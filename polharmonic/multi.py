@@ -34,7 +34,8 @@ class MultiMicroscope:
     def calc_sys_matrix(self):
         psi = []
         for micro in self.micros:
-            psi.append(sft.sft(micro.prf, max_l=self.max_l))
+            psi_row = sft.sft(micro.prf, max_l=self.max_l)
+            psi.append(psi_row)
         psi = np.array(psi, dtype=float)
         psi[np.abs(psi) < 1e-15] = 0
         self.psi = psi
@@ -86,7 +87,6 @@ class MultiMicroscope:
         return d
 
     def recon_dist_field(self, g):
-        import pdb; pdb.set_trace() 
         sh_arr = np.zeros([*g.shape[:2], self.max_j])
         for i in np.ndindex(g.shape[:2]):
             d = self.recon_dist(g[i])

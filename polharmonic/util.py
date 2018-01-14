@@ -256,3 +256,6 @@ def lm2j(l, m):
         return None
     else:
         return int(0.5*l*(l+1) + m)
+
+def maxl2maxj(l):
+    return int(0.5*(l + 1)*(l + 2))

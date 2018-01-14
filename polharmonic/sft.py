@@ -15,9 +15,9 @@ def sft(f, max_l=4):
             print("Integrating: "+ str(l) + ', ' + str(m))
             Znm = sh.Znm(l, m, theta, phi).expand(func=True)
             theta_int = integrate(expand(sin(theta)*Znm*f), (theta, 0, pi)) 
-            final_int = integrate(expand(theta_int), (phi, 0, 2*pi))
+            final_int = integrate(expand_trig(theta_int.rewrite(cos)), (phi, 0, 2*pi))
             coeffs.append(re(final_int).evalf())
-    return coeffs
+    return np.array(coeffs)
 
 # Numerical forward spherical Fourier transform from delta
 def tp_sft(tp, max_l=4):

@@ -5,13 +5,14 @@ import os; import time; start = time.time(); print('Running...')
 np.set_printoptions(precision=3, suppress=True)
 
 # Specify saving path
-folder = 'epi'
+folder = 'dispim'
 if not os.path.exists(folder):
     os.makedirs(folder)
 data_file = folder+'/'+folder+'.dat'
 
 # Build microscope
-exp = multi.MultiMicroscope(max_l=4, n_pts=5000)
+exp = multi.MultiMicroscope(ill_thetas=[0, 90], det_thetas=[90, 0],
+                            det_nas=[0.8, 0.8], max_l=4, n_pts=5000)
 
 # Calculate and save (comment this on repeat runs)
 exp.calc_sys_matrix()
