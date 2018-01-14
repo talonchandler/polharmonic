@@ -20,7 +20,7 @@ setup(name='polharmonic',
       author='Talon Chandler',
       author_email='talonchandler@talonchandler.com',
       license='MIT',
-      packages=['dipsim'],
+      packages=['polharmonic'],
       install_requires=[
           'matplotlib',
           'numpy',

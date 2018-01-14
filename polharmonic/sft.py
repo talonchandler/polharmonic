@@ -1,4 +1,4 @@
-from util import *
+from polharmonic.util import *
 import numpy as np
 from sympy import *
 import sympy.functions.special.spherical_harmonics as sh
@@ -12,30 +12,24 @@ def sft(f, max_l=4):
     coeffs = []
     for l in range(0, max_l+2, 2):
         for m in range(-l, l+1):
-            print("Integrating: "+ str(l) + ', ' + str(m))            
+            print("Integrating: "+ str(l) + ', ' + str(m))
             Znm = sh.Znm(l, m, theta, phi).expand(func=True)
             theta_int = integrate(expand(sin(theta)*Znm*f), (theta, 0, pi)) 
-            final_int = integrate(expand_trig(theta_int), (phi, 0, 2*pi))
-            coeffs.append((simplify(final_int), l, m))
-    dtypes = [('expr', 'O'), ('l', 'i4'), ('m', 'i4')]
-    return np.array(coeffs, dtype=dtypes)
+            final_int = integrate(expand(theta_int), (phi, 0, 2*pi))
+            coeffs.append(re(final_int).evalf())
+    return coeffs
 
 # Numerical forward spherical Fourier transform from delta
-def tp_sft(tp, max_l=4, return_labels=False):
+def tp_sft(tp, max_l=4):
     labels = []
     coeffs = []
     for l in range(0, max_l+2, 2):
         for m in range(-l, l+1):
             coeffs.append(spZnm(l, m, tp[0], tp[1]))
-            labels.append(str(l)+','+str(m))
-    if return_labels:
-        return np.array(coeffs), np.array(labels)
-    else:
-        return np.array(coeffs)
+    return np.array(coeffs)
 
 def field_tp_sft(tp_field, max_l=4):
-    x, labels = tp_sft(tp_field[0,0,:], max_l=max_l, return_labels=True)
-    return np.apply_along_axis(tp_sft, 2, tp_field, max_l=max_l), labels
+    return np.apply_along_axis(tp_sft, 2, tp_field, max_l=max_l)
 
 # Analytic inverse spherical Fourier transform
 def isft(ylm):

@@ -6,98 +6,19 @@ from mayavi import mlab
 from scipy.special import sph_harm
 from skimage import io
 
-# Convert a list of coefficients into a system matrix with labels
-def list2matrix(arr, data_i='Hlm', row_i='i', col_i='j', lab_col_i='lm', lab_row_i='pol'):
-    out_arr = np.zeros((max(arr[row_i])+1, max(arr[col_i])+1), dtype='complex')
-    col_labels = np.zeros(max(arr[col_i]+1), dtype='U4')
-    row_labels = np.zeros(max(arr[row_i]+1), dtype='U10')
-    for entry in arr:
-        out_arr[entry[row_i], entry[col_i]] = entry[data_i]
-        col_labels[entry[col_i]] = str(entry[lab_col_i[0]]) + ',' + str(entry[lab_col_i[1]])
-        row_labels[entry[row_i]] = entry[lab_row_i]
-    return np.real(out_arr), col_labels, row_labels
-
-def spherical_mesh(coeffs, labels, r=1, gridn=151):
-    # Create sampling grid
-    theta, phi = np.mgrid[0:np.pi:(gridn*1j), 0:2*np.pi:(gridn*1j)]
-    x = r*np.sin(theta)*np.cos(phi)
-    y = r*np.sin(theta)*np.sin(phi)
-    z = r*np.cos(theta)
-
-    # Calculate values
-    rc = 0
-    for coeff, label in zip(coeffs, labels):
-        l = int(label.split(',')[0])
-        m = int(label.split(',')[1])
-        rc += coeff*spZnm(l, m, theta, phi)
-        
-    # Check that imaginary part is small before discarding it
-    if np.max(np.imag(rc)) > 1e-3:
-        import pdb; pdb.set_trace()
-    rc = np.real(rc)
-
-    # Separate positive and negative components
-    n = rc.clip(max=0) 
-    p = rc.clip(min=0)*(-1)
-
-    return x, y, z, p, n
-
-# Plot an orientation distribution from its spherical harmonic coefficients
-def plot_spherical(coeffs, labels, filename='spherical.png', 
-                   ax=None, r=1, mag=1, show=False):
-    # Create figure
-    mlab.figure(1, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), size=(400, 400))
-    mlab.clf()
-
-    x, y, z, p, n = spherical_mesh(coeffs, labels, r=1, gridn=50)
-    
-    # Plot
-    mlab.mesh(p*x, p*y, p*z, color=(1, 0, 0), representation='surface')
-    mlab.mesh(n*x, n*y, n*z, color=(0, 0, 1), representation='surface')
-
-    # View and save
-    mlab.view(azimuth=45, elevation=45, distance=3, focalpoint=None,
-              roll=None, reset_roll=True, figure=None)
-    mlab.savefig(filename, magnification=mag)
-    subprocess.call(['convert', filename, '-transparent', 'white', filename])
-    if show:
-        mlab.show()
-
-# Plot a field of orientation distributions
-def plot_spherical_field(coeffs_matrix, labels, filename='spherical.png',
-                         ax=None, r=1, mag=1, dist=10, show=False, gridn=100):
-    # Create figure
-    mlab.figure(1, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), size=(400, 400))
-    mlab.clf()
-    
-    spacing = 2
-    shift = spacing*gridn/2
-    for i in np.ndindex(coeffs_matrix.shape[:2]):
-        print(i)
-        x, y, z, p, n = spherical_mesh(coeffs_matrix[i], labels, r=r, gridn=gridn)
-        mlab.mesh(p*x + spacing*i[0] - shift, p*y + spacing*i[1] - shift, p*z, color=(1, 0, 0), representation='surface')
-        mlab.mesh(n*x + spacing*i[0] - shift, n*y + spacing*i[1] - shift, n*z, color=(0, 0, 1), representation='surface')
-
-    # View and save
-    mlab.view(azimuth=45, elevation=45, distance=dist, focalpoint=None,
-              roll=None, reset_roll=True, figure=None)
-    mlab.savefig(filename, magnification=mag)
-    subprocess.call(['convert', filename, '-transparent', 'white', filename])
-    if show:
-        mlab.show()
-        
 # SciPy real spherical harmonics with identical interface to SymPy's Znm
 # Useful for faster numerical evaluation of Znm
 def spZnm(l, m, theta, phi):
     if m > 0:
-        return (sph_harm(m, l, phi, theta) +
-                np.conj(sph_harm(m, l, phi, theta)))/(np.sqrt(2))
+        return np.real((sph_harm(m, l, phi, theta) +
+                np.conj(sph_harm(m, l, phi, theta)))/(np.sqrt(2)))
     elif m == 0:
-        return sph_harm(m, l, phi, theta)
+        return np.real(sph_harm(m, l, phi, theta))
     elif m < 0:
-        return  (sph_harm(m, l, phi, theta) -
-                 np.conj(sph_harm(m, l, phi, theta)))/(np.sqrt(2)*1j)
+        return  np.real((sph_harm(m, l, phi, theta) -
+                 np.conj(sph_harm(m, l, phi, theta)))/(np.sqrt(2)*1j))
 
+# Draw microscope schematic (move to Microscope class?)
 def draw_scene(scene_string, filename='out.png', my_ax=None, dpi=300,
                save_file=False, chop=True):
     asy_string = """
@@ -234,17 +155,8 @@ def draw_scene(scene_string, filename='out.png', my_ax=None, dpi=300,
     subprocess.call(['rm', 'temp.asy', 'temp.pdf', 'temp.png'])
     return ax
 
-# Plots a set of spherical harmonics and returns a string for tex 
-def plot_multiple_spherical(coeffs, labels, filename='sph', r=1.0):
-    sph_tex_string = ''
-    for i in range(len(labels)):
-        plot_spherical(coeffs[:,i], labels, filename=filename+str(i)+'.png', r=r)
-        tex_string = "\pic{1.0}{sphXXX}\\\\"
-        sph_tex_string += tex_string.replace('XXX', str(i))
-    return sph_tex_string
-
-# Create matrix in latex and save
-def create_latex_matrix(sph_tex_string, asy_tex_string, psi, filename):
+# Create matrix in latex and save 
+def create_latex_matrix(lhs_string, rhs_string, array, filename):
     tex_template = r"""
     \documentclass[preview, border={0pt 10pt 0pt 0pt}]{standalone}
     \usepackage{amsmath}
@@ -268,33 +180,34 @@ def create_latex_matrix(sph_tex_string, asy_tex_string, psi, filename):
     \begin{document}
     \begin{align*}
       \begin{bmatrix}
-         ASY_STRING
+         LHS_STRING
       \end{bmatrix} =
       \begin{bmatrix}
          ARR_STRING
       \end{bmatrix}
       \begin{bmatrix}
-        SPH_STRING   
+        RHS_STRING   
       \end{bmatrix}
     \end{align*}
     \end{document}
     """
-    tex_template = tex_template.replace('ASY_STRING', asy_tex_string)
-    tex_template = tex_template.replace('SPH_STRING', sph_tex_string)
+    tex_template = tex_template.replace('LHS_STRING', lhs_string)
+    tex_template = tex_template.replace('RHS_STRING', rhs_string)
 
     # Convert psi to tex
-    np.savetxt('psi.csv', psi.real, delimiter=' & ', fmt='%2.2f', newline=' \\\\')
-    with open ("psi.csv", "r") as myfile:
+    np.savetxt('temp.csv', array, delimiter=' & ', fmt='%2.2f', newline=' \\\\')
+    with open ("temp.csv", "r") as myfile:
         arr_tex_string = myfile.readlines()
     tex_template = tex_template.replace('ARR_STRING', ' '.join(arr_tex_string))
     
     with open(filename+'.tex', 'w') as text_file:
         print(tex_template, file=text_file)
     subprocess.call(['latexmk', '-cd', filename+'.tex'])
+    subprocess.call(['rm', 'temp.csv'])
 
+# Opens .tiff and returns array starting at x, y, z with width, height, and
+# slices dimensions. "None" means return the whole dimension.
 def tiff2array(filename, x=0, y=0, z=0, width=None, height=None, slices=None):
-    # Opens .tiff and returns array starting at x, y, z with width, height, and
-    # slices dimensions. "None" means return the whole dimension.
     im = io.imread(filename)
     shape = im.shape
     x_min = x
@@ -318,3 +231,28 @@ def tiff2array(filename, x=0, y=0, z=0, width=None, height=None, slices=None):
     else:
         return im
 
+# Returns "equally" spaced points on a unit sphere in spherical coordinates.
+# http://stackoverflow.com/a/26127012/5854689
+def fibonacci_sphere(n):
+    z = np.linspace(1 - 1/n, -1 + 1/n, num=n) 
+    theta = np.arccos(z)
+    phi = np.mod((np.pi*(3.0 - np.sqrt(5.0)))*np.arange(n), 2*np.pi) - np.pi
+    return np.vstack((theta, phi)).T
+
+# Convert between spherical harmonic indices (l, m) and matrix index (j)
+def j2lm(j):
+    if j < 0:
+        return None
+    l = 0
+    while True:
+        x = 0.5*l*(l+1)
+        if abs(j - x) <= l:
+            return l, int(j-x)
+        else:
+            l = l+2
+
+def lm2j(l, m):
+    if abs(m) > l or l%2 == 1:
+        return None
+    else:
+        return int(0.5*l*(l+1) + m)
