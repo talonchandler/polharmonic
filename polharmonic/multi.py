@@ -1,5 +1,7 @@
 from polharmonic import ill, det, micro, util, dist, sft
 from cvxopt import matrix, solvers
+solvers.options['show_progress'] = False
+import sys
 import numpy as np
 
 class MultiMicroscope:
@@ -88,7 +90,12 @@ class MultiMicroscope:
 
     def recon_dist_field(self, g):
         sh_arr = np.zeros([*g.shape[:2], self.max_j])
+        N = g.shape[0]*g.shape[1]
+        j = 1
         for i in np.ndindex(g.shape[:2]):
+            sys.stdout.flush()
+            sys.stdout.write("Reconstructing: "+ str(j) + '/' + str(N) + '\r')
+            j += 1
             d = self.recon_dist(g[i])
             sh_arr[i] = d.sh
         return dist.DistributionField(sh_arr=sh_arr)

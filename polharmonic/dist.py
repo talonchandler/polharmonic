@@ -3,6 +3,7 @@ from polharmonic import util, sft
 from mayavi import mlab
 import subprocess
 from cvxopt import matrix, solvers
+import sys
 
 class DistributionField:
     """A DistributionField represents many fluorophore distributions. It 
@@ -27,12 +28,19 @@ class DistributionField:
 
         space = 2
         shift = space*np.max(radii.shape[:2])/2
+
+        N = radii.shape[0]*radii.shape[1]
+        j = 1
         
         # Plot
         for i in np.ndindex(radii.shape[:2]):
+            sys.stdout.flush()            
+            sys.stdout.write("Plotting: "+ str(j) + '/' + str(N) + '\r')
+
             # Split into positive and negatives
             n = radii[i].clip(max=0) 
             p = radii[i].clip(min=0)*(-1)
+            j += 1
 
             mlab.triangular_mesh(p*xyz[:,0] + space*i[0] - shift, p*xyz[:,1] + space*i[1] - shift, p*xyz[:,2], triangles, color=(1, 0, 0))
             mlab.triangular_mesh(n*xyz[:,0] + space*i[0] - shift, n*xyz[:,1] + space*i[1] - shift, n*xyz[:,2], triangles, color=(0, 0, 1))
