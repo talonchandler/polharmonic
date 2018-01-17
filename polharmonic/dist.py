@@ -18,32 +18,42 @@ class DistributionField:
             self.sh_arr[i] = d.sh
             
     def plot_dist_field(self, B, xyz, triangles, filename=None,
-                        d=50, r=1, mag=1, show=False):
+                        d=50, r=1, mag=1, show=False, mask_threshold=0.01):
         # Calculate radii
-        radii = np.einsum('ij,klj->kli', B, self.sh_arr)
-
+        radii = r*np.einsum('ij,klmj->klmi', B, self.sh_arr)
+        mask = np.max(radii, axis=-1) > mask_threshold
+        
         # Create figure
         mlab.figure(1, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), size=(400, 400))
         mlab.clf()
 
-        space = 2
-        shift = space*np.max(radii.shape[:2])/2
+        space = 1
 
-        N = radii.shape[0]*radii.shape[1]
+        N = np.sum(mask)
         j = 1
         
         # Plot
-        for i in np.ndindex(radii.shape[:2]):
-            sys.stdout.flush()            
-            sys.stdout.write("Plotting: "+ str(j) + '/' + str(N) + '\r')
+        for i in np.ndindex(radii.shape[:-1]):
+            if mask[i]:
+                sys.stdout.flush()            
+                sys.stdout.write("Plotting: "+ str(j) + '/' + str(N) + '\r')
 
-            # Split into positive and negatives
-            n = radii[i].clip(max=0) 
-            p = radii[i].clip(min=0)*(-1)
-            j += 1
+                # Split into positive and negatives
+                n = radii[i].clip(max=0) 
+                p = radii[i].clip(min=0)*(-1)
+                j += 1
 
-            mlab.triangular_mesh(p*xyz[:,0] + space*i[0] - shift, p*xyz[:,1] + space*i[1] - shift, p*xyz[:,2], triangles, color=(1, 0, 0))
-            mlab.triangular_mesh(n*xyz[:,0] + space*i[0] - shift, n*xyz[:,1] + space*i[1] - shift, n*xyz[:,2], triangles, color=(0, 0, 1))
+                if i == (2, 8, 0):
+                    mlab.triangular_mesh(p*xyz[:,0] + space*i[0], p*xyz[:,1] + space*i[1], p*xyz[:,2] + space*i[2], triangles, color=(0, 1, 0))
+                else:
+                    mlab.triangular_mesh(p*xyz[:,0] + space*i[0], p*xyz[:,1] + space*i[1], p*xyz[:,2] + space*i[2], triangles, color=(1, 0, 0))
+
+                if np.max(n) > mask_threshold:
+                    mlab.triangular_mesh(n*xyz[:,0] + space*i[0], n*xyz[:,1] + space*i[1], n*xyz[:,2] + space*i[2], triangles, color=(0, 0, 1))
+
+        if radii.shape[2] != 1:
+            mlab.outline(extent=[0,radii.shape[0],0,radii.shape[1],0,radii.shape[2]])
+            mlab.points3d(0,0,0, color=(1, 1, 1))
         
         # View and save
         mlab.view(azimuth=45, elevation=45, distance=d, focalpoint=None,

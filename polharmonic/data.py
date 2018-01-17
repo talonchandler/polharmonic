@@ -4,23 +4,27 @@ import matplotlib.pyplot as plt
 from mayavi import mlab
 
 class IntensityField:
-    """An IntensityField represents the data collected from Distribution Field.  
+    """An IntensityField represents the data collected from a DistributionField.  
     It consists of an array of intensities g. 
     """
-    def __init__(self, file_names, x0=0, y0=0, z0=0, xspan=10, yspan=10, zspan=10, cal=None):
-        g = np.zeros((xspan, yspan, len(file_names)))
-        for i, file_name in enumerate(file_names):
-            im = util.tiff2array(file_name, x=x0, y=y0, z=z0, width=xspan, height=yspan, slices=zspan)
-            if cal is None:
-                g[:,:,i] = im
-            else:
-                g[:,:,i] = im/cal[i]
-        g = g/g.max()
-        self.g = g
-
+    def __init__(self, file_names=None, x0=0, y0=0, z0=0, xspan=10, yspan=10, zspan=10, cal=None):
+        if file_names is not None:
+            g = np.zeros((xspan, yspan, zspan, len(file_names)))
+            for i, file_name in enumerate(file_names):
+                im = util.tiff2array(file_name, x=x0, y=y0, z=z0, width=xspan, height=yspan, slices=zspan)
+                if cal is None:
+                    g[:,:,:,i] = im
+                else:
+                    g[:,:,:,i] = im/cal[i]
+            g = g/g.max()
+            self.g = g
+        else:
+            self.g = 0
+                
+        
     def plot_int_field(self, output_file='out.pdf', shape=(2, 4), row_labels=[], col_labels=[],
                        line_start=(0,0), line_end=(0,0),
-                       roi_upper_left=(0, 0), roi_wh=(0,0), plot_roi=False, zslice=0, dim=2):
+                       roi_upper_left=(0, 0), roi_wh=(0,0), plot_roi=False, zslice=0):
         # Create axes
         inches = 3
         fig, axs = plt.subplots(2*shape[0], shape[1], figsize=(3.5*inches, 3*inches), gridspec_kw={'height_ratios':[1, 0.2]*shape[0], 'hspace':0.1, 'wspace':0.1})
@@ -31,27 +35,20 @@ class IntensityField:
         for i, (main_ax, line_ax) in enumerate(zip(main_axs.flatten(), line_axs.flatten())):
 
             # Plot image
-            im = self.g[:,:,i]
-            # if dim == 3:
-            #     x, y, z = np.ogrid[-5:5:64j, -5:5:64j, -5:5:64j]
-            #     scalars = x * x * 0.5 + y * y + z * z * 2.0
-            #     obj = mlab.contour3d(scalars, contours=8, transparent=True)
-            #     import pdb; pdb.set_trace() 
+            im = self.g[:,:,:,i]
+            mlab.figure(1, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), size=(1000, 1000))
+            mlab.clf()
+            mlab.points3d(0,0,0, color=(1, 1, 1))
+            obj = mlab.contour3d(im, contours=[.2, .4, .6, .8, .9], transparent=True)
+            
+            mlab.outline(extent=[0,im.shape[0],0,im.shape[1],0,im.shape[2]])
+            mlab.view(azimuth=45, elevation=45, distance=50, focalpoint=None,
+                      roll=None, reset_roll=True, figure=None)
 
-            #     # sys.stdout.flush()            
-            #     # sys.stdout.write("Plotting: "+ str(j) + '/' + str(N) + '\r')
+            # TODO save 3d figure
+            mlab.show()
 
-            #     # mlab.triangular_mesh(p*xyz[:,0] + space*i[0] - shift, p*xyz[:,1] + space*i[1] - shift, p*xyz[:,2], triangles, color=(1, 0, 0))
-            #     # mlab.triangular_mesh(n*xyz[:,0] + space*i[0] - shift, n*xyz[:,1] + space*i[1] - shift, n*xyz[:,2], triangles, color=(0, 0, 1))
-
-            #     # View and save
-            #     # mlab.view(azimuth=45, elevation=45, distance=d, focalpoint=None,
-            #     #           roll=None, reset_roll=True, figure=None)
-            #     # mlab.savefig(filename, magnification=mag)
-            #     # subprocess.call(['convert', filename, '-transparent', 'white', filename])
-            #     mlab.show()
-
-            main_ax.imshow(im, interpolation=None, vmin=0, vmax=1)
+            main_ax.imshow(im[:,:,zslice], interpolation=None, vmin=0, vmax=1)
             main_ax.set_axis_off()
             line_ax.set_axis_off()
 

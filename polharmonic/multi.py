@@ -1,4 +1,4 @@
-from polharmonic import ill, det, micro, util, dist, sft
+from polharmonic import ill, det, micro, util, dist, sft, data
 from cvxopt import matrix, solvers
 solvers.options['show_progress'] = False
 import sys
@@ -74,7 +74,10 @@ class MultiMicroscope:
         return np.matmul(self.psi, dist.sh)
 
     def calc_intensity_field(self, dist_field):
-        return np.einsum('ij,klj->kli', self.psi, dist_field.sh_arr)
+        g = np.einsum('ij,klmj->klmi', self.psi, dist_field.sh_arr)
+        intf = data.IntensityField()
+        intf.g = g
+        return intf
     
     def recon_dist(self, g):
         N = self.B.shape[1]
@@ -88,16 +91,21 @@ class MultiMicroscope:
         d = dist.Distribution(sh=sh)
         return d
 
-    def recon_dist_field(self, g):
-        sh_arr = np.zeros([*g.shape[:2], self.max_j])
-        N = g.shape[0]*g.shape[1]
+    def recon_dist_field(self, intf, mask_threshold=0):
+        g = intf.g
+        mask = np.max(intf.g, axis=-1) > mask_threshold
+        sh_arr = np.zeros([*g.shape[:-1], self.max_j])
+        N = np.sum(mask)
         j = 1
-        for i in np.ndindex(g.shape[:2]):
-            sys.stdout.flush()
-            sys.stdout.write("Reconstructing: "+ str(j) + '/' + str(N) + '\r')
-            j += 1
-            d = self.recon_dist(g[i])
-            sh_arr[i] = d.sh
+        for i in np.ndindex(g.shape[:-1]):
+            if mask[i]:
+                sys.stdout.flush()
+                sys.stdout.write("Reconstructing: "+ str(j) + '/' + str(N) + '\r')
+                j += 1
+                d = self.recon_dist(g[i])
+                sh_arr[i] = d.sh                
+            else:
+                sh_arr[i] = np.zeros(self.max_j)
         return dist.DistributionField(sh_arr=sh_arr)
 
     def plot_scene(self, filename):

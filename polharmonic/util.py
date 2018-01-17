@@ -226,10 +226,8 @@ def tiff2array(filename, x=0, y=0, z=0, width=None, height=None, slices=None):
     else:
         z_max = z + slices
     im = im[z_min:z_max, y_min:y_max, x_min:x_max]
-    if slices == 1:
-        return im.squeeze()
-    else:
-        return im
+    im = np.swapaxes(im,0,2)
+    return im
 
 # Returns "equally" spaced points on a unit sphere in spherical coordinates.
 # http://stackoverflow.com/a/26127012/5854689
