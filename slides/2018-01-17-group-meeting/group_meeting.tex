@@ -32,7 +32,7 @@
 \begin{document}
 
 \maketitle
-\begin{frame}[label=sec-1]{Forward Model}
+\begin{frame}[label=sec-1]{Forward model}
 \begin{align*}
 g_i = \int_{\mathbb{S}^2}d\hat{\textbf{r}}\ h_i(\hat{\textbf{r}})f(\hat{\textbf{r}})
 \end{align*}
@@ -51,7 +51,7 @@ g_i = \int_{\mathbb{S}^2}d\hat{\textbf{r}}\ h_i(\hat{\textbf{r}})f(\hat{\textbf{
   \end{align*}
 \end{frame}
 
-\begin{frame}{Discrete Inverse Transform Matrix $\mathbf{B}$}
+\begin{frame}{Discrete inverse transform matrix $\mathbf{B}$}
   \begin{align*}
     \mathbf{f} = \mathbf{B}\mathbf{F}
   \end{align*}
@@ -65,7 +65,7 @@ g_i = \int_{\mathbb{S}^2}d\hat{\textbf{r}}\ h_i(\hat{\textbf{r}})f(\hat{\textbf{
   \end{align*}
 \end{frame}
 
-\begin{frame}{Reconstruction Problem}
+\begin{frame}{Reconstruction problem}
   \begin{equation*}
     \begin{aligned}
       \mathbf{F^*} =\ \  
@@ -81,25 +81,20 @@ g_i = \int_{\mathbb{S}^2}d\hat{\textbf{r}}\ h_i(\hat{\textbf{r}})f(\hat{\textbf{
   \end{align*}
 \end{frame}
 
-\begin{frame}{Phantom}
-\begin{center}
-  \includegraphics[width=0.7\textwidth, interpolate=true]{figs/phantom.png}
-\end{center}
+\begin{frame}
+\frametitle<1>{Phantom}
+\frametitle<2>{Reconstructed with synthetic data from epi}
+\frametitle<3>{Reconstructed with synthetic data from diSPIM}
+
+\begin{overprint}
+  \onslide<1>\centerline{\includegraphics[width=0.7\textwidth, interpolate=true]{figs/phantom}}%
+  \onslide<2>\centerline{\includegraphics[width=0.7\textwidth, interpolate=true]{figs/phantom_epi_recon}}%
+  \onslide<3>\centerline{\includegraphics[width=0.7\textwidth, interpolate=true]{figs/phantom_dispim_recon}}%
+\end{overprint}
 \end{frame}
 
-\begin{frame}{Reconstructed with data from single-view epi-illumination NA = 0.7}
-\begin{center}
-  \includegraphics[width=0.7\textwidth, interpolate=true]{figs/phantom_epi_recon.png}
-\end{center}
-\end{frame}
 
-\begin{frame}{Reconstructed with data from diSPIM}
-\begin{center}
-  \includegraphics[width=0.7\textwidth, interpolate=true]{figs/phantom_dispim_recon.png}
-\end{center}
-\end{frame}
-
-\begin{frame}{Reconstructed with priors}
+\begin{frame}{Reconstruction with priors}
     \begin{equation*}
     \begin{aligned}
       \mathbf{f^*} =\ \  
