@@ -79,34 +79,60 @@ class MultiMicroscope:
         intf.g = g
         return intf
     
-    def recon_dist(self, g):
-        N = self.B.shape[1]
-        M = self.B.shape[0]
-        P = matrix(2*np.matmul(self.psi.T, self.psi), tc='d')
-        q = matrix(-2*np.matmul(g, self.psi), tc='d')
-        G = matrix(-self.B, tc='d')
-        h = matrix(np.zeros(M), tc='d')
-        sol = solvers.qp(P, q, G, h)
-        sh = np.array(sol['x']).flatten()
-        d = dist.Distribution(sh=sh)
-        return d
+    def recon_dist(self, g, prior=None):
+        if prior is None:
+            N = self.B.shape[1]
+            M = self.B.shape[0]
+            P = matrix(2*np.matmul(self.psi.T, self.psi), tc='d')
+            q = matrix(-2*np.matmul(g, self.psi), tc='d')
+            G = matrix(-self.B, tc='d')
+            h = matrix(np.zeros(M), tc='d')
+            sol = solvers.qp(P, q, G, h)
+            sh = np.array(sol['x']).flatten()
+            d = dist.Distribution(sh=sh)
+            return d
+        elif prior is 'single':
+            g_model = np.matmul(self.psi, np.linalg.pinv(self.B))
+            g_model = g_model/np.max(g_model)
+            g_diff = g_model - g[:, np.newaxis]
+            obj = np.linalg.norm(g_diff, ord=2, axis=0)**2
+            argmin = np.argmin(obj)
+            f = np.zeros(self.B.shape[0])
+            f[argmin] = 1
+            d = dist.Distribution(f=f)
+            return d
 
-    def recon_dist_field(self, intf, mask_threshold=0):
+    def recon_dist_field(self, intf, mask_threshold=0, prior=None):
         g = intf.g
         mask = np.max(intf.g, axis=-1) > mask_threshold
-        sh_arr = np.zeros([*g.shape[:-1], self.max_j])
         N = np.sum(mask)
-        j = 1
-        for i in np.ndindex(g.shape[:-1]):
-            if mask[i]:
-                sys.stdout.flush()
-                sys.stdout.write("Reconstructing: "+ str(j) + '/' + str(N) + '\r')
-                j += 1
-                d = self.recon_dist(g[i])
-                sh_arr[i] = d.sh                
-            else:
-                sh_arr[i] = np.zeros(self.max_j)
-        return dist.DistributionField(sh_arr=sh_arr)
+        j = 1        
+        if prior is None:
+            dist_arr = np.zeros([*g.shape[:-1], self.max_j])
+            for i in np.ndindex(g.shape[:-1]):
+                if mask[i]:
+                    sys.stdout.flush()
+                    sys.stdout.write("Reconstructing: "+ str(j) + '/' + str(N) + '\r')
+                    j += 1
+                    d = self.recon_dist(g[i], prior=prior)
+                    dist_arr[i] = d.sh
+                else:
+                    dist_arr[i] = np.zeros(self.max_j)
+            return dist.DistributionField(sh_arr=dist_arr)
+        
+        elif prior is 'single':
+            dist_arr = np.zeros([*g.shape[:-1], self.B.shape[0]])
+            for i in np.ndindex(g.shape[:-1]):
+                if mask[i]:
+                    sys.stdout.flush()
+                    sys.stdout.write("Reconstructing: "+ str(j) + '/' + str(N) + '\r')
+                    j += 1
+                    d = self.recon_dist(g[i], prior=prior)
+                    dist_arr[i] = d.f
+                else:
+                    dist_arr[i] = np.zeros(self.B.shape[0])
+            return dist.DistributionField(f_arr=dist_arr)
+            
 
     def plot_scene(self, filename):
         scene_string = ''

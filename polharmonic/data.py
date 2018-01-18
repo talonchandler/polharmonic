@@ -1,7 +1,10 @@
 import numpy as np
 from polharmonic import util
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 from mayavi import mlab
+import matplotlib.image as mpimg
+import subprocess
 
 class IntensityField:
     """An IntensityField represents the data collected from a DistributionField.  
@@ -22,66 +25,43 @@ class IntensityField:
             self.g = 0
                 
         
-    def plot_int_field(self, output_file='out.pdf', shape=(2, 4), row_labels=[], col_labels=[],
+    def plot_int_field(self, output_file='out.pdf', shape=(2, 4),
+                       row_labels=['$x$-illumination\n $z$-detection\n 1.1 NA', '$z$-illumination\n $x$-detection\n 0.71 NA'], col_labels=['$\phi = 0^{\circ}$', '$\phi = 45^{\circ}$', '$\phi = 90^{\circ}$', '$\phi = 135^{\circ}$'],
                        line_start=(0,0), line_end=(0,0),
-                       roi_upper_left=(0, 0), roi_wh=(0,0), plot_roi=False, zslice=0):
+                       roi_upper_left=(0, 0), roi_wh=(0,0), plot_roi=False, zslice=0, d=50, mag=1):
         # Create axes
         inches = 3
-        fig, axs = plt.subplots(2*shape[0], shape[1], figsize=(3.5*inches, 3*inches), gridspec_kw={'height_ratios':[1, 0.2]*shape[0], 'hspace':0.1, 'wspace':0.1})
-        main_axs = axs[::2,:]
-        line_axs = axs[1::2,:]
+        fig, axs = plt.subplots(shape[0], shape[1], figsize=(shape[1]*inches, shape[0]*inches), gridspec_kw={'height_ratios':[1]*shape[0], 'hspace':-0.3, 'wspace':-0.1})
 
         # Load data and plot
-        for i, (main_ax, line_ax) in enumerate(zip(main_axs.flatten(), line_axs.flatten())):
+        for i, ax in enumerate(axs.flatten()):
 
             # Plot image
             im = self.g[:,:,:,i]
             mlab.figure(1, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), size=(1000, 1000))
             mlab.clf()
             mlab.points3d(0,0,0, color=(1, 1, 1))
-            obj = mlab.contour3d(im, contours=[.2, .4, .6, .8, .9], transparent=True)
-            
+
+            for i in 0.1*np.arange(9):
+                color = cm.hot(i)
+                obj = mlab.contour3d(im, contours=[i], color=color[:-1], opacity=0.8) 
+            mlab.gcf().scene.parallel_projection = True
             mlab.outline(extent=[0,im.shape[0],0,im.shape[1],0,im.shape[2]])
-            mlab.view(azimuth=45, elevation=45, distance=50, focalpoint=None,
+            mlab.view(azimuth=45, elevation=45, distance=d, focalpoint=None,
                       roll=None, reset_roll=True, figure=None)
+            #mlab.show()
+            mlab.savefig('temp.png', magnification=mag)
+            subprocess.call(['convert', '-density', str(300), '-units', 'PixelsPerInch', 'temp.png', 'temp2.png'])
+            im = mpimg.imread('temp2.png')
+            subprocess.call(['rm', 'temp.png', 'temp2.png'])
 
-            # TODO save 3d figure
-            mlab.show()
-
-            main_ax.imshow(im[:,:,zslice], interpolation=None, vmin=0, vmax=1)
-            main_ax.set_axis_off()
-            line_ax.set_axis_off()
-
-            # Plot roi box on image
-            if not plot_roi:
-                rx0, ry0 = roi_upper_left
-                rx1, ry1 = rx0 + roi_wh[0], ry0 + roi_wh[1],
-                main_ax.plot([rx0, rx1, rx1, rx0, rx0], [ry0, ry0, ry1, ry1, ry0], 'g-')
-
-            # Plot line on image
-            x0, y0 = line_start
-            x1, y1 = line_end
-            main_ax.plot([x0, x1], [y0, y1], 'r-')
-            main_ax.plot([x0], [y0], 'r.', markersize=6)
-
-            # Extract line profile
-            num = 1000
-            x, y = np.linspace(x0, x1, num), np.linspace(y0, y1, num)
-            zi = []
-            for (xi, yi) in zip(x, y):
-                zi.append(im[int(yi), int(xi)])
-
-            # Plot profile
-            line_ax.plot(zi, '-r')
-            line_ax.plot(zi[0], '.r', markersize=6)
-            line_ax.set_ylim(0, 1)
-            line_ax.set_xlim(-0.05*len(zi), len(zi))
+            ax.imshow(im, interpolation=None, vmin=0, vmax=1)            
+            ax.set_axis_off()
 
         # Label rows and columns
         for i, label in enumerate(col_labels):
-            axs[0, i].annotate(label, xy=(0,0), xytext=(0.5, 1.1), textcoords='axes fraction', va='center', ha='center', fontsize=12, annotation_clip=False)
+            axs[0, i].annotate(label, xy=(0,0), xytext=(0.5, 1.05), textcoords='axes fraction', va='center', ha='center', fontsize=12, annotation_clip=False)
         for i, label in enumerate(row_labels):
-            axs[2*i, 0].annotate(label, xy=(0,0), xytext=(-0.1, 0.5), textcoords='axes fraction', va='center', ha='center', fontsize=12, annotation_clip=False, rotation=90)
+            axs[i, 0].annotate(label, xy=(0,0), xytext=(0, 0.5), textcoords='axes fraction', va='center', ha='center', fontsize=12, annotation_clip=False, rotation=90)
 
-        fig.savefig(output_file, dpi=200)
-
+        fig.savefig(output_file, dpi=400)

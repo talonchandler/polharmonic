@@ -8,8 +8,13 @@ import sys
 class DistributionField:
     """A DistributionField represents many fluorophore distributions. It 
     consists of an array of Distributions."""
-    def __init__(self, sh_arr=None):
-        self.sh_arr = sh_arr
+    def __init__(self, sh_arr=None, f_arr=None):
+        if f_arr is None:
+            self.sh_arr = sh_arr
+            self.f_arr = None
+        if sh_arr is None:
+            self.sh_arr = None
+            self.f_arr = f_arr
 
     def make_positive(self, B, max_l=None):
         for i in np.ndindex(self.sh_arr.shape[:2]):
@@ -20,11 +25,14 @@ class DistributionField:
     def plot_dist_field(self, B, xyz, triangles, filename=None,
                         d=50, r=1, mag=1, show=False, mask_threshold=0.01):
         # Calculate radii
-        radii = r*np.einsum('ij,klmj->klmi', B, self.sh_arr)
+        if self.f_arr is None:
+            radii = r*np.einsum('ij,klmj->klmi', B, self.sh_arr)
+        elif self.sh_arr is None:
+            radii = r*self.f_arr
         mask = np.max(radii, axis=-1) > mask_threshold
         
         # Create figure
-        mlab.figure(1, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), size=(400, 400))
+        mlab.figure(1, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), size=(1000, 1000))
         mlab.clf()
 
         space = 1
@@ -33,28 +41,35 @@ class DistributionField:
         j = 1
         
         # Plot
-        for i in np.ndindex(radii.shape[:-1]):
-            if mask[i]:
-                sys.stdout.flush()            
-                sys.stdout.write("Plotting: "+ str(j) + '/' + str(N) + '\r')
 
-                # Split into positive and negatives
-                n = radii[i].clip(max=0) 
-                p = radii[i].clip(min=0)*(-1)
-                j += 1
+        if self.f_arr is None:
+            for i in np.ndindex(radii.shape[:-1]):
+                if mask[i]:
+                    sys.stdout.flush()            
+                    sys.stdout.write("Plotting: "+ str(j) + '/' + str(N) + '\r')
 
-                if i == (2, 8, 0):
-                    mlab.triangular_mesh(p*xyz[:,0] + space*i[0], p*xyz[:,1] + space*i[1], p*xyz[:,2] + space*i[2], triangles, color=(0, 1, 0))
-                else:
-                    mlab.triangular_mesh(p*xyz[:,0] + space*i[0], p*xyz[:,1] + space*i[1], p*xyz[:,2] + space*i[2], triangles, color=(1, 0, 0))
+                    # Split into positive and negatives
+                    n = radii[i].clip(max=0) 
+                    p = radii[i].clip(min=0)*(-1)
+                    j += 1
 
-                if np.max(n) > mask_threshold:
-                    mlab.triangular_mesh(n*xyz[:,0] + space*i[0], n*xyz[:,1] + space*i[1], n*xyz[:,2] + space*i[2], triangles, color=(0, 0, 1))
+                    if i == (2, 8, 0):
+                        mlab.triangular_mesh(p*xyz[:,0] + space*i[0], p*xyz[:,1] + space*i[1], p*xyz[:,2] + space*i[2], triangles, color=(0, 1, 0))
+                    else:
+                        mlab.triangular_mesh(p*xyz[:,0] + space*i[0], p*xyz[:,1] + space*i[1], p*xyz[:,2] + space*i[2], triangles, color=(1, 0, 0))
 
-        if radii.shape[2] != 1:
+        elif self.sh_arr is None:
+            # Black magic ahead
+            x, y, z, tp = np.nonzero(radii)
+            u = xyz[tp, 0]
+            v = xyz[tp, 1]
+            w = xyz[tp, 2]
+            mlab.quiver3d(x, y, z, u, v, w, mode='cylinder', scale_factor=r)
+
+        if radii.shape[2] != 1: # If 3D dataset
             mlab.outline(extent=[0,radii.shape[0],0,radii.shape[1],0,radii.shape[2]])
             mlab.points3d(0,0,0, color=(1, 1, 1))
-        
+
         # View and save
         mlab.view(azimuth=45, elevation=45, distance=d, focalpoint=None,
                   roll=None, reset_roll=True, figure=None)
@@ -69,8 +84,11 @@ class Distribution:
     and the angular frequency domain (spherical harmonic coefficients).
 
     """
-    def __init__(self, sh=None):
-        self.sh = sh
+    def __init__(self, sh=None, f=None):
+        if f is None:
+            self.sh_arr = sh_arr
+        if sh is None:
+            self.f = f
 
     def make_positive(self, B, max_l=None):
         N = B.shape[1]
