@@ -101,14 +101,11 @@ class MultiMicroscope:
             obj = np.linalg.norm(g_diff, ord=2, axis=0)**2
             argmin = np.argmin(obj)
             f = f_prior[:, argmin]
-
             d = dist.Distribution(f=f)
             return d
 
-    def recon_dist_field(self, intf, mask_threshold=0, mask=None, prior=None):
+    def recon_dist_field(self, intf, mask=None, prior=None):
         g = intf.g
-        if mask is None:
-            mask = np.max(intf.g, axis=-1) > mask_threshold
         N = np.sum(mask)
         j = 1        
         if prior is None:
@@ -122,7 +119,9 @@ class MultiMicroscope:
                     dist_arr[i] = d.sh
                 else:
                     dist_arr[i] = np.zeros(self.max_j)
-            return dist.DistributionField(sh_arr=dist_arr)
+            d = dist.DistributionField(sh_arr=dist_arr)
+            d.calc_f_arr(self.B)
+            return d
         
         elif prior is 'single':
             dist_arr = np.zeros([*g.shape[:-1], self.B.shape[0]])

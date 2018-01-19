@@ -9,12 +9,17 @@ class DistributionField:
     """A DistributionField represents many fluorophore distributions. It 
     consists of an array of Distributions."""
     def __init__(self, sh_arr=None, f_arr=None):
-        if f_arr is None:
+        if f_arr is not None and sh_arr is not None:
+            print("Warning: sh_arr and f_arr are redundant.")
+        elif f_arr is None:
             self.sh_arr = sh_arr
             self.f_arr = None
-        if sh_arr is None:
+        elif sh_arr is None:
             self.sh_arr = None
             self.f_arr = f_arr
+
+    def calc_f_arr(self, B):
+        self.f_arr = np.einsum('ij,klmj->klmi', B, self.sh_arr)
 
     def make_positive(self, B, max_l=None):
         for i in np.ndindex(self.sh_arr.shape[:2]):
@@ -23,67 +28,56 @@ class DistributionField:
             self.sh_arr[i] = d.sh
             
     def plot_dist_field(self, B, xyz, triangles, filename=None,
-                        d=50, r=1, mag=1, show=False,
-                        mask_threshold=0.01, mask=None):
+                        d=50, r=1, s=1, mag=1, show=False, mask=None):
         
         # Calculate radii
-        if self.f_arr is None:
-            radii = r*np.einsum('ij,klmj->klmi', B, self.sh_arr)
-        elif self.sh_arr is None:
-            radii = r*self.f_arr
-
-        if mask is None:
-            mask = np.max(radii, axis=-1) > mask_threshold
+        radii = r*self.f_arr
         
         # Create figure
         mlab.figure(1, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), size=(800, 800))
         mlab.clf()
 
-        space = 1
-
         N = np.sum(mask)
         j = 1
-        
-        # Plot
 
-        if self.f_arr is None:
-            for i in np.ndindex(radii.shape[:-1]):
-                if mask[i]:
-                    sys.stdout.flush()            
-                    sys.stdout.write("Plotting: "+ str(j) + '/' + str(N) + '\r')
-
-                    # Split into positive and negatives
-                    n = radii[i].clip(max=0) 
-                    p = radii[i].clip(min=0)*(-1)
-                    j += 1
-
-                    if i == (2, 8, 0):
-                        mlab.triangular_mesh(p*xyz[:,0] + space*i[0], p*xyz[:,1] + space*i[1], p*xyz[:,2] + space*i[2], triangles, color=(0, 1, 0))
-                    else:
-                        mlab.triangular_mesh(p*xyz[:,0] + space*i[0], p*xyz[:,1] + space*i[1], p*xyz[:,2] + space*i[2], triangles, color=(1, 0, 0))
-
-        elif self.sh_arr is None:
-            # Black magic ahead
+        # If single direction plot quiver, otherwise plot mesh
+        # Black magic ahead for faster plotting
+        nz_idx = np.nonzero(np.sum(radii, axis=3))
+        nz = radii[nz_idx]
+        if np.nonzero(nz)[0].shape[0] == nz.shape[0]:
             x, y, z, tp = np.nonzero(radii)
             scale = radii[x, y, z, tp]
             u = xyz[tp, 0]
             v = xyz[tp, 1]
             w = xyz[tp, 2]
             sss = np.random.random(*x.shape)
-            mlab.quiver3d(x, y, z, u, v, w, scalars=scale, mode='cylinder', scale_factor=r, scale_mode='scalar')
+            mlab.quiver3d(x, y, z, u, v, w, scalars=scale, mode='cylinder',
+                          scale_factor=r, scale_mode='scalar')
+        else:
+            # TODO replace for loop with single tri_mesh
+            for i in range(nz.shape[0]):
+                sys.stdout.flush()            
+                sys.stdout.write("Plotting: "+ str(j) + '/' + str(N) + '\r')
+                idx = [x[i] for x in nz_idx]
+                r = nz[i,:]
+                j += 1
+                mlab.triangular_mesh(r*xyz[:,0] + s*idx[0],
+                                     r*xyz[:,1] + s*idx[1],
+                                     r*xyz[:,2] + s*idx[2],
+                                     triangles, color=(1, 0, 0))
 
         if radii.shape[2] != 1: # If 3D dataset
-            mlab.outline(extent=[0,radii.shape[0],0,radii.shape[1],0,radii.shape[2]], line_width=2*mag)
+            extent = [0, radii.shape[0], 0, radii.shape[1], 0, radii.shape[2]]
+            mlab.outline(extent=extent, line_width=2*mag)
             mlab.points3d(0,0,0, color=(1, 1, 1))
 
         # View and save
         mlab.gcf().scene.parallel_projection = True
         mlab.view(azimuth=45, elevation=45, distance=d, focalpoint=None,
                   roll=None, reset_roll=True, figure=None)
-        mlab.savefig(filename, magnification=mag)
-        subprocess.call(['convert', '-density', str(300), '-units', 'PixelsPerInch', filename, filename])
         if show:
             mlab.show()
+        mlab.savefig(filename, magnification=mag)
 
 class Distribution:
     """A Distribution represents a fluorophore distribution. It has redundant
@@ -93,7 +87,7 @@ class Distribution:
     """
     def __init__(self, sh=None, f=None):
         if f is None:
-            self.sh_arr = sh_arr
+            self.sh = sh
         if sh is None:
             self.f = f
 
