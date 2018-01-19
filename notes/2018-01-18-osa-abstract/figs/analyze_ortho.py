@@ -11,12 +11,13 @@ if not os.path.exists(folder):
 data_file = folder+'/'+folder+'.dat'
 
 # Build microscope
-exp = multi.MultiMicroscope(ill_thetas=[90], max_l=4, n_pts=5000)
+exp = multi.MultiMicroscope(ill_thetas=[90], det_nas=[1.1], max_l=4, n_pts=250)
 
 # Calculate and save (comment this on repeat runs)
-# exp.calc_sys_matrix()
-# dill.dump(exp.psi, open(data_file,'wb'))
+exp.calc_sys_matrix()
+dill.dump(exp.psi, open(data_file,'wb'))
 
+import pdb; pdb.set_trace() 
 # Load 
 f = open(data_file, 'rb')
 exp.psi = dill.load(f)

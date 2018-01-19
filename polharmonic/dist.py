@@ -23,16 +23,20 @@ class DistributionField:
             self.sh_arr[i] = d.sh
             
     def plot_dist_field(self, B, xyz, triangles, filename=None,
-                        d=50, r=1, mag=1, show=False, mask_threshold=0.01):
+                        d=50, r=1, mag=1, show=False,
+                        mask_threshold=0.01, mask=None):
+        
         # Calculate radii
         if self.f_arr is None:
             radii = r*np.einsum('ij,klmj->klmi', B, self.sh_arr)
         elif self.sh_arr is None:
             radii = r*self.f_arr
-        mask = np.max(radii, axis=-1) > mask_threshold
+
+        if mask is None:
+            mask = np.max(radii, axis=-1) > mask_threshold
         
         # Create figure
-        mlab.figure(1, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), size=(1000, 1000))
+        mlab.figure(1, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), size=(800, 800))
         mlab.clf()
 
         space = 1
@@ -61,20 +65,23 @@ class DistributionField:
         elif self.sh_arr is None:
             # Black magic ahead
             x, y, z, tp = np.nonzero(radii)
+            scale = radii[x, y, z, tp]
             u = xyz[tp, 0]
             v = xyz[tp, 1]
             w = xyz[tp, 2]
-            mlab.quiver3d(x, y, z, u, v, w, mode='cylinder', scale_factor=r)
+            sss = np.random.random(*x.shape)
+            mlab.quiver3d(x, y, z, u, v, w, scalars=scale, mode='cylinder', scale_factor=r, scale_mode='scalar')
 
         if radii.shape[2] != 1: # If 3D dataset
-            mlab.outline(extent=[0,radii.shape[0],0,radii.shape[1],0,radii.shape[2]])
+            mlab.outline(extent=[0,radii.shape[0],0,radii.shape[1],0,radii.shape[2]], line_width=2*mag)
             mlab.points3d(0,0,0, color=(1, 1, 1))
 
         # View and save
+        mlab.gcf().scene.parallel_projection = True
         mlab.view(azimuth=45, elevation=45, distance=d, focalpoint=None,
                   roll=None, reset_roll=True, figure=None)
         mlab.savefig(filename, magnification=mag)
-        subprocess.call(['convert', filename, '-transparent', 'white', filename])
+        subprocess.call(['convert', '-density', str(300), '-units', 'PixelsPerInch', filename, filename])
         if show:
             mlab.show()
 

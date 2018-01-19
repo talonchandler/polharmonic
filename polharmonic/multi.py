@@ -92,19 +92,23 @@ class MultiMicroscope:
             d = dist.Distribution(sh=sh)
             return d
         elif prior is 'single':
-            g_model = np.matmul(self.psi, np.linalg.pinv(self.B))
+            # Construct prior set (single directions w/ 10 amplitudes)
+            f_prior = np.hstack([(x*0.1 + 0.1)*np.identity(self.B.shape[0]) for x in range(10)])
+            H_model = np.matmul(self.psi, np.linalg.pinv(self.B))
+            g_model = np.matmul(H_model, f_prior)
             g_model = g_model/np.max(g_model)
             g_diff = g_model - g[:, np.newaxis]
             obj = np.linalg.norm(g_diff, ord=2, axis=0)**2
             argmin = np.argmin(obj)
-            f = np.zeros(self.B.shape[0])
-            f[argmin] = 1
+            f = f_prior[:, argmin]
+
             d = dist.Distribution(f=f)
             return d
 
-    def recon_dist_field(self, intf, mask_threshold=0, prior=None):
+    def recon_dist_field(self, intf, mask_threshold=0, mask=None, prior=None):
         g = intf.g
-        mask = np.max(intf.g, axis=-1) > mask_threshold
+        if mask is None:
+            mask = np.max(intf.g, axis=-1) > mask_threshold
         N = np.sum(mask)
         j = 1        
         if prior is None:
