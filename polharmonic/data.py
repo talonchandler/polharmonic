@@ -37,18 +37,43 @@ class IntensityField:
         for i, ax in enumerate(axs.flatten()):
             
             # Calculate contours and plot
+            mlab.figure(1, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), size=(800, 800))
             mlab.clf()
             im = self.g[:,:,:,i]
+            vol = mlab.pipeline.volume(mlab.pipeline.scalar_field(im), vmin=0, vmax=.8, color=(1, 0, 0))
+
+            # Changing the ctf:
+            from tvtk.util.ctf import ColorTransferFunction
+
+            ctf = ColorTransferFunction()
             for i in 0.1*np.arange(9):
-                color = cm.hot(i)
-                obj = mlab.contour3d(im, contours=[i],
-                                     color=color[:-1], opacity=0.8)
+                c = cm.hot(i)
+                ctf.add_rgb_point(i, c[0], c[1], c[2]) 
+            # ctf.add_hsv_point(value, h, s, v)
+            # ...
+            vol._volume_property.set_color(ctf)
+            vol._ctf = ctf
+            vol.update_ctf = True
+
+            # Changing the otf:
+            from tvtk.util.ctf import PiecewiseFunction
+            otf = PiecewiseFunction()
+            for i in 0.1*np.arange(9):
+                otf.add_point(i, i**(3))
+            vol._otf = otf
+            vol._volume_property.set_scalar_opacity(otf)
+            # for i in 0.1*np.arange(9):
+            #     color = cm.hot(i)
+            #     obj = mlab.contour3d(im, contours=[i],
+            #                          color=color[:-1], opacity=0.8)
                 
             mlab.gcf().scene.parallel_projection = True
             mlab.points3d(0,0,0, color=(1, 1, 1))
+            
             mlab.outline(extent=[0,im.shape[0],0,im.shape[1],0,im.shape[2]], line_width=2*mag)
-            mlab.view(azimuth=45, elevation=45, distance=d, focalpoint=None,
+            mlab.view(azimuth=225, elevation=45, distance=d, focalpoint=None,
                       roll=None, reset_roll=True, figure=None)
+
 
             if show:
                 mlab.show()

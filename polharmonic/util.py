@@ -2,9 +2,13 @@ import subprocess
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
+import matplotlib
 from mayavi import mlab
 from scipy.special import sph_harm
+import scipy.misc
 from skimage import io
+import vispy
+from polharmonic import visuals
 
 # SciPy real spherical harmonics with identical interface to SymPy's Znm
 # Useful for faster numerical evaluation of Znm
@@ -231,11 +235,40 @@ def tiff2array(filename, x=0, y=0, z=0, width=None, height=None, slices=None):
 
 # Returns "equally" spaced points on a unit sphere in spherical coordinates.
 # http://stackoverflow.com/a/26127012/5854689
-def fibonacci_sphere(n):
+def fibonacci_sphere(n, xyz=False):
     z = np.linspace(1 - 1/n, -1 + 1/n, num=n) 
     theta = np.arccos(z)
     phi = np.mod((np.pi*(3.0 - np.sqrt(5.0)))*np.arange(n), 2*np.pi) - np.pi
-    return np.vstack((theta, phi)).T
+    if xyz:
+        return np.vstack((np.sin(theta)*np.cos(phi), np.sin(theta)*np.sin(phi), np.cos(theta))).T, np.vstack((theta, phi)).T
+    else:
+        return np.vstack((theta, phi)).T
+
+
+def sphere_LUT_points():
+    n = 256
+    z = np.linspace(1 - 1/n, -1 + 1/n, num=n) 
+    theta = np.arccos(z)
+    phi = np.mod((np.pi*(3.0 - np.sqrt(5.0)))*np.arange(n), 2*np.pi) - np.pi
+    xyz = np.abs(np.vstack((np.cos(phi)*np.sin(theta), np.sin(phi)*np.sin(theta), np.cos(theta))).T)
+    i = np.lexsort((xyz[:,2], xyz[:,1], xyz[:,0]))
+    return xyz[i]
+
+def sphere_LUT():
+    points = sphere_LUT_points()
+    lut = np.zeros((256, 4))
+    for i in range(256):
+        lut[i, :] = [points[i, 0], points[i, 1], points[i, 2], 1]
+    return (255*lut).astype('uint8')
+
+def uvw2color(u, v, w):
+    lut = sphere_LUT()
+    color_idx = []
+    for i in range(u.shape[0]):
+        uvw_comp = 255*np.abs(np.array([u[i], v[i], w[i]]))
+        amin = np.argmin(np.linalg.norm(uvw_comp - lut[:,:3], ord=2, axis=1)**2)
+        color_idx.append(amin)
+    return np.array(color_idx)
 
 # Convert between spherical harmonic indices (l, m) and matrix index (j)
 def j2lm(j):
@@ -258,3 +291,37 @@ def lm2j(l, m):
 def maxl2maxj(l):
     return int(0.5*(l + 1)*(l + 2))
 
+def tp2xyz(theta, phi):
+    # Convert spherical to cartesian
+    return np.sin(theta)*np.cos(phi), np.sin(theta)*np.sin(phi), np.cos(theta)
+
+def plot_sphere(filename=None, directions=None, data=None, show=False,
+                dpi=500, vis_px=500):
+
+    # Setup viewing window
+    vispy.use('PyQt4')
+    canvas = vispy.scene.SceneCanvas(keys='interactive', bgcolor='white',
+                                     size=(vis_px, vis_px), show=show, dpi=dpi)
+    my_cam = vispy.scene.cameras.turntable.TurntableCamera(fov=0, elevation=40, azimuth=135,
+                                                           scale_factor=2.05)
+
+    view = canvas.central_widget.add_view(camera=my_cam)
+
+    # Plot dots
+    dots = vispy.scene.visuals.Markers(parent=view.scene)
+    dots.antialias = False
+    dots.set_data(pos=np.array([[1.01,0,0],[0,1.01,0],[0,0,1.01]]),
+                  edge_color='black', face_color='black', size=vis_px/50)
+
+    colors = np.abs(data)
+    
+    # Plot sphere
+    sphere = visuals.MySphere(parent=view.scene, radius=1.0,
+                              directions=directions, colors=colors)
+    
+    # Display or save
+    im = canvas.render()
+    scipy.misc.imsave(filename, im)
+    if show:
+        #visuals.MyXYZAxis(parent=view.scene, origin=[0,1.3,-0.3], length=0.2)
+        vispy.app.run()

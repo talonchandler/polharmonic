@@ -125,17 +125,15 @@ class MultiMicroscope:
         
         elif prior is 'single':
             dist_arr = np.zeros([*g.shape[:-1], self.B.shape[0]])
-            for i in np.ndindex(g.shape[:-1]):
-                if mask[i]:
-                    sys.stdout.flush()
-                    sys.stdout.write("Reconstructing: "+ str(j) + '/' + str(N) + '\r')
-                    j += 1
-                    d = self.recon_dist(g[i], prior=prior)
-                    dist_arr[i] = d.f
-                else:
-                    dist_arr[i] = np.zeros(self.B.shape[0])
+            mask_idx = np.nonzero(mask)
+            for i in range(mask_idx[0].shape[0]):
+                sys.stdout.flush()
+                sys.stdout.write("Reconstructing: "+ str(j) + '/' + str(N) + '\r')
+                j += 1
+                idx = mask_idx[0][i], mask_idx[1][i], mask_idx[2][i]
+                d = self.recon_dist(g[idx], prior=prior)
+                dist_arr[idx] = d.f
             return dist.DistributionField(f_arr=dist_arr)
-            
 
     def plot_scene(self, filename):
         scene_string = ''
