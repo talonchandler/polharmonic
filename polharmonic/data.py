@@ -28,13 +28,13 @@ class IntensityField:
              dpi=400, d=50, mag=1, show=False):
         # Create axes
         inches = 3
-        fig, axs = plt.subplots(shape[0], shape[1],
+        fig, axs = plt.subplots(shape[0], shape[1]+1,
                                 figsize=(shape[1]*inches, shape[0]*inches),
-                                gridspec_kw={'hspace':-0.15, 'wspace':-0.05})
+                                gridspec_kw={'hspace':-0.175, 'wspace':-0.075, 'width_ratios':[1, 1, 1, 1, 0.05]})
         mlab.figure(1, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), size=(800, 800))
 
         # Load data and plot
-        for i, ax in enumerate(axs.flatten()):
+        for i, ax in enumerate(axs[:,:4].flatten()):
             
             # Calculate contours and plot
             mlab.figure(1, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), size=(800, 800))
@@ -62,18 +62,13 @@ class IntensityField:
                 otf.add_point(i, i**(3))
             vol._otf = otf
             vol._volume_property.set_scalar_opacity(otf)
-            # for i in 0.1*np.arange(9):
-            #     color = cm.hot(i)
-            #     obj = mlab.contour3d(im, contours=[i],
-            #                          color=color[:-1], opacity=0.8)
-                
+
             mlab.gcf().scene.parallel_projection = True
             mlab.points3d(0,0,0, color=(1, 1, 1))
             
             mlab.outline(extent=[0,im.shape[0],0,im.shape[1],0,im.shape[2]], line_width=2*mag)
             mlab.view(azimuth=225, elevation=45, distance=d, focalpoint=None,
                       roll=None, reset_roll=True, figure=None)
-
 
             if show:
                 mlab.show()
@@ -83,12 +78,31 @@ class IntensityField:
             ax.set_axis_off()
         subprocess.call(['rm', 'temp.png'])
 
+        # Plot colorbars
+        import matplotlib as mpl
+        norm = mpl.colors.Normalize(vmin=0, vmax=1)
+        cb1 = mpl.colorbar.ColorbarBase(axs[0,-1], cmap=cm.hot, norm=norm, orientation='vertical')
+        cb1.set_label('Color Transfer Function', rotation=270, labelpad=15)
+
+        norm = mpl.colors.PowerNorm(gamma=1./2.)
+        cb1 = mpl.colorbar.ColorbarBase(axs[1,-1], cmap=cm.binary, norm=norm, orientation='vertical')
+        cb1.set_label('Opacity Transfer Function', rotation=270, labelpad=15)
+
+        # Adjust colorbar position
+        diff = 0.05
+        pos1 = axs[0,-1].get_position()
+        pos2 = [pos1.x0 + diff/5, pos1.y0 + diff,  pos1.width, pos1.height - 2*diff] 
+        axs[0, -1].set_position(pos2)
+        pos1 = axs[1,-1].get_position()
+        pos2 = [pos1.x0 + diff/5, pos1.y0 + diff,  pos1.width, pos1.height - 2*diff] 
+        axs[1, -1].set_position(pos2)
+        
         # Label rows and columns
         if col_labels is not None:
             for i, label in enumerate(col_labels):
                 axs[0, i].annotate(label, xy=(0,0), xytext=(0.5, 1.05), textcoords='axes fraction', va='center', ha='center', fontsize=12, annotation_clip=False)
         if row_labels is not None:
             for i, label in enumerate(row_labels):
-                axs[i, 0].annotate(label, xy=(0,0), xytext=(-0.1, 0.5), textcoords='axes fraction', va='center', ha='center', fontsize=12, annotation_clip=False, rotation=90)
+                axs[i, 0].annotate(label, xy=(0,0), xytext=(-0.05, 0.5), textcoords='axes fraction', va='center', ha='center', fontsize=12, annotation_clip=False, rotation=90)
 
         fig.savefig(output_file, dpi=dpi)

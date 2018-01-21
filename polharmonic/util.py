@@ -303,7 +303,7 @@ def plot_sphere(filename=None, directions=None, data=None, show=False,
     canvas = vispy.scene.SceneCanvas(keys='interactive', bgcolor='white',
                                      size=(vis_px, vis_px), show=show, dpi=dpi)
     my_cam = vispy.scene.cameras.turntable.TurntableCamera(fov=0, elevation=40, azimuth=135,
-                                                           scale_factor=2.05)
+                                                           scale_factor=2.2)
 
     view = canvas.central_widget.add_view(camera=my_cam)
 
@@ -321,7 +321,10 @@ def plot_sphere(filename=None, directions=None, data=None, show=False,
     
     # Display or save
     im = canvas.render()
-    scipy.misc.imsave(filename, im)
+
     if show:
         #visuals.MyXYZAxis(parent=view.scene, origin=[0,1.3,-0.3], length=0.2)
         vispy.app.run()
+    
+    return im
+    #scipy.misc.imsave(filename, im)

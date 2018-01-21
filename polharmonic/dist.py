@@ -32,7 +32,7 @@ class DistributionField:
     def plot_dist_field(self, B, xyz, triangles, filename=None,
                         d=50, r=1, s=1, mag=1, show=False, mask=None,
                         vis_px=500, dpi=500):
-        
+
         # Calculate radii
         radii = r*self.f_arr
         
@@ -51,6 +51,7 @@ class DistributionField:
             v = xyz[tp, 1]
             w = xyz[tp, 2]
 
+            # u = np.random.random(u.shape)
             # v = np.random.random(v.shape)
             # w = np.random.random(w.shape)
             
@@ -78,10 +79,6 @@ class DistributionField:
             # y = y - ys/2
             # z = z - zs/2
             
-            # Setup viewing window
-            # xyz, tp = util.fibonacci_sphere(1000, xyz=True)
-            # util.plot_sphere(filename='scale.png', directions=tp, data=xyz,
-            #                  show=show, vis_px=500)
             
             # vispy.use('PyQt4')
             # canvas = vispy.scene.SceneCanvas(keys='interactive', bgcolor='white',
