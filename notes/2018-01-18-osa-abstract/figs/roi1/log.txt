@@ -1,0 +1,7 @@
+name: roi1
+note: roi from previous email
+roi coords (px) = 50, 50, 20
+span (px) = 50, 50, 20
+span (um) = 6.75, 6.75, 2.7
+skip (px) = 2
+threshold (normalized) = 0.6

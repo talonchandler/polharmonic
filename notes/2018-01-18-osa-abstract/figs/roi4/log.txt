@@ -1,0 +1,7 @@
+name: roi4
+note: edge of cell...attachment to cover slip?
+roi coords (px) = 100, 100, 40
+span (px) = 100, 100, 40
+span (um) = 13.5, 13.5, 5.4
+skip (px) = 3
+threshold (normalized) = 0.3

@@ -1,0 +1,7 @@
+name: roi3
+note: ~half of a cell body
+roi coords (px) = 200, 250, 100
+span (px) = 200, 250, 100
+span (um) = 27.0, 33.75, 13.5
+skip (px) = 4
+threshold (normalized) = 0.25

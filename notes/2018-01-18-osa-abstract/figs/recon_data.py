@@ -49,7 +49,7 @@ def recon_roi(name, xs, ys, zs, x0, y0, z0, recon_mask_threshold, d, skip, dpi=8
     intf = data.IntensityField()
     intf.load_from_file(file_names=input_files, x0=x0, y0=y0, z0=z0, xspan=xs, yspan=ys, zspan=zs, cal=cal)
     row_labels = ['$x$-illumination\n $z$-detection\n 1.1 NA', '$z$-illumination\n $x$-detection\n 0.71 NA']
-    col_labels = ['$\phi = 0^{\circ}$', '$\phi = 45^{\circ}$', '$\phi = 90^{\circ}$', '$\phi = 135^{\circ}$']
+    col_labels = ['$\phi_{\mathrm{pol}} = 0^{\circ}$', '$\phi_{\mathrm{pol}} = 45^{\circ}$', '$\phi_{\mathrm{pol}} = 90^{\circ}$', '$\phi_{\mathrm{pol}} = 135^{\circ}$']
     intf.plot(output_file=folder+'/'+'data.pdf', shape=(2,4),
               row_labels=row_labels, col_labels=col_labels,
               d=d, mag=int_field_mag, dpi=400, show=False)
@@ -102,9 +102,6 @@ def recon_roi(name, xs, ys, zs, x0, y0, z0, recon_mask_threshold, d, skip, dpi=8
                               mag=recon_mag, show=False, mask=mask)
 
     # Setup viewing window
-    xyz, tp = util.fibonacci_sphere(1000, xyz=True)
-    sphere_im = util.plot_sphere(filename='scale.png', directions=tp, data=xyz,
-                          show=False, vis_px=500)
 
     from mpl_toolkits.axes_grid.inset_locator import (inset_axes, InsetPosition,
                                                       mark_inset)
@@ -151,12 +148,16 @@ def recon_roi(name, xs, ys, zs, x0, y0, z0, recon_mask_threshold, d, skip, dpi=8
         image = mpimg.imread(ims[i])
         ax.imshow(image, interpolation=None, vmin=0, vmax=1)
         ax.set_axis_off()
+
+        xyz, tp = util.fibonacci_sphere(1000, xyz=True)
+        sphere_im = util.plot_sphere(filename='scale.png', directions=tp, data=xyz,
+                                     show=False, vis_px=500)
         ax_in.imshow(sphere_im, interpolation='none')
         ax_in.set_axis_off()
 
-    ax_lst[0][0].annotate('1.1 NA data only', xy=(0,0), xytext=(0.5, 1.07), textcoords='axes fraction', va='center', ha='center', fontsize=10, annotation_clip=False)
-    ax_lst[1][0].annotate('0.71 NA data only', xy=(0,0), xytext=(0.5, 1.07), textcoords='axes fraction', va='center', ha='center', fontsize=10, annotation_clip=False)
-    ax_lst[2][0].annotate('All data', xy=(0,0), xytext=(0.5, 1.07), textcoords='axes fraction', va='center', ha='center', fontsize=10, annotation_clip=False)
+    ax_lst[0][0].annotate('1.1 NA data only', xy=(0,0), xytext=(0.5, 1.04), textcoords='axes fraction', va='center', ha='center', fontsize=7, annotation_clip=False)
+    ax_lst[1][0].annotate('0.71 NA data only', xy=(0,0), xytext=(0.5, 1.04), textcoords='axes fraction', va='center', ha='center', fontsize=7, annotation_clip=False)
+    ax_lst[2][0].annotate('All data', xy=(0,0), xytext=(0.5, 1.04), textcoords='axes fraction', va='center', ha='center', fontsize=7, annotation_clip=False)
     fig.savefig(folder+'/recon.pdf', dpi=dpi, bbox_inches='tight')
 
     subprocess.Popen('rm '+folder+'/*.png', shell=True)
@@ -177,10 +178,10 @@ recon_roi(name='roi2', xs=100, ys=100, zs=40, x0=180, y0=545, z0=150,
           recon_mask_threshold=0.4, d=130, skip=3,
           dpi=800, mag=3, note='zoomed out version of roi1')
 
-recon_roi(name='roi3', xs=200, ys=250, zs=100, x0=100, y0=500, z0=100,
-          recon_mask_threshold=0.25, d=130, skip=4,
-          dpi=800, mag=3, note='~half of a cell body')
+# recon_roi(name='roi3', xs=200, ys=250, zs=100, x0=100, y0=500, z0=100,
+#           recon_mask_threshold=0.25, d=130, skip=4,
+#           dpi=800, mag=3, note='~half of a cell body')
 
-recon_roi(name='roi4', xs=100, ys=100, zs=40, x0=325, y0=225, z0=240,
-          recon_mask_threshold=0.3, d=130, skip=3,
-          dpi=800, mag=3, note='edge of cell...attachment to cover slip?')
+# recon_roi(name='roi4', xs=100, ys=100, zs=40, x0=325, y0=225, z0=240,
+#           recon_mask_threshold=0.3, d=130, skip=3,
+#           dpi=800, mag=3, note='edge of cell...attachment to cover slip?')

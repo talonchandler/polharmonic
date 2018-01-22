@@ -82,12 +82,14 @@ class IntensityField:
         import matplotlib as mpl
         norm = mpl.colors.Normalize(vmin=0, vmax=1)
         cb1 = mpl.colorbar.ColorbarBase(axs[0,-1], cmap=cm.hot, norm=norm, orientation='vertical')
-        cb1.set_label('Color Transfer Function', rotation=270, labelpad=15)
+        cb1.set_label('Color Transfer Function', rotation=270, labelpad=22, fontsize=14)
+        cb1.ax.tick_params(axis='both', labelsize=14)
 
-        norm = mpl.colors.PowerNorm(gamma=1./2.)
-        cb1 = mpl.colorbar.ColorbarBase(axs[1,-1], cmap=cm.binary, norm=norm, orientation='vertical')
-        cb1.set_label('Opacity Transfer Function', rotation=270, labelpad=15)
-
+        norm = mpl.colors.PowerNorm(gamma=1./3.)
+        cb2 = mpl.colorbar.ColorbarBase(axs[1,-1], cmap=cm.binary, norm=norm, orientation='vertical')
+        cb2.set_label('Opacity Transfer Function', rotation=270, labelpad=22, fontsize=14)
+        cb2.ax.tick_params(axis='both', labelsize=14)
+        
         # Adjust colorbar position
         diff = 0.05
         pos1 = axs[0,-1].get_position()
@@ -100,9 +102,9 @@ class IntensityField:
         # Label rows and columns
         if col_labels is not None:
             for i, label in enumerate(col_labels):
-                axs[0, i].annotate(label, xy=(0,0), xytext=(0.5, 1.05), textcoords='axes fraction', va='center', ha='center', fontsize=12, annotation_clip=False)
+                axs[0, i].annotate(label, xy=(0,0), xytext=(0.5, 1.05), textcoords='axes fraction', va='center', ha='center', fontsize=14, annotation_clip=False)
         if row_labels is not None:
             for i, label in enumerate(row_labels):
-                axs[i, 0].annotate(label, xy=(0,0), xytext=(-0.05, 0.5), textcoords='axes fraction', va='center', ha='center', fontsize=12, annotation_clip=False, rotation=90)
+                axs[i, 0].annotate(label, xy=(0,0), xytext=(-0.08, 0.5), textcoords='axes fraction', va='center', ha='center', fontsize=14, annotation_clip=False, rotation=90)
 
         fig.savefig(output_file, dpi=dpi)
