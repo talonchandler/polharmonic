@@ -174,6 +174,47 @@ class DistributionField:
         #                              r*xyz[:,2] + s*idx[2],
         #                              triangles, color=(1, 0, 0))
 
+    def plot_dist_field_color(self, B, xyz, triangles, filename=None,
+                              d=50, r=1, s=1, mag=1, show=False, mask=None,
+                              vis_px=500, dpi=500, gmask=None, rmask=None):
+
+        # Calculate radii
+        mlab.figure(1, bgcolor=(1, 1, 1), fgcolor=(0, 0, 0), size=(800, 800))
+        mlab.clf()
+
+        radii = r*self.f_arr
+        radii_r = np.copy(radii)
+        radii_g = np.copy(radii)
+
+        x, y, z, tp = np.nonzero(radii)
+        u = xyz[tp, 0]
+        v = xyz[tp, 1]
+        w = xyz[tp, 2]
+
+        for i, rad in enumerate(x):
+            print(i)
+            if -0.7*x[i] + z[i] > -7:
+                quiv = mlab.quiver3d(x[i], y[i], z[i], u[i], v[i], w[i], color=(1, 0, 0), mode='cylinder',
+                                     scale_factor=r, scale_mode='none', vmin=0, vmax=255)
+            else:
+                quiv = mlab.quiver3d(x[i], y[i], z[i], u[i], v[i], w[i], color=(0, 1, 0), mode='cylinder',
+                                     scale_factor=r, scale_mode='none', vmin=0, vmax=255)
+
+
+        if radii.shape[2] != 1: # If 3D dataset
+            extent = [0, radii.shape[0], 0, radii.shape[1], 0, radii.shape[2]]
+            mlab.points3d(0,0,0, color=(1, 1, 1))
+            mlab.outline(extent=extent, line_width=2*mag)            
+
+        # View and save
+        mlab.gcf().scene.parallel_projection = True
+        mlab.view(azimuth=225, elevation=45, distance=d, focalpoint=None,
+                  roll=None, reset_roll=True, figure=None)
+        mlab.savefig(filename, magnification=mag)        
+        if show:
+            mlab.show()
+        
+
 
 class Distribution:
     """A Distribution represents a fluorophore distribution. It has redundant

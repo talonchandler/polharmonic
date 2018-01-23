@@ -5,6 +5,7 @@ import matplotlib.cm as cm
 from mayavi import mlab
 import matplotlib.image as mpimg
 import subprocess
+import scipy.ndimage
 
 class IntensityField:
     """An IntensityField represents the data collected from a DistributionField.  
@@ -13,10 +14,18 @@ class IntensityField:
     def __init__(self, g=None):
         self.g = g
 
-    def load_from_file(self, file_names=None, x0=0, y0=0, z0=0, xspan=10, yspan=10, zspan=10, cal=None):
+    def load_from_file(self, file_names=None, x0=0, y0=0, z0=0,
+                       xspan=10, yspan=10, zspan=10, cal=None,
+                       angle=-35):
+
+        # Rotate and make arrow
+        # im = util.tiff2array(file_names[0], x=x0, y=y0, z=z0, width=xspan, height=yspan, slices=zspan)
+        # im = scipy.ndimage.rotate(im, angle=angle, axes=(0, 2))
         g = np.zeros((xspan, yspan, zspan, len(file_names)))
+        
         for i, file_name in enumerate(file_names):
             im = util.tiff2array(file_name, x=x0, y=y0, z=z0, width=xspan, height=yspan, slices=zspan)
+            # im = scipy.ndimage.rotate(im, angle=angle, axes=(0, 2))
             if cal is None:
                 g[:,:,:,i] = im
             else:
