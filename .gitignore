@@ -2,7 +2,6 @@
 *.DS_Store
 
 # Python
-__init__*
 *.pyc
 
 # Cython
