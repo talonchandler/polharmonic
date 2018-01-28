@@ -1,0 +1,51 @@
+
+\documentclass{minimal}
+\usepackage{mathptmx}
+
+\usepackage{tikz}
+\usetikzlibrary{shapes}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{chains}
+\usetikzlibrary{matrix}
+\usetikzlibrary{scopes}
+\usetikzlibrary{decorations.pathreplacing, angles, quotes}
+
+\usepackage{tikz-3dplot}
+\usepackage{verbatim}
+\usepackage[active,tightpage]{preview}
+\PreviewEnvironment{tikzpicture}
+\setlength\PreviewBorder{1mm}\begin{document}
+
+\tdplotsetmaincoords{60}{135}
+\pgfmathsetmacro{\inclination}{135}
+\pgfmathsetmacro{\azimuth}{90}
+\begin{tikzpicture}[scale=1, tdplot_main_coords]
+\draw[-Latex] (0,0,0) -- (1,0,0) node[anchor=east]{$x$};
+\draw[-Latex] (0,0,0) -- (0,1,0) coordinate (Y) node[anchor=west]{$y$};
+\draw[-Latex] (0,0,0) -- (0,0,1) node[anchor=south]{$z$};
+\draw[dashed] (0,0,0) -- (0,0,-0.7);
+
+\coordinate (O) at (0,0,0);
+\tdplotsetcoord{P}{1}{\inclination}{\azimuth}
+
+% \draw[-Latex] (O) -- (P) node[anchor=south west] {} node[sloped,pos=0.6,above,scale=0.75] {};
+% \draw[dashed] (P) -- (Pxy);
+\draw[] (O) -- (Pxy);
+
+%\tdplotdrawarc{(O)}{0.4}{0}{\azimuth}{anchor=north}{$\phi_{\textrm{pol}}$}
+
+\coordinate (Y) at (0,0,-0.25);
+\coordinate (0) at (0,0,0);
+\coordinate (V) at (0,0.35, -0.35);
+\pic [draw, angle radius = .3cm] {angle = Y--O--V };
+\node [label={[xshift=0.4cm, yshift=-1.25cm]$\phi_{\textrm{pol}}$}] {};
+\draw[] (0)--(0, .4, -.4);
+% \tdplotsetthetaplanecoords{\azimuth}
+% \tdplotdrawarc[tdplot_rotated_coords]{(O)}{0.25}{0}{\inclination}{shift={(0.6,0.5)}}{$\theta_{\hat{\mathbf{z}}}$}
+
+% \draw[decoration={brace,mirror,raise=0pt},decorate]
+% (0,0,0) -- node[xshift=6, yshift=-3] {$r$} (P);
+\end{tikzpicture}
+
+\end{document}

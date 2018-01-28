@@ -56,7 +56,7 @@ class IntensityField:
 
             ctf = ColorTransferFunction()
             for i in 0.1*np.arange(9):
-                c = cm.hot(i)
+                c = (1,1,1)#cm.binary(i)
                 ctf.add_rgb_point(i, c[0], c[1], c[2]) 
             # ctf.add_hsv_point(value, h, s, v)
             # ...
@@ -89,14 +89,15 @@ class IntensityField:
 
         # Plot colorbars
         import matplotlib as mpl
-        norm = mpl.colors.Normalize(vmin=0, vmax=1)
-        cb1 = mpl.colorbar.ColorbarBase(axs[0,-1], cmap=cm.hot, norm=norm, orientation='vertical')
-        cb1.set_label('Color Transfer Function', rotation=270, labelpad=22, fontsize=14)
-        cb1.ax.tick_params(axis='both', labelsize=14)
+        axs[0,-1].set_axis_off()
+        # norm = mpl.colors.Normalize(vmin=0, vmax=1)
+        # cb1 = mpl.colorbar.ColorbarBase(axs[0,-1], cmap=cm.hot, norm=norm, orientation='vertical')
+        # cb1.set_label('Color Transfer Function', rotation=270, labelpad=22, fontsize=14)
+        # cb1.ax.tick_params(axis='both', labelsize=14)
 
         norm = mpl.colors.PowerNorm(gamma=1./3.)
         cb2 = mpl.colorbar.ColorbarBase(axs[1,-1], cmap=cm.binary, norm=norm, orientation='vertical')
-        cb2.set_label('Opacity Transfer Function', rotation=270, labelpad=22, fontsize=14)
+        cb2.set_label('Intensity = Opacity', rotation=270, labelpad=22, fontsize=14)
         cb2.ax.tick_params(axis='both', labelsize=14)
         
         # Adjust colorbar position
@@ -107,6 +108,16 @@ class IntensityField:
         pos1 = axs[1,-1].get_position()
         pos2 = [pos1.x0 + diff/5, pos1.y0 + diff,  pos1.width, pos1.height - 2*diff] 
         axs[1, -1].set_position(pos2)
+
+        # Add xyz axes
+        from scipy.ndimage import imread
+        
+        axis1 = fig.add_axes([0.07, 0.775, 0.15, 0.15])
+        axis1.imshow(imread('frames/frames_a.png'))
+        axis1.set_axis_off()
+        axis2 = fig.add_axes([0.07, 0.425, 0.15, 0.15])
+        axis2.imshow(imread('frames/frames_b.png'))
+        axis2.set_axis_off()
         
         # Label rows and columns
         if col_labels is not None:

@@ -53,6 +53,7 @@ def recon_roi(name, xs, ys, zs, x0, y0, z0, recon_mask_threshold, d, skip, dpi=8
     intf.plot(output_file=folder+'/'+'data.pdf', shape=(2,4),
               row_labels=row_labels, col_labels=col_labels,
               d=d, mag=int_field_mag, dpi=400, show=False)
+    import pdb; pdb.set_trace() 
 
     # Build microscopes
     exp = multi.MultiMicroscope(ill_thetas=[90, 0], det_thetas=[0, 90],
@@ -176,7 +177,7 @@ def recon_roi(name, xs, ys, zs, x0, y0, z0, recon_mask_threshold, d, skip, dpi=8
 
 recon_roi(name='roi2', xs=100, ys=100, zs=40, x0=180, y0=545, z0=150,
           recon_mask_threshold=0.4, d=130, skip=3,
-          dpi=800, mag=3, note='zoomed out version of roi1')
+          dpi=1000, mag=5, note='zoomed out version of roi1')
 
 # recon_roi(name='roi3', xs=200, ys=250, zs=100, x0=100, y0=500, z0=100,
 #           recon_mask_threshold=0.25, d=130, skip=4,
