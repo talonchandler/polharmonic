@@ -1,0 +1,162 @@
+\documentclass[presentation]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\tolerance=1000
+\usepackage{graphicx} \DeclareMathOperator{\argmin}{argmin}
+
+\newcommand{\under}[2]{\underset{\scriptscriptstyle#1}{#2}}
+
+
+\usetheme{simple}
+\usecolortheme{}
+\usefonttheme{serif}
+\useinnertheme{}
+\useoutertheme{}
+\author{Talon Chandler}
+\date{February 9, 2017}
+\title{Update On 3D Orientation Reconstruction}
+
+\begin{document}
+
+\maketitle
+\begin{frame}[label=sec-1]{Polarized diSPIM data---Summer 2017}
+Since last time:
+\begin{itemize}
+\item Much faster reconstructions. Reconstructed 350K voxels in 1 min on my
+  laptop. Bottlenecks are file I/O (not much I can do here) and visualization
+  (chokes a bit on my computer, but live renders on diSPIM computer and RCC).
+\item Previously I was just reconstructing the orientation in each voxel. Now
+  I'm reconstructing the orientation and the ``number'' of fluorophores in each
+  voxel. In each voxel I assign an oriented glyph scaled by the number of
+  fluorophores in that voxel.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[label=sec-1]{Polarized diSPIM data---Summer 2017}
+ \begin{center}
+   \includegraphics[width=0.8\textwidth]{figs/last_frame.png}
+ \end{center}
+  Fly-around video here: \url{https://www.dropbox.com/s/szvssvu9fzxsajj/orientation-anim.avi?dl=0}
+\end{frame}
+
+\begin{frame}[label=sec-1]{Polarized diSPIM data---Summer 2017}
+Notes:
+\begin{itemize}
+\item The video shows the entire volume 68$\times$108$\times$46 $\mu$m${}^3$.
+\item I reconstructed ~10$\times$ as many voxels as the ones shown in the video then
+  thresholded the smallest ones away. In Paraview I can change the threshold
+  with a slider and choose slice planes quickly. 
+\item I'd estimate that a majority of voxel orientations align parallel with the
+  actin fibers within 10 degrees. The fiber with 25-30 degree error that we saw
+  before is one of the worst cases. The orientations also clearly follow the
+  edges of the cells, although the individual fibers are not resolvable in these
+  regions. I'm still skeptical of our data ordering, but the results are
+  encouraging.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{PBT Film via Fred Lanni}
+  poly(1,4-phenylene-2,6-benzo-bis-thiazole)
+   \begin{center}
+     \includegraphics[width=0.4\textwidth]{figs/snap.png}
+   \end{center}
+   \begin{itemize}
+   \item \textbf{Goal}: evaluate this sample as a test specimen for 3D reconstructions
+   \item Broad excitation and emission spectra
+   \item Stable and insoluble
+   \item No published data on fluorescence anisotropy---only Fred's verbal reports
+   \end{itemize}
+\end{frame}
+
+\begin{frame}{PBT Film, Single-view FluoPolscope\\20$\times$/0.5 NA, 325$\times$325 $\mu$m${}^2$ \\February 6, 2018}
+   \begin{center}
+     \includegraphics[width=0.6\textwidth]{figs/capture.png}
+   \end{center}
+\end{frame}
+
+\begin{frame}{PBT Film, Single-view FluoPolscope\\20$\times$/0.5 NA, 325$\times$325 $\mu$m${}^2$ \\February 6, 2018}
+  Notes:
+  \begin{itemize}
+  \item I sandwiched the PBT film between a slide and cover slip so the fibers are 
+    approximately flat.
+  \item I calculated the orientation lines using the existing FluoPolscope
+    algorithms and overlaid the lines on the average intensity image.
+  \item Good alignment along the fibers as expected (except for one pesky fiber in
+    the bottom center?).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Uncontrolled polarization dual-view data\\0.8/0.8 NA, February 3, 2018}
+  Notes:
+  \begin{itemize}
+  \item We took two datasets with the PBT film on the symmetric diSPIM without
+    polarizers. The illumination light was partially polarized on one arm, and
+    almost completely polarized on the other arm---I don't expect any
+    quantitative results given that we didn't use polarizers.
+  \item During our first collection I accidentally saturated the detector for
+    most parts of sample. 
+  \item During the second collection I turned down the laser power to avoid
+    saturation.
+  \item The two views from the first (saturated) dataset registered easily.
+  \item The two views from the second (unsaturated) dataset didn't register. I
+    can't visually match up any of the features in the two datasets either. This
+    could be because of orientation dependence, shadowing, something else? 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Saturated data---possible registration issues?}
+  \begin{center}
+    \includegraphics[width=0.15\textwidth]{figs/SPIMA-regROI}
+    \hspace{1em}
+    \includegraphics[width=0.15\textwidth]{figs/SPIMB-regROI}    
+  \end{center}
+  \begin{itemize}
+  \item In the saturated registered dataset I noticed that the deformed dataset
+    (right) is significantly degraded compared to the undeformed dataset (left).
+    I'd expect some degradation on the order of a few pixels, but this seems
+    much larger. Do these results match your experience, Min?
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Conclusions}
+  \begin{itemize}
+  \item The PBT film is a convenient sample that displays fluorescence
+    anisotropy.
+  \item I think it will be a useful sample for testing the diSPIM with
+    polarizers. We will be able to fray the sample into all orientations, and
+    we won't have to worry about labeled cells being too flat or GUVs
+    being too fragile. 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Next Up}
+  Next week: 
+  \begin{itemize}
+  \item Thesis proposal document
+  \end{itemize}    
+  After that: 
+  \begin{itemize}
+  \item Formulate joint spatio-angular restoration problem
+  \item Answer lingering questions about relating these reconstructions to
+    existing work. How is the ``anisotropy'' related to these reconstructions?
+    Can we understand Rudolf's existing reconstructions using spherical
+    harmonics?
+  \end{itemize}    
+\end{frame}
+
+
+\end{document}
