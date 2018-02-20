@@ -1,4 +1,4 @@
-from util import *
+from polharmonic.util import *
 import numpy as np
 from sympy import *
 import sympy.functions.special.spherical_harmonics as sh

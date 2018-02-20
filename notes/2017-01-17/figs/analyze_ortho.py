@@ -1,7 +1,7 @@
 import numpy as np
 import dill
-from util import *
-from microscopes import *
+from polharmonic.util import *
+from polharmonic.microscopes import *
 np.set_printoptions(precision=2, suppress=True)
 
 # Main script

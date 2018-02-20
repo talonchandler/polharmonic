@@ -1,9 +1,9 @@
 import numpy as np
-from util import *
+from polharmonic.util import *
 from sympy import *
 from sympy.matrices.dense import *
 import sympy.functions.special.spherical_harmonics as sh
-from sft import *
+from polharmonic.sft import *
 import dill
 
 # Global initialize symbols
@@ -234,8 +234,10 @@ def generate_plots(psi, col_labels, row_labels, sch_strings, folder):
     # SVD
     U, s, Vh = np.linalg.svd(psi.real)
     V = Vh.conj().T
-    
+
+    import pdb; pdb.set_trace() 
+
     # Plot individual singular distributions
-    plot_multiple_spherical(V, col_labels, filename=folder+'/sv', r=0.8)
+    plot_multiple_spherical(V, col_labels, filename=folder+'/sv', r=0.65)
 
     # Plot singular value spectrum TODO
