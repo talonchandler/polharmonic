@@ -1,13 +1,13 @@
 usepackage("amsmath");
 settings.outformat = "pdf";
-settings.render=16;
+settings.render=8;//16;
 settings.embed=true;
 settings.prc=true;
 import three;
 import graph3;
 import solids;
 import grid3;
-defaultpen(fontsize(20pt));
+defaultpen(fontsize(24pt));
 currentprojection = orthographic(5,5,1.5);
 
 texpreamble("
@@ -78,22 +78,24 @@ draw(3*r*Z--(A+3*r*Z), dashed);
 
 // Choose vector
 real rv = 0.5;
-real q = 0.25*pi; //theta
-real f = 0.5*pi; //phi
+real q = 0.75*pi; //theta
+real f = 0*pi; //phi
 triple Av = rv*expi(q,f);
 
 // Draw other lines
-draw(L=Label("$\mathbf{\hat{s}_o}$", position=Relative(1.1), align=E), O--Av, thinblack, Arrow3);
+draw(L=Label("$\mathbf{\hat{s}}_o = \cos\varphi\sin\vartheta\hat{\mathbf{x}} + \sin\varphi\sin\vartheta\hat{\mathbf{y}} + \cos\vartheta\hat{\mathbf{z}}$", position=Relative(1.1), align=SE), O--Av, thinblack, Arrow3(emissive(black))); 
 //draw(2*Z--(2*Z+0.5*Y), thinblack, Arrow3);
 //label(L=Label("$\mathbf{\hat{p}_{\text{exc}}}$"), position=1.8*Z+0.5*Y);
 
 // Plane labels
-label(L=Label("$\mathbf{\mathfrak{r}_o}$"), align=E, -A + O);
-label(L=Label("$\mathbf{r_b}$"), align=E, -A + 2*r*Z);
-label(L=Label("$\mathbf{r_d}$"), align=E, -A + 4*r*Z);
+label(L=Label("$\mathbf{\mathfrak{r}}_o =x_o\hat{\mathbf{x}} + y_o\hat{\mathbf{y}} + z\hat{\mathbf{z}}$"), align=E, -A + O);
+label(L=Label("$\mathbf{r}_b = r_b\cos\phi_b\hat{\mathbf{x}} + r_b\sin\phi_b\hat{\mathbf{y}}$"), align=E, -A + 2*r*Z);
+label(L=Label("$\mathbf{r}_d = r_b\cos\phi_b\hat{\mathbf{x}} + r_b\sin\phi_b\hat{\mathbf{y}}$"), align=E, -A + 4*r*Z);
 
 // Refractive index labels
 label(L=Label("$n_o$"), 0.5*A + 0.5*r*Z);
-label(L=Label("$n_b$"), 0.5*A + 1.5*r*Z);
+label(L=Label("$n_t$"), 0.5*A + 1.5*r*Z);
+label(L=Label("$n_t$"), 0.5*A + 2.5*r*Z);
+label(L=Label("$n_t$"), 0.5*A + 3.5*r*Z);
 
 shipout(scale(4.0)*currentpicture.fit());
