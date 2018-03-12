@@ -88,7 +88,7 @@ draw(L=Label("$\mathbf{\hat{s}}_o = \cos\varphi\sin\vartheta\hat{\mathbf{x}} + \
 //label(L=Label("$\mathbf{\hat{p}_{\text{exc}}}$"), position=1.8*Z+0.5*Y);
 
 // Plane labels
-label(L=Label("$\mathbf{\mathfrak{r}}_o =x_o\hat{\mathbf{x}} + y_o\hat{\mathbf{y}} + z\hat{\mathbf{z}}$"), align=E, -A + O);
+label(L=Label("$\mathbf{\mathfrak{r}}_o =x_o\hat{\mathbf{x}} + y_o\hat{\mathbf{y}}$"), align=E, -A + O);
 label(L=Label("$\mathbf{r}_b = r_b\cos\phi_b\hat{\mathbf{x}} + r_b\sin\phi_b\hat{\mathbf{y}}$"), align=E, -A + 2*r*Z);
 label(L=Label("$\mathbf{r}_d = r_b\cos\phi_b\hat{\mathbf{x}} + r_b\sin\phi_b\hat{\mathbf{y}}$"), align=E, -A + 4*r*Z);
 
