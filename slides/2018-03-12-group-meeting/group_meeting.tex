@@ -1,0 +1,94 @@
+\documentclass[presentation]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\tolerance=1000
+\usepackage{graphicx} \DeclareMathOperator{\argmin}{argmin}
+
+\newcommand{\me}{\mathrm{e}}
+\providecommand{\e}[1]{\ensuremath{\times 10^{#1}}} 
+\providecommand{\mb}[1]{\mathbf{#1}}
+\providecommand{\mf}[1]{\mathfrak{#1}}
+\providecommand{\ro}[1]{\mathbf{\mathfrak{r}}_o}
+\providecommand{\so}[1]{\mathbf{\hat{s}}_o}
+\providecommand{\rb}[1]{\mathbf{r}_b}
+\providecommand{\rbm}[1]{r_b^{\text{m}}}
+\providecommand{\rd}[1]{\mathbf{r}_d}
+\providecommand{\mh}[1]{\mathbf{\hat{#1}}}
+\providecommand{\bs}[1]{\boldsymbol{#1}} 
+\providecommand{\intinf}{\int_{-\infty}^{\infty}}
+
+
+\newcommand{\under}[2]{\underset{\scriptscriptstyle#1}{#2}}
+
+
+\usetheme{simple}
+\usecolortheme{}
+\usefonttheme{serif}
+\useinnertheme{}
+\useoutertheme{}
+\author{Talon Chandler}
+\date{March 12, 2018}
+\title{Update on Spatio-angular Transfer Functions}
+
+\begin{document}
+
+\maketitle
+\begin{frame}[label=sec-1]{Steady progress on closed form OTF}
+  \begin{itemize}
+  \item Initial calculation didn't match my numerical OTF.
+  \item Found some issues that I glossed over. Calculation still in progress.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[label=sec-1]{Brute-force degeneracy finding}
+ \begin{center}
+   \includegraphics[width=0.8\textwidth]{figs/solid-angle-uncertainty.png}
+ \end{center}
+\end{frame}
+
+\begin{frame}[label=sec-1]{0.8 NA Epi-illumination Microscope}
+ \begin{center}
+   \includegraphics[width=0.8\textwidth]{figs/singular-value-spectrum-epi.pdf}
+ \end{center}
+\end{frame}
+
+\begin{frame}[label=sec-1]{0.8 NA Symmetric diSPIM Microscope}
+ \begin{center}
+   \includegraphics[width=0.8\textwidth]{figs/singular-value-spectrum-dispim.pdf}
+ \end{center}
+\end{frame}
+
+\begin{frame}[label=sec-1]{Group theory for finding degeneracy}
+\begin{columns}
+  \begin{column}{0.5\textwidth}
+    \centering \textbf{Quantum mechanics}\\\vspace{2em}
+    $\mathcal{H} = \text{Hamiltonian}$\\\vspace{2em}
+    $\mathcal{H}\psi_k = W_k\psi_k$\\\vspace{2em}
+    $\mathcal{T}_j\mathcal{H} - \mathcal{H}\mathcal{T}_j = 0$\\\vspace{2em}
+    $\mathcal{T}_j$ form the symmetry group of the Hamiltonian.
+\end{column}
+\begin{column}{0.5\textwidth}  %%<--- here
+  \centering \textbf{Imaging}\\\vspace{2em}
+  $\mathcal{H} = \text{Forward operator}$\vspace{2em}
+  $\mathcal{H}^{\dagger}\mathcal{H}u_k = \mu_ku_k$\\\vspace{2em}
+  $\mathcal{T}_j\mathcal{H}^{\dagger}\mathcal{H} - \mathcal{H}^{\dagger}\mathcal{H}\mathcal{T}_j = 0$\\\vspace{2em}
+  $\mathcal{T}_j$ form the symmetry group of the imaging system.
+  
+\end{column}
+\end{columns}
+\end{frame}
+
+\end{document}
