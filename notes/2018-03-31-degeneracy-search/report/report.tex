@@ -1,0 +1,228 @@
+\documentclass[11pt]{article}
+
+%%%%%%%%%%%%
+% Packages %
+%%%%%%%%%%%%
+
+\hyphenpenalty=10000
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+
+\usepackage{tocloft}
+\renewcommand\cftsecleader{\cftdotfill{\cftdotsep}}
+\def\undertilde#1{\mathord{\vtop{\ialign{##\crcr
+$\hfil\displaystyle{#1}\hfil$\crcr\noalign{\kern1.5pt\nointerlineskip}
+$\hfil\tilde{}\hfil$\crcr\noalign{\kern1.5pt}}}}}
+\usepackage{cleveref}
+\usepackage{xcolor}
+\usepackage[colorlinks = true,
+            linkcolor = black,
+            urlcolor  = black,
+            citecolor = black,
+            anchorcolor = black]{hyperref}
+\usepackage{epstopdf}
+\usepackage{braket}
+\usepackage{upgreek}
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{subcaption}
+\usepackage{amssymb,latexsym,amsmath,gensymb}
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{pdflscape}
+\usepackage{url}
+\usepackage{array}
+\newcolumntype{C}{>{$\displaystyle} c <{$}}
+\usepackage{tikz, calc}
+\usetikzlibrary{shapes.geometric, arrows, calc}
+\tikzstyle{norm} = [rectangle, rounded corners, minimum width=2cm, minimum height=1cm,text centered, draw=black]
+\tikzstyle{arrow} = [thick, ->, >=stealth]
+
+\newcommand{\argmin}{\arg\!\min}
+\newcommand{\me}{\mathrm{e}}
+\providecommand{\e}[1]{\ensuremath{\times 10^{#1}}} 
+\providecommand{\mb}[1]{\mathbf{#1}}
+\providecommand{\mf}[1]{\mathbf{#1}}
+\providecommand{\ro}[1]{\mathbf{\mathbf{r}}_o}
+\providecommand{\so}[1]{\mathbf{\hat{s}}_1}
+\providecommand{\s}[1]{\mathbf{\hat{s}}}
+\providecommand{\rb}[1]{\mathbf{r}_b}
+\providecommand{\rbm}[1]{r_b^{\text{m}}}
+\providecommand{\rd}[1]{\mathbf{r}_d}
+\providecommand{\mh}[1]{\mathbf{\hat{#1}}}
+\providecommand{\bs}[1]{\boldsymbol{#1}} 
+\providecommand{\intinf}{\int_{-\infty}^{\infty}}
+\providecommand{\fig}[4]{
+  % filename, width, caption, label
+\begin{figure}[h]
+ \captionsetup{width=1.0\linewidth}
+ \centering
+ \includegraphics[width = #2\textwidth]{#1}
+ \caption{#3}
+ \label{fig:#4}
+\end{figure}
+}
+
+\newcommand{\tensor}[1]{\overset{\text{\tiny$\leftrightarrow$}}{\mb{#1}}}
+\newcommand{\tunderbrace}[2]{\underbrace{#1}_{\textstyle#2}}
+\providecommand{\figs}[7]{
+  % filename1, filename2, caption1, caption2, label1, label2, shift
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{.45\textwidth}
+  \centering
+  \includegraphics[width=1.0\linewidth]{#1}
+  \captionsetup{justification=justified, singlelinecheck=true}
+  \caption{#3}
+  \label{fig:#5}
+\end{minipage}
+\hspace{2em}
+\begin{minipage}[b]{.45\textwidth}
+  \centering
+  \includegraphics[width=1.0\linewidth]{#2}
+  \vspace{#7em}
+  \captionsetup{justification=justified}
+  \caption{#4}
+  \label{fig:#6}
+\end{minipage}
+\end{figure}
+}
+\makeatletter
+
+\providecommand{\code}[1]{
+\begin{center}
+\lstinputlisting{#1}
+\end{center}
+}
+
+\newcommand{\crefrangeconjunction}{--}
+%%%%%%%%%%%
+% Spacing %
+%%%%%%%%%%%
+% Margins
+\usepackage[
+top    = 1.5cm,
+bottom = 1.5cm,
+left   = 1.5cm,
+right  = 1.5cm]{geometry}
+
+% Indents, paragraph space
+%\usepackage{parskip}
+\setlength{\parskip}{1.5ex}
+
+% Section spacing
+\usepackage{titlesec}
+\titlespacing*{\title}
+{0pt}{0ex}{0ex}
+\titlespacing*{\section}
+{0pt}{0ex}{0ex}
+\titlespacing*{\subsection}
+{0pt}{0ex}{0ex}
+\titlespacing*{\subsubsection}
+{0pt}{0ex}{0ex}
+
+% Line spacing
+\linespread{1.1}
+
+%%%%%%%%%%%%
+% Document %
+%%%%%%%%%%%%
+\begin{document}
+\title{\vspace{-2.5em} Finding degeneracy in fluorescence orientation microscopes \vspace{-1em}}  \vspace{-2em} \author{}
+\date{\vspace{-3em}\today\vspace{-2em}}
+\maketitle
+
+Consider a microscope with an angular point spread function $h_i(\s{})$---we're
+assuming that the spatial and angular problems are decoupled. The forward model for
+this microscope is
+\begin{align}
+  g_i = \int_{\mathbb{S}^2}d\s{}\, h_i(\s{})f(\s{}), \qquad i=1, 2, ..., N.
+\end{align}
+where $f(\s{})$ is the angular density of fluorophores and $i$ indexes $N$
+measurements.
+
+We would like to find the angular degeneracies of this microscope. In other
+words, what rotations $\mb{R}$ can we apply to samples $f(\s{})$ and measure
+the same data? Mathematically, we need to find the set of matrices $\mb{R}$ and
+functions $f(\s{})$ that satisfy
+\begin{align}
+  \int_{\mathbb{S}^2}d\s{}\, h_i(\s{})f(\s{}) - \int_{\mathbb{S}^2}d\s{}\, h_i(\s{})f(\mb{R}^{-1}\s{}) = 0, \qquad i=1, 2, ..., N. \label{eq:tosolve}
+\end{align}
+We will start by restricting the problem to objects where all of the
+fluorophores are oriented in the same direction so that
+$f(\s{}) = \delta(\s{} - \so{})$. In this case we need to find the set of
+directions $\so{}$ and matrices $\mb{R}$ that satisfy
+\begin{align}
+  h_i(\so{}) - h_i(\mb{R}^{-1}\so{}) = 0, \qquad i=1, 2, ..., N. \label{eq:tosolve2}
+\end{align}
+
+We have a set of $N$ equations that we need to solve simultaneously for
+$\so{} \in \mathbb{S}^2$ and $\mb{R} \in \mathbb{SO}(3)$. As far as I can tell
+there is no analytic way to solve this set of equations in the general case. I
+tried expanding onto spherical and rotational harmonics, but that didn't help
+because there's no easy way to relate a solution in the frequency domain to a
+solution in the normal domain. Instead, we can find as many solutions as we can
+``by hand'' then check our results numerically. I've used optimization packages
+the can optimize on $\mathbb{S}^2\times \mathbb{SO}(3)$---my rough plan is to
+seed an optimization procedure at many place on a grid in
+$\mathbb{S}^2\times \mathbb{SO}(3)$ and check (not prove!) that we have all of
+the solutions with those results. Other ideas welcome!
+
+For now let's solve a simple case ``by hand''. If we have a single point
+detector along the $z$ axis then our angular point spread function is given by
+\begin{align}
+  h^{(\mh{z})}(\so{}) = 1 - (\so{}\cdot\mh{z})^2. \label{eq:zpsf}
+\end{align}
+This is the first time I'm expressing an angular point spread function in vector
+notation, but it's easy to check that this reduces to the familiar $h^{(\mh{z})}(\so{}) = \sin^2\vartheta$ if you choose spherical coordinates so that $\so{} = \cos\varphi\sin\vartheta\mh{x} + \sin\varphi\sin\vartheta\mh{y} + \cos\vartheta\mh{z}$. Plugging Eq. \ref{eq:zpsf} into Eq. \ref{eq:tosolve} gives
+\begin{align}
+  -(\so{}\cdot\mh{z})^2 + (\mb{R}^{-1}\so{}\cdot\mh{z})^2 = 0.
+\end{align}
+I can find the following solutions to this equation for all $\so{} \in \mathbb{S}^2$
+\begin{align}
+  \mb{R}_0 =
+  \begin{bmatrix}
+    \cos\theta& -\sin\theta & 0\\
+    \sin\theta& \cos\theta & 0\\
+    0&0&1\\
+  \end{bmatrix} \text{for}\ 0 \leq \theta < 2\pi,
+\end{align}
+which is an arbitrary rotation about the $z$ axis;
+\begin{align}
+  \mb{R}_1 = \mb{I} + 2 \left[\mb{k}\right]_{\times}^2
+\end{align}
+where
+\begin{align}
+  \mb{k} = \frac{\so{}\times[(\so{}\cdot\mh{z})\mh{z}]}{|\so{}\times[(\so{}\cdot\mh{z})\mh{z}]|}, \qquad  \left[\mb{k}\right]_{\times} =
+  \begin{bmatrix}
+    0& -k_z& k_y\\
+    k_z& 0 & -k_x\\
+    -k_y& k_x& 0 \\
+  \end{bmatrix},
+\end{align}
+which is a rotation that maps $\so{}$ to $-\so{}$; and
+\begin{align}
+  \mb{R}_2 = \mb{I} + 2(\so{}\cdot\mh{z})\sqrt{1 - (\so{}\cdot{z})^2}\left[\mb{k}\right]_{\times} + 2(\so{}\cdot\mh{z})^2\left[\mb{k}\right]_{\times}^2
+\end{align}
+which is a rotation that maps every $\so{}$ above the $x-y$ plane to an $\so{}$
+below the $x-y$ plane and vice versa. Notice that
+\begin{align}
+  \mb{R}_3 =
+  \begin{bmatrix}
+    -1&0&0\\
+    0&-1&0\\
+    0&0&-1\\    
+  \end{bmatrix}
+\end{align}
+is not a solution because $\mb{R}_3$ is not a member of $\mathbb{SO}(3)$---$\mb{R}_3$ is a member of the larger set $\mathbb{O}(3)$. This distinction is important
+so that we don't double count solutions.
+
+We can identify the solutions $\mb{R}_0$, $\mb{R}_1$, and $\mb{R}_2$ as matrix
+representations of a group. This group is a \textit{Frieze group} with
+\textit{dihedral symmetry}, an infinite number of possible rotations, and a
+horizontal reflection axis. Using Sch\"onflies notation we say that
+$D_{\infty h}$ is the symmetry group of the imaging system. 
+
+\end{document}
