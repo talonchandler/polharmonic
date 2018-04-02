@@ -159,16 +159,20 @@ directions $\so{}$ and matrices $\mb{R}$ that satisfy
 \end{align}
 
 We have a set of $N$ equations that we need to solve simultaneously for
-$\so{} \in \mathbb{S}^2$ and $\mb{R} \in \mathbb{SO}(3)$. As far as I can tell
-there is no analytic way to solve this set of equations in the general case. I
-tried expanding onto spherical and rotational harmonics, but that didn't help
-because there's no easy way to relate a solution in the frequency domain to a
-solution in the normal domain. Instead, we can find as many solutions as we can
-``by hand'' then check our results numerically. I've used optimization packages
-the can optimize on $\mathbb{S}^2\times \mathbb{SO}(3)$---my rough plan is to
-seed an optimization procedure at many place on a grid in
-$\mathbb{S}^2\times \mathbb{SO}(3)$ and check (not prove!) that we have all of
-the solutions with those results. Other ideas welcome!
+$\so{} \in \mathbb{S}^2$ and $\mb{R} \in \mathbb{O}(3)$. Notice that we allow
+for improper rotations ($\text{det}\mb{R} = -1$) by allowing $\mb{R} \in \mathbb{O}(3)$
+instead of restricting to $\mb{R} \in \mathbb{SO}(3)$.
+
+As far as I can tell there is no analytic way to solve this set of equations in
+the general case. I tried expanding onto spherical and rotational harmonics, but
+that didn't help because there's no easy way to relate a solution in the
+frequency domain to a solution in the normal domain. Instead, we can find as
+many solutions as we can ``by hand'' then check our results numerically. I've
+used optimization packages the can optimize on
+$\mathbb{S}^2\times \mathbb{O}(3)$---my rough plan is to seed an optimization
+procedure at many place on a grid in $\mathbb{S}^2\times \mathbb{O}(3)$ and
+check (not prove!) that we have all of the solutions with those results. Other
+ideas welcome!
 
 For now let's solve a simple case ``by hand''. If we have a single point
 detector along the $z$ axis then our angular point spread function is given by
@@ -191,38 +195,35 @@ I can find the following solutions to this equation for all $\so{} \in \mathbb{S
 \end{align}
 which is an arbitrary rotation about the $z$ axis;
 \begin{align}
-  \mb{R}_1 = \mb{I} + 2 \left[\mb{k}\right]_{\times}^2
-\end{align}
-where
-\begin{align}
-  \mb{k} = \frac{\so{}\times[(\so{}\cdot\mh{z})\mh{z}]}{|\so{}\times[(\so{}\cdot\mh{z})\mh{z}]|}, \qquad  \left[\mb{k}\right]_{\times} =
+  \mb{R}_1 =
   \begin{bmatrix}
-    0& -k_z& k_y\\
-    k_z& 0 & -k_x\\
-    -k_y& k_x& 0 \\
+    1&0&0\\
+    0&1&0\\
+    0&0&-1\\    
   \end{bmatrix},
 \end{align}
-which is a rotation that maps $\so{}$ to $-\so{}$; and
+which is a mirroring operation about the transverse plane; and
 \begin{align}
-  \mb{R}_2 = \mb{I} + 2(\so{}\cdot\mh{z})\sqrt{1 - (\so{}\cdot{z})^2}\left[\mb{k}\right]_{\times} + 2(\so{}\cdot\mh{z})^2\left[\mb{k}\right]_{\times}^2
-\end{align}
-which is a rotation that maps every $\so{}$ above the $x-y$ plane to an $\so{}$
-below the $x-y$ plane and vice versa. Notice that
-\begin{align}
-  \mb{R}_3 =
+  \mb{R}_2 =
   \begin{bmatrix}
     -1&0&0\\
     0&-1&0\\
     0&0&-1\\    
-  \end{bmatrix}
+  \end{bmatrix},
 \end{align}
-is not a solution because $\mb{R}_3$ is not a member of $\mathbb{SO}(3)$---$\mb{R}_3$ is a member of the larger set $\mathbb{O}(3)$. This distinction is important
-so that we don't double count solutions.
+which is an inversion operation. 
 
 We can identify the solutions $\mb{R}_0$, $\mb{R}_1$, and $\mb{R}_2$ as matrix
 representations of a group. This group is a \textit{Frieze group} with
 \textit{dihedral symmetry}, an infinite number of possible rotations, and a
 horizontal reflection axis. Using Sch\"onflies notation we say that
-$D_{\infty h}$ is the symmetry group of the imaging system. 
+$D_{\infty h}$ is the symmetry group of the imaging system.
+
+There are more solutions to the problem---for example a proper rotation that
+maps $\so{}$ to $-\so{}$ instead of an improper rotation---but these solutions
+give the same mappings as the solutions above, so it's okay to ignore them.
+Alternatively, we could restrict ourselves to finding solutions in
+$\mathbb{SO}(3)$ to find unique solutions, but this makes the solutions much
+more difficult to identify. 
 
 \end{document}
