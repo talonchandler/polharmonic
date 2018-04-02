@@ -225,6 +225,27 @@ aperture of the lens with $r_b^{\text{max}} = \frac{f_0}{n_0}\text{NA}$. We use
 a tilde to mark single dipole response functions---we will consider the response
 due to a field of dipoles in the next section.
 
+Although we will not use the result immediately, we can write the electric field
+in back focal plane under the paraxial approximation. We expand Eq. \ref{eq:bfp}
+in a Taylor series about $r_b=0$ and drop all second-order and higher terms to
+find
+\begin{align}
+  \mb{\tilde{e}}^{(p)}_b(\rb{};\ro{}, \so{}) \propto \me^{-i(kn_o/f_o)\rb{}\cdot\ro{}}
+  \begin{bmatrix}
+    1 & 0 &-\frac{r_b}{f_o}\cos\phi_b\\
+    0&1&-\frac{r_b}{f_o}\sin\phi_b\\
+    0&0&0
+  \end{bmatrix}
+  \begin{bmatrix}
+    \cos\varphi_o\sin\vartheta_o\\
+    \sin\varphi_o\sin\vartheta_o\\
+    \cos\vartheta_o
+  \end{bmatrix}
+\Pi\left(\frac{r_b}{r_b^{\text{max}}}\right)\label{eq:bfppara}
+\end{align}
+We will continue to use a superscript $(p)$ to mark terms that have used the
+paraxial approximation.
+
 If the tube lens is weakly focusing ($f_o \ll f_t$) then we can find the
 electric field in the detector plane by taking the Fourier transform of the
 electric field in the back focal plane
@@ -232,11 +253,11 @@ electric field in the back focal plane
   \mb{\tilde{e}}_d(\rd{}; \ro{}, \so{}) \propto \int_{\mathbb{R}^2} d\rb{}\, \tilde{\mb{e}}_b(\rb{}; \ro{}, \so{})\me^{-i (kn_t/f_t) \rb{} \cdot \rd{}}. \label{eq:ed}
 \end{align}
 By isolating the phase term in Eq. \ref{eq:bfp} with
-$\mb{\tilde{e}}_b(\rb{};\ro{}, \so{}) = \me^{-i(kn_o/f_o)\rb{}\cdot\ro{}}
-\tilde{\underline{\mb{e}}}_b(\rb{};\ro{}, \so{})$, and plugging into Eq. \ref{eq:ed} we find
+$\mb{\tilde{e}}_b(\rb{};\ro{}, \so{}) \equiv \me^{-i(kn_o/f_o)\rb{}\cdot\ro{}}
+\tilde{\underline{\mb{e}}}_b(\rb{};\so{})$, and plugging into Eq. \ref{eq:ed} we find
 that 
 \begin{align}
-  \mb{\tilde{e}}_d(\rd{} - M\ro{}, \so{}) \propto \int_{\mathbb{R}^2} d\rb{}\, \tilde{\underline{\mb{e}}}_b(\rb{}; \ro{}, \so{})\me^{-i (kn_t/f_t)\, \rb{} \cdot [\,\rd{} - M\ro{}]}.
+  \mb{\tilde{e}}_d(\rd{} - M\ro{}, \so{}) \propto \int_{\mathbb{R}^2} d\rb{}\, \tilde{\underline{\mb{e}}}_b(\rb{}; \so{})\me^{-i (kn_t/f_t)\, \rb{} \cdot [\,\rd{} - M\ro{}]}.
 \end{align}
 where $M = -\frac{n_o}{n_t}\frac{f_t}{f_o}$ is the transverse magnification.  By
 writing the electric field in the detector plane in terms of $\rd{} - M\ro{}$,
@@ -244,15 +265,15 @@ we have established that the electric field in the detector plane is
 \textit{transverse shift-invariant}---a transverse shift of the object creates a
 magnified transverse shift of the image. We define coordinates on the detector
 centered on the image of the object
-$\rd{}' \equiv \rd{} - M\ro{} = r_d'\cos\phi_d'\mh{x} + r_d'\sin\phi_d\mh{y}$,
+$\rd{}' \equiv \rd{} - M\ro{} = r_d'\cos\phi_d'\mh{x} + r_d'\sin\phi_d'\mh{y}$,
 then we follow Novotny \cite{nov2006} by writing the integrals in polar
 coordinates, evaluating the azimuthal integrals, and writing the result
 concisely in terms of three radial integrals
 \begin{align}
   \tilde{\mb{e}}_d(\rd{}', \so{}) &\propto
   \begin{bmatrix}
-    A + C\cos(2\phi_d') & C\sin(2\phi_d') & -2iB\cos\phi_d'\\
-    C\sin(2\phi_d') & A - C\cos(2\phi_d') & -2iB\sin\phi_d'\\
+    A(r_d') + C(r_d')\cos(2\phi_d') & C(r_d')\sin(2\phi_d') & 2iB(r_d')\cos\phi_d'\\
+    C(r_d')\sin(2\phi_d') & A(r_d') - C(r_d')\cos(2\phi_d') & 2iB(r_d')\sin\phi_d'\\
     0&0&0\\
   \end{bmatrix}
   \begin{bmatrix}
@@ -261,7 +282,7 @@ concisely in terms of three radial integrals
     \cos\vartheta_o
   \end{bmatrix}\label{eq:elec}
 \end{align}
-where $A, B$ and $C$ are
+where $A(r_d'), B(r_d')$, and $C(r_d')$ are
 \begin{align}
   A(r_d') &= \int_0^{\theta_{\text{max}}}d\theta\ \sqrt{\cos\theta}\sin\theta(1+\cos\theta)J_0(k_b r_d'\sin\theta f_o/f_t),\\%\ \text{exp}\left\{ik_bz_o[1-(1/2)(f_o/f_t)^2\sin^2\theta]\right\},\\
   B(r_d') &= \int_0^{\theta_{\text{max}}}d\theta\ \sqrt{\cos\theta}\sin^2\theta J_1(k_b r_d'\sin\theta f_o/f_t),\\%\ \text{exp}\left\{ik_bz_o[1-(1/2)(f_o/f_t)^2\sin^2\theta]\right\},\\
@@ -271,7 +292,7 @@ We can identify Eq. \ref{eq:elec} as the vector-valued \textit{coherent spread
   function} (CSF) of the microscope. The scalar-valued CSF---sometimes called
 the amplitude transfer function---is only applicable to cases where
 electromagnetic optics plays no role in the microscope---not true
-for oriented samples. 
+for samples that contain dipole emitters. 
 
 To build our intuition about the CSF, we will rewrite the matrix multiplication
 in Eq. \ref{eq:elec} in terms of the spherical harmonics. Notice that the $l=1$
@@ -280,37 +301,34 @@ Eq. \ref{eq:harmonics}), so the CSF becomes
 \begin{align}
   \tilde{\mb{e}}_d(\rd{}', \so{}) &\propto
   \begin{bmatrix}
-    [A + C\cos(2\phi_d')]y_1^{1}(\so{}) + C\sin(2\phi_d')y_1^{-1}(\so{}) - 2iB\cos\phi_d'y_1^{0}(\so{})\\
-    C\sin(2\phi_d')y_1^{1}(\so{}) + [A - C\cos(2\phi_d')]y_1^{-1}(\so{}) - 2iB\sin\phi_d'y_1^{0}(\so{})\\
+    [A(r_d') + C(r_d')\cos(2\phi_d')]y_1^{1}(\so{}) + C(r_d')\sin(2\phi_d')y_1^{-1}(\so{}) + 2iB(r_d')\cos\phi_d'y_1^{0}(\so{})\\
+    C(r_d')\sin(2\phi_d')y_1^{1}(\so{}) + [A(r_d') - C(r_d')\cos(2\phi_d')]y_1^{-1}(\so{}) + 2iB(r_d')\sin\phi_d'y_1^{0}(\so{})\\
     0\\
   \end{bmatrix}.
 \end{align}
 By applying the paraxial approximation ($\sin\theta\approx\theta$ and
-$\cos\theta\approx 1$), the integrals $A, B$ and $C$ can be evaluated in terms
-of Bessel functions. We can evaluate $A$ and $B$ with the help of
-$\int_0^zdx\ xJ_0(ax) = zJ_1(az)/a$ and $\int_0^zdx\ x^2J_1(ax) = z^2J_2(az)/a$,
-respectively, and $C = 0$ because $J_2(x)$ is zero to first order. In this
-case, the CSF simplifies to
+$\cos\theta\approx 1$), the integrals $A(r_d'), B(r_d')$ and $C(r_d')$ can be
+evaluated in terms of Bessel functions. We can evaluate $A(r_d')$ and $B(r_d')$ with the
+help of $\int_0^zdx\ xJ_0(ax) = zJ_1(az)/a$ and
+$\int_0^zdx\ x^2J_1(ax) = z^2J_2(az)/a$, respectively, and $C(r_d') = 0$ because
+$J_2(x)$ is zero to first order. In this case, the CSF simplifies to
 \begin{align}
   \tilde{\mb{e}}^{(p)}_d(\rd{}', \so{}) &\propto
   \begin{bmatrix}
-    A^{(p)}y_1^{1}(\so{}) - 2iB^{(p)}\cos\phi_d'y_1^{0}(\so{})\\
-    A^{(p)}y_1^{-1}(\so{}) - 2iB^{(p)}\sin\phi_d'y_1^{0}(\so{})\\
+    A^{(p)}(r_d')y_1^{1}(\so{}) + 2iB^{(p)}(r_d')\cos\phi_d'y_1^{0}(\so{})\\
+    A^{(p)}(r_d')y_1^{-1}(\so{}) + 2iB^{(p)}(r_d')\sin\phi_d'y_1^{0}(\so{})\\
     0\\
   \end{bmatrix}\label{eq:paracsf}
 \end{align}
 where the integrals evaluate to
 \begin{align}
-  {A^{(p)}} = \frac{2J_1(\tilde{r}_d)}{\tilde{r}_d},
-  \hspace{2em}
-    {B^{(p)}} = \frac{\text{NA}}{n_o}\left[\frac{2J_2(\tilde{r}_d)}{\tilde{r}_d}\right],
+  {A^{(p)}}(r_d') = \frac{J_1(2\pi ar_d')}{\pi ar_d'}, 
+  &\hspace{2em}
+    {B^{(p)}}(r_d') = \frac{\text{NA}}{n_o}\left[\frac{J_2(2\pi ar_d')}{\pi ar_d'}\right],  \label{eq:abparadef}
   \intertext{and we have substituted}
-  \tilde{r}_d = \frac{2\pi\text{NA}\thinspace r_d}{M\lambda},\hspace{2em}
-  \text{NA} = n_o\sin\theta_{\text{max}}.
+  a \equiv \frac{\text{NA}}{M\lambda},&\hspace{2em}
+  \text{NA} \equiv n_o\sin\theta_{\text{max}}.
 \end{align}
-We will continue to use an superscipt $(p)$ to mark the terms where we have used
-the paraxial approximation.
-
 Under the paraxial approximation the electric fields on the detector created by
 a single dipole are composed of two parts, a parallel part and a radial
 part. The coefficients of the $y_1^0$ spherical harmonic in Eq. \ref{eq:paracsf}
@@ -325,14 +343,14 @@ transverse field.
 We can find the intensity in the detector plane due to a single dipole
 by taking the modulus squared of the CSF
 \begin{align}
-  \tilde{h}(\rd{}', \so{}) = \left|\tilde{\mb{e}}_d(\rd{}', \so{})\right|^2 \label{eq:kernel}.
+  h(\rd{}', \so{}) = \left|\tilde{\mb{e}}_d(\rd{}', \so{})\right|^2 \label{eq:kernel}.
 \end{align}
 For convenience we keep the CSF written in terms of the spherical harmonics and
 use a table of spherical harmonic products (see Appendix \ref{realspherical}) to
 calculate the intensity in the detector plane as
 \begin{equation}
   \begin{split}
-  \tilde{h}(\rd{}', \so{}) \propto &\left(A^2 + 2B^2 + C^2\right)y_0^0(\so{}) -\frac{2\sqrt{15}}{5}AC\sin(2\phi_d')y_2^{-2}(\so{})\\ &+ \frac{1}{\sqrt{5}}\left(-A^2 + 4B^2 - C^2\right)y_2^{0}(\so{}) +\frac{2\sqrt{15}}{5}AC\cos(2\phi_d')y_2^{2}(\so{}). \label{eq:kerna}
+  h(\rd{}', \so{}) \propto &\left(A^2(r_d') + 2B^2(r_d') + C^2(r_d')\right)y_0^0(\so{}) -\frac{2\sqrt{15}}{5}A(r_d')C(r_d')\sin(2\phi_d')y_2^{-2}(\so{})\\ &+ \frac{1}{\sqrt{5}}\left(-A^2(r_d') + 4B^2(r_d') - C^2(r_d')\right)y_2^{0}(\so{}) +\frac{2\sqrt{15}}{5}A(r_d')C(r_d')\cos(2\phi_d')y_2^{2}(\so{}). \label{eq:kerna}
 \end{split}
 \end{equation}
 We can identify Eq. \ref{eq:kerna} as the spatio-angular \textit{point spread
@@ -344,7 +362,7 @@ spatio-angular PSFs---one for each spherical harmonic. Second, the spherical
 harmonic functions form an orthonormal basis for functions on the sphere---a
 convenient fact that we will use later.
 
-It is useful to compare equation \ref{eq:kerna} to Backer and Moerner's approach
+It is useful to compare Eq. \ref{eq:kerna} to Backer and Moerner's approach
 \cite{backer2014}. They expand the spatio-angular PSF in terms of six second
 moments of the fluorophore distribution
 $\{s_x^2, s_y^2, s_z^2, s_xs_y, s_xs_z, s_ys_z\}$. This approach is very
@@ -357,20 +375,21 @@ functions for fluorescence microscopes.
 
 The spatio-angular PSF under the paraxial approximation is given by
 \begin{align}
-      \tilde{h}^{(p)}(\rd{}', \so{}) \propto \left({A^{(p)}}^2 + 2{B^{(p)}}^2\right)y_0^0(\so{}) + \frac{1}{\sqrt{5}}\left(-{A^{(p)}}^2 + 4{B^{(p)}}^2\right)y_2^{0}(\so{})\label{eq:para}.
+      h^{(p)}(\rd{}', \so{}) \propto \left({A^{(p)}}^2(r_d') + 2{B^{(p)}}^2(r_d')\right)y_0^0(\so{}) + \frac{1}{\sqrt{5}}\left(-{A^{(p)}}^2(r_d') + 4{B^{(p)}}^2(r_d')\right)y_2^{0}(\so{})\label{eq:para}.
 \end{align}
-First, consider the coefficient on the $y_0^0$ spherical harmonic in
-Eq. \ref{eq:para}. This coefficient is the point spread function for a angularly
-uniform distribution of fluorophores. The first term of the coefficient ${A^{(p)}}^2$
-is the familiar Airy disk that arises from the contribution of dipoles oriented
-in the transverse plane, while the second term ${B^{(p)}}^2$ is a smaller factor that
-arises from dipoles oriented outside of the transverse plane. This leads to an
-interesting conclusion---a uniform distribution of dipoles has a point spread
-function that is slightly wider than an Airy disk even in the paraxial
-approximation. The Airy disk is usually derived using paraxial scalar optics
-while here we have used paraxial electromagnetic optics. Therefore, we can
-consider the second term to be an electromagnetic correction to the Airy
-disk. We will quantify this difference in the next section.
+First, consider the coefficient on the $y_0^0$ spherical harmonic in Eq.
+\ref{eq:para}. This coefficient is the point spread function for an angularly
+uniform distribution of fluorophores. The first term of the coefficient
+${A^{(p)}}^2(r_d')$ is the familiar Airy disk that arises from the contribution
+of dipoles oriented in the transverse plane, while the second term
+${B^{(p)}}^2(r_d')$ is a smaller factor that arises from dipoles oriented
+outside of the transverse plane. This leads to an interesting conclusion---a
+uniform distribution of dipoles has a point spread function that is slightly
+wider than an Airy disk even in the paraxial approximation. The Airy disk is
+usually derived using paraxial scalar optics while here we have used paraxial
+electromagnetic optics. Therefore, we can consider the second term to be an
+electromagnetic correction to the Airy disk. We will quantify this difference in
+the next section.
 
 Next, consider the coefficient on the $y_2^0$ spherical harmonic in
 Eq. \ref{eq:para}. This coefficient is the spatial PSF for a distribution of
@@ -415,46 +434,168 @@ Note that these integrals represent a vector sum---the coherence of the electric
 fields radiated by the object can cause cancellations of the fields created on
 the detector.
 
-We can simplify this expression by expanding the CSF and the object in terms
-of spatio-angular harmonics
+We can simplify this expression by expanding the CSF in terms of spatio-angular
+harmonics
 \begin{align}
-  \tilde{\mb{e}}_d(\rd{} - M\mb{r}_o, \so{}) &= \sum_{l=0}^{\infty} \sum_{m=-l}^l \int_{\mathbb{R}^2}d\bs{\nu}_o{}\, \mb{E}_l^m(\bs{\nu}_o)y_l^m(\so{})\thinspace\me^{i 2\pi (\rd{} - M\ro{})\cdot\bs{\nu}_o},\label{eq:csfexp}\\
-    \bs{\mu}(\mb{r}_o, \so{}) &= \sum_{l=0}^{\infty} \sum_{m=-l}^l \int_{\mathbb{R}^2}d\bs{\nu}_o{}\, \mb{M}_l^m(\bs{\nu}_o)y_l^m(\so{})\thinspace\me^{i 2\pi \ro{}\cdot\bs{\nu}_o},\label{eq:objexp}
+  \tilde{\mb{e}}_d(\rd{} - M\mb{r}_o, \so{}) &= \sum_{l=0}^{\infty} \sum_{m=-l}^l \int_{\mathbb{R}^2}d\bs{\nu}{}\, \mb{E}_l^m(\bs{\nu})y_l^m(\so{})\thinspace\me^{i 2\pi (\rd{} - M\ro{})\cdot\bs{\nu}},\label{eq:csfexp}
 \end{align}
-where $\mb{E}_l^m(\bs{\nu_o})$ and $\mb{M}_l^m(\bs{\nu_o})$ are the
-vector spatio-angular spectra of the CSF and object, respectively, given by
+where $\mb{E}_l^m(\bs{\nu})$ is the spatio-angular spectrum of the CSF given
+by
 \begin{align}
-  \mb{E}_l^m(\bs{\nu_o}) &= \int_{\mathbb{R}^2}d\ro{} \int_{\mathbb{S}^2}d\so{}\, \tilde{\mb{e}}_d(\rd{} - M\mb{r}_o, \so{}) y_l^m(\so{})\thinspace\me^{-i 2\pi \ro{}\cdot\bs{\nu}_o},\\
-\mb{M}_l^m(\bs{\nu_o}) &= \int_{\mathbb{R}^2}d\ro{} \int_{\mathbb{S}^2}d\so{}\, \bs{\mu}(\mb{r}_o, \so{}) y_l^m(\so{})\thinspace\me^{-i 2\pi \ro{}\cdot\bs{\nu}_o}.
+  \mb{E}_l^m(\bs{\nu}) \equiv \int_{\mathbb{S}^2}d\so{}\int_{\mathbb{R}^2}d\ro{}\, \tilde{\mb{e}}_d(\rd{} - M\ro{}, \so{}) y_l^m(\so{})\thinspace\me^{-i 2\pi (\rd{} - M\ro{})\cdot\bs{\nu}}.\label{eq:csfdef}
 \end{align}
-In progress. By plugging Eqs. \ref{eq:csfexp} and \ref{eq:objexp} into
-Eq. \ref{eq:eforward} we find that
+We can change variables to make this expression easier to evaluate
 \begin{align}
-  \mb{e}_d(\rd{}) = \sum_{l=0}^{\infty} \sum_{m=-l}^l \int_{\mathbb{R}^2}d\bs{\nu}_o{}\, \mb{E}_l^m(\bs{\nu}_o)\mb{M}_l^m(\bs{\nu}_o)y_l^m(\so{})\thinspace\me^{i 2\pi (\rd{} - M\ro{})\cdot\bs{\nu}_o}. \label{eq:freqforward}
+  \mb{E}_l^m(\bs{\nu}) \propto \int_{\mathbb{S}^2}d\so{}\int_{\mathbb{R}^2}d\ro{}\, \tilde{\mb{e}}_d(\rd{}', \so{}) y_l^m(\so{})\thinspace\me^{-i 2\pi \rd{}'\cdot\bs{\nu}}.\label{eq:csfdef2}
+\end{align}
+By plugging Eq. \ref{eq:csfexp} into Eq. \ref{eq:eforward} we find that
+\begin{align}
+  \mb{e}_d(\rd{}) = \int_{\mathbb{S}^2}d\so{}\int_{\mathbb{R}^2}d\ro{}\, \left[\sum_{l=0}^{\infty} \sum_{m=-l}^l \int_{\mathbb{R}^2}d\bs{\nu}{}\, \mb{E}_l^m(\bs{\nu})y_l^m(\so{})\thinspace\me^{i 2\pi (\rd{} - M\ro{})\cdot\bs{\nu}}\right]\bs{\mu}(\ro{}, \so{}). \label{eq:freqforward}
+\end{align}
+We can rearrange this equation into the following form
+\begin{align}
+  \mb{e}_d(\rd{}) = \sum_{l=0}^{\infty} \sum_{m=-l}^l \int_{\mathbb{R}^2}d\bs{\nu}{}\, \mb{E}_l^m(\bs{\nu}) \left[\int_{\mathbb{S}^2}d\so{}\int_{\mathbb{R}^2}d\ro{}\, \bs{\mu}(\ro{}, \so{})y_l^m(\so{})\thinspace\me^{-i 2\pi M\ro{}\cdot\bs{\nu}}\right] \me^{i 2\pi \rd{}\cdot\bs{\nu}}. \label{eq:freqforward}
+\end{align}
+We recognize the term in square brackets as the spatio-angular spectrum of the
+object, so we define
+\begin{align}
+\mb{M}_l^m(\bs{\nu}) \equiv \int_{\mathbb{S}^2}d\so{}\int_{\mathbb{R}^2}d\ro{} \, \bs{\mu}(\mb{r}_o, \so{}) y_l^m(\so{})\thinspace\me^{-i 2\pi M\ro{}\cdot\bs{\nu}}.  
+\end{align}
+and write the electric field on the detector as
+\begin{align}
+  \mb{e}_d(\rd{}) = \sum_{l=0}^{\infty} \sum_{m=-l}^l \int_{\mathbb{R}^2}d\bs{\nu}{}\, \mb{E}_l^m(\bs{\nu}) \mb{M}_l^m(\mb{\nu}) \me^{i 2\pi \rd{}\cdot\bs{\nu}}. \label{eq:freqforward}
 \end{align}
 Eq. \ref{eq:freqforward} shows that the electric field on the detector can be
 found by resolving the object into its spatio-angular components
-$\mb{M}_l^m(\bs{\nu}_o)$, weighting each component by $\mb{E}_l^m(\bs{\nu}_o)$, then
-summing over all spatio-angular components. For this reason, we identify
-$\mb{E}_l^m(\bs{\nu}_o)$ as the spatio-angular \textit{coherent transfer function}
-(CTF).
+$\mb{M}_l^m(\bs{\nu})$, weighting each component by $\mb{E}_l^m(\bs{\nu})$,
+then summing over all spatio-angular components. Therefore, we identify
+$\mb{E}_l^m(\bs{\nu})$ as the spatio-angular \textit{coherent transfer
+  function} (CTF).
 
-We define the spatio-angular optical transfer function (OTF) as
+In Appendix \ref{paraxialctf} we calculate the paraxial CTF for a single-view fluorescence microscope as 
 \begin{align}
-  H_l^m(\bs{\nu}_o) = \int_{\mathbb{R}^3}d\ro{} \int_{\mathbb{S}^2}d\so{}\ h(\rd{}; \ro{}, \so{}) y_l^m(\so{})\thinspace\me^{i 2\pi \ro{}\cdot\bs{\nu}_o}. \label{eq:ft}
+  {\mb{E}_l^m}^{(p)}(\bs{\nu}) =
+\begin{bmatrix}
+  \delta(l-1, m-1) + \frac{2}{a}\frac{\text{NA}}{n_o}\nu\cos\phi_\nu\delta(l-1, m)\\
+  \delta(l-1, m+1) + \frac{2}{a}\frac{\text{NA}}{n_o}\nu\sin\phi_\nu\delta(l-1, m)\\
+  0\\
+  \end{bmatrix}\Pi\left(\frac{\nu}{a}\right).\label{eq:ctfinal}
 \end{align}
+The CTF shows that single-view coherent microscopes have a spatial band limit at
+$\nu = a$ and an $l=1$ angular pass band. It is useful to compare the paraxial
+CTF in Eq. \ref{eq:ctfinal} to the paraxial electric field in the back focal
+plane in Eq. \ref{eq:bfppara}. The CTF is just a rescaled version of the
+electric field in the back focal plane, and this leads to an extremely valuable
+interpretation. The CTF of a single-view fluorescence microscope is constrained
+to the three members of the $l=1$ band the value of the CTF for each $m$ is a
+rescaled version of the electric field due to a single dipole oriented along one
+of the Cartesian axes.
+
+At the risk of being too explicit, the $m=1$ CTF is a rescaled version of the
+electric field due to a dipole oriented along the $x$ axis, the $m=-1$ CTF is a
+rescaled version of the electric field due to a dipole oriented along the $y$
+axis, and the $m=0$ CTF is a rescaled version of the electric field due to a
+dipole oriented along the $z$ axis. Therefore, we can reason about the CTF by
+thinking about the electric field that single $x$-, $y$-, and $z$-oriented dipoles
+create in the back focal plane. 
+
+With this interpretation in mind, the form of the CTF is not surprising. Under
+the paraxial approximation $x$- and $y$-oriented dipoles uniformly fill the back
+focal plane with an electric field parallel to the dipole axis. A $z$-oriented
+dipole creates a radial electric field with linearly increasing amplitude towards
+the edges of the back focal plane.
+
+The spatial band limit can be increased by increasing the NA of the microscope,
+so what parameter sets the angular band limit? The angular band limit in the
+current microscope is set by the dipole emission process---only $l=1$ terms show
+up in the CTF for dipole emitters. Adding polarizing filters to the microscope
+will not extend the band limit of the microscope because filters only block
+electric fields. However, polarized illumination can be used to extend the band
+limit. The excitation process is completely incoherent with the emission
+process, so the spatio-angular transfer functions of the two processes will
+multiply. We can use the multiplication rules in Appendix \ref{realspherical} to
+find the band limit of the new microscope that uses selective excitation.
+
+Next we find the intensity on the detector plane $g(\rd{})$ by taking the
+modulus squared of the electric field. Using Eq. \ref{eq:eforward} we find that
+\begin{align}
+  g(\rd{}) = |\mb{e}_d(\rd{})|^2 = \left|\int_{\mathbb{S}^2}d\so{}\int_{\mathbb{R}^2}d\ro{} \ \tilde{\mb{e}}_d(\rd{} - M\mb{r}_o, \so{})\bs{\mu}(\ro{}, \so{})\right|^2. 
+\end{align}
+If the dipoles emit incoherently---a fair assumption for fluorescent emitters
+that are not within homo-FRET distance---then we can take the modulus squared of the
+object and CSF independently which gives
+\begin{align}
+  g(\rd{}) = \int_{\mathbb{S}^2}d\so{}\int_{\mathbb{R}^2}d\ro{} \ \left|\tilde{\mb{e}}_d(\rd{} - M\mb{r}_o, \so{})\right|^2\left|\bs{\mu}(\ro{}, \so{})\right|^2. 
+\end{align}
+We recognize that $\left|\tilde{\mb{e}}_d(\rd{} - M\mb{r}_o, \so{})\right|^2$ is
+the PSF of the microscope $h(\rd{} - M\mb{r}_o, \so{})$, and
+we introduce a new function
+$f(\ro{}, \so{}) \equiv \left|\bs{\mu}(\ro{}, \so{})\right|^2$ to represent the object
+\begin{align}
+  g(\rd{}) = \int_{\mathbb{S}^2}d\so{}\int_{\mathbb{R}^2}d\ro{} \ h(\rd{} - M\mb{r}_o, \so{})f(\ro{}, \so{}).\label{eq:forwardint}
+\end{align}
+We can interpret $f(\ro{}, \so{})$ as the spatio-angular density of dipoles---it
+is a function that is proportional to the number of fluorophores at position
+$\ro{}$ oriented in direction $\so{}$ per unit volume per unit solid angle. Notice
+that $h$ and $f$ are scalar functions---we removed all phase information when we took
+the modulus squared. 
+
+We can follow our previous work with the electric field and simplify Eq.
+\ref{eq:forwardint} by expanding the PSF in terms of spatio-angular harmonics
+\begin{align}
+  h(\rd{} - M\mb{r}_o, \so{}) &= \sum_{l=0}^{\infty} \sum_{m=-l}^l \int_{\mathbb{R}^2}d\bs{\nu}{}\, H_l^m(\bs{\nu})y_l^m(\so{})\thinspace\me^{i 2\pi (\rd{} - M\ro{})\cdot\bs{\nu}},\label{eq:ctfexp}
+\end{align}
+where $H_l^m(\bs{\nu})$ is the spatio-angular spectrum of the PSF given
+by
+\begin{align}
+  H_l^m(\bs{\nu}) \equiv \int_{\mathbb{S}^2}d\so{}\int_{\mathbb{R}^2}d\ro{}\, h(\rd{} - M\ro{}, \so{}) y_l^m(\so{})\thinspace\me^{-i 2\pi (\rd{} - M\ro{})\cdot\bs{\nu}}.\label{eq:ctfdef}
+\end{align}
+We can change variables to make this expression easier to evaluate
+\begin{align}
+  H_l^m(\bs{\nu}) \propto \int_{\mathbb{S}^2}d\so{}\int_{\mathbb{R}^2}d\rd{}'\, h(\rd{}', \so{}) y_l^m(\so{})\thinspace\me^{-i 2\pi \rd{}'\cdot\bs{\nu}}.\label{eq:otfdef2}
+\end{align}
+By plugging Eq. \ref{eq:ctfexp} into Eq. \ref{eq:forwardint} we find that
+\begin{align}
+  g(\rd{}) = \int_{\mathbb{S}^2}d\so{}\int_{\mathbb{R}^2}d\ro{}\, \left[\sum_{l=0}^{\infty} \sum_{m=-l}^l \int_{\mathbb{R}^2}d\bs{\nu}{}\, H_l^m(\bs{\nu})y_l^m(\so{})\thinspace\me^{i 2\pi (\rd{} - M\ro{})\cdot\bs{\nu}}\right]f(\ro{}, \so{}). \label{eq:freqforwardint}
+\end{align}
+We can rearrange this equation into the following form
+\begin{align}
+  g(\rd{}) = \sum_{l=0}^{\infty} \sum_{m=-l}^l \int_{\mathbb{R}^2}d\bs{\nu}{}\, H_l^m(\bs{\nu}) \left[\int_{\mathbb{S}^2}d\so{}\int_{\mathbb{R}^2}d\ro{}\, f(\ro{}, \so{})y_l^m(\so{})\thinspace\me^{-i 2\pi M\ro{}\cdot\bs{\nu}}\right] \me^{i 2\pi \rd{}\cdot\bs{\nu}}. \label{eq:freqforward}
+\end{align}
+We recognize the term in square brackets as the spatio-angular spectrum of the
+object, so we define
+\begin{align}
+F_l^m(\bs{\nu}) \equiv \int_{\mathbb{S}^2}d\so{}\int_{\mathbb{R}^2}d\ro{} \, f(\mb{r}_o, \so{}) y_l^m(\so{})\thinspace\me^{-i 2\pi M\ro{}\cdot\bs{\nu}}.  
+\end{align}
+and write the intensity on the detector as
+\begin{align}
+  g(\rd{}) = \sum_{l=0}^{\infty} \sum_{m=-l}^l \int_{\mathbb{R}^2}d\bs{\nu}{}\, H_l^m(\bs{\nu}) F_l^m(\mb{\nu}) \me^{i 2\pi \rd{}\cdot\bs{\nu}}. \label{eq:freqforwardint}
+\end{align}
+Eq. \ref{eq:freqforwardint} shows that the intensity on the detector can be
+found by resolving the object into its spatio-angular component
+$F_l^m(\mb{\nu}_o)$, weighting each component by $H_l^m(\mb{\nu}_o)$, then
+summing over all spatio-angular components. Therefore, we identify
+$H_l^m(\mb{\nu}_o)$ as the spatio-angular \textit{optical transfer function}
+(OTF). Notice that the CSF and CTF are vector-valued functions, while the PSF
+and OTF are scalar-valued functions.
+
+In Appendix \ref{paraxialotf} we calculate the paraxial OTF for a single-view
+fluorescence microscope as
+
+
+
 The spatio-angular OTF measures the ability of the microscope to pass
 spatio-angular harmonics---instead of the usual spatial harmonics
-$\me^{i 2\pi \ro{}\cdot\bs{\nu}_o}$ we now need consider the spatio-angular
+$\me^{i 2\pi \ro{}\cdot\bs{\nu}}$ we now need consider the spatio-angular
 harmonics $y_l^m(\so{})\thinspace\me^{i 2\pi
-  \ro{}\cdot\bs{\nu}_o}$. Eq.~\ref{eq:ft} can be interpreted as the
+  \ro{}\cdot\bs{\nu}}$. Eq.~\ref{eq:ft} can be interpreted as the
 spatio-angular Fourier transform of the spatio-angular PSF.
 
 We can plug Eq. \ref{eq:kerna} into \ref{eq:ft} and use the orthonormality
 relation for spherical harmonics $\int_{\mathbb{S}^2}d\so{} y_{l_0}^{m_0}(\so{})y_{l_1}^{m_1}(\so{}) = \delta(l_0 - l_1, m_0 - m_1)$ to find that
 \begin{equation}
   \begin{split}
-  H_l^m(\bs{\nu}_o) \propto \int_{\mathbb{R}^3}d\ro{}  \bigg[&\left(I_0^2 + 2I_1^2 + I_2^2\right) \delta(l, m) - \frac{2\sqrt{15}}{5}I_0I_2\sin(2\phi_d)\thinspace \delta(l-2, m+2)\\ +& \frac{1}{\sqrt{5}}\left(-I_0^2 + 4I_1^2 - I_2^2\right) \delta(l-2, m) +\frac{2\sqrt{15}}{5}I_0I_2\cos(2\phi_d) \thinspace \delta(l-2, m-2)\bigg]\me^{i 2\pi \ro{}\cdot\bs{\nu}_o}.\label{eq:otf}
+  H_l^m(\bs{\nu}) \propto \int_{\mathbb{R}^3}d\ro{}  \bigg[&\left(I_0^2 + 2I_1^2 + I_2^2\right) \delta(l, m) - \frac{2\sqrt{15}}{5}I_0I_2\sin(2\phi_d)\thinspace \delta(l-2, m+2)\\ +& \frac{1}{\sqrt{5}}\left(-I_0^2 + 4I_1^2 - I_2^2\right) \delta(l-2, m) +\frac{2\sqrt{15}}{5}I_0I_2\cos(2\phi_d) \thinspace \delta(l-2, m-2)\bigg]\me^{i 2\pi \ro{}\cdot\bs{\nu}}.\label{eq:otf}
 \end{split}
 \end{equation}
 We can see that the microscope has an angular band limit---the microscope only
@@ -464,7 +605,7 @@ $l=2$ bands.
 Once again, we constrain the object to the focal plane and apply the paraxial
 approximation to find that
 \begin{align}
-  {H_l^m}^{(p)}(\nu_o^x, \nu_o^y) \propto \int_{\mathbb{R}^2}d\mb{r}_o\left[\left({I_0^{(p)}}^2 + 2{I_1^{(p)}}^2\right)\delta(l, m) + \frac{1}{\sqrt{5}}\left(-{I_0^{(p)}}^2 + 4{I_1^{(p)}}^2\right)\delta(l-2, m)\right]  \me^{i 2\pi(\nu_o^xx_o + \nu_o^yy_o)}\label{eq:otfh}
+  {H_l^m}^{(p)}(\nu^x, \nu^y) \propto \int_{\mathbb{R}^2}d\mb{r}_o\left[\left({I_0^{(p)}}^2 + 2{I_1^{(p)}}^2\right)\delta(l, m) + \frac{1}{\sqrt{5}}\left(-{I_0^{(p)}}^2 + 4{I_1^{(p)}}^2\right)\delta(l-2, m)\right]  \me^{i 2\pi(\nu^xx_o + \nu^yy_o)}\label{eq:otfh}
 \end{align}
 The integral in Eqs. \ref{eq:otfh} cannot be solved directly. We could proceed
 numerically like \cite{backer2014}, but instead we use the Wiener-Khinchin
@@ -473,7 +614,7 @@ the calculation in Appendix \ref{paraxialotf} and find that
 The final paraxial OTF for a single-view fluorescence microscope is
 given by
 \begin{equation}
-  H_l^m(\bs{\nu}_o)
+  H_l^m(\bs{\nu})
 \end{equation}
 
 TODO: The auto-correlation calculation is in progress. I should be able to find an
@@ -495,8 +636,8 @@ TODO: Consider illumination polarizers.
 \begin{tikzpicture}[auto, node distance=3cm,>=latex]
     \node [input, name=input] {};
     \node [block, align=center] (csf) {CSF\\ $\tilde{\mb{e}}_d(\rd{} - M\ro{}, \so{})$};
-    \node [block,  right of=csf, node distance=6cm] (ctf) {CTF\\ $\mb{E}_l^m(\bs{\nu}_o)$};
-    \node [block, below of=ctf, node distance=4cm] (otf) {OTF\\ $H_l^m(\bs{\nu}_o)$};
+    \node [block,  right of=csf, node distance=6cm] (ctf) {CTF\\ $\mb{E}_l^m(\bs{\nu})$};
+    \node [block, below of=ctf, node distance=4cm] (otf) {OTF\\ $H_l^m(\bs{\nu})$};
     \node [block, below of=csf, node distance=4cm] (psf) {PSF\\ $\tilde{h}(\ro{}, \so{})$};
     
     \draw [<->] (csf) -- node[name=u, text width=3cm, align=center] {Tube Lens\\ $\mathcal{F}_{\mathbb{R}^2}$} (ctf);        
@@ -544,57 +685,316 @@ TODO
 \section{Products of real spherical harmonics}\label{realspherical}
 The six products of $l=1$ spherical harmonics are
 \begin{align}
-y_1^{-1}y_1^{-1}\sqrt{\pi} &= \frac{1}{2 }y_0^0 + - \frac{\sqrt{5}}{10 }y_2^0 + - \frac{\sqrt{15}}{10 }y_2^2,\\ 
+y_1^{-1}y_1^{-1}\sqrt{\pi} &= \frac{1}{2 }y_0^0 - \frac{\sqrt{5}}{10 }y_2^0 - \frac{\sqrt{15}}{10 }y_2^2,\\ 
 y_1^{-1}y_1^0\sqrt{\pi} &= \frac{\sqrt{15}}{10 }y_2^{-1} ,\\
 y_1^{-1}y_1^1\sqrt{\pi} &= - \frac{\sqrt{15}}{10 }y_2^{-2} ,\\
 y_1^0y_1^0\sqrt{\pi} &= \frac{1}{2 }y_0^0 + \frac{\sqrt{5}}{5 }y_2^0 ,\\
 y_1^0y_1^1\sqrt{\pi} &= \frac{\sqrt{15}}{10 }y_2^1 ,\\
-y_1^1y_1^1\sqrt{\pi} &= \frac{1}{2 }y_0^0 + - \frac{\sqrt{5}}{10 }y_2^0 + \frac{\sqrt{15}}{10 }y_2^2.
+y_1^1y_1^1\sqrt{\pi} &= \frac{1}{2 }y_0^0 - \frac{\sqrt{5}}{10 }y_2^0 + \frac{\sqrt{15}}{10 }y_2^2.
 \end{align}
 The fifteen products of $l=2$ spherical harmonics are
 \begin{align}
-y_2^{-2}y_2^{-2}\sqrt{\pi} &= \frac{1}{2 }y_0^{0} + - \frac{\sqrt{5}}{7 }y_2^{0} + \frac{1}{14 }y_4^{0} + - \frac{\sqrt{35}}{14 }y_4^{4} \\
+y_2^{-2}y_2^{-2}\sqrt{\pi} &= \frac{1}{2 }y_0^{0} - \frac{\sqrt{5}}{7 }y_2^{0} + \frac{1}{14 }y_4^{0} - \frac{\sqrt{35}}{14 }y_4^{4} \\
 y_2^{-2}y_2^{-1}\sqrt{\pi} &= - \frac{\sqrt{15}}{14 }y_2^{1} + \frac{\sqrt{10}}{28 }y_4^{1} + \frac{\sqrt{70}}{28 }y_4^{3} \\
 y_2^{-2}y_2^{0}\sqrt{\pi} &= - \frac{\sqrt{5}}{7 }y_2^{-2} + \frac{\sqrt{15}}{14 }y_4^{-2} \\
-y_2^{-2}y_2^{1}\sqrt{\pi} &= - \frac{\sqrt{15}}{14 }y_2^{-1} + - \frac{\sqrt{70}}{28 }y_4^{-3} + \frac{\sqrt{10}}{28 }y_4^{-1} \\
+y_2^{-2}y_2^{1}\sqrt{\pi} &= - \frac{\sqrt{15}}{14 }y_2^{-1} - \frac{\sqrt{70}}{28 }y_4^{-3} + \frac{\sqrt{10}}{28 }y_4^{-1} \\
 y_2^{-2}y_2^{2}\sqrt{\pi} &= \frac{\sqrt{35}}{14 }y_4^{-4} \\
-y_2^{-1}y_2^{-1}\sqrt{\pi} &= \frac{1}{2 }y_0^{0} + \frac{\sqrt{5}}{14 }y_2^{0} + - \frac{\sqrt{15}}{14 }y_2^{2} + - \frac{2}{7 }y_4^{0} + - \frac{\sqrt{5}}{7 }y_4^{2} \\
+y_2^{-1}y_2^{-1}\sqrt{\pi} &= \frac{1}{2 }y_0^{0} + \frac{\sqrt{5}}{14 }y_2^{0} - \frac{\sqrt{15}}{14 }y_2^{2} - \frac{2}{7 }y_4^{0} - \frac{\sqrt{5}}{7 }y_4^{2} \\
 y_2^{-1}y_2^{0}\sqrt{\pi} &= \frac{\sqrt{5}}{14 }y_2^{-1} + \frac{\sqrt{30}}{14 }y_4^{-1} \\
-y_2^{-1}y_2^{1}\sqrt{\pi} &= - \frac{\sqrt{15}}{14 }y_2^{-2} + - \frac{\sqrt{5}}{7 }y_4^{-2} \\
+y_2^{-1}y_2^{1}\sqrt{\pi} &= - \frac{\sqrt{15}}{14 }y_2^{-2} - \frac{\sqrt{5}}{7 }y_4^{-2} \\
 y_2^{-1}y_2^{2}\sqrt{\pi} &= - \frac{\sqrt{15}}{14 }y_2^{-1} + \frac{\sqrt{70}}{28 }y_4^{-3} + \frac{\sqrt{10}}{28 }y_4^{-1} \\
 y_2^{0}y_2^{0}\sqrt{\pi} &= \frac{1}{2 }y_0^{0} + \frac{\sqrt{5}}{7 }y_2^{0} + \frac{3}{7 }y_4^{0} \\
 y_2^{0}y_2^{1}\sqrt{\pi} &= \frac{\sqrt{5}}{14 }y_2^{1} + \frac{\sqrt{30}}{14 }y_4^{1} \\
 y_2^{0}y_2^{2}\sqrt{\pi} &= - \frac{\sqrt{5}}{7 }y_2^{2} + \frac{\sqrt{15}}{14 }y_4^{2} \\
-y_2^{1}y_2^{1}\sqrt{\pi} &= \frac{1}{2 }y_0^{0} + \frac{\sqrt{5}}{14 }y_2^{0} + \frac{\sqrt{15}}{14 }y_2^{2} + - \frac{2}{7 }y_4^{0} + \frac{\sqrt{5}}{7 }y_4^{2} \\
-y_2^{1}y_2^{2}\sqrt{\pi} &= \frac{\sqrt{15}}{14 }y_2^{1} + - \frac{\sqrt{10}}{28 }y_4^{1} + \frac{\sqrt{70}}{28 }y_4^{3} \\
-y_2^{2}y_2^{2}\sqrt{\pi} &= \frac{1}{2 }y_0^{0} + - \frac{\sqrt{5}}{7 }y_2^{0} + \frac{1}{14 }y_4^{0} + \frac{\sqrt{35}}{14 }y_4^{4}
+y_2^{1}y_2^{1}\sqrt{\pi} &= \frac{1}{2 }y_0^{0} + \frac{\sqrt{5}}{14 }y_2^{0} + \frac{\sqrt{15}}{14 }y_2^{2} - \frac{2}{7 }y_4^{0} + \frac{\sqrt{5}}{7 }y_4^{2} \\
+y_2^{1}y_2^{2}\sqrt{\pi} &= \frac{\sqrt{15}}{14 }y_2^{1} - \frac{\sqrt{10}}{28 }y_4^{1} + \frac{\sqrt{70}}{28 }y_4^{3} \\
+y_2^{2}y_2^{2}\sqrt{\pi} &= \frac{1}{2 }y_0^{0} - \frac{\sqrt{5}}{7 }y_2^{0} + \frac{1}{14 }y_4^{0} + \frac{\sqrt{35}}{14 }y_4^{4}
 \end{align}
-  
-\section{Paraxial optical transfer function in terms of elementary functions}\label{paraxialotf}
-In progress. 
 
-Our goal is to calculate the paraxial optical transfer function. We start by
-plugging Eq. \ref{eq:kernel} into Eq. \ref{eq:ft}, using the paraxial
-approximation, and constraining ourselves to the transverse plane
+\section{Paraxial coherent transfer function}\label{paraxialctf}
+In this appendix we calculate the paraxial CTF for a single-view fluorescence
+microscope. We start by plugging Eq. \ref{eq:paracsf} (the paraxial CSF) into Eq.
+\ref{eq:csfdef2}
 \begin{align}
-  {H_l^m}^{(p)}(\bs{\nu}_o) = \int_{\mathbb{R}^2}d\mb{r}_o{} \int_{\mathbb{S}^2}d\so{}\ \left|\int_{\mathbb{R}^2} d\rb{}\, \mb{e}_b(\rb{}; \ro{}, \so{})\me^{-i (kn_t/f_t) \rb{} \cdot \rd{}}\right|^2
- y_l^m(\so{})\thinspace\me^{i 2\pi \ro{}\cdot\bs{\nu}_o}\label{eq:ft2}.
+  {\mb{E}_l^m}^{(p)}(\bs{\nu}) \propto \int_{\mathbb{S}^2}d\so{}\int_{\mathbb{R}^2}d\rd{}'\,
+\begin{bmatrix}
+    A^{(p)}(r_d')y_1^{1}(\so{}) + 2iB^{(p)}(r_d')\cos\phi_d'y_1^{0}(\so{})\\
+    A^{(p)}(r_d')y_1^{-1}(\so{}) + 2iB^{(p)}(r_d')\sin\phi_d'y_1^{0}(\so{})\\
+    0\\
+  \end{bmatrix}
+  y_l^m(\so{})\thinspace\me^{-i 2\pi\rd{}'\cdot\bs{\nu}}. 
 \end{align}
-We change the order of the integrals
+We split the integral into two parts by writing
 \begin{align}
-  {H_l^m}^{(p)}(\bs{\nu}_o) = \int_{\mathbb{S}^2}d\so{}\ y_l^m(\so{}) \int_{\mathbb{R}^2}d\mb{r}_o\ \left|\int_{\mathbb{R}^2} d\rb{}\, \mb{e}_b(\rb{}; \ro{}, \so{})\me^{-i (kn_t/f_t) \rb{} \cdot \rd{}}\right|^2 \me^{i 2\pi \ro{}\cdot\bs{\nu}_o}, 
+  {\mb{E}_l^m}^{(p)}(\bs{\nu}) &\propto \int_{\mathbb{S}^2}d\so{}\, \mb{E}^{(p)}(\bs{\nu};\so{}) y_l^m(\so{}),\\ \label{eq:splitup}
+  \mb{E}^{(p)}(\bs{\nu};\so{}) &\equiv  \int_{\mathbb{R}^2}d\rd{}'\
+\begin{bmatrix}
+    A^{(p)}(r_d')y_1^{1}(\so{}) + 2iB^{(p)}(r_d')\cos\phi_d'y_1^{0}(\so{})\\
+    A^{(p)}(r_d')y_1^{-1}(\so{}) + 2iB^{(p)}(r_d')\sin\phi_d'y_1^{0}(\so{})\\
+    0\\
+  \end{bmatrix}
+  \thinspace\me^{-i 2\pi\rd{}'\cdot\bs{\nu}}. 
 \end{align}
-then apply the Wiener-Khinchin theorem
-$\mathcal{F}\{|\mathcal{F}\{\mb{e}_b\}|^2\} = \mb{e}_b \star \mb{e}_b$ to find
-that
+Substituting $A^{(p)}(r_d')$ and $B^{(p)}(r_d')$ using Eq. \ref{eq:abparadef} gives
 \begin{align}
-  H_l^m(\bs{\nu}_o) = \int_{\mathbb{S}^2}d\so{}\ y_l^m(\so{}) \left[\mb{e}_b \star \mb{e}_b\right](\bs{\nu}_o). 
+  \mb{E}^{(p)}(\bs{\nu}; \so{}) = \int_{\mathbb{R}^2}d\rd{}'\,
+\begin{bmatrix}
+    \frac{J_1(2\pi ar_d')}{\pi ar_d'}y_1^m(\so{}) + 2i\frac{\text{NA}}{n_o}\left[\frac{J_2(2\pi ar_d')}{\pi ar_d'}\right]\cos\phi_d'y_1^0(\so{})\\
+    \frac{J_1(2\pi ar_d')}{\pi ar_d'}y_1^{-1}(\so{}) + 2i\frac{\text{NA}}{n_o}\left[\frac{J_2(2\pi ar_d')}{\pi ar_d'}\right]\sin\phi_d'y_1^0(\so{})\\
+    0\\
+  \end{bmatrix}
+  \thinspace\me^{-i 2\pi\rd{}'\cdot\bs{\nu}}.
 \end{align}
-The vector auto-correlation is given by
+We can rewrite this in terms of three two-dimensional Fourier transforms
 \begin{align}
-[\mb{e}_b \star \mb{e}_b](\bs{\nu}_o) = \int_{\mathbb{R}^2}d\bs{r}_b \mb{e}_b^{T}(\bs{r}_b)\mb{e}_b(\bs{r}_b + \bs{\nu}_o),
+  \mb{E}^{(p)}(\bs{\nu}; \so{}) \propto 
+\begin{bmatrix}
+    t_1(\bs{\nu})y_1^1(\so{}) + t_2(\bs{\nu})y_1^0(\so{})\\
+    t_1(\bs{\nu})y_1^{-1}(\so{}) + t_3(\bs{\nu})y_1^0(\so{})\\
+    0\\
+  \end{bmatrix}\label{eq:tint}
 \end{align}
-where $\cdot^T$ denotes the transpose operator. 
+where
+\begin{align}
+  t_1(\bs{\nu}) &\equiv \frac{1}{\pi a}\int_{\mathbb{R}^2}d\rd{}'\,  \frac{J_1(2\pi ar_d')}{r_d'}\, \me^{-i 2\pi\rd{}'\cdot\bs{\nu}},\\
+  t_2(\bs{\nu}) &\equiv \frac{2i}{\pi a}\frac{\text{NA}}{n_o}\int_{\mathbb{R}^2}d\rd{}'\, \frac{J_2(2\pi ar_d')}{r_d'}\cos\phi_d'\, \me^{-i 2\pi\rd{}'\cdot\bs{\nu}},\\
+  t_3(\bs{\nu}) &\equiv \frac{2i}{\pi a}\frac{\text{NA}}{n_o}\int_{\mathbb{R}^2}d\rd{}'\, \frac{J_2(2\pi ar_d')}{r_d'}\sin\phi_d'\, \me^{-i 2\pi\rd{}'\cdot\bs{\nu}}.
+\end{align}
+All three of the functions to be transformed are separable in polar coordinates,
+so we can rewrite the Fourier transform as a sum of weighted Hankel transforms
+\cite{goodman1996}. In general, if a function $g(r, \theta)$ is separable in
+polar coordinates then we can rewrite it as
+$g(r, \theta) = g_{R}(r)g_{\Theta}(\theta)$ and its two-dimensional Fourier transform
+is given by
+\begin{align}
+  \mathcal{F}\{g(r, \theta)\} = \sum_{k=-\infty}^{\infty}c_k(-i)^k\me^{ik\phi}\mathcal{H}_k\{g_R(r)\}
+\end{align}
+where
+\begin{align}
+  c_k = \frac{1}{2\pi}\int_0^{2\pi}d\theta\, g_{\Theta}(\theta)\me^{-ik\theta}
+\end{align}
+and $\mathcal{H}_k\{\}$ is the Hankel transform of order $k$ given by
+\begin{align}
+  \mathcal{H}_k\{g_R(r)\} = 2\pi\int_0^{\infty}dr\, r g_R(r)J_k(2\pi r \nu).
+\end{align}
+First, we evaluate $t_1(\bs{\nu})$. The Fourier transform will be in polar
+coordinates, so we define polar coordinates in frequency space as
+$\bs{\nu} \equiv \nu\cos\phi_\nu\mh{x} + \nu\sin\phi_\nu\mh{y} \equiv \nu_x\mh{x} + \nu_y\mh{y}$. The
+angular part of $J_z(ar_d')/r_d'$ is a constant, so $c_k = \delta(k)$ which
+means we only need to evaluate the zero-order Hankel transform
+\begin{align}
+  t_1(\bs{\nu}) = \frac{1}{\pi a}\mathcal{H}_0\left\{\frac{J_1(2\pi ar_d')}{r_d'}\right\}.
+\end{align}
+From tabulated Hankel transforms we find that
+\begin{align}
+  \mathcal{H}_{\mu}\left\{\frac{J_{\mu+1}(2\pi ar_d')}{r_d'}\right\} =
+  \frac{1}{2\pi}a^{-\mu-1}\nu^\mu\, \Pi\left(\frac{\nu}{a}\right)\label{eq:hankstar}
+\end{align}
+when $a > 0$ and $\text{Re}(\mu) > -\frac{3}{2}$ \cite{poul1998}. Applying this result
+we find that
+\begin{align}
+  t_1(\bs{\nu}) =
+    \frac{1}{2\pi^2 a^{2}}\, \Pi\left(\frac{\nu}{a}\right)\label{eq:t1final}.
+\end{align}
+To evaluate $t_2(\bs{\nu})$ and $t_3(\bs{\nu})$ we need to be careful with the angular part. For $t_2(\bs{\nu})$
+the angular part of the function is $\cos\phi_d' = \frac{1}{2}\left(e^{i\phi_d'} + e^{-i\phi_d'}\right)$. Therefore, $c_k = \frac{1}{2}\delta(k-1) + \frac{1}{2}\delta(k+1)$ and we have to evaluate two Hankel transforms given by
+\begin{align}
+  t_2(\bs{\nu}) = \frac{2i}{\pi a}\frac{\text{NA}}{n_o}\left[ie^{-i\phi_{\nu}}\mathcal{H}_{-1}\left\{\frac{J_2(2\pi ar_d')}{\pi ar_d'}\right\} - ie^{i\phi_{\nu}}\mathcal{H}_{1}\left\{\frac{J_2(2\pi ar_d')}{\pi ar_d'}\right\}\right].
+\end{align}
+To put the Hankel transforms in the form of Eq. \ref{eq:hankstar} we apply
+$\mathcal{H}_\mu = (-1)^\mu\mathcal{H}_{-\mu}$ to get
+\begin{align}
+  t_2(\bs{\nu}) = \frac{2i}{\pi a}\frac{\text{NA}}{n_o}\left[-ie^{-i\phi_{\nu}}\mathcal{H}_{1}\left\{\frac{J_2(2\pi ar_d')}{\pi ar_d'}\right\} - ie^{i\phi_{\nu}}\mathcal{H}_{1}\left\{\frac{J_2(2\pi ar_d')}{\pi ar_d'}\right\}\right].
+\end{align}
+Applying Eq. \ref{eq:hankstar} and simplifying gives
+\begin{align}
+  t_2(\bs{\nu}) =
+    \frac{1}{\pi^2 a^3}\frac{\text{NA}}{n_o}\nu(e^{-i\phi_\nu} + e^{i\phi_\nu})\, \Pi\left(\frac{\nu}{a}\right)
+\end{align}
+Finally, 
+\begin{align}
+  t_2(\bs{\nu}) =
+    \frac{1}{\pi^2 a^3}\frac{\text{NA}}{n_o}\nu\cos\phi_{\nu}\, \Pi\left(\frac{\nu}{a}\right)\label{eq:t2final}
+\end{align}
+Similarly, 
+\begin{align}
+  t_3(\bs{\nu}) =
+    \frac{1}{\pi^2 a^3}\frac{\text{NA}}{n_o}\nu\sin\phi_{\nu}\, \Pi\left(\frac{\nu}{a}\right)\label{eq:t3final}
+\end{align}
+Plugging Eqs. \ref{eq:t1final}, \ref{eq:t2final}, and \ref{eq:t3final} into Eq.
+\ref{eq:tint} and normalizing gives
+\begin{align}
+  {\mb{E}}^{(p)}(\bs{\nu}; \so{}) =
+\begin{bmatrix}
+  y_1^1(\so{}) + \frac{2}{a}\frac{\text{NA}}{n_o}\nu\cos\phi_\nu y_1^0(\so{})\\
+  y_1^{-1}(\so{}) + \frac{2}{a}\frac{\text{NA}}{n_o}\nu\sin\phi_\nu y_1^0(\so{})\\
+  0\\
+  \end{bmatrix}\, \Pi\left(\frac{\nu}{a}\right). \label{eq:paractfsp}
+\end{align}
+Finally, we find the paraxial CTF by evaluating the angular integral in Eq.
+\ref{eq:splitup} 
+\begin{align}
+  {\mb{E}_l^m}^{(p)}(\bs{\nu}) =
+\begin{bmatrix}
+  \delta(l-1, m-1) + \frac{2}{a}\frac{\text{NA}}{n_o}\nu\cos\phi_\nu\delta(l-1, m)\\
+  \delta(l-1, m+1) + \frac{2}{a}\frac{\text{NA}}{n_o}\nu\sin\phi_\nu\delta(l-1, m)\\
+  0\\
+  \end{bmatrix}\, \Pi\left(\frac{\nu}{a}\right).
+\end{align}
+
+\section{Paraxial optical transfer function}\label{paraxialotf}
+In this appendix we calculate the paraxial OTF for a single-view fluorescence
+microscope. We start with Eq. \ref{eq:otfdef2}
+\begin{align}
+  H_l^m(\bs{\nu}) \propto \int_{\mathbb{S}^2}d\so{}\int_{\mathbb{R}^2}d\rd{}'\, h(\rd{}', \so{}) y_l^m(\so{})\thinspace\me^{-i 2\pi \rd{}'\cdot\bs{\nu}}.\label{eq:otfdef2}
+\end{align}
+We could plug in the paraxial PSF and evaluate the integrals, but this will lead
+us to Fourier transforms that cannot be found in tables. Instead we use a trick
+from scalar Fourier optics and write the OTF in terms of the detected electric
+field \cite{goodman1996}
+\begin{align}
+  H_l^m(\bs{\nu}) \propto \int_{\mathbb{S}^2}d\so{}\int_{\mathbb{R}^2}d\rd{}'\, \left|\mb{e}_d(\rd{}', \so{})\right|^2 y_l^m(\so{})\thinspace\me^{-i 2\pi \rd{}'\cdot\bs{\nu}}.
+\end{align}
+Next, we manipulate this equation to
+\begin{align}
+  H_l^m(\bs{\nu}) &\propto \int_{\mathbb{S}^2}d\so{}\, y_l^m(\so{})\int_{\mathbb{R}^2}d\rd{}'\, \mb{e}^{\dagger}_d(\rd{}', \so{})\mb{e}_d(\rd{}', \so{})\, \me^{-i 2\pi \rd{}'\cdot\bs{\nu}},\\
+  H_l^m(\bs{\nu}) &\propto \int_{\mathbb{S}^2}d\so{}\, y_l^m(\so{})\int_{\mathbb{R}^2}d\rd{}'\, \int_{\mathbb{R}^2}d\rd{}''\, \mb{e}^{\dagger}_d(\rd{}', \so{})\mb{e}_d(\rd{}'', \so{})\delta(\rd{}'' - \rd{}')\, \me^{-i 2\pi \rd{}''\cdot\bs{\nu}},\\
+  H_l^m(\bs{\nu}) &\propto \int_{\mathbb{S}^2}d\so{}\, y_l^m(\so{})\int_{\mathbb{R}^2}d\bs{\tau}\,\int_{\mathbb{R}^2}d\rd{}'\, \int_{\mathbb{R}^2}d\rd{}''\, \mb{e}^{\dagger}_d(\rd{}', \so{})\mb{e}_d(\rd{}'', \so{})\me^{-i 2\pi\bs{\tau}(\rd{}'' - \rd{}')}\me^{-i 2\pi \rd{}''\cdot\bs{\nu}},\\
+  H_l^m(\bs{\nu}) &\propto \int_{\mathbb{S}^2}d\so{}\, y_l^m(\so{})\int_{\mathbb{R}^2}d\bs{\tau}\,\left[\int_{\mathbb{R}^2}d\rd{}'\, \mb{e}^{\dagger}_d(\rd{}', \so{}) \me^{i 2\pi\rd{}'\cdot \bs{\nu}}\right]\left[\int_{\mathbb{R}^2}d\rd{}''\, \mb{e}_d(\rd{}'', \so{})\me^{-i 2\pi \rd{}''\cdot(\bs{\nu} + \bs{\tau})}\right],\\
+  H_l^m(\bs{\nu}) &\propto \int_{\mathbb{S}^2}d\so{}\, y_l^m(\so{})\int_{\mathbb{R}^2}d\bs{\tau}\,\mb{E}^{\dagger}(\bs{\tau}; \so{})\mb{E}(\bs{\tau} + \bs{\nu}; \so{}). \label{eq:hlmauto}
+\end{align}
+We have followed the proof for the Wiener-Kinchin theorem \cite{papoulis2002, wiener} to explicitly show how the angular integral affects the usual scalar
+calculation. Eq. \ref{eq:hlmauto} shows that we can calculate the OTF by taking
+the vector autocorrelation of the spatial CTF then projecting the result onto
+the spherical harmonics.
+
+We will rewrite Eq. \ref{eq:hlmauto} in two parts
+\begin{align}
+  H_l^m(\bs{\nu}) &\propto \int_{\mathbb{S}^2}d\so{}\, y_l^m(\so{}) H(\bs{\nu}; \so{})  \label{eq:hlmauto2}\\
+  H(\bs{\nu}; \so{}) &\equiv \int_{\mathbb{R}^2}d\bs{\tau}\,\mb{E}^{\dagger}(\bs{\tau}- \bs{\nu}/2; \so{})\mb{E}(\bs{\tau} + \bs{\nu}/2; \so{}). \label{eq:hlmspatial}
+\end{align}
+Notice the change of variable to simplify the autocorrelation. In the previous
+section we calculated the CTF in the paraxial case as 
+\begin{align}
+  {\mb{E}}^{(p)}(\bs{\nu}; \so{}) =
+\begin{bmatrix}
+  y_1^1(\so{}) + \frac{2}{a}\frac{\text{NA}}{n_o}\nu\cos\phi_\nu y_1^0(\so{})\\
+  y_1^{-1}(\so{}) + \frac{2}{a}\frac{\text{NA}}{n_o}\nu\sin\phi_\nu y_1^0(\so{})\\
+  0\\
+  \end{bmatrix}\, \Pi\left(\frac{\nu}{a}\right). \label{eq:ctfparax}
+\end{align}
+By introducing $\bs{\tau} \equiv \tau_x\mh{x} + \tau_y\mh{y} \equiv \tau\cos\phi_\tau\mh{x} + \tau\sin\phi_\tau\mh{y}$
+we can plug Eq. \ref{eq:ctfparax} into Eq. \ref{eq:hlmspatial} and find that
+\begin{align}
+    H^{(p)}(\bs{\nu}; \so{}) = \int_{\mathbb{R}^2}d\bs{\tau}\, &\begin{bmatrix}
+  y_1^1(\so{}) + \frac{2}{a}\frac{\text{NA}}{n_o}(\tau_x - \frac{1}{2}\nu_x) y_1^0(\so{})\\
+  y_1^{-1}(\so{}) + \frac{2}{a}\frac{\text{NA}}{n_o}(\tau_y - \frac{1}{2}\nu_y) y_1^0(\so{})\\
+  0\\
+\end{bmatrix}^{\dagger}
+  \begin{bmatrix}
+  y_1^1(\so{}) + \frac{2}{a}\frac{\text{NA}}{n_o}(\tau_x + \frac{1}{2}\nu_x) y_1^0(\so{})\\
+  y_1^{-1}(\so{}) + \frac{2}{a}\frac{\text{NA}}{n_o}(\tau_y + \frac{1}{2}\nu_y) y_1^0(\so{})\\
+  0\\
+\end{bmatrix}\nonumber \\
+  &\Pi\left(\frac{\tau - \nu/2}{a}\right)\Pi\left(\frac{\tau + \nu/2}{a}\right).
+\end{align}
+Expanding the inner product gives
+\begin{align}
+    H^{(p)}(\bs{\nu}; \so{}) = \int_{\mathbb{R}^2}d\bs{\tau}\, &
+      \{y_1^1(\so{})\}^2  + \left\{\frac{2}{a}\frac{\text{NA}}{n_o}y_1^0(\so{})\right\}^2(\tau_x - \frac{1}{2}\nu_x)(\tau_x + \frac{1}{2}\nu_x) + \nonumber \\
+                                                                 &\{y_1^{-1}(\so{})\}^2 + \left\{\frac{2}{a}\frac{\text{NA}}{n_o}y_1^0(\so{})\right\}^2(\tau_y - \frac{1}{2}\nu_y)(\tau_y + \frac{1}{2}\nu_y) + \nonumber \\
+                                                                 &\left\{\frac{2}{a}\frac{\text{NA}}{n_o}y_1^0(\so{})y_1^1(\so{})\right\}(\tau_x - \frac{1}{2}\nu_x) + \left\{\frac{2}{a}\frac{\text{NA}}{n_o}y_1^0(\so{})y_1^1(\so{})\right\}(\tau_x + \frac{1}{2}\nu_x) \nonumber \\
+  &\left\{\frac{2}{a}\frac{\text{NA}}{n_o}y_1^0(\so{})y_1^{-1}(\so{})\right\}(\tau_y - \frac{1}{2}\nu_y) + \left\{\frac{2}{a}\frac{\text{NA}}{n_o}y_1^0(\so{})y_1^{-1}(\so{})\right\}(\tau_y + \frac{1}{2}\nu_y) \nonumber \\  
+&\Pi\left(\frac{\tau - \nu/2}{a}\right)\Pi\left(\frac{\tau + \nu/2}{a}\right). 
+\end{align}
+All of the terms with a single $\tau_x$ or $\tau_y$ are odd, so they integrate
+to zero. Therefore
+\begin{align}
+    H^{(p)}(\bs{\nu}; \so{}) = \int_{\mathbb{R}^2}d\bs{\tau}\, &
+      \{y_1^1(\so{})\}^2  + \left\{\frac{2}{a}\frac{\text{NA}}{n_o}y_1^0(\so{})\right\}^2(\tau_x - \frac{1}{2}\nu_x)(\tau_x + \frac{1}{2}\nu_x) + \nonumber \\
+                                                                 &\{y_1^{-1}(\so{})\}^2 + \left\{\frac{2}{a}\frac{\text{NA}}{n_o}y_1^0(\so{})\right\}^2(\tau_y - \frac{1}{2}\nu_y)(\tau_y + \frac{1}{2}\nu_y) + \nonumber \\
+&\Pi\left(\frac{\tau - \nu/2}{a}\right)\Pi\left(\frac{\tau + \nu/2}{a}\right). 
+\end{align}
+After expanding the spherical harmonics we can rewrite this equation in terms of
+three autocorrelations
+\begin{align}
+    H^{(p)}(\bs{\nu}; \so{}) &= [s_1(\bs{\nu}) + s_2(\bs{\nu}) + s_3(\bs{\nu})]y_0^0(\so{}) + \frac{2\text{NA}}{\sqrt{5}a n_o}[-s_1(\bs{\nu}) + s_2(\bs{\nu}) + s_3(\bs{\nu})]y_2^0(\so{})\label{eq:hinter}
+\end{align}
+where
+\begin{align}
+  s_1(\bs{\nu}) &\equiv \int_{\mathbb{R}^2}d\bs{\tau}\, \Pi\left(\frac{\tau - \nu/2}{a}\right)\Pi\left(\frac{\tau + \nu/2}{a}\right),\\
+  s_2(\bs{\nu}) &\equiv \int_{\mathbb{R}^2}d\bs{\tau}\, (\tau_x - \nu_x/2)(\tau_x + \nu_x/2) \Pi\left(\frac{\tau - \nu/2}{a}\right)\Pi\left(\frac{\tau + \nu/2}{a}\right),\\
+  s_3(\bs{\nu}) &\equiv \int_{\mathbb{R}^2}d\bs{\tau}\, (\tau_y - \nu_y/2)(\tau_y + \nu_y/2) \Pi\left(\frac{\tau - \nu/2}{a}\right)\Pi\left(\frac{\tau + \nu/2}{a}\right).
+\end{align}
+We can evaluate these integrals with the help of the geometric construction
+shown in Figure \ref{fig:geometry} \cite{goodman1996}. 
+
+\begin{figure}[h]
+ \captionsetup{width=1.0\linewidth}
+ \centering
+   \centering
+   \includegraphics[width = 0.8\textwidth]{../figures/geometry/geometry.pdf}
+   \caption{Geometric construction for evaluating $s_1(\bs{\nu})$,
+     $s_2(\bs{\nu})$, and $s_3(\bs{\nu})$. We need to find the boundaries of
+     integration for the overlapping region of two circles with radius $a$ and
+     distance $\nu$ between their centers. The region is given by four times the
+     difference in area between a sector of angle
+     $\arccos\left(\frac{\nu}{2a}\right)$ and a triangle with base $\nu/2$ and
+     hypotenuse $a$.}
+   \label{fig:geometry}
+\end{figure}
+
+Starting with $s_1(\bs{\nu})$ we find that
+\begin{align}
+  s_1(\bs{\nu}) &= 4\left[\left(\int\limits_0^a d\tau\, \tau\int\limits_0^{\arccos\left(\frac{\nu}{2a}\right)}d\phi_{\tau}\right) - \left(\int\limits_0^{\nu/2}d\tau_x \int\limits_0^{\tau_x\frac{2a}{\nu}\sqrt{1 - \left(\frac{\nu}{2a}\right)^2}}d\tau_y\right)\right]\\
+  s_1(\bs{\nu}) &= 4\left[\left(\int\limits_0^a d\tau\,\tau\arccos\left(\frac{\nu}{2a}\right)\right) - \left(\int\limits_0^{\nu/2}d\tau_x \tau_x \frac{2a}{\nu}\sqrt{1 - \left(\frac{\nu}{2a}\right)^2}\right)\right]\\
+  s_1(\bs{\nu}) &= 4\left[\frac{a^2}{2}\arccos\left(\frac{\nu}{2a}\right) - \frac{\nu a}{4}\sqrt{1 - \left(\frac{\nu}{2a}\right)^2}\right]\\
+  s_1(\bs{\nu}) &= 2a^2\arccos\left(\frac{\nu}{2a}\right) - \nu a\sqrt{1 - \left(\frac{\nu}{2a}\right)^2}.
+\end{align}
+Note that $s_1(\bs{\nu})$ is the unnormalized OTF for a single-view
+fluorescence microscope under the scalar approximation. Next we evaluate
+$s_2(\bs{\nu})$ using the same geometric construction. This integral is not
+rotationally symmetric, so we start by restricting $\bs{\nu}$ to the $x$-axis
+\begin{align}
+  s_2(\nu_x) = 4\Bigg[&\int\limits_0^a d\tau\, \tau \int\limits_0^{\arccos\left(\frac{\nu_x}{2a}\right)}d\phi_{\tau}(\tau\cos\phi_{\tau} - \nu_x/2)(\tau\cos\phi_{\tau} + \nu_x/2)\nonumber \\ &- \int\limits_0^{\nu_x/2}d\tau_x \int\limits_0^{\tau_x \frac{2a}{\nu_x}\sqrt{1 - \left(\frac{\nu_x}{2a}\right)^2}}d\tau_y(\tau_x - \nu_x/2)(\tau_x + \nu_x/2)\Bigg],\\
+  s_2(\nu_x) = 4\Bigg[&\int\limits_0^a d\tau\, \tau\int\limits_0^{\arccos\left(\frac{\nu_x}{2a}\right)}d\phi_{\tau}(\tau^2\cos^2\phi_{\tau} - \nu_x^2/4)\nonumber \\ &- \int\limits_0^{\nu_x/2}d\tau_x \int\limits_0^{\tau_x\frac{2 a}{\nu_x}\sqrt{1 - \left(\frac{\nu_x}{2a}\right)^2}}d\tau_y(\tau_x^2 - \nu_x^2/4)\Bigg].
+\end{align}
+For the first inner integral we will make use of the following
+\begin{align}
+  \int\limits_0^{\arccos(z)} d\phi \cos^2\phi = \frac{1}{2}z\sqrt{1 - z^2} + \frac{1}{2}\arccos(z).
+\end{align}
+This results in
+\begin{align}
+  s_2(\nu_x) = 4\Bigg[&\int\limits_0^a d\tau\left(\frac{\tau^3}{2}\left(\frac{\nu_x}{2a}\right)\sqrt{1 - \left(\frac{\nu_x}{2a}\right)^2} + \frac{\tau^3}{2}\arccos\left(\frac{\nu_x}{2a}\right) - \frac{\tau\nu_x^2}{4}\arccos\left(\frac{\nu_x}{2a}\right)\right)\nonumber \\ &- \int\limits_0^{\nu_x/2}d\tau_x \left(\tau_x^3 - \frac{\tau_x\nu_x^2}{4}\right)\frac{2 a}{\nu_x}\sqrt{1 - \left(\frac{\nu_x}{2a}\right)^2}\Bigg],\\
+  s_2(\nu_x) = 4\Bigg[&\left(\frac{a^4}{8}\left(\frac{\nu_x}{2a}\right)\sqrt{1 - \left(\frac{\nu_x}{2a}\right)^2} + \frac{a^4}{8}\arccos\left(\frac{\nu_x}{2a}\right) - \frac{a^2\nu_x^2}{8}\arccos\left(\frac{\nu_x}{2a}\right)\right) - \left(\frac{\nu_x^4}{64} - \frac{\nu_x^4}{32}\right)\frac{2 a}{\nu_x}\sqrt{1 - \left(\frac{\nu_x}{2a}\right)^2}\Bigg],\\
+  s_2(\nu_x) = 4\Bigg[&\frac{\nu_xa^3}{16}\sqrt{1 - \left(\frac{\nu_x}{2a}\right)^2} + \frac{a^4}{8}\arccos\left(\frac{\nu_x}{2a}\right) - \frac{a^2\nu_x^2}{8}\arccos\left(\frac{\nu_x}{2a}\right) + \frac{\nu_x^3a}{32}\sqrt{1 - \left(\frac{\nu_x}{2a}\right)^2}\Bigg],\\
+  s_2(\nu_x) = &\frac{\nu_xa^3}{4}\sqrt{1 - \left(\frac{\nu_x}{2a}\right)^2} + \frac{a^4}{2}\arccos\left(\frac{\nu_x}{2a}\right) - \frac{a^2\nu_x^2}{2}\arccos\left(\frac{\nu_x}{2a}\right) + \frac{\nu_x^3a}{8}\sqrt{1 - \left(\frac{\nu_x}{2a}\right)^2},\\
+  s_2(\nu_x) = &\left(\frac{a^2}{4} - \frac{\nu_x^2}{4}\right)2a^2\arccos\left(\frac{\nu_x}{2a}\right) + \left(\frac{a^2}{4} + \frac{\nu_x^2}{8}\right)\nu_x a \sqrt{1 - \left(\frac{\nu_x}{2a}\right)^2}.
+\end{align}
+This result is only true for $\bs{\nu}$ restricted to the $x$ axis, but we can
+extend this result to the general case by noticing that the value of the
+function in the area of overlap has the same functional form for any direction
+of $\bs{\nu}$ but the total value is reduced by a factor of $\cos^2\phi_\nu$.
+This make sense because the function in the area of overlap for the circles
+displaced along the $y$-axis is zero. Therefore, the complete integral is given
+by 
+\begin{align}
+    s_2(\bs{\nu}) = &\cos^2\phi_\nu\left[\left(\frac{a^2}{4} - \frac{\nu^2}{4}\right)2a^2\arccos\left(\frac{\nu}{2a}\right) + \left(\frac{a^2}{4} + \frac{\nu^2}{8}\right)\nu a\sqrt{1 - \left(\frac{\nu}{2a}\right)^2}\right].
+\end{align}
+Similarly, $s_3(\bs{\nu})$ is given by
+\begin{align}
+      s_3(\bs{\nu}) = &\sin^2\phi_\nu\left[\left(\frac{a^2}{4} - \frac{\nu^2}{4}\right)2a^2\arccos\left(\frac{\nu}{2a}\right) + \left(\frac{a^2}{4} + \frac{\nu^2}{8}\right)\nu a\sqrt{1 - \left(\frac{\nu}{2a}\right)^2}\right].
+\end{align}
+Plugging these results into Eq. \ref{eq:hinter} gives
+\begin{align}
+    H^{(p)}(\bs{\nu}; \so{}) = &\left[\left(1 + \frac{a^2}{4} - \frac{\nu^2}{4}\right)2a^2\arccos\left(\frac{\nu}{2a}\right) - \left(1 - \frac{a^2}{4} - \frac{\nu^2}{8}\right)\nu a\sqrt{1 - \left(\frac{\nu}{2a}\right)^2}\right]y_0^0(\so{})\nonumber\\ + &\left[\left(-1 + \frac{a^2}{4} - \frac{\nu^2}{4}\right)2a^2\arccos\left(\frac{\nu}{2a}\right) - \left(-1 - \frac{a^2}{4} - \frac{\nu^2}{8}\right)\nu a\sqrt{1 - \left(\frac{\nu}{2a}\right)^2}\right]y_2^0(\so{}).
+\end{align}
+After plugging this into Eq. \ref{eq:hlmauto2}, performing the angular integral,
+refactoring, and normalizing, we get the complete spatio-angular transfer function
+\begin{align}
+  H_l^m(\nu) &= H_0^0(\nu)\delta(l, m) + \frac{2\text{NA}}{\sqrt{5}an_o}H_2^0(\nu)\delta(l-2, m)\\
+  H_0^0(\nu) &= \left(1 + \frac{a^2}{4} - \frac{\nu^2}{4}\right)2a^2\arccos\left(\frac{\nu}{2a}\right) - \left(1 - \frac{a^2}{4} - \frac{\nu^2}{8}\right)\nu a\sqrt{1 - \left(\frac{\nu}{2a}\right)^2}\\
+  H_2^0(\nu) &= \left(-1 + \frac{a^2}{4} - \frac{\nu^2}{4}\right)2a^2\arccos\left(\frac{\nu}{2a}\right) - \left(-1 - \frac{a^2}{4} - \frac{\nu^2}{8}\right)\nu a\sqrt{1 - \left(\frac{\nu}{2a}\right)^2}               
+\end{align}
 
 \end{document}
-

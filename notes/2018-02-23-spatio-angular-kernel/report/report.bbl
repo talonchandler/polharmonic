@@ -1,0 +1,37 @@
+\begin{thebibliography}{1}
+
+\bibitem{backer2014}
+Adam~S. Backer and W.~E. Moerner.
+\newblock Extending single-molecule microscopy using optical {F}ourier
+  processing.
+\newblock {\em J. Phys. Chem. B}, 118(28):8313--8329, 2014.
+
+\bibitem{nov2006}
+Lukas Novotny and Bert Hecht.
+\newblock {\em Principles of Nano-Optics}.
+\newblock Cambridge University Press, 2006.
+
+\bibitem{goodman1996}
+J.W. Goodman.
+\newblock {\em Introduction to Fourier Optics}.
+\newblock McGraw-Hill, 2nd edition, 1996.
+
+\bibitem{papoulis2002}
+A.~{Papoulis} and S.~U. {Pillai}.
+\newblock {\em {Probability, Random Variables, and Stochastic Processes}}.
+\newblock McGraw-Hill Higher Education, 4 edition, 2002.
+
+\bibitem{mertz2009}
+J.~Mertz.
+\newblock {\em Introduction to Optical Microscopy}.
+\newblock W. H. Freeman, 2009.
+
+\bibitem{poul1998}
+A.~Poularikas.
+\newblock {\em Handbook of Formulas and Tables for Signal Processing}.
+\newblock Electrical Engineering Handbook. CRC-Press, 1998.
+
+\bibitem{wiener}
+\url{http://mathworld.wolfram.com/Wiener-KhinchinTheorem.html}.
+
+\end{thebibliography}

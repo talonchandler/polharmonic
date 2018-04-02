@@ -1,13 +1,13 @@
 usepackage("amsmath");
 settings.outformat = "pdf";
-settings.render=8;//16;
+settings.render=16;// Draw other lines
 settings.embed=true;
 settings.prc=true;
 import three;
 import graph3;
 import solids;
 import grid3;
-defaultpen(fontsize(24pt));
+defaultpen(fontsize(20pt));
 currentprojection = orthographic(5,5,1.5);
 
 texpreamble("
@@ -87,8 +87,13 @@ draw(L=Label("$\mathbf{\hat{s}}_o = \cos\varphi\sin\vartheta\hat{\mathbf{x}} + \
 //draw(2*Z--(2*Z+0.5*Y), thinblack, Arrow3);
 //label(L=Label("$\mathbf{\hat{p}_{\text{exc}}}$"), position=1.8*Z+0.5*Y);
 
+
+// draw(L=Label("$\mathbf{\hat{s}}_o = \cos\varphi_o\sin\vartheta_o\hat{\mathbf{x}} + \sin\varphi_o\sin\vartheta_o\hat{\mathbf{y}} + \cos\vartheta_o\hat{\mathbf{z}}$", position=Relative(1.1), align=SE), O--Av, thinblack, Arrow3(emissive(black))); 
+//draw(2*Z--(2*Z+0.5*Y), thinblack, Arrow3);
+//label(L=Label("$\mathbf{\hat{p}_{\text{exc}}}$"), position=1.8*Z+0.5*Y);
+
 // Plane labels
-label(L=Label("$\mathbf{\mathfrak{r}}_o =x_o\hat{\mathbf{x}} + y_o\hat{\mathbf{y}}$"), align=E, -A + O);
+label(L=Label("$\mathbf{r}_o =x_o\hat{\mathbf{x}} + y_o\hat{\mathbf{y}}$"), align=E, -A + O);
 label(L=Label("$\mathbf{r}_b = r_b\cos\phi_b\hat{\mathbf{x}} + r_b\sin\phi_b\hat{\mathbf{y}}$"), align=E, -A + 2*r*Z);
 label(L=Label("$\mathbf{r}_d = r_b\cos\phi_b\hat{\mathbf{x}} + r_b\sin\phi_b\hat{\mathbf{y}}$"), align=E, -A + 4*r*Z);
 

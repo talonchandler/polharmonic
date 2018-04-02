@@ -54,15 +54,16 @@ X2 = Symbol('X2', real=True)
 
 # Calculate intensity
 # Full
-G = Matrix([[X0+X2*cos(2*phid), X2*sin(2*phid), -2*I*X1*cos(phid)], [X2*sin(2*phid), X0-X2*cos(2*phid), -2*I*X1*sin(phid)], [0, 0, 0]])
+G = Matrix([[X0+X2*cos(2*phid), X2*sin(2*phid), 2*I*X1*cos(phid)], [X2*sin(2*phid), X0-X2*cos(2*phid), 2*I*X1*sin(phid)], [0, 0, 0]])
 # Paraxial
 # G = Matrix([[X0, 0, -2*I*X1*cos(phid)], [0, X0, -2*I*X1*sin(phid)], [0, 0, 0]])
-mu = Matrix([sin(theta)*cos(phi), sin(theta)*sin(phi), cos(theta)])
+mu = Matrix([sh.Znm(1, 1, theta, phi).expand(func=True), sh.Znm(1, -1, theta, phi).expand(func=True), sh.Znm(1, 0, theta, phi).expand(func=True)])
+# mu = Matrix([sin(theta)*cos(phi), sin(theta)*sin(phi), cos(theta)])
 ed = G*mu
 I = (ed.H*ed)[0,0]
-
+import pdb; pdb.set_trace() 
 # Expand onto spherical harmonics
-# x = sft(I, max_l=2, odd_l=False)
+x = sft(I, max_l=2, odd_l=False)
 
 # Expand eb
 Gb = Matrix([[1, 0, rb], [0, 1, rb], [0,0,0]])

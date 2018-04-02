@@ -28,10 +28,10 @@ theta = Symbol('theta', real=True)
 phi = Symbol('phi', real=True)
 
 # Calculate expansions
-# b = 1
-# for m1 in range(-b, b+1):
-#     for m2 in range(m1, b+1):
-#         sh_mult(b, m1, b, m2)
+b = 1
+for m1 in range(-b, b+1):
+    for m2 in range(m1, b+1):
+        sh_mult(b, m1, b, m2)
 
 print('\n\n')
 b = 2
