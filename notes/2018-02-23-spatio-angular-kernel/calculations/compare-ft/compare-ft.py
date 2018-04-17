@@ -6,33 +6,44 @@ import matplotlib.pyplot as plt
 out = 'output/'
 NA = 0.8
 n = 1.33
-n_pixels = 256
+n_pixels = 257
 [X, Y] = np.meshgrid(np.linspace(-2, 2, n_pixels),
                      np.linspace(-2, 2, n_pixels))
 R = np.sqrt(X**2 + Y**2)
 
 # Analytic OTF
-Han = (A(R)).astype('float32')
-H00an = (H00(R)).astype('float32')
-H20an = (H20(R)).astype('float32')
-save_tiff(Han, out+'Han.tiff')
+Hxan = (A(R)).astype('float32')
+Hzan = (B(R, NA=NA, n=n)).astype('float32')
+H00an = (H00(R, NA=NA, n=n)).astype('float32')
+H20an = (H20(R, NA=NA, n=n)).astype('float32')
+save_tiff(Hxan, out+'Hxan.tiff')
+save_tiff(Hzan, out+'Hzan.tiff')
 save_tiff(H00an, out+'H00an.tiff')
 save_tiff(H20an, out+'H20an.tiff')
 
 # Analytic PSF
-hhan = (a(R)).astype('float32')
-hh00an = (h00(R)).astype('float32')
-hh20an = (h20(R)).astype('float32')
-save_tiff(hhan, out+'hhan.tiff')
+hhxan = (a(R)).astype('float32')
+hhzan = (b(R, NA=NA, n=n)).astype('float32')
+hh00an = (h00(R, NA=NA, n=n)).astype('float32')
+hh20an = (h20(R, NA=NA, n=n)).astype('float32')
+save_tiff(hhxan, out+'hhxan.tiff')
+save_tiff(hhzan, out+'hhzan.tiff')
 save_tiff(hh00an, out+'hh00an.tiff')
 save_tiff(hh20an, out+'hh20an.tiff')
 
 # Computed PSF
-xF, hhft = myfft(Han)
-xF, hh00ft = myfft(H00an)
-xF, hh20ft = myfft(H20an)
+xF, hhxftraw = myfft(Hxan)
+xF, hhzftraw = myfft(Hzan)
+xF, hh00ftraw = myfft(H00an)
+xF, hh20ftraw = myfft(H20an)
 
-save_tiff(hhft, out+'hhft.tiff')
+hhxft = hhxftraw/np.max(hhxftraw)
+hhzft = hhzftraw/np.max(hhxftraw)
+hh00ft = hh00ftraw/np.max(hh00ftraw)
+hh20ft = hh20ftraw/np.max(hh00ftraw)
+
+save_tiff(hhxft, out+'hhxft.tiff')
+save_tiff(hhzft, out+'hhzft.tiff')
 save_tiff(hh00ft, out+'hh00ft.tiff')
 save_tiff(hh20ft, out+'hh20ft.tiff')
 
@@ -40,54 +51,49 @@ save_tiff(hh20ft, out+'hh20ft.tiff')
 
 # Plot PSFs
 x = np.linspace(-2, 2, n_pixels)
-y2 = h20(x, NA=NA)
-y3 = h20(x, NA=NA)*(-np.sqrt(5))
 f, axs = plt.subplots(1, 2, figsize=(10,5))
 
-axs[0].plot(x, cs(hh00an), '-', c='k', lw=1, label=r"$h_0^0(r_d')$")
-axs[0].plot(xF, cs(hh00ft)/np.max(hh00ft), ':', c='k',lw=1, label=r"$h_0^0(r_d')$ FT")
+axs[0].plot(x, cs(hh00an), '-', c='k', lw=1, label=r"${h_0^0}^{(p)}(r_d')$")
+#axs[0].plot(xF, cs(hh00ft), ':', c='k',lw=1, label=r"$h_0^0(r_d')$ FT")
 
-axs[0].plot(x, cs(hh20an), '-', c='b',lw=1, label=r"$h_0^2(r_d')$")
-axs[0].plot(xF, cs(hh20ft)/np.max(hh00ft), ':', c='b',lw=1, label=r"$h_0^2(r_d')$ FT")
+axs[0].plot(x, cs(hh20an), '-', c='b',lw=1, label=r"${h_0^2}^{(p)}(r_d')$")
+#axs[0].plot(xF, cs(hh20ft), ':', c='b',lw=1, label=r"$h_0^2(r_d')$ FT")
 
-# axs[0].plot(x, y3, ':', c='k',lw=1, label=r"Normalized $h_0^2(\nu)$")
-# axs[0].plot(x, H00ft/np.max(H00ft), ':', c='b',lw=1, label=r"H00ft calc")
-# axs[0].plot(x, H20ft/np.max(H00ft), ':', c='r',lw=1, label=r"H20ft calc")
+axs[0].plot(x, cs(hhxan), '-', c='r',lw=1, label=r"$h_x^{(p)}(r_d')$")
+#axs[0].plot(xF, cs(hhxft), ':', c='r',lw=1, label=r"$h_x(r_d')$ FT")
 
-axs[0].plot(x, a(x), '-', c='r',lw=1, label=r"Airy")
-axs[0].plot(xF, cs(hhft)/np.max(hhft), ':', c='r',lw=1, label=r"Airy FT")
+axs[0].plot(x, cs(hhzan), '-', c='g',lw=1, label=r"$h_z^{(p)}(r_d')$")
+#axs[0].plot(xF, cs(hhzft), ':', c='g',lw=1, label=r"$h_z(r_d')$ FT")
 
+# Ax 0 setup
 axs[0].set_xlim([-2, 2])
 axs[0].set_ylim([-1, 1])
 axs[0].set_xlabel(r"$r_d'\, \textrm{NA}/(M\lambda)$")
-axs[0].set_title(r'Spatio-angular PSF')
+axs[0].set_title(r'')
 axs[0].get_xaxis().set_ticks([-2, -1, 0, 1, 2])
 axs[0].get_yaxis().set_ticks([-1, -0.5, 0, 0.5, 1])
 axs[0].xaxis.labelpad = 10
-axs[0].legend(frameon=False, loc=8)
+axs[0].legend(frameon=False, loc=4)
 
 # Plot OTFS
 x = np.linspace(-2, 2, n_pixels)
-y2 = H20(x, NA=NA, n=n)#*(np.sqrt(5)*(1 + 0.5*(NA/n)**2))/(-1 + ((NA/n)**2))
-y3 = H20(x, NA=NA, n=n)*(np.sqrt(5)*(1 + 0.5*(NA/n)**2))/(-1 + ((NA/n)**2))
-y4 = A(x)
 
-axs[1].plot(x, cs(H00an), '-', c='k', lw=1, label=r"$H_0^0(r_d')$")
-axs[1].plot(x, cs(H20an), '-', c='b',lw=1, label=r"$H_0^2(\nu)$")
-axs[1].plot(x, cs(Han), '-', c='r',lw=1, label=r"Airy OTF")
 
-# axs[1].plot(x, y3, ':', c='k',lw=1, label=r"Normalized $H_0^2(\nu)$")
-# axs[1].plot(x, H00im, ':', c='b',lw=1, label=r"H00 calc")
-# axs[1].plot(x, H20im, ':', c='r',lw=1, label=r"H20 calc")
+axs[1].plot(x, cs(H00an), '-', c='k', lw=1, label=r"${H_0^0}^{(p)}(\nu)$")
+axs[1].plot(x, cs(H20an), '-', c='b',lw=1, label=r"${H_0^2}^{(p)}(\nu)$")
+axs[1].plot(x, cs(Hxan), '-', c='r',lw=1, label=r"$H_x^{(p)}(\nu)$")
+axs[1].plot(x, cs(Hzan), '-', c='g',lw=1, label=r"$H_z^{(p)}(\nu)$")
+N = (1/np.pi)*((NA/n)**2)
+poly = (1.0/3.0)*(13.0 - 10.0*(np.abs(x/2)**2))
 
 axs[1].set_xlim([-1, 1])
 axs[1].set_ylim([-1, 1])
 axs[1].set_xlabel(r"$\nu\, (M\lambda)/\textrm{NA}$")
-axs[1].set_title(r'Spatio-angular OTF')
+axs[1].set_title(r'')
 axs[1].get_xaxis().set_ticks([-2, -1, 0, 1, 2])
 axs[1].get_yaxis().set_ticks([-1, -0.5, 0, 0.5, 1])
 axs[1].xaxis.labelpad = 10
-axs[1].legend(frameon=False, loc=8)
+axs[1].legend(frameon=False, loc=4)
 
 plt.savefig('psfs.pdf')
 

@@ -28,19 +28,21 @@ def myacos(x):
     return np.nan_to_num(np.arccos(np.abs(x/2)))
     
 def mysqrt(x):
-    return np.nan_to_num((np.abs(x)/2)*np.sqrt(1 - (np.abs(x)/2)**2))
+    return np.nan_to_num((np.abs(x/2))*np.sqrt(1 - (np.abs(x/2))**2))
     
 def A(x):
     return (2/np.pi)*(myacos(x) - mysqrt(x))
 
 def B(x, NA=0.8, n=1.33):
-    return ((NA**2)/(2*np.pi*(n**2)))*((1 - x**2)*myacos(x) + (1 + ((x**2)/2))*mysqrt(x))
+    N = (1/(np.pi))*((NA/n)**2)
+    poly = (3.0 - 2.0*(np.abs(x/2)**2))
+    return N*(myacos(x) - poly*mysqrt(x))
 
 def H00(x, NA=0.8, n=1.33):
-    return (A(x) + 2*B(x, NA=NA, n=n))/(1 + 0.5*(NA/n)**2)
+    return (A(x) + 2*B(x, NA=NA, n=n))/(1 + (NA/n)**2)
 
 def H20(x, NA=0.8, n=1.33):
-    return (-A(x) + 4*B(x, NA=NA, n=n))/(np.sqrt(5)*(1 + 0.5*(NA/n)**2))
+    return (-A(x) + 4*B(x, NA=NA, n=n))/(np.sqrt(5)*(1 + (NA/n)**2))
 
 # File I/O
 def save_tiff(image, filename):

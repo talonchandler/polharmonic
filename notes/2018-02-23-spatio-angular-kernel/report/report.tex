@@ -3,7 +3,7 @@
 %%%%%%%%%%%%
 % Packages %
 %%%%%%%%%%%%
-
+\usepackage[dvipsnames]{xcolor}
 \hyphenpenalty=10000
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows}
@@ -375,9 +375,9 @@ The spatio-angular PSF under the paraxial approximation is given by
 \end{align}
 We rewrite the PSF in the following form to make plotting and interpretation easier
 \begin{align}
-  h^{(p)}(\rd{}', \so{}) &= {h_0^0}^{(p)}(\rd{}')y_0^0(\so{}) + {h_0^2}^{(p)}(\rd{}')y_0^2(\so{}),\\
+  h^{(p)}(\rd{}', \so{}) &= {h_0^0}^{(p)}(\rd{}')y_0^0(\so{}) + {h_2^0}^{(p)}(\rd{}')y_2^0(\so{}),\\
   {h_0^0}^{(p)}(\rd{}') &\equiv {a^{(p)}}^2(r_d') + 2{b^{(p)}}^2(r_d'),\\
-  {h_0^2}^{(p)}(\rd{}') &\equiv \frac{1}{\sqrt{5}}\left[- {a^{(p)}}^2(r_d') + 4{b^{(p)}}^2(r_d')\right].
+  {h_2^0}^{(p)}(\rd{}') &\equiv \frac{1}{\sqrt{5}}\left[- {a^{(p)}}^2(r_d') + 4{b^{(p)}}^2(r_d')\right]. \label{eq:concisepsf}
 \end{align}
 
 First, consider the coefficient on the $y_0^0$ spherical harmonic in Eq.
@@ -582,33 +582,33 @@ $H_l^m(\mb{\nu}_o)$ as the spatio-angular \textit{optical transfer function}
 (OTF). Notice that the CSF and CTF are vector-valued functions, while the PSF
 and OTF are scalar-valued functions.
 
-In Appendix \ref{paraxialotf} we calculate the paraxial OTF for a single-view
+In Appendix \ref{paraxialotf2} we calculate the paraxial OTF for a single-view
 fluorescence microscope as
 \begin{align}
-  {H_l^m}^{(p)}(\nu) &= {H_0^0}^{(p)}(\nu)\delta(l, m) + {H_2^0}^{(p)}(\nu)\delta(l-2, m),\label{eq:fullotf}\\
-  {H_0^0}^{(p)}(\nu) &\equiv \frac{A^{(p)}(\nu) + 2B^{(p)}(\nu)}{1 + \text{NA}^2/(2n_o^2)},\\
-  {H_2^0}^{(p)}(\nu) &\equiv \frac{-A^{(p)}(\nu) + 4B^{(p)}}{\sqrt{5}\, [1 + \text{NA}^2/(2n_o^2)]}.
+  {H_l^m}^{(p)}(\nu) &= {H_0^0}^{(p)}(\nu)\delta(l, m) + {H_2^0}^{(p)}(\nu)\delta(l-2, m), \label{eq:fullotf} \\
+  {H_0^0}^{(p)}(\nu) &\equiv \frac{A^{(p)}(\nu) + 2B^{(p)}(\nu)}{1 + (\text{NA}/n_o)^2},\\
+  {H_2^0}^{(p)}(\nu) &\equiv \frac{-A^{(p)}(\nu) + 4B^{(p)}}{\sqrt{5}\, [1 + (\text{NA}/n_o)^2]},
 \end{align}
 where
 \begin{align}
   {A}^{(p)}(\nu) &= \frac{2}{\pi}\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
-  {B}^{(p)}(\nu) &= \frac{\text{NA}^2}{2\pi n_o^2}\left[\left(1 - \frac{\nu^2}{\nu_o^2}\right)\arccos\left(\frac{\nu}{2\nu_o}\right) + \left(1 + \frac{\nu^2}{2\nu_o^2}\right)\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right).
+  B^{(p)}(\nu) &= \frac{1}{\pi}\left(\frac{\text{NA}}{n_o}\right)^2\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \left[3 - 2\left(\frac{\nu}{2\nu_o}\right)^2\right]\frac{\nu}{2\nu_o} \sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right).                 
 \end{align}
 
 Notice that the paraxial OTF is rotationally symmetric, so we can write in terms
 of $\nu$ instead of the complete spatial frequency vector $\bs{\nu}$. This will
-no longer be true when we leave the paraxial approximation or add polarizing
-filters to the system. Also, notice that ${A}^{(p)}(\nu)$ is the spatial OTF for
-an incoherent imaging system under the paraxial and scalar approximations
-\cite{goodman1996}.
+not be true when we leave the paraxial approximation or add polarizing filters
+to the system. Also, notice that ${A}^{(p)}(\nu)$ is the spatial OTF for an
+incoherent imaging system (the Fourier transform of an Airy pattern) under the
+paraxial and scalar approximations \cite{goodman1996}.
 
 If our sample consists of isotropic distributions of fluorophores only, then we
 can ignore the ${H_2^0}^{(p)}(\nu)$ term in the OTF. As the NA approaches zero,
-${B}^{(p)}(\nu)$ disappears and we recover the spatial OTF from the
+${B}^{(p)}(\nu)$ disappears and we recover the scalar OTF from the vector
 spatio-angular OTF as expected. For non-zero NA the difference between the OTF
 with and without the scalar approximation is $2{B}^{(p)}(\nu)$. We can interpret
 this difference as an electromagnetic correction to the scalar OTF. The
-correction is proportional to $\frac{\text{NA}^2}{n_o^2}$, so it is a small term
+correction is proportional to $\left(\text{NA}/{n_o}\right)^2$, so it is a small term
 for all but high NA objectives.
 
 Next, consider the ${H_2^0}^{(p)}(\nu)$ term for NA approaching zero. In this
@@ -640,39 +640,37 @@ sum to find
 \end{align}
 So the spatial OTF for a $z$ oriented dipole is given by
 \begin{align}
-  H_{\mh{z}}(\nu) \propto \sqrt{\frac{1}{4\pi}}H_0^0(\nu) + \sqrt{\frac{5}{4\pi}}H_2^0(\nu).
+  H_z^{(p)}(\nu) &\propto \sqrt{\frac{1}{4\pi}}H_0^0(\nu) + \sqrt{\frac{5}{4\pi}}H_2^0(\nu), \\
+    H_z^{(p)}(\nu) &= \frac{1}{2}\left(\frac{n_o}{\text{NA}}\right) B^{(p)}(\nu).
 \end{align}
-The main result is that the spatial OTF for any dipole distribution is a linear
-combination of the OTFs for the spherical harmonics. I am partially hesitant to
-refer to $H_{\mh{z}}(\nu)$ as an OTF because it is object dependent, but the
-vocabulary is fine if it is understood that the sample only contains
-$z$-oriented dipoles. For general distributions, the complete spatio-angular OTF
-should be used instead of deriving the transfer function for every individual
-fluorophore.
+The most important result is that the spatial OTF for \textbf{any} dipole
+distribution is a linear combination of just two OTFs---one for each spherical
+harmonic. The same is true for the PSFs---the PSF for any dipole
+distribution is a linear combination of just two PSFs. 
 
-Fig. \ref{fig:para} shows the spatio-angular OTF for a microscope with
-$\text{NA}=0.8$ and $n=1.33$. The most important feature of this figure is that
-${H_0^0}^{(p)}(\nu)$ is a low-pass filter compared to ${H_0^2}^{(p)}(\nu)$ with
-a maximum difference of $\sim 7\%$ (with larger difference for higher NA). If the difference between
-${H_0^0}^{(p)}(\nu)$ and ${H_0^2}^{(p)}(\nu)$ is not completely obscured by
-noise, we will be able to exploit the difference to estimate the out-of-plane
-angle of dipoles with a single image (putting aside the ill-posedness of the
-problem).
+Fig. \ref{fig:para} shows four important paraxial PSFs and OTFs for a microscope
+with $\text{NA}=0.8$ and $n=1.33$. Notice that the OTF for $z$-oriented
+dipoles is negative at high frequencies. An OTF that crosses zero will give a
+contrast inversion in a Siemens star test target. The negative OTF is a direct
+consequence of the donut-shaped point spread function. If we arranged a pattern
+of $z$-oriented dipoles with a sinusoid spatial frequency near the cutoff
+frequency, the regions of low intensity would report the positions of the
+fluorophores.
 
 \begin{figure}[h]
  \captionsetup{width=1.0\linewidth}
  \centering
    \centering
-   \includegraphics[width = 1.\textwidth]{../calculations/psfs.pdf}
-   \caption{\textbf{Left:} Paraxial spatio-angular point spread function for a
-     single-view fluorescence microscope with NA=0.8 and $n_o$=1.33. The solid
-     line is the PSF for $y_0^0$ distributions and the dashed line is the PSF
-     for $y_2^0$ distributions. The dotted line is the $y_2^0$ PSF normalized
-     for comparison with the $y_0^0$ PSF. The $y_2^0$ distributions includes
-     ``negative'' fluorophores, so it gives rise to a negative PSF.
-     \textbf{Right:} Numerical paraxial spatio-angular optical transfer function
-     for the same microscope. The $y_0^0$ term has a comparatively low-pass
-     response while the $y_2^0$ term has a comparatively high-pass response.}
+   \includegraphics[width = 1.\textwidth]{../calculations/compare-ft/psfs.pdf}
+   \caption{\textbf{Left:} Point spread functions and \textbf{Right:} optical
+     transfer functions for a single-view fluorescence microscope with
+     $\text{NA}=0.8$ and $n_o=1.33$ under the paraxial approximation.
+     \textbf{Black:} $l=0, m=0$ spherical harmonic---an isotropic distribution
+     of fluorophores. \textcolor{blue}{\textbf{Blue:}} $l=2, m=0$ spherical
+     harmonic---negative fluorophores near the transverse plane, positive
+     fluorophores near the optical axis. \textcolor{red}{\textbf{Red:}}
+     $x$-oriented dipole. \textcolor{OliveGreen}{\textbf{Green:}} $y$-oriented
+     dipole.}
    \label{fig:para}
 \end{figure}
     
@@ -840,97 +838,207 @@ Finally, we find the paraxial CTF by evaluating the angular integral in Eq.
   \end{bmatrix}\, \Pi\left(\frac{\nu}{\nu_o}\right).
 \end{align}
 
-\section{Paraxial optical transfer function}\label{paraxialotf}
+% \section{Paraxial optical transfer function}\label{paraxialotf}
+% In this appendix we calculate the paraxial OTF for a single-view fluorescence
+% microscope. We start with Eq. \ref{eq:otfdef2}
+% \begin{align}
+%   H_l^m(\bs{\nu}) \propto \int_{\mathbb{S}^2}d\so{}\int_{\mathbb{R}^2}d\rd{}'\, h(\rd{}', \so{}) y_l^m(\so{})\thinspace\me^{-i 2\pi \rd{}'\cdot\bs{\nu}}.
+% \end{align}
+% We could plug in the paraxial PSF and evaluate the integrals, but this will lead
+% us to Fourier transforms that cannot be found in tables. Instead we use a trick
+% from scalar Fourier optics and write the OTF in terms of the detected electric
+% field \cite{goodman1996}
+% \begin{align}
+%   H_l^m(\bs{\nu}) \propto \int_{\mathbb{S}^2}d\so{}\int_{\mathbb{R}^2}d\rd{}'\, \left|\mb{e}_d(\rd{}', \so{})\right|^2 y_l^m(\so{})\thinspace\me^{-i 2\pi \rd{}'\cdot\bs{\nu}}.
+% \end{align}
+% Next, we manipulate this equation to
+% \begin{align}
+%   H_l^m(\bs{\nu}) &\propto \int_{\mathbb{S}^2}d\so{}\, y_l^m(\so{})\int_{\mathbb{R}^2}d\rd{}'\, \mb{e}^{\dagger}_d(\rd{}', \so{})\mb{e}_d(\rd{}', \so{})\, \me^{-i 2\pi \rd{}'\cdot\bs{\nu}},\\
+%   H_l^m(\bs{\nu}) &\propto \int_{\mathbb{S}^2}d\so{}\, y_l^m(\so{})\int_{\mathbb{R}^2}d\rd{}'\, \int_{\mathbb{R}^2}d\rd{}''\, \mb{e}^{\dagger}_d(\rd{}', \so{})\mb{e}_d(\rd{}'', \so{})\delta(\rd{}'' - \rd{}')\, \me^{-i 2\pi \rd{}''\cdot\bs{\nu}},\\
+%   H_l^m(\bs{\nu}) &\propto \int_{\mathbb{S}^2}d\so{}\, y_l^m(\so{})\int_{\mathbb{R}^2}d\bs{\tau}\,\int_{\mathbb{R}^2}d\rd{}'\, \int_{\mathbb{R}^2}d\rd{}''\, \mb{e}^{\dagger}_d(\rd{}', \so{})\mb{e}_d(\rd{}'', \so{})\me^{-i 2\pi\bs{\tau}(\rd{}'' - \rd{}')}\me^{-i 2\pi \rd{}''\cdot\bs{\nu}},\\
+%   H_l^m(\bs{\nu}) &\propto \int_{\mathbb{S}^2}d\so{}\, y_l^m(\so{})\int_{\mathbb{R}^2}d\bs{\tau}\,\left[\int_{\mathbb{R}^2}d\rd{}'\, \mb{e}^{\dagger}_d(\rd{}', \so{}) \me^{i 2\pi\rd{}'\cdot \bs{\tau}}\right]\left[\int_{\mathbb{R}^2}d\rd{}''\, \mb{e}_d(\rd{}'', \so{})\me^{-i 2\pi \rd{}''\cdot(\bs{\nu} + \bs{\tau})}\right],\\
+%   H_l^m(\bs{\nu}) &\propto \int_{\mathbb{S}^2}d\so{}\, y_l^m(\so{})\int_{\mathbb{R}^2}d\bs{\tau}\,\mb{E}^{\dagger}(\bs{\tau}; \so{})\mb{E}(\bs{\tau} + \bs{\nu}; \so{}). \label{eq:hlmauto}
+% \end{align}
+% We have followed the proof for the Wiener-Kinchin theorem \cite{papoulis2002, wiener} to explicitly show how the angular integral affects the usual scalar
+% calculation. Eq. \ref{eq:hlmauto} shows that we can calculate the OTF by taking
+% the vector autocorrelation of the spatial CTF then projecting the result onto
+% the spherical harmonics.
+
+% We will rewrite Eq. \ref{eq:hlmauto} in two parts
+% \begin{align}
+%   H_l^m(\bs{\nu}) &\propto \int_{\mathbb{S}^2}d\so{}\, y_l^m(\so{}) H(\bs{\nu}; \so{})  \label{eq:hlmauto2}\\
+%   H(\bs{\nu}; \so{}) &\equiv \int_{\mathbb{R}^2}d\bs{\tau}\,\mb{E}^{\dagger}(\bs{\tau}- \bs{\nu}/2; \so{})\mb{E}(\bs{\tau} + \bs{\nu}/2; \so{}). \label{eq:hlmspatial}
+% \end{align}
+% Notice the change of variable to simplify the autocorrelation. In the previous
+% section we calculated the CTF in the paraxial case as 
+% \begin{align}
+%   {\mb{E}}^{(p)}(\bs{\nu}; \so{}) =
+% \begin{bmatrix}
+%   y_1^1(\so{}) + \frac{2}{\nu_o}\frac{\text{NA}}{n_o}\nu\cos\phi_\nu y_1^0(\so{})\\
+%   y_1^{-1}(\so{}) + \frac{2}{\nu_o}\frac{\text{NA}}{n_o}\nu\sin\phi_\nu y_1^0(\so{})\\
+%   0\\
+%   \end{bmatrix}\, \Pi\left(\frac{\nu}{\nu_o}\right). \label{eq:ctfparax}
+% \end{align}
+% By introducing $\bs{\tau} \equiv \tau_x\mh{x} + \tau_y\mh{y} \equiv \tau\cos\phi_\tau\mh{x} + \tau\sin\phi_\tau\mh{y}$
+% we can plug Eq. \ref{eq:ctfparax} into Eq. \ref{eq:hlmspatial} and find that
+% \begin{align}
+%     H^{(p)}(\bs{\nu}; \so{}) \propto \int_{\mathbb{R}^2}d\bs{\tau}\, &\begin{bmatrix}
+%   y_1^1(\so{}) + \frac{2}{\nu_o}\frac{\text{NA}}{n_o}(\tau_x - \frac{1}{2}\nu_x) y_1^0(\so{})\\
+%   y_1^{-1}(\so{}) + \frac{2}{\nu_o}\frac{\text{NA}}{n_o}(\tau_y - \frac{1}{2}\nu_y) y_1^0(\so{})\\
+%   0\\
+% \end{bmatrix}^{\dagger}
+%   \begin{bmatrix}
+%   y_1^1(\so{}) + \frac{2}{\nu_o}\frac{\text{NA}}{n_o}(\tau_x + \frac{1}{2}\nu_x) y_1^0(\so{})\\
+%   y_1^{-1}(\so{}) + \frac{2}{\nu_o}\frac{\text{NA}}{n_o}(\tau_y + \frac{1}{2}\nu_y) y_1^0(\so{})\\
+%   0\\
+% \end{bmatrix}\nonumber \\
+%   &\Pi\left(\frac{\tau - \nu/2}{\nu_o}\right)\Pi\left(\frac{\tau + \nu/2}{\nu_o}\right).
+% \end{align}
+% Expanding the inner product gives
+% \begin{align}
+%     H^{(p)}(\bs{\nu}; \so{}) \propto \int_{\mathbb{R}^2}d\bs{\tau}\, &
+%       \{y_1^1(\so{})\}^2  + \left\{\frac{2}{\nu_o}\frac{\text{NA}}{n_o}y_1^0(\so{})\right\}^2(\tau_x - \frac{1}{2}\nu_x)(\tau_x + \frac{1}{2}\nu_x) + \nonumber \\
+%                                                                  &\{y_1^{-1}(\so{})\}^2 + \left\{\frac{2}{\nu_o}\frac{\text{NA}}{n_o}y_1^0(\so{})\right\}^2(\tau_y - \frac{1}{2}\nu_y)(\tau_y + \frac{1}{2}\nu_y) + \nonumber \\
+%                                                                  &\left\{\frac{2}{\nu_o}\frac{\text{NA}}{n_o}y_1^0(\so{})y_1^1(\so{})\right\}(\tau_x - \frac{1}{2}\nu_x) + \left\{\frac{2}{\nu_o}\frac{\text{NA}}{n_o}y_1^0(\so{})y_1^1(\so{})\right\}(\tau_x + \frac{1}{2}\nu_x) \nonumber \\
+%   &\left\{\frac{2}{\nu_o}\frac{\text{NA}}{n_o}y_1^0(\so{})y_1^{-1}(\so{})\right\}(\tau_y - \frac{1}{2}\nu_y) + \left\{\frac{2}{\nu_o}\frac{\text{NA}}{n_o}y_1^0(\so{})y_1^{-1}(\so{})\right\}(\tau_y + \frac{1}{2}\nu_y) \nonumber \\  
+% &\Pi\left(\frac{\tau - \nu/2}{\nu_o}\right)\Pi\left(\frac{\tau + \nu/2}{\nu_o}\right). 
+% \end{align}
+% All of the terms with a single $(\tau_\cdot \pm \frac{1}{2}\nu_\cdot)$ term are
+% correlations of an odd function with an even function, so they are zero.
+% Therefore
+% \begin{align}
+%     H^{(p)}(\bs{\nu}; \so{}) \propto \int_{\mathbb{R}^2}d\bs{\tau}\, &
+%       \{y_1^1(\so{})\}^2  + \left\{\frac{2}{\nu_o}\frac{\text{NA}}{n_o}y_1^0(\so{})\right\}^2(\tau_x - \frac{1}{2}\nu_x)(\tau_x + \frac{1}{2}\nu_x) + \nonumber \\
+%                                                                  &\{y_1^{-1}(\so{})\}^2 + \left\{\frac{2}{\nu_o}\frac{\text{NA}}{n_o}y_1^0(\so{})\right\}^2(\tau_y - \frac{1}{2}\nu_y)(\tau_y + \frac{1}{2}\nu_y) + \nonumber \\
+% &\Pi\left(\frac{\tau - \nu/2}{\nu_o}\right)\Pi\left(\frac{\tau + \nu/2}{\nu_o}\right). 
+% \end{align}
+% After expanding the spherical harmonics we can rewrite this equation in terms of
+% two autocorrelations
+% \begin{align}
+%     H^{(p)}(\nu; \so{}) &\propto \Big[A^{(p)}(\nu) + 2B^{(p)}(\nu)\Big]y_0^0(\so{}) + \frac{1}{\sqrt{5}}\Big[-A^{(p)}(\nu) + 4B^{(p)}(\nu)\Big]y_2^0(\so{})\label{eq:hinter}
+% \end{align}
+% where
+% \begin{align}
+%   A^{(p)}(\nu) &\equiv \frac{1}{\pi\nu_o^2}\int_{\mathbb{R}^2}d\bs{\tau}\, \Pi\left(\frac{\tau - \nu/2}{\nu_o}\right)\Pi\left(\frac{\tau + \nu/2}{\nu_o}\right),\\
+%   B^{(p)}(\nu) &\equiv \frac{\text{NA}^2}{\pi\nu_o^4n_o^2} \int_{\mathbb{R}^2}d\bs{\tau}\, \left[(\tau_x - \nu_x/2)(\tau_x + \nu_x/2) + (\tau_y - \nu_y/2)(\tau_y + \nu_y/2)\right]\nonumber \\ &\hspace{17em}\Pi\left(\frac{\tau - \nu/2}{\nu_o}\right)\Pi\left(\frac{\tau + \nu/2}{\nu_o}\right).
+% \end{align}
+% I've used the constant $\frac{1}{\pi\nu_o^2}$ in front of both autocorrelations
+% so that the results are normalized, but these constants are not essential. Also,
+% notice that both autocorrelations are rotationally symmetric, so we can write
+% them as a function of $\nu$ instead of $\bs{\nu}$. We can evaluate these
+% integrals with the help of the geometric construction shown in Figure
+% \ref{fig:geometry} \cite{goodman1996}.
+
+% \begin{figure}[h]
+%  \captionsetup{width=1.0\linewidth}
+%  \centering
+%    \centering
+%    \includegraphics[width = 0.8\textwidth]{../figures/geometry/geometry.pdf}
+%    \caption{Geometric construction for evaluating $A^{(p)}(\bs{\nu})$ and
+%      $B^{(p)}(\bs{\nu})$. We need to find the boundaries of integration for the
+%      overlapping region of two circles with radius $\nu_o$ and distance $\nu$
+%      between their centers. The region is given by four times the difference in
+%      area between a sector of angle $\arccos\left(\frac{\nu}{2\nu_o}\right)$ and
+%      a triangle with base $\nu/2$ and hypotenuse $\nu_o$.}
+%    \label{fig:geometry}
+% \end{figure}
+
+% Starting with $A^{(p)}(\nu)$ we find that
+% \begin{align}
+%   A^{(p)}(\nu) &= \frac{4}{\pi\nu_o^2}\left[\left(\int\limits_0^{\nu_o} d\tau\, \tau\int\limits_0^{\arccos\left(\frac{\nu}{2\nu_o}\right)}d\phi_{\tau}\right) - \left(\int\limits_0^{\nu/2}d\tau_x \int\limits_0^{\tau_x\frac{2\nu_o}{\nu}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}}d\tau_y\right)\right]\Pi\left(\frac{\nu}{2\nu_o}\right)\\
+%   A^{(p)}(\nu) &= \frac{4}{\pi\nu_o^2}\left[\left(\int\limits_0^{\nu_o} d\tau\,\tau\arccos\left(\frac{\nu}{2\nu_o}\right)\right) - \left(\int\limits_0^{\nu/2}d\tau_x \tau_x \frac{2\nu_o}{\nu}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right)\right]\Pi\left(\frac{\nu}{2\nu_o}\right)\\
+%   A^{(p)}(\nu) &= \frac{2}{\pi}\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right).
+% \end{align}
+% Notice that $A^{(p)}(\nu)$ is the normalized OTF for fluorescence
+% microscope with isotropic samples under the paraxial and scalar approximations.
+% Next we evaluate $B^{(p)}(\nu)$ using the same geometric construction. This
+% integral is rotationally symmetric, so we start by rewriting it as 
+% \begin{align}
+%   B^{(p)}(\nu) =  \frac{4\text{NA}^2}{\pi\nu_o^4n_o^2}\Bigg[\int\limits_0^{\nu_o} d\tau\, \tau \int\limits_0^{\arccos\left(\frac{\nu}{2\nu_o}\right)}d\phi_{\tau}(-\tau^2\cos^2\phi_{\tau} + \nu\tau\cos\phi_{\tau}) - \int\limits_0^{\nu/2}d\tau_x \int\limits_0^{\tau_x \frac{2\nu_o}{\nu}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}}d\tau_y(-\tau_x^2 + \nu\tau_x)\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right).\\
+% \end{align}
+% For the first inner integral we make use of
+% \begin{align}
+%   \int\limits_0^{\arccos(z)} d\phi \cos^2\phi &= \frac{1}{2}z\sqrt{1 - z^2} + \frac{1}{2}\arccos(z), \\
+%   \int\limits_0^{\arccos(z)} d\phi \cos\phi &= \sqrt{1 - z^2}.
+% \end{align}
+% This results in
+% \begin{align}
+%   B^{(p)}(\nu)&=\frac{4\text{NA}^2}{\pi\nu_o^4n_o^2}\Bigg[\int\limits_0^{\nu_o} d\tau\, \frac{-\tau^3}{2}\left(\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} + \arccos\left(\frac{\nu}{2a}\right)\right) + \nu\tau^2\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)}\nonumber \\ &\hspace{5em}- \int\limits_0^{\nu/2}d\tau_x \left(-\tau_x^3 + \nu\tau_x^2\right)\frac{2 \nu_o}{\nu}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+%   B^{(p)}(\nu) &=  \frac{4\text{NA}^2}{\pi\nu_o^4n_o^2}\Bigg[\frac{-\nu_o^4}{8}\left(\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} + \arccos\left(\frac{\nu}{2\nu_o}\right) \right) + \frac{2\nu_o^4}{3}\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)}\nonumber \\ &\hspace{5em} - \frac{5\nu^2\nu_o^2}{48}\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+%   B^{(p)}(\nu) &=  \frac{\text{NA}^2}{2\pi n_o^2}\Bigg[\left(\frac{-\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} - \arccos\left(\frac{\nu}{2\nu_o}\right) \right) + \frac{16}{3}\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)}\nonumber \\ &\hspace{5em} - \frac{5\nu^2}{6\nu_o^2}\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+%   B^{(p)}(\nu) &= \frac{\text{NA}^2}{2\pi n_o^2}\left[-\arccos\left(\frac{\nu}{2\nu_o}\right) + \left(\frac{13}{3} - \frac{5\nu^2}{6\nu_o^2}\right)\frac{\nu}{2\nu_o} \sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+%   B^{(p)}(\nu) &= \frac{2}{\pi}\left(\frac{2\text{NA}}{n_o}\right)^2\left[-\arccos\left(\frac{\nu}{2\nu_o}\right) + \frac{1}{3}\left[13 - 10\left(\frac{\nu}{2\nu_o}\right)^2\right]\frac{\nu}{2\nu_o} \sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right).                 
+% \end{align}
+
+% Now that we've evaluated the autocorrelations we can complete the OTF
+% calculation. By plugging Eq. \ref{eq:hinter} into Eq. \ref{eq:hlmauto2},
+% performing the angular integral, and normalizing, we get the complete
+% spatio-angular transfer function
+% \begin{align}
+%   {H_l^m}^{(p)}(\nu) &= {H_0^0}^{(p)}(\nu)\delta(l, m) + {H_2^0}^{(p)}(\nu)\delta(l-2, m),\\
+%   {H_0^0}^{(p)}(\nu) &\equiv \frac{A^{(p)}(\nu) + 2B^{(p)}(\nu)}{1 + 8(\text{NA}/n_o)^2},\\
+%   {H_2^0}^{(p)}(\nu) &\equiv \frac{-A^{(p)}(\nu) + 4B^{(p)}}{\sqrt{5}\, [1 + 8(\text{NA}/n_o)^2]}.
+% \end{align}
+% where
+% \begin{align}
+%   {A}^{(p)}(\nu) &= \frac{2}{\pi}\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+%   B^{(p)}(\nu) &= \frac{2}{\pi}\left(\frac{2\text{NA}}{n_o}\right)^2\left[-\arccos\left(\frac{\nu}{2\nu_o}\right) + \frac{1}{3}\left[13 - 10\left(\frac{\nu}{2\nu_o}\right)^2\right]\frac{\nu}{2\nu_o} \sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right).                 
+% \end{align}
+
+\section{Paraxial optical transfer function}\label{paraxialotf2}    
 In this appendix we calculate the paraxial OTF for a single-view fluorescence
 microscope. We start with Eq. \ref{eq:otfdef2}
 \begin{align}
-  H_l^m(\bs{\nu}) \propto \int_{\mathbb{S}^2}d\so{}\int_{\mathbb{R}^2}d\rd{}'\, h(\rd{}', \so{}) y_l^m(\so{})\thinspace\me^{-i 2\pi \rd{}'\cdot\bs{\nu}}.\label{eq:otfdef2}
+  {H_l^m}^{(p)}(\bs{\nu}) \propto \int_{\mathbb{S}^2}d\so{}\int_{\mathbb{R}^2}d\rd{}'\, h^{(p)}(\rd{}', \so{}) y_l^m(\so{})\thinspace\me^{-i 2\pi \rd{}'\cdot\bs{\nu}}.
+  \label{eq:appotf}
 \end{align}
-We could plug in the paraxial PSF and evaluate the integrals, but this will lead
-us to Fourier transforms that cannot be found in tables. Instead we use a trick
-from scalar Fourier optics and write the OTF in terms of the detected electric
-field \cite{goodman1996}
+where the paraxial PSF is given by Eq. \ref{eq:concisepsf}
 \begin{align}
-  H_l^m(\bs{\nu}) \propto \int_{\mathbb{S}^2}d\so{}\int_{\mathbb{R}^2}d\rd{}'\, \left|\mb{e}_d(\rd{}', \so{})\right|^2 y_l^m(\so{})\thinspace\me^{-i 2\pi \rd{}'\cdot\bs{\nu}}.
+  h^{(p)}(\rd{}', \so{}) &= {h_0^0}^{(p)}(\rd{}')y_0^0(\so{}) + {h_2^0}^{(p)}(\rd{}')y_2^0(\so{}),\\ \label{eq:parapsf}
+  {h_0^0}^{(p)}(\rd{}') &\equiv {a^{(p)}}^2(r_d') + 2{b^{(p)}}^2(r_d'),\\
+  {h_2^0}^{(p)}(\rd{}') &\equiv \frac{1}{\sqrt{5}}\left[- {a^{(p)}}^2(r_d') + 4{b^{(p)}}^2(r_d')\right]. 
 \end{align}
-Next, we manipulate this equation to
+Plugging Eq. \ref{eq:parapsf} into Eq. \ref{eq:appotf} and evaluating the
+angular integral gives
 \begin{align}
-  H_l^m(\bs{\nu}) &\propto \int_{\mathbb{S}^2}d\so{}\, y_l^m(\so{})\int_{\mathbb{R}^2}d\rd{}'\, \mb{e}^{\dagger}_d(\rd{}', \so{})\mb{e}_d(\rd{}', \so{})\, \me^{-i 2\pi \rd{}'\cdot\bs{\nu}},\\
-  H_l^m(\bs{\nu}) &\propto \int_{\mathbb{S}^2}d\so{}\, y_l^m(\so{})\int_{\mathbb{R}^2}d\rd{}'\, \int_{\mathbb{R}^2}d\rd{}''\, \mb{e}^{\dagger}_d(\rd{}', \so{})\mb{e}_d(\rd{}'', \so{})\delta(\rd{}'' - \rd{}')\, \me^{-i 2\pi \rd{}''\cdot\bs{\nu}},\\
-  H_l^m(\bs{\nu}) &\propto \int_{\mathbb{S}^2}d\so{}\, y_l^m(\so{})\int_{\mathbb{R}^2}d\bs{\tau}\,\int_{\mathbb{R}^2}d\rd{}'\, \int_{\mathbb{R}^2}d\rd{}''\, \mb{e}^{\dagger}_d(\rd{}', \so{})\mb{e}_d(\rd{}'', \so{})\me^{-i 2\pi\bs{\tau}(\rd{}'' - \rd{}')}\me^{-i 2\pi \rd{}''\cdot\bs{\nu}},\\
-  H_l^m(\bs{\nu}) &\propto \int_{\mathbb{S}^2}d\so{}\, y_l^m(\so{})\int_{\mathbb{R}^2}d\bs{\tau}\,\left[\int_{\mathbb{R}^2}d\rd{}'\, \mb{e}^{\dagger}_d(\rd{}', \so{}) \me^{i 2\pi\rd{}'\cdot \bs{\tau}}\right]\left[\int_{\mathbb{R}^2}d\rd{}''\, \mb{e}_d(\rd{}'', \so{})\me^{-i 2\pi \rd{}''\cdot(\bs{\nu} + \bs{\tau})}\right],\\
-  H_l^m(\bs{\nu}) &\propto \int_{\mathbb{S}^2}d\so{}\, y_l^m(\so{})\int_{\mathbb{R}^2}d\bs{\tau}\,\mb{E}^{\dagger}(\bs{\tau}; \so{})\mb{E}(\bs{\tau} + \bs{\nu}; \so{}). \label{eq:hlmauto}
+  {H_l^m}^{(p)}(\bs{\nu}) \propto \int_{\mathbb{R}^2}d\rd{}'\, \left[{h_0^0}^{(p)}(\rd{}')\delta(l, m) + {h_2^0}^{(p)}(\rd{}')\delta(l-2, m)\right] \me^{-i 2\pi \rd{}'\cdot\bs{\nu}}. \label{eq:appotf2}
 \end{align}
-We have followed the proof for the Wiener-Kinchin theorem \cite{papoulis2002, wiener} to explicitly show how the angular integral affects the usual scalar
-calculation. Eq. \ref{eq:hlmauto} shows that we can calculate the OTF by taking
-the vector autocorrelation of the spatial CTF then projecting the result onto
-the spherical harmonics.
-
-We will rewrite Eq. \ref{eq:hlmauto} in two parts
+Using the operator notation $\mathcal{F}_2\{f(\mb{r})\} = \int_{\mathbb{R}^2}d\mb{r}\{f(\mb{r})\}\me^{-i 2\pi \mb{r}\cdot\bs{\nu}}$, we can rewrite Eq. \ref{eq:appotf2} as 
 \begin{align}
-  H_l^m(\bs{\nu}) &\propto \int_{\mathbb{S}^2}d\so{}\, y_l^m(\so{}) H(\bs{\nu}; \so{})  \label{eq:hlmauto2}\\
-  H(\bs{\nu}; \so{}) &\equiv \int_{\mathbb{R}^2}d\bs{\tau}\,\mb{E}^{\dagger}(\bs{\tau}- \bs{\nu}/2; \so{})\mb{E}(\bs{\tau} + \bs{\nu}/2; \so{}). \label{eq:hlmspatial}
+  {H_l^m}^{(p)}(\bs{\nu}) &\propto \mathcal{F}_2\{{h_0^0}^{(p)}(\rd{}')\delta(l, m) + {h_2^0}^{(p)}(\rd{}')\delta(l-2, m) \},\\
+  {H_l^m}^{(p)}(\bs{\nu}) &\propto \left[\mathcal{F}_2\left\{{a^{(p)}}^2(r_d')\right\} + 2\mathcal{F}_2\left\{{b^{(p)}}^2(r_d')\right\}\right]\delta(l, m) + \\&\hspace{1em}\left[-\mathcal{F}_2\left\{{a^{(p)}}^2(r_d')\right\} + 4\mathcal{F}_2\left\{{b^{(p)}}^2(r_d')\right\}\right]\delta(l-2, m).
 \end{align}
-Notice the change of variable to simplify the autocorrelation. In the previous
-section we calculated the CTF in the paraxial case as 
+To calculate $\mathcal{F}_2\left\{{a^{(p)}}^2(r_d')\right\}$ we can use the
+autocorrelation theorem \cite{goodman1996}
+p\begin{align}
+  \mathcal{F}_2\left\{f^2(r)\right\} = \mathcal{F}_2\left\{f(r)\right\} \star_2 \mathcal{F}\left\{f(r)\right\},
+\end{align}
+where $\star_2$ denotes a two-dimensional autocorrelation. We can rewrite
+$\mathcal{F}_2\left\{{a^{(p)}}^2(r_d')\right\}$ as
 \begin{align}
-  {\mb{E}}^{(p)}(\bs{\nu}; \so{}) =
-\begin{bmatrix}
-  y_1^1(\so{}) + \frac{2}{\nu_o}\frac{\text{NA}}{n_o}\nu\cos\phi_\nu y_1^0(\so{})\\
-  y_1^{-1}(\so{}) + \frac{2}{\nu_o}\frac{\text{NA}}{n_o}\nu\sin\phi_\nu y_1^0(\so{})\\
-  0\\
-  \end{bmatrix}\, \Pi\left(\frac{\nu}{\nu_o}\right). \label{eq:ctfparax}
+  \mathcal{F}_2\left\{{a^{(p)}}^2(r_d')\right\} &= \mathcal{F}_2\left\{\frac{J_1(2\pi\nu_o r_d')}{\pi\nu_o r_d'}\right\} \star_2 \mathcal{F}_2\left\{\frac{J_1(2\pi\nu_o r_d')}{\pi\nu_o r_d'}\right\}.
 \end{align}
-By introducing $\bs{\tau} \equiv \tau_x\mh{x} + \tau_y\mh{y} \equiv \tau\cos\phi_\tau\mh{x} + \tau\sin\phi_\tau\mh{y}$
-we can plug Eq. \ref{eq:ctfparax} into Eq. \ref{eq:hlmspatial} and find that
+Next, we notice that the two-dimensional Fourier transform is radially
+symmetric, so it can be written as a zero-order Hankel transform
 \begin{align}
-    H^{(p)}(\bs{\nu}; \so{}) \propto \int_{\mathbb{R}^2}d\bs{\tau}\, &\begin{bmatrix}
-  y_1^1(\so{}) + \frac{2}{\nu_o}\frac{\text{NA}}{n_o}(\tau_x - \frac{1}{2}\nu_x) y_1^0(\so{})\\
-  y_1^{-1}(\so{}) + \frac{2}{\nu_o}\frac{\text{NA}}{n_o}(\tau_y - \frac{1}{2}\nu_y) y_1^0(\so{})\\
-  0\\
-\end{bmatrix}^{\dagger}
-  \begin{bmatrix}
-  y_1^1(\so{}) + \frac{2}{\nu_o}\frac{\text{NA}}{n_o}(\tau_x + \frac{1}{2}\nu_x) y_1^0(\so{})\\
-  y_1^{-1}(\so{}) + \frac{2}{\nu_o}\frac{\text{NA}}{n_o}(\tau_y + \frac{1}{2}\nu_y) y_1^0(\so{})\\
-  0\\
-\end{bmatrix}\nonumber \\
-  &\Pi\left(\frac{\tau - \nu/2}{\nu_o}\right)\Pi\left(\frac{\tau + \nu/2}{\nu_o}\right).
+\mathcal{F}_2\left\{{a^{(p)}}^2(r_d')\right\} &= \mathcal{H}_0\left\{\frac{J_1(2\pi\nu_o r_d')}{\pi\nu_o r_d'}\right\} \star_2 \mathcal{H}_0\left\{\frac{J_1(2\pi\nu_o r_d')}{\pi\nu_o r_d'}\right\}, 
 \end{align}
-Expanding the inner product gives
+where the $k$-order Hankel transform is defined as
 \begin{align}
-    H^{(p)}(\bs{\nu}; \so{}) \propto \int_{\mathbb{R}^2}d\bs{\tau}\, &
-      \{y_1^1(\so{})\}^2  + \left\{\frac{2}{\nu_o}\frac{\text{NA}}{n_o}y_1^0(\so{})\right\}^2(\tau_x - \frac{1}{2}\nu_x)(\tau_x + \frac{1}{2}\nu_x) + \nonumber \\
-                                                                 &\{y_1^{-1}(\so{})\}^2 + \left\{\frac{2}{\nu_o}\frac{\text{NA}}{n_o}y_1^0(\so{})\right\}^2(\tau_y - \frac{1}{2}\nu_y)(\tau_y + \frac{1}{2}\nu_y) + \nonumber \\
-                                                                 &\left\{\frac{2}{\nu_o}\frac{\text{NA}}{n_o}y_1^0(\so{})y_1^1(\so{})\right\}(\tau_x - \frac{1}{2}\nu_x) + \left\{\frac{2}{\nu_o}\frac{\text{NA}}{n_o}y_1^0(\so{})y_1^1(\so{})\right\}(\tau_x + \frac{1}{2}\nu_x) \nonumber \\
-  &\left\{\frac{2}{\nu_o}\frac{\text{NA}}{n_o}y_1^0(\so{})y_1^{-1}(\so{})\right\}(\tau_y - \frac{1}{2}\nu_y) + \left\{\frac{2}{\nu_o}\frac{\text{NA}}{n_o}y_1^0(\so{})y_1^{-1}(\so{})\right\}(\tau_y + \frac{1}{2}\nu_y) \nonumber \\  
-&\Pi\left(\frac{\tau - \nu/2}{\nu_o}\right)\Pi\left(\frac{\tau + \nu/2}{\nu_o}\right). 
+  \mathcal{H}_k\left\{f(r)\right\} = 2\pi \int_0^\infty dr\, r f(r)J_k(2\pi r\nu).
 \end{align}
-All of the terms with a single $(\tau_\cdot \pm \frac{1}{2}\nu_\cdot)$ term are
-correlations of an odd function with an even function, so they are zero.
-Therefore
+Finally, we can apply the following Hankel transform identity
 \begin{align}
-    H^{(p)}(\bs{\nu}; \so{}) \propto \int_{\mathbb{R}^2}d\bs{\tau}\, &
-      \{y_1^1(\so{})\}^2  + \left\{\frac{2}{\nu_o}\frac{\text{NA}}{n_o}y_1^0(\so{})\right\}^2(\tau_x - \frac{1}{2}\nu_x)(\tau_x + \frac{1}{2}\nu_x) + \nonumber \\
-                                                                 &\{y_1^{-1}(\so{})\}^2 + \left\{\frac{2}{\nu_o}\frac{\text{NA}}{n_o}y_1^0(\so{})\right\}^2(\tau_y - \frac{1}{2}\nu_y)(\tau_y + \frac{1}{2}\nu_y) + \nonumber \\
-&\Pi\left(\frac{\tau - \nu/2}{\nu_o}\right)\Pi\left(\frac{\tau + \nu/2}{\nu_o}\right). 
+  \mathcal{H}_{k}\left\{\frac{J_{k+1}(2\pi \nu_or_d')}{\pi\nu_o r_d'}\right\} =
+  \frac{2\nu^k}{\nu_o^{k+1}}\, \Pi\left(\frac{\nu}{\nu_o}\right)\label{eq:hankstar2},
 \end{align}
-After expanding the spherical harmonics we can rewrite this equation in terms of
-two autocorrelations
+when $\nu_o > 0$ and $\text{Re}(k) > -\frac{3}{2}$ \cite{poul1998} which gives
 \begin{align}
-    H^{(p)}(\nu; \so{}) &\propto \Big[A^{(p)}(\nu) + 2B^{(p)}(\nu)\Big]y_0^0(\so{}) + \frac{1}{\sqrt{5}}\Big[-A^{(p)}(\nu) + 4B^{(p)}(\nu)\Big]y_2^0(\so{})\label{eq:hinter}
+  \mathcal{F}_2\left\{{a^{(p)}}^2(r_d')\right\} &= \left[\frac{2}{\nu_o}\Pi\left(\frac{\nu}{\nu_o}\right)\right] \star_2 \left[\frac{2}{\nu_o}\Pi\left(\frac{\nu}{\nu_o}\right)\right],\\
+  \mathcal{F}_2\left\{{a^{(p)}}^2(r_d')\right\} &= \frac{4}{\nu_o^2}\left[\Pi\left(\frac{\nu}{\nu_o}\right)\right] \star_2 \left[\Pi\left(\frac{\nu}{\nu_o}\right)\right].
 \end{align}
-where
-\begin{align}
-  A^{(p)}(\nu) &\equiv \frac{1}{\pi\nu_o^2}\int_{\mathbb{R}^2}d\bs{\tau}\, \Pi\left(\frac{\tau - \nu/2}{\nu_o}\right)\Pi\left(\frac{\tau + \nu/2}{\nu_o}\right),\\
-  B^{(p)}(\nu) &\equiv \frac{\text{NA}^2}{\pi\nu_o^4n_o^2} \int_{\mathbb{R}^2}d\bs{\tau}\, \left[(\tau_x - \nu_x/2)(\tau_x + \nu_x/2) + (\tau_y - \nu_y/2)(\tau_y + \nu_y/2)\right]\nonumber \\ &\hspace{17em}\Pi\left(\frac{\tau - \nu/2}{\nu_o}\right)\Pi\left(\frac{\tau + \nu/2}{\nu_o}\right).
-\end{align}
-I've used the constant $\frac{1}{\pi\nu_o^2}$ in front of both autocorrelations
-so that the results are normalized, but these constants are not essential. Also,
-notice that both autocorrelations are rotationally symmetric, so we can write
-them as a function of $\nu$ instead of $\bs{\nu}$. We can evaluate these
-integrals with the help of the geometric construction shown in Figure
-\ref{fig:geometry} \cite{goodman1996}.
-
+The autocorrelation is a geometry problem of finding the area of overlap of two
+displaced circles. Using the geometric construction in Fig. \ref{fig:geometry} we find that
 \begin{figure}[h]
  \captionsetup{width=1.0\linewidth}
  \centering
@@ -944,52 +1052,133 @@ integrals with the help of the geometric construction shown in Figure
      a triangle with base $\nu/2$ and hypotenuse $\nu_o$.}
    \label{fig:geometry}
 \end{figure}
-
-Starting with $A^{(p)}(\nu)$ we find that
 \begin{align}
-  A^{(p)}(\nu) &= \frac{4}{\pi\nu_o^2}\left[\left(\int\limits_0^{\nu_o} d\tau\, \tau\int\limits_0^{\arccos\left(\frac{\nu}{2\nu_o}\right)}d\phi_{\tau}\right) - \left(\int\limits_0^{\nu/2}d\tau_x \int\limits_0^{\tau_x\frac{2\nu_o}{\nu}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}}d\tau_y\right)\right]\Pi\left(\frac{\nu}{2\nu_o}\right)\\
-  A^{(p)}(\nu) &= \frac{4}{\pi\nu_o^2}\left[\left(\int\limits_0^{\nu_o} d\tau\,\tau\arccos\left(\frac{\nu}{2\nu_o}\right)\right) - \left(\int\limits_0^{\nu/2}d\tau_x \tau_x \frac{2\nu_o}{\nu}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right)\right]\Pi\left(\frac{\nu}{2\nu_o}\right)\\
-  A^{(p)}(\nu) &= \frac{2}{\pi}\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right).
+  \mathcal{F}_2\left\{{a^{(p)}}^2(r_d')\right\}&= \frac{16}{\nu_o^2}\left[\left(\int\limits_0^{\nu_o} d\tau\, \tau\int\limits_0^{\arccos\left(\frac{\nu}{2\nu_o}\right)}d\phi_{\tau}\right) - \left(\int\limits_0^{\nu/2}d\tau_x \int\limits_0^{\tau_x\frac{2\nu_o}{\nu}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}}d\tau_y\right)\right]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+  \mathcal{F}_2\left\{{a^{(p)}}^2(r_d')\right\} &= \frac{16}{\nu_o^2}\left[\left(\int\limits_0^{\nu_o} d\tau\,\tau\arccos\left(\frac{\nu}{2\nu_o}\right)\right) - \left(\int\limits_0^{\nu/2}d\tau_x \tau_x \frac{2\nu_o}{\nu}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right)\right]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+  \mathcal{F}_2\left\{{a^{(p)}}^2(r_d')\right\} &= 8\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right).
 \end{align}
-Notice that $A^{(p)}(\nu)$ is the normalized OTF for fluorescence
-microscope with isotropic samples under the paraxial and scalar approximations.
-Next we evaluate $B^{(p)}(\nu)$ using the same geometric construction. This
-integral is rotationally symmetric, so we start by rewriting it as 
+
+Next, we calculate $\mathcal{F}_2\left\{{b^{(p)}}^2(r_d')\right\}$. If we follow
+the same steps as we did for $\mathcal{F}_2\left\{{a^{(p)}}^2(r_d')\right\}$, we
+will reach a dead end because there is no Hankel transform identity that we can
+use. Instead, we rewrite $\mathcal{F}_2\left\{{b^{(p)}}^2(r_d')\right\}$ in the
+following way so that we can use the Hankel transform identity in Eq. \ref{eq:hankstar2}
 \begin{align}
-  B^{(p)}(\nu) =  \frac{4\text{NA}^2}{\pi\nu_o^4n_o^2}\Bigg[&\int\limits_0^{\nu_o} d\tau\, \tau \int\limits_0^{\arccos\left(\frac{\nu}{2\nu_o}\right)}d\phi_{\tau}(\tau\cos\phi_{\tau} - \nu/2)(\tau\cos\phi_{\tau} + \nu/2)\nonumber \\ &- \int\limits_0^{\nu/2}d\tau_x \int\limits_0^{\tau_x \frac{2\nu_o}{\nu}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}}d\tau_y(\tau_x - \nu/2)(\tau_x + \nu/2)\Bigg],\\
-  B^{(p)}(\nu) =  \frac{4\text{NA}^2}{\pi\nu_o^4n_o^2}\Bigg[&\int\limits_0^{\nu_o} d\tau\, \tau\int\limits_0^{\arccos\left(\frac{\nu}{2\nu_o}\right)}d\phi_{\tau}(\tau^2\cos^2\phi_{\tau} - \nu^2/4)\nonumber \\ &- \int\limits_0^{\nu/2}d\tau_x \int\limits_0^{\tau_x\frac{2\nu_o}{\nu}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}}d\tau_y(\tau_x^2 - \nu^2/4)\Bigg].
+  \mathcal{F}_2\left\{{b^{(p)}}^2(r_d')\right\} = \mathcal{F}_2\left\{{b^{(p)}}^2(r_d')\cos^2(\phi_d')\right\} + \mathcal{F}_2\left\{{b^{(p)}}^2(r_d')\cos^2(\phi_d')\right\}.
+\end{align}
+Now we apply the autocorrelation theorem
+\begin{align}
+  \mathcal{F}_2\left\{{b^{(p)}}^2(r_d')\right\} = \left[\mathcal{F}_2\left\{{b^{(p)}}(r_d')\cos(\phi_d')\right\} \star_2 \mathcal{F}_2\left\{{b^{(p)}}(r_d')\cos(\phi_d')\right\}\right] + \left[\mathcal{F}_2\left\{{b^{(p)}}(r_d')\sin(\phi_d')\right\} \star_2 \mathcal{F}_2\left\{{b^{(p)}}(r_d')\sin(\phi_d')\right\}\right]. \label{eq:int3}
+\end{align}
+The two autocorrelated Fourier transforms are separable in polar coordinates, so
+they can be expanded in terms of Hankel transforms \cite{goodman1996}. In
+general, if a function $f(r, \theta)$ is separable in polar coordinates then we
+can rewrite it as $f(r, \theta) = f_{R}(r)f_{\Theta}(\theta)$ and its
+two-dimensional Fourier transform can be expanded in terms of Hankel transforms
+using
+\begin{align}
+  \mathcal{F}\{f(r, \theta)\} = \sum_{k=-\infty}^{\infty}c_k(-i)^k\me^{ik\phi}\mathcal{H}_k\{f_R(r)\},
+\end{align}
+where
+\begin{align}
+  c_k = \frac{1}{2\pi}\int_0^{2\pi}d\theta\, f_{\Theta}(\theta)\me^{-ik\theta}. 
+\end{align}
+Applying the Hankel transform expansion to $\mathcal{F}_2\left\{{b^{(p)}}(r_d')\cos(\phi_d')\right\}$ gives
+\begin{align}
+  \mathcal{F}_2\left\{{b^{(p)}}(r_d')\cos(\phi_d')\right\} = i\me^{i\phi_\nu}\mathcal{H}_{-1}\{{b^{(p)}}(r_d')\} - i\me^{-i\phi_\nu}\mathcal{H}_{1}\{{b^{(p)}}(r_d')\}.
+\end{align}
+Next, we apply the identity $\mathcal{H}_\mu = (-1)^\mu\mathcal{H}_{-\mu}$ and simplify
+\begin{align}
+  \mathcal{F}_2\left\{{b^{(p)}}(r_d')\cos(\phi_d')\right\} = \frac{i\cos\phi_\nu}{2}\mathcal{H}_{1}\{{b^{(p)}}(r_d')\}.
+\end{align}
+Next, we evaluate the Hankel transform using Eq. \ref{eq:hankstar2}
+\begin{align}
+  \mathcal{H}_{1}\{{b^{(p)}}(r_d')\} = \mathcal{H}_{1}\left\{\frac{J_{2}(2\pi \nu_or_d')}{\pi\nu_o r_d'}\right\} =
+  \left(\frac{\text{NA}}{n_o}\right)\frac{2\nu}{\nu_o^{2}}\, \Pi\left(\frac{\nu}{\nu_o}\right).
+\end{align}
+Therefore, 
+\begin{align}
+  \mathcal{F}_2\left\{{b^{(p)}}(r_d')\cos(\phi_d')\right\} = \left(\frac{\text{NA}}{n_o}\right)\frac{i\nu\cos\phi_\nu}{\nu_o^2}\, \Pi\left(\frac{\nu}{\nu_o}\right) = \left(\frac{\text{NA}}{n_o}\right)\frac{i\nu_x}{\nu_o^2}\, \Pi\left(\frac{\nu}{\nu_o}\right).
+\end{align}
+Similarly,
+\begin{align}
+  \mathcal{F}_2\left\{{b^{(p)}}(r_d')\sin(\phi_d')\right\} = \left(\frac{\text{NA}}{n_o}\right)\frac{i\nu\sin\phi_\nu}{\nu_o^2}\, \Pi\left(\frac{\nu}{\nu_o}\right) = \left(\frac{\text{NA}}{n_o}\right)\frac{i\nu_y}{\nu_o^2}\, \Pi\left(\frac{\nu}{\nu_o}\right).  
+\end{align}
+Now we can plug these back in to the autocorrelation in Eq. \ref{eq:int3}
+\begin{align}
+    \mathcal{F}_2\left\{{b^{(p)}}^2(r_d')\right\} &= -\left(\frac{\text{NA}}{n_o}\right)^2\frac{1}{\nu_0^4}\left\{\left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right] \star_2 \left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right]\right\} - \left(\frac{\text{NA}}{n_o}\right)^2\frac{1}{\nu_0^4}\left\{\left[\nu_y\, \Pi\left(\frac{\nu}{\nu_o}\right)\right] \star_2 \left[\nu_y\, \Pi\left(\frac{\nu}{\nu_o}\right)\right]\right\}.\label{eq:auto}
+\end{align}
+These autocorrelations can be evaluated by finding the weighted area of overlap
+of two circles. Neither of the autocorrelations is radially symmetric, but we
+know that their sum must be radially symmetric because ${b^{(p)}}^2(r_d')$ is
+radially symmetric. We recognize that the first autocorrelation is largest for
+shifts along the $x$ axis and smallest for shifts along the $y$ axis with a
+smooth $\cos^2\phi_\nu$ weighting between the two extremes. The same is true for
+the second autocorrelation except with the $x$ and $y$ axes exchanged and a
+$\sin^2\phi_\nu$ weighting between the two extremes. Therefore, the sum of the two
+autocorrelations can be rewritten as the sum of either autocorrelation shifted along
+the $x$ axis and the $y$ axis
+\begin{align}
+    \mathcal{F}_2\left\{{b^{(p)}}^2(r_d')\right\} &= -\left(\frac{\text{NA}}{n_o}\right)^2\frac{1}{\nu_0^4}\left\{\left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right] \star_2^x \left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right]\right\} - \left(\frac{\text{NA}}{n_o}\right)^2\frac{1}{\nu_0^4}\left\{\left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right] \star_2^y \left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right]\right\}.
+\end{align}
+where $\star_2^x$ denotes a two-dimensional autocorrelation for shifts along the
+$x$ axis.
+
+We can use the same limits of integration as we did previously, but we need to
+include a weighted integrand. First, we evaluate the autocorrelation for shifts
+along the $x$-axis
+\begin{align}
+  &\frac{-1}{\nu_0^4}\left\{\left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right] \star_2^x \left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right]\right\} = \\
+  &=  \frac{-4}{\nu_o^4}\Bigg[\int\limits_0^{\nu_o} d\tau\, \tau \int\limits_0^{\arccos\left(\frac{\nu}{2\nu_o}\right)}d\phi_{\tau}(-\tau^2\cos^2\phi_{\tau} + \nu\tau\cos\phi_{\tau}) - \int\limits_0^{\nu/2}d\tau_x \int\limits_0^{\tau_x \frac{2\nu_o}{\nu}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}}d\tau_y(-\tau_x^2 + \nu\tau_x)\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right).
 \end{align}
 For the first inner integral we make use of
 \begin{align}
-  \int\limits_0^{\arccos(z)} d\phi \cos^2\phi = \frac{1}{2}z\sqrt{1 - z^2} + \frac{1}{2}\arccos(z).
+  \int\limits_0^{\arccos(z)} d\phi \cos^2\phi &= \frac{1}{2}z\sqrt{1 - z^2} + \frac{1}{2}\arccos(z), \\
+  \int\limits_0^{\arccos(z)} d\phi \cos\phi &= \sqrt{1 - z^2}.
 \end{align}
 This results in
 \begin{align}
-  B^{(p)}(\nu)&=\frac{4\text{NA}^2}{\pi\nu_o^4n_o^2}\Bigg[\int\limits_0^a d\tau\left(\frac{\tau^3}{2}\left(\frac{\nu}{2\nu_o}\right)\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} + \frac{\tau^3}{2}\arccos\left(\frac{\nu}{2a}\right) - \frac{\tau\nu^2}{4}\arccos\left(\frac{\nu}{2\nu_o}\right)\right)\nonumber \\ &\hspace{7em}- \int\limits_0^{\nu/2}d\tau_x \left(\tau_x^3 - \frac{\tau_x\nu^2}{4}\right)\frac{2 \nu_o}{\nu}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right),
+  &=\frac{-4}{\nu_o^4}\Bigg[\int\limits_0^{\nu_o} d\tau\, \frac{-\tau^3}{2}\left(\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} + \arccos\left(\frac{\nu}{2a}\right)\right) + \nu\tau^2\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)}\nonumber \\ &\hspace{5em}- \int\limits_0^{\nu/2}d\tau_x \left(-\tau_x^3 + \nu\tau_x^2\right)\frac{2 \nu_o}{\nu}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+  &=  \frac{-4}{\nu_o^4}\Bigg[\frac{-\nu_o^4}{8}\left(\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} + \arccos\left(\frac{\nu}{2\nu_o}\right) \right) + \frac{2\nu_o^4}{3}\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)}\nonumber \\ &\hspace{5em} - \frac{5\nu^2\nu_o^2}{48}\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+  &=  \frac{1}{2}\Bigg[\left(\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} + \arccos\left(\frac{\nu}{2\nu_o}\right) \right) - \frac{16}{3}\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)}\nonumber \\ &\hspace{5em} + \frac{5\nu^2}{6\nu_o^2}\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+  &= \frac{1}{2}\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \left(\frac{13}{3} - \frac{5\nu^2}{6\nu_o^2}\right)\frac{\nu}{2\nu_o} \sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+  &= \left[\frac{1}{2}\arccos\left(\frac{\nu}{2\nu_o}\right) - \frac{1}{6}\left[13 - 10\left(\frac{\nu}{2\nu_o}\right)^2\right]\frac{\nu}{2\nu_o} \sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right).\label{eq:auto1}
 \end{align}
+Next, we evaluate the autocorrelation for shifts along the $y$-axis
 \begin{align}
-  B^{(p)}(\nu) &=  \frac{4\text{NA}^2}{\pi\nu_o^4n_o^2}\Bigg[\left(\frac{\nu_o^4}{8}\left(\frac{\nu}{2\nu_o}\right)\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} + \frac{\nu_o^4}{8}\arccos\left(\frac{\nu}{2\nu_o}\right)- \frac{\nu_o^2\nu^2}{8}\arccos\left(\frac{\nu}{2\nu_o}\right)\right)\nonumber \\ &\hspace{7em} - \left(\frac{\nu^4}{64} - \frac{\nu^4}{32}\right)\frac{2\nu_o}{\nu}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
-  B^{(p)}(\nu) &=  \frac{4\text{NA}^2}{\pi\nu_o^4n_o^2}\Bigg[\frac{\nu\nu_o^3}{16}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} + \frac{\nu_o^4}{8}\arccos\left(\frac{\nu}{2\nu_o}\right) - \frac{\nu_o^2\nu^2}{8}\arccos\left(\frac{\nu}{2\nu_o}\right) + \frac{\nu^3\nu_o}{32}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
-  B^{(p)}(\nu) &= \frac{\text{NA}^2}{2\pi n_o^2}\left[\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2a}\right)^2} + \arccos\left(\frac{\nu}{2\nu_o}\right) - \frac{\nu^2}{\nu_o^2}\arccos\left(\frac{\nu}{2\nu_o}\right) + \frac{\nu^3}{4\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
-  B^{(p)}(\nu) &= \frac{\text{NA}^2}{2\pi n_o^2}\left[\left(1 - \frac{\nu^2}{\nu_o^2}\right)\arccos\left(\frac{\nu}{2\nu_o}\right) + \left(1 + \frac{\nu^2}{2\nu_o^2}\right)\frac{\nu}{2\nu_o} \sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2a}\right).
+  &\frac{-1}{\nu_0^4}\left\{\left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right] \star_2^y \left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right]\right\} = \\
+  &=  \frac{-4}{\nu_o^4}\Bigg[\int\limits_0^{\nu_o} d\tau\, \tau \int\limits_0^{\arccos\left(\frac{\nu}{2\nu_o}\right)}d\phi_{\tau}(-\tau^2\sin^2\phi_{\tau}) - \int\limits_0^{\nu/2}d\tau_x \int\limits_0^{\tau_x \frac{2\nu_o}{\nu}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}}d\tau_y(-\tau_y^2)\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right).
 \end{align}
-
-Now that we've evaluated the autocorrelations we can complete the OTF
-calculation. By plugging Eq. \ref{eq:hinter} into Eq. \ref{eq:hlmauto2},
-performing the angular integral, and normalizing, we get the complete
-spatio-angular transfer function
+For the first inner integral we make use of
+\begin{align}
+  \int\limits_0^{\arccos(z)} d\phi \sin^2\phi &= -\frac{1}{2}z\sqrt{1 - z^2} + \frac{1}{2}\arccos(z).
+\end{align}
+This results in
+\begin{align}
+  &=\frac{-4}{\nu_o^4}\Bigg[\int\limits_0^{\nu_o} d\tau\, \frac{-\tau^3}{2}\left(\frac{-\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} + \arccos\left(\frac{\nu}{2a}\right)\right) - \int\limits_0^{\nu/2}d\tau_x \frac{-\tau_x^3}{3}\left(\frac{2 \nu_o}{\nu}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right)^3\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+  &=  \frac{-4}{\nu_o^4}\Bigg[\frac{-\nu_o^4}{8}\left(\frac{-\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} + \arccos\left(\frac{\nu}{2\nu_o}\right) \right) + \frac{\nu_o^4}{12}\frac{\nu}{2\nu_o}\sqrt[3]{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+  &=  \Bigg[\frac{1}{2}\arccos\left(\frac{\nu}{2\nu_o}\right) - \frac{1}{2}\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} - \frac{1}{3}\frac{\nu}{2\nu_o}\sqrt[3]{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right). \label{eq:auto2}
+\end{align}
+Combining the results in Eqs. \ref{eq:auto1} and \ref{eq:auto2} gives us the final Fourier transform
+\begin{align}
+  \mathcal{F}_2\left\{{b^{(p)}}^2(r_d')\right\} &= \left(\frac{\text{NA}}{n_o}\right)^2\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \frac{1}{3}\left[8 - 5\left(\frac{\nu}{2\nu_o}\right)^2\right]\frac{\nu}{2\nu_o} \sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} - \frac{1}{3}\frac{\nu}{2\nu_o}\sqrt[3]{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+    \mathcal{F}_2\left\{{b^{(p)}}^2(r_d')\right\} &= \left(\frac{\text{NA}}{n_o}\right)^2\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \left[3 - 2\left(\frac{\nu}{2\nu_o}\right)^2\right]\frac{\nu}{2\nu_o} \sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right).
+\end{align}
+Now that we've evaluated $\mathcal{F}_2\left\{{a^{(p)}}^2(r_d')\right\}$ and $\mathcal{F}_2\left\{{b^{(p)}}^2(r_d')\right\}$, we can plug the results into the following equation and we have the complete spatio-angular transfer function
+\begin{align}
+  {H_l^m}^{(p)}(\bs{\nu}) &\propto \left[\mathcal{F}_2\left\{{a^{(p)}}^2(r_d')\right\} + 2\mathcal{F}_2\left\{{b^{(p)}}^2(r_d')\right\}\right]\delta(l, m) + \\&\hspace{1em}\left[-\mathcal{F}_2\left\{{a^{(p)}}^2(r_d')\right\} + 4\mathcal{F}_2\left\{{b^{(p)}}^2(r_d')\right\}\right]\delta(l-2, m).
+\end{align}
+After refactoring and normalizing, we have the final spatio-angular transfer function
 \begin{align}
   {H_l^m}^{(p)}(\nu) &= {H_0^0}^{(p)}(\nu)\delta(l, m) + {H_2^0}^{(p)}(\nu)\delta(l-2, m),\\
-  {H_0^0}^{(p)}(\nu) &\equiv \frac{A^{(p)}(\nu) + 2B^{(p)}(\nu)}{1 + \text{NA}^2/(2n_o^2)},\\
-  {H_2^0}^{(p)}(\nu) &\equiv \frac{-A^{(p)}(\nu) + 4B^{(p)}}{\sqrt{5}\, [1 + \text{NA}^2/(2n_o^2)]}.
+  {H_0^0}^{(p)}(\nu) &\equiv \frac{A^{(p)}(\nu) + 2B^{(p)}(\nu)}{1 + (\text{NA}/n_o)^2},\\
+  {H_2^0}^{(p)}(\nu) &\equiv \frac{-A^{(p)}(\nu) + 4B^{(p)}}{\sqrt{5}\, [1 + (\text{NA}/n_o)^2]},
 \end{align}
 where
 \begin{align}
   {A}^{(p)}(\nu) &= \frac{2}{\pi}\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
-  {B}^{(p)}(\nu) &= \frac{\text{NA}^2}{2\pi n_o^2}\left[\left(1 - \frac{\nu^2}{\nu_o^2}\right)\arccos\left(\frac{\nu}{2\nu_o}\right) + \left(1 + \frac{\nu^2}{2\nu_o^2}\right)\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right).
+  B^{(p)}(\nu) &= \frac{1}{\pi}\left(\frac{\text{NA}}{n_o}\right)^2\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \left[3 - 2\left(\frac{\nu}{2\nu_o}\right)^2\right]\frac{\nu}{2\nu_o} \sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right).                 
 \end{align}
-
-
 
 \tikzstyle{block} = [draw, fill=white, rectangle, 
     minimum height=2cm, minimum width=3.5cm, text width=3cm, align=center]
@@ -1018,4 +1207,5 @@ where
         \cite{goodman1996} and \cite{mertz2009} for analogous diagrams under
         scalar optics approximations.}
     \end{figure}
+
 \end{document}
