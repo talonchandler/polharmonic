@@ -1044,12 +1044,12 @@ displaced circles. Using the geometric construction in Fig. \ref{fig:geometry} w
  \centering
    \centering
    \includegraphics[width = 0.8\textwidth]{../figures/geometry/geometry.pdf}
-   \caption{Geometric construction for evaluating $A^{(p)}(\bs{\nu})$ and
-     $B^{(p)}(\bs{\nu})$. We need to find the boundaries of integration for the
-     overlapping region of two circles with radius $\nu_o$ and distance $\nu$
-     between their centers. The region is given by four times the difference in
-     area between a sector of angle $\arccos\left(\frac{\nu}{2\nu_o}\right)$ and
-     a triangle with base $\nu/2$ and hypotenuse $\nu_o$.}
+   \caption{Geometric construction for evaluating the autocorrelations. We need
+     to integrate over the overlapping region of two circles with radius $\nu_o$
+     and distance $\nu$ between their centers. The region is given by four times
+     the difference in area between a sector of angle
+     $\arccos\left(\frac{\nu}{2\nu_o}\right)$ and a triangle with base $\nu/2$
+     and hypotenuse $\nu_o$.}
    \label{fig:geometry}
 \end{figure}
 \begin{align}
@@ -1085,11 +1085,11 @@ where
 \end{align}
 Applying the Hankel transform expansion to $\mathcal{F}_2\left\{{b^{(p)}}(r_d')\cos(\phi_d')\right\}$ gives
 \begin{align}
-  \mathcal{F}_2\left\{{b^{(p)}}(r_d')\cos(\phi_d')\right\} = i\me^{i\phi_\nu}\mathcal{H}_{-1}\{{b^{(p)}}(r_d')\} - i\me^{-i\phi_\nu}\mathcal{H}_{1}\{{b^{(p)}}(r_d')\}.
+  \mathcal{F}_2\left\{{b^{(p)}}(r_d')\cos(\phi_d')\right\} = \frac{1}{2}\left[i\me^{i\phi_\nu}\mathcal{H}_{-1}\{{b^{(p)}}(r_d')\} - i\me^{-i\phi_\nu}\mathcal{H}_{1}\{{b^{(p)}}(r_d')\}\right].
 \end{align}
 Next, we apply the identity $\mathcal{H}_\mu = (-1)^\mu\mathcal{H}_{-\mu}$ and simplify
 \begin{align}
-  \mathcal{F}_2\left\{{b^{(p)}}(r_d')\cos(\phi_d')\right\} = \frac{i\cos\phi_\nu}{2}\mathcal{H}_{1}\{{b^{(p)}}(r_d')\}.
+  \mathcal{F}_2\left\{{b^{(p)}}(r_d')\cos(\phi_d')\right\} = -i\cos\phi_\nu \mathcal{H}_{1}\{{b^{(p)}}(r_d')\}.
 \end{align}
 Next, we evaluate the Hankel transform using Eq. \ref{eq:hankstar2}
 \begin{align}
@@ -1098,15 +1098,15 @@ Next, we evaluate the Hankel transform using Eq. \ref{eq:hankstar2}
 \end{align}
 Therefore, 
 \begin{align}
-  \mathcal{F}_2\left\{{b^{(p)}}(r_d')\cos(\phi_d')\right\} = \left(\frac{\text{NA}}{n_o}\right)\frac{i\nu\cos\phi_\nu}{\nu_o^2}\, \Pi\left(\frac{\nu}{\nu_o}\right) = \left(\frac{\text{NA}}{n_o}\right)\frac{i\nu_x}{\nu_o^2}\, \Pi\left(\frac{\nu}{\nu_o}\right).
+  \mathcal{F}_2\left\{{b^{(p)}}(r_d')\cos(\phi_d')\right\} = -\left(\frac{\text{NA}}{n_o}\right)\frac{2i\nu\cos\phi_\nu}{\nu_o^2}\, \Pi\left(\frac{\nu}{\nu_o}\right) = -\left(\frac{\text{NA}}{n_o}\right)\frac{2i\nu_x}{\nu_o^2}\, \Pi\left(\frac{\nu}{\nu_o}\right).
 \end{align}
 Similarly,
 \begin{align}
-  \mathcal{F}_2\left\{{b^{(p)}}(r_d')\sin(\phi_d')\right\} = \left(\frac{\text{NA}}{n_o}\right)\frac{i\nu\sin\phi_\nu}{\nu_o^2}\, \Pi\left(\frac{\nu}{\nu_o}\right) = \left(\frac{\text{NA}}{n_o}\right)\frac{i\nu_y}{\nu_o^2}\, \Pi\left(\frac{\nu}{\nu_o}\right).  
+  \mathcal{F}_2\left\{{b^{(p)}}(r_d')\sin(\phi_d')\right\} = -\left(\frac{\text{NA}}{n_o}\right)\frac{2i\nu\sin\phi_\nu}{\nu_o^2}\, \Pi\left(\frac{\nu}{\nu_o}\right) = -\left(\frac{\text{NA}}{n_o}\right)\frac{2i\nu_y}{\nu_o^2}\, \Pi\left(\frac{\nu}{\nu_o}\right).  
 \end{align}
 Now we can plug these back in to the autocorrelation in Eq. \ref{eq:int3}
 \begin{align}
-    \mathcal{F}_2\left\{{b^{(p)}}^2(r_d')\right\} &= -\left(\frac{\text{NA}}{n_o}\right)^2\frac{1}{\nu_0^4}\left\{\left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right] \star_2 \left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right]\right\} - \left(\frac{\text{NA}}{n_o}\right)^2\frac{1}{\nu_0^4}\left\{\left[\nu_y\, \Pi\left(\frac{\nu}{\nu_o}\right)\right] \star_2 \left[\nu_y\, \Pi\left(\frac{\nu}{\nu_o}\right)\right]\right\}.\label{eq:auto}
+    \mathcal{F}_2\left\{{b^{(p)}}^2(r_d')\right\} &= -\left(\frac{\text{NA}}{n_o}\right)^2\frac{4}{\nu_0^4}\left\{\left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right] \star_2 \left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right]\right\} - \left(\frac{\text{NA}}{n_o}\right)^2\frac{4}{\nu_0^4}\left\{\left[\nu_y\, \Pi\left(\frac{\nu}{\nu_o}\right)\right] \star_2 \left[\nu_y\, \Pi\left(\frac{\nu}{\nu_o}\right)\right]\right\}.\label{eq:auto}
 \end{align}
 These autocorrelations can be evaluated by finding the weighted area of overlap
 of two circles. Neither of the autocorrelations is radially symmetric, but we
@@ -1119,7 +1119,7 @@ $\sin^2\phi_\nu$ weighting between the two extremes. Therefore, the sum of the t
 autocorrelations can be rewritten as the sum of either autocorrelation shifted along
 the $x$ axis and the $y$ axis
 \begin{align}
-    \mathcal{F}_2\left\{{b^{(p)}}^2(r_d')\right\} &= -\left(\frac{\text{NA}}{n_o}\right)^2\frac{1}{\nu_0^4}\left\{\left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right] \star_2^x \left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right]\right\} - \left(\frac{\text{NA}}{n_o}\right)^2\frac{1}{\nu_0^4}\left\{\left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right] \star_2^y \left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right]\right\}.
+    \mathcal{F}_2\left\{{b^{(p)}}^2(r_d')\right\} &= -\left(\frac{\text{NA}}{n_o}\right)^2\frac{4}{\nu_0^4}\left\{\left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right] \star_2^x \left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right]\right\} - \left(\frac{\text{NA}}{n_o}\right)^2\frac{4}{\nu_0^4}\left\{\left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right] \star_2^y \left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right]\right\}.
 \end{align}
 where $\star_2^x$ denotes a two-dimensional autocorrelation for shifts along the
 $x$ axis.
@@ -1128,8 +1128,8 @@ We can use the same limits of integration as we did previously, but we need to
 include a weighted integrand. First, we evaluate the autocorrelation for shifts
 along the $x$-axis
 \begin{align}
-  &\frac{-1}{\nu_0^4}\left\{\left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right] \star_2^x \left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right]\right\} = \\
-  &=  \frac{-4}{\nu_o^4}\Bigg[\int\limits_0^{\nu_o} d\tau\, \tau \int\limits_0^{\arccos\left(\frac{\nu}{2\nu_o}\right)}d\phi_{\tau}(-\tau^2\cos^2\phi_{\tau} + \nu\tau\cos\phi_{\tau}) - \int\limits_0^{\nu/2}d\tau_x \int\limits_0^{\tau_x \frac{2\nu_o}{\nu}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}}d\tau_y(-\tau_x^2 + \nu\tau_x)\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right).
+  &\frac{-4}{\nu_0^4}\left\{\left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right] \star_2^x \left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right]\right\} = \\
+  &=  \frac{-16}{\nu_o^4}\Bigg[\int\limits_0^{\nu_o} d\tau\, \tau \int\limits_0^{\arccos\left(\frac{\nu}{2\nu_o}\right)}d\phi_{\tau}(-\tau^2\cos^2\phi_{\tau} + \nu\tau\cos\phi_{\tau}) - \int\limits_0^{\nu/2}d\tau_x \int\limits_0^{\tau_x \frac{2\nu_o}{\nu}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}}d\tau_y(-\tau_x^2 + \nu\tau_x)\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right).
 \end{align}
 For the first inner integral we make use of
 \begin{align}
@@ -1138,16 +1138,16 @@ For the first inner integral we make use of
 \end{align}
 This results in
 \begin{align}
-  &=\frac{-4}{\nu_o^4}\Bigg[\int\limits_0^{\nu_o} d\tau\, \frac{-\tau^3}{2}\left(\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} + \arccos\left(\frac{\nu}{2a}\right)\right) + \nu\tau^2\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)}\nonumber \\ &\hspace{5em}- \int\limits_0^{\nu/2}d\tau_x \left(-\tau_x^3 + \nu\tau_x^2\right)\frac{2 \nu_o}{\nu}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
-  &=  \frac{-4}{\nu_o^4}\Bigg[\frac{-\nu_o^4}{8}\left(\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} + \arccos\left(\frac{\nu}{2\nu_o}\right) \right) + \frac{2\nu_o^4}{3}\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)}\nonumber \\ &\hspace{5em} - \frac{5\nu^2\nu_o^2}{48}\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
-  &=  \frac{1}{2}\Bigg[\left(\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} + \arccos\left(\frac{\nu}{2\nu_o}\right) \right) - \frac{16}{3}\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)}\nonumber \\ &\hspace{5em} + \frac{5\nu^2}{6\nu_o^2}\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
-  &= \frac{1}{2}\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \left(\frac{13}{3} - \frac{5\nu^2}{6\nu_o^2}\right)\frac{\nu}{2\nu_o} \sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
-  &= \left[\frac{1}{2}\arccos\left(\frac{\nu}{2\nu_o}\right) - \frac{1}{6}\left[13 - 10\left(\frac{\nu}{2\nu_o}\right)^2\right]\frac{\nu}{2\nu_o} \sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right).\label{eq:auto1}
+  &=\frac{-16}{\nu_o^4}\Bigg[\int\limits_0^{\nu_o} d\tau\, \frac{-\tau^3}{2}\left(\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} + \arccos\left(\frac{\nu}{2a}\right)\right) + \nu\tau^2\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)}\nonumber \\ &\hspace{5em}- \int\limits_0^{\nu/2}d\tau_x \left(-\tau_x^3 + \nu\tau_x^2\right)\frac{2 \nu_o}{\nu}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+  &=  \frac{-16}{\nu_o^4}\Bigg[\frac{-\nu_o^4}{8}\left(\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} + \arccos\left(\frac{\nu}{2\nu_o}\right) \right) + \frac{2\nu_o^4}{3}\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)}\nonumber \\ &\hspace{5em} - \frac{5\nu^2\nu_o^2}{48}\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+  &=  2\Bigg[\left(\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} + \arccos\left(\frac{\nu}{2\nu_o}\right) \right) - \frac{16}{3}\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)}\nonumber \\ &\hspace{5em} + \frac{5\nu^2}{6\nu_o^2}\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+  &= 2\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \left(\frac{13}{3} - \frac{5\nu^2}{6\nu_o^2}\right)\frac{\nu}{2\nu_o} \sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+  &= \left[2\arccos\left(\frac{\nu}{2\nu_o}\right) - \frac{2}{3}\left[13 - 10\left(\frac{\nu}{2\nu_o}\right)^2\right]\frac{\nu}{2\nu_o} \sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right).\label{eq:auto1}
 \end{align}
 Next, we evaluate the autocorrelation for shifts along the $y$-axis
 \begin{align}
-  &\frac{-1}{\nu_0^4}\left\{\left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right] \star_2^y \left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right]\right\} = \\
-  &=  \frac{-4}{\nu_o^4}\Bigg[\int\limits_0^{\nu_o} d\tau\, \tau \int\limits_0^{\arccos\left(\frac{\nu}{2\nu_o}\right)}d\phi_{\tau}(-\tau^2\sin^2\phi_{\tau}) - \int\limits_0^{\nu/2}d\tau_x \int\limits_0^{\tau_x \frac{2\nu_o}{\nu}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}}d\tau_y(-\tau_y^2)\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right).
+  &\frac{-4}{\nu_0^4}\left\{\left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right] \star_2^y \left[\nu_x\, \Pi\left(\frac{\nu}{\nu_o}\right)\right]\right\} = \\
+  &=  \frac{-16}{\nu_o^4}\Bigg[\int\limits_0^{\nu_o} d\tau\, \tau \int\limits_0^{\arccos\left(\frac{\nu}{2\nu_o}\right)}d\phi_{\tau}(-\tau^2\sin^2\phi_{\tau}) - \int\limits_0^{\nu/2}d\tau_x \int\limits_0^{\tau_x \frac{2\nu_o}{\nu}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}}d\tau_y(-\tau_y^2)\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right).
 \end{align}
 For the first inner integral we make use of
 \begin{align}
@@ -1155,14 +1155,14 @@ For the first inner integral we make use of
 \end{align}
 This results in
 \begin{align}
-  &=\frac{-4}{\nu_o^4}\Bigg[\int\limits_0^{\nu_o} d\tau\, \frac{-\tau^3}{2}\left(\frac{-\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} + \arccos\left(\frac{\nu}{2a}\right)\right) - \int\limits_0^{\nu/2}d\tau_x \frac{-\tau_x^3}{3}\left(\frac{2 \nu_o}{\nu}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right)^3\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
-  &=  \frac{-4}{\nu_o^4}\Bigg[\frac{-\nu_o^4}{8}\left(\frac{-\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} + \arccos\left(\frac{\nu}{2\nu_o}\right) \right) + \frac{\nu_o^4}{12}\frac{\nu}{2\nu_o}\sqrt[3]{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
-  &=  \Bigg[\frac{1}{2}\arccos\left(\frac{\nu}{2\nu_o}\right) - \frac{1}{2}\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} - \frac{1}{3}\frac{\nu}{2\nu_o}\sqrt[3]{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right). \label{eq:auto2}
+  &=\frac{-16}{\nu_o^4}\Bigg[\int\limits_0^{\nu_o} d\tau\, \frac{-\tau^3}{2}\left(\frac{-\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} + \arccos\left(\frac{\nu}{2a}\right)\right) - \int\limits_0^{\nu/2}d\tau_x \frac{-\tau_x^3}{3}\left(\frac{2 \nu_o}{\nu}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right)^3\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+  &=  \frac{-16}{\nu_o^4}\Bigg[\frac{-\nu_o^4}{8}\left(\frac{-\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} + \arccos\left(\frac{\nu}{2\nu_o}\right) \right) + \frac{\nu_o^4}{12}\frac{\nu}{2\nu_o}\sqrt[3]{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+  &=  \Bigg[2\arccos\left(\frac{\nu}{2\nu_o}\right) - 2\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} - \frac{4}{3}\frac{\nu}{2\nu_o}\sqrt[3]{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right). \label{eq:auto2}
 \end{align}
 Combining the results in Eqs. \ref{eq:auto1} and \ref{eq:auto2} gives us the final Fourier transform
 \begin{align}
-  \mathcal{F}_2\left\{{b^{(p)}}^2(r_d')\right\} &= \left(\frac{\text{NA}}{n_o}\right)^2\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \frac{1}{3}\left[8 - 5\left(\frac{\nu}{2\nu_o}\right)^2\right]\frac{\nu}{2\nu_o} \sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} - \frac{1}{3}\frac{\nu}{2\nu_o}\sqrt[3]{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
-    \mathcal{F}_2\left\{{b^{(p)}}^2(r_d')\right\} &= \left(\frac{\text{NA}}{n_o}\right)^2\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \left[3 - 2\left(\frac{\nu}{2\nu_o}\right)^2\right]\frac{\nu}{2\nu_o} \sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right).
+  \mathcal{F}_2\left\{{b^{(p)}}^2(r_d')\right\} &= 4\left(\frac{\text{NA}}{n_o}\right)^2\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \frac{1}{3}\left[8 - 5\left(\frac{\nu}{2\nu_o}\right)^2\right]\frac{\nu}{2\nu_o} \sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2} - \frac{1}{3}\frac{\nu}{2\nu_o}\sqrt[3]{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+    \mathcal{F}_2\left\{{b^{(p)}}^2(r_d')\right\} &= 4\left(\frac{\text{NA}}{n_o}\right)^2\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \left[3 - 2\left(\frac{\nu}{2\nu_o}\right)^2\right]\frac{\nu}{2\nu_o} \sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right).
 \end{align}
 Now that we've evaluated $\mathcal{F}_2\left\{{a^{(p)}}^2(r_d')\right\}$ and $\mathcal{F}_2\left\{{b^{(p)}}^2(r_d')\right\}$, we can plug the results into the following equation and we have the complete spatio-angular transfer function
 \begin{align}
