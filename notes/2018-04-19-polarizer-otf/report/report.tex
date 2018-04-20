@@ -1,0 +1,349 @@
+\documentclass[11pt]{article}
+
+%%%%%%%%%%%%
+% Packages %
+%%%%%%%%%%%%
+\usepackage[dvipsnames]{xcolor}
+\hyphenpenalty=10000
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+
+\usepackage{tocloft}
+\renewcommand\cftsecleader{\cftdotfill{\cftdotsep}}
+\def\undertilde#1{\mathord{\vtop{\ialign{##\crcr
+$\hfil\displaystyle{#1}\hfil$\crcr\noalign{\kern1.5pt\nointerlineskip}
+$\hfil\tilde{}\hfil$\crcr\noalign{\kern1.5pt}}}}}
+\usepackage{cleveref}
+\usepackage{xcolor}
+\usepackage[colorlinks = true,
+            linkcolor = black,
+            urlcolor  = blue,
+            citecolor = black,
+            anchorcolor = black]{hyperref}
+\usepackage{epstopdf}
+\usepackage{braket}
+\usepackage{upgreek}
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{subcaption}
+\usepackage{amssymb,latexsym,amsmath,gensymb}
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{pdflscape}
+\usepackage{url}
+\usepackage{array}
+\newcolumntype{C}{>{$\displaystyle} c <{$}}
+\usepackage{tikz, calc}
+\usetikzlibrary{shapes.geometric, arrows, calc}
+\tikzstyle{norm} = [rectangle, rounded corners, minimum width=2cm, minimum height=1cm,text centered, draw=black]
+\tikzstyle{arrow} = [thick, ->, >=stealth]
+
+\newcommand{\argmin}{\arg\!\min}
+\newcommand{\me}{\mathrm{e}}
+\providecommand{\e}[1]{\ensuremath{\times 10^{#1}}} 
+\providecommand{\mb}[1]{\mathbf{#1}}
+\providecommand{\mf}[1]{\mathbf{#1}}
+\providecommand{\ro}[1]{\mathbf{\mathbf{r}}_o}
+\providecommand{\so}[1]{\mathbf{\hat{s}}_o}
+\providecommand{\rb}[1]{\mathbf{r}_b}
+\providecommand{\rbm}[1]{r_b^{\text{m}}}
+\providecommand{\rd}[1]{\mathbf{r}_d}
+\providecommand{\mh}[1]{\mathbf{\hat{#1}}}
+\providecommand{\bs}[1]{\boldsymbol{#1}} 
+\providecommand{\intinf}{\int_{-\infty}^{\infty}}
+\providecommand{\fig}[4]{
+  % filename, width, caption, label
+\begin{figure}[h]
+ \captionsetup{width=1.0\linewidth}
+ \centering
+ \includegraphics[width = #2\textwidth]{#1}
+ \caption{#3}
+ \label{fig:#4}
+\end{figure}
+}
+
+\makeatletter
+\renewcommand*\env@matrix[1][*\c@MaxMatrixCols c]{%
+  \hskip -\arraycolsep
+  \let\@ifnextchar\new@ifnextchar
+  \array{#1}}
+\makeatother
+
+\newcommand{\tensor}[1]{\overset{\text{\tiny$\leftrightarrow$}}{\mb{#1}}}
+\newcommand{\tunderbrace}[2]{\underbrace{#1}_{\textstyle#2}}
+\providecommand{\figs}[7]{
+  % filename1, filename2, caption1, caption2, label1, label2, shift
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{.45\textwidth}
+  \centering
+  \includegraphics[width=1.0\linewidth]{#1}
+  \captionsetup{justification=justified, singlelinecheck=true}
+  \caption{#3}
+  \label{fig:#5}
+\end{minipage}
+\hspace{2em}
+\begin{minipage}[b]{.45\textwidth}
+  \centering
+  \includegraphics[width=1.0\linewidth]{#2}
+  \vspace{#7em}
+  \captionsetup{justification=justified}
+  \caption{#4}
+  \label{fig:#6}
+\end{minipage}
+\end{figure}
+}
+\makeatletter
+
+\providecommand{\code}[1]{
+\begin{center}
+\lstinputlisting{#1}
+\end{center}
+}
+
+\newcommand{\crefrangeconjunction}{--}
+%%%%%%%%%%%
+% Spacing %
+%%%%%%%%%%%
+% Margins
+\usepackage[
+top    = 1.5cm,
+bottom = 1.5cm,
+left   = 1.5cm,
+right  = 1.5cm]{geometry}
+
+% Indents, paragraph space
+%\usepackage{parskip}
+\setlength{\parskip}{1.5ex}
+
+% Section spacing
+\usepackage{titlesec}
+\titlespacing*{\title}
+{0pt}{0ex}{0ex}
+\titlespacing*{\section}
+{0pt}{0ex}{0ex}
+\titlespacing*{\subsection}
+{0pt}{0ex}{0ex}
+\titlespacing*{\subsubsection}
+{0pt}{0ex}{0ex}
+
+% Line spacing
+\linespread{1.1}
+
+%%%%%%%%%%%%
+% Document %
+%%%%%%%%%%%%
+\begin{document}
+\title{\vspace{-2.5em} Spatio-angular transfer functions for polarized fluorescence microscopes\vspace{-1em}}  \author{Talon Chandler, Min Guo, Hari Shroff, Rudolf Oldenbourg, Patrick La Rivi\`ere}
+\date{\vspace{-1em}\today\vspace{-1em}}
+\maketitle
+\section{Introduction}
+These notes are a continuation of the
+\href{https://github.com/talonchandler/polharmonic/blob/master/notes/2018-02-23-spatio-angular-kernel/report/report.pdf}{2018-02-23
+  notes} on the spatio-angular transfer functions for unpolarized fluorescence
+microscopes. We will use the same notation and extend those results to microscopes
+with polarized illumination and detection.
+
+\section{Polarized illumination}
+We can model polarized excitation using a spatio-angular excitation point
+response function $h_{\text{exc}}(\ro{}, \so{})$. In these notes we will only
+consider spatially uniform excitation patterns $h_{\text{exc}}(\so{})$, but we
+would need the full function to model structured illumination patterns.
+
+We calculated several spatio-angular excitation point response functions in our
+Optics Express paper \cite{chandler17} (in the paper we called this function the
+excitation efficiency for a single dipole, but this is equivalent to the
+excitation point spread function). If we place a spatially incoherent and
+spatially uniform light source (or its image) in the aperture plane with the
+optical axis along the $\mh{z}$ axis, then the excitation point response function
+is given by
+\begin{align}
+  h^{\mh{z}}_{\text{exc}}(\Theta, \Phi; \phi_{\text{exc}}) &= \bar{D}\{\bar{A} + \bar{B}\sin^{2}{\Theta} + \bar{C}\sin^{2}{\Theta} \cos{[2 (\Phi - \phi_{\text{exc}}})]\}\label{eq:scalarabs},
+\end{align}
+where
+$\so{} = \cos\Phi\sin\Theta\mh{x} + \sin\Phi\sin\Theta\mh{y} + \cos\Theta\mh{z}$,
+the illumination polarizer orientation is given by $\mh{p} = \cos\phi_{\text{exc}}\mh{x} + \sin\phi_{\text{exc}}\mh{y}$, and 
+\begin{subequations}
+\begin{align}
+  \bar{A} &= \frac{1}{4} - \frac{3}{8} \cos{\alpha } + \frac{1}{8} \cos^{3}{\alpha },\\
+  \bar{B} &= \frac{3}{16} \cos{\alpha } - \frac{3}{16} \cos^{3}{\alpha },\\
+  \bar{C} &= \frac{7}{32} - \frac{3}{32} \cos{\alpha } - \frac{3}{32} \cos^{2}{\alpha } - \frac{1}{32} \cos^{3}{\alpha},\\
+  \bar{D} &= \frac{4}{3(1 - \cos\alpha)},
+\end{align}\label{eq:coefficients}%
+\end{subequations}
+where $\alpha = \arcsin(\text{NA}/n_o)$. I'm using bars on the constants to
+avoid notation overlap with the previous note set. We can rewrite this
+expression in terms of spherical harmonics as
+\begin{align}
+  h^{\mh{z}}_{\text{exc}}(\so{}; \mh{p}) \propto\, &[2A + (4/3)B]y_0^0(\so{}) - \frac{4\sqrt{5}}{15}By_2^0(\so{}) + \nonumber\\ &\frac{4C}{\sqrt{15}}\left\{[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2]y_2^2(\so{}) - (\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})y_2^{-2}(\so{})\right\}. \label{eq:genpsf}
+\end{align}
+
+% We can rewrite this expression in vector 
+% notation as
+% \begin{align}
+% h^{\mh{z}}_{\text{exc}}(\so{}; \mh{p}) &= E + F[(\so{}\cdot\mh{x})^2 + (\so{}\cdot\mh{y})] + G\left[\mh{p} \cdot \frac{(\so{}\cdot\mh{x})\mh{x} + (\so{}\cdot\mh{y})\mh{y}}{\sqrt{(\so{}\cdot\mh{x})^2 + (\so{}\cdot\mh{y})^2}}\right]^2,
+% \end{align}
+% where
+% \begin{subequations}
+%   \begin{align}
+%     E &\equiv DA = \frac{1}{3} - \frac{1}{6}\cos\alpha - \frac{1}{6}\cos^2\alpha,\\
+%     F &\equiv D(B-C) = -\frac{7}{24} + \frac{1}{12}\cos\alpha + \frac{5}{24}\cos^2\alpha,\\
+%     G &\equiv 2DC = \frac{7}{12} + \frac{1}{3}\cos\alpha + \frac{1}{12}\cos^2\alpha.
+%   \end{align}
+% \end{subequations}
+% Finally, we can rewrite this expression in Cartesian coordinates as 
+% \begin{align}
+%     h^{\mh{z}}_{\text{exc}}(s_x, s_y; p_x, p_y) &= E + F[s_x^2 + s_y^2] + G\frac{(p_xs_x + p_ys_y)^2}{s_x^2 + s_y^2},
+% \end{align}
+% where $s_x^2 + s_y^2 + s_z^2 = 1$ and $p_x^2 + p_y^2 + p_z^2= 1$. 
+
+The light-sheet excitation point response function is given by Eq.
+\ref{eq:genpsf} in the limit of small NA which gives
+\begin{align}
+  h^{\mh{z}, \text{ls}}_{\text{exc}}(\so{}; \mh{p}) \equiv \lim_{\alpha \rightarrow 0} h^{\mh{z}}_{\text{exc}}(\so{}) \propto y_0^0(\so{}) + \frac{7}{4\sqrt{15}}\left\{[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2]y_2^2(\so{}) - (\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})y_2^{-2}(\so{})\right\}.
+\end{align}
+To find the excitation point response function for illumination along the
+$\mh{x}$ axis we need to change every $\mh{x}$ and $\mh{y}$ to $\mh{z}$ and
+$-\mh{y}$, respectively. Rotating the spherical harmonics is not trivial,
+but we show the relevant transformation matrix in Appendix \ref{sec:sh}. The
+excitation point response function for illumination along the $\mh{x}$ axis is
+given by
+\begin{align}
+  h^{\mh{x}, \text{ls}}_{\text{exc}}(\so{}; \mh{p}) \propto y_0^0(\so{}) + \frac{7}{4\sqrt{15}}\left\{[(\mh{p}\cdot\mh{z})^2 - (\mh{p}\cdot\mh{y})^2]\left[\frac{\sqrt{3}}{2}y_2^0(\so{}) + \frac{1}{2}y_2^2(\so{})\right] + (\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})y_2^{-1}(\so{})\right\}.
+\end{align}
+
+To find the excitation transfer functions we need to calculate
+\begin{align}
+  H_{l, \text{exc}}^m = \int_{\mathbb{S}^2} d\so{}\, h_{\text{exc}}(\so{}) y_l^m(\so{}).
+\end{align}
+This calculation is straightforward now that we've expressed the excitation
+point response functions in terms of spherical harmonics. The excitation
+transfer functions are
+\begin{align}
+  H^{m,\mh{z}}_{l,\text{exc}}(\mh{p}) \propto\, &[2A + (4/3)B]\delta(l, m) - \frac{4\sqrt{5}}{15}B\delta(l-2, m)(\so{}) + \nonumber\\ &\frac{4C}{\sqrt{15}}\left\{[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2]\delta(l-2, m-2) - (\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})\delta(l-2, m+2)\right\},\\
+  H^{m,\mh{z}, \text{ls}}_{l,\text{exc}}(\mh{p}) \propto\, &\delta(l,m) + \frac{7}{4\sqrt{15}}\left\{[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2]\delta(l-2,m-2) - (\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})\delta(l-2, m+2)\right\},\\
+  H^{m,\mh{x}, \text{ls}}_{l, \text{exc}}(\mh{p}) \propto\, &\delta(l,m) + \frac{7}{4\sqrt{15}}\left\{[(\mh{p}\cdot\mh{z})^2 - (\mh{p}\cdot\mh{y})^2]\left[\frac{\sqrt{3}}{2}\delta(l-2,m) + \frac{1}{2}\delta(l-2, m-2)\right] + (\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})\delta(l-2, m+1)\right\}.                                                              
+\end{align}
+
+\section{Polarized detection}
+In the previous note set we found the spatio-angular detection point spread
+function for unpolarized fluorescence microscopes. In this section we will find
+the spatio-angular detection point spread function when there is a linear
+polarizer in the detection path.
+
+The electric field in the back-focal plane of a fluorescence microscope under
+the paraxial approximation is given by
+\begin{align}
+   \mb{\tilde{e}}^{(p)}_b(\rb{};\ro{}, \so{}) \propto
+  \begin{bmatrix}
+    y_1^1(\so{}) -\frac{2r_b}{f_o}\cos\phi_by_1^0(\so{})\\
+    y_1^{-1}(\so{}) -\frac{2r_b}{f_o}\sin\phi_by_1^0(\so{})\\
+    0
+  \end{bmatrix}.
+\end{align}
+If we place a polarizer oriented along $\mh{p}_d$ in the back focal plane then
+the electric field becomes
+\begin{align}
+   \mb{\tilde{e}}^{(p)}_b(\rb{};\ro{}, \so{}) \propto \mh{p}_d \cdot
+  \begin{bmatrix}
+    y_1^1(\so{}) -\frac{2r_b}{f_o}\cos\phi_by_1^0(\so{})\\
+    y_1^{-1}(\so{}) -\frac{2r_b}{f_o}\sin\phi_by_1^0(\so{})\\
+    0
+  \end{bmatrix}.
+\end{align}
+To find the electric field in the detector plane we need to take the
+two-dimensional Fourier transform of each component. The dot product with the
+polarizer is linear, so we can pull the Fourier transform inside and use the same
+result from the previous notes
+\begin{align}
+  \tilde{\mb{e}}^{(p)}_d(\rd{}', \so{}; \mh{p}_d) &\propto \mh{p}_d \cdot
+  \begin{bmatrix}
+    a^{(p)}(r_d')y_1^{1}(\so{}) + 2ib^{(p)}(r_d')\cos\phi_d'y_1^{0}(\so{})\\
+    a^{(p)}(r_d')y_1^{-1}(\so{}) + 2ib^{(p)}(r_d')\sin\phi_d'y_1^{0}(\so{})\\
+    0\\
+  \end{bmatrix}\label{eq:paracsf}. 
+\end{align}
+Finally, we can find the spatio-angular point spread function by taking the
+squared modulus of the electric field on the detector.
+
+In progress. Calculate the spatio-angular PSF then the spatio-angular OTF. 
+% \begin{equation}
+%   \begin{split}
+%   h(\rd{}', \so{}; \mh{p}_d) \propto &\left(a^2(r_d') + 2b^2(r_d') + c^2(r_d')\right)y_0^0(\so{}) -\frac{2\sqrt{15}}{5}a(r_d')c(r_d')\sin(2\phi_d')y_2^{-2}(\so{})\\ &+ \frac{1}{\sqrt{5}}\left(-a^2(r_d') + 4b^2(r_d') - c^2(r_d')\right)y_2^{0}(\so{}) +\frac{2\sqrt{15}}{5}a(r_d')c(r_d')\cos(2\phi_d')y_2^{2}(\so{}). \label{eq:kerna}
+% \end{split}
+% \end{equation}
+
+\appendix
+\section{Rotation of spherical harmonics} \label{sec:sh}
+Given a spherical function and its spherical harmonic coefficients $c_j$ (we're
+using a single index over the spherical harmonics), the spherical harmonic
+coefficients of the rotated function $c'_i$ can be computed with the linear
+transformation
+\begin{align}
+  c_i' = \sum_j M_{ij}c_j, 
+\end{align}
+where the elements of the linear transformation can be computed with
+\begin{align}
+  M_{ij} = \int_{\mathbb{S}^2} d\so{}\, y_j(\mathbf{R}\so{})y_i(\so{}), 
+\end{align}
+where $\mathbf{R}$ is the rotation matrix that maps the original function to the
+rotated function \cite{kautz2002}. If we assemble the elements of the linear transformation into
+a matrix $\mathbf{M}$, then the matrix is block sparse
+\begin{align}
+  \mathbf{M} =
+  \begin{bmatrix}[c|ccc|cccccc]    
+    1&0&0&0&0&0&0&0&0&\cdots\\ \hline
+    0&\mathbf{X}&\mathbf{X}&\mathbf{X}&0&0&0&0&0&\cdots\\
+    0&\mathbf{X}&\mathbf{X}&\mathbf{X}&0&0&0&0&0&\cdots\\
+    0&\mathbf{X}&\mathbf{X}&\mathbf{X}&0&0&0&0&0&\cdots\\ \hline
+    0&0&0&0&\mathbf{X}&\mathbf{X}&\mathbf{X}&\mathbf{X}&\mathbf{X}&\cdots\\
+    0&0&0&0&\mathbf{X}&\mathbf{X}&\mathbf{X}&\mathbf{X}&\mathbf{X}&\cdots\\
+    0&0&0&0&\mathbf{X}&\mathbf{X}&\mathbf{X}&\mathbf{X}&\mathbf{X}&\cdots\\
+    0&0&0&0&\mathbf{X}&\mathbf{X}&\mathbf{X}&\mathbf{X}&\mathbf{X}&\cdots\\
+    0&0&0&0&\mathbf{X}&\mathbf{X}&\mathbf{X}&\mathbf{X}&\mathbf{X}&\cdots\\    
+    \vdots&\vdots&\vdots&\vdots&\vdots&\vdots&\vdots&\vdots&\vdots&\ddots\\        
+  \end{bmatrix}.
+\end{align}
+This means the spherical harmonic coefficients from each band transform
+independently from the other bands.
+
+To efficiently find the point spread functions and transfer functions for the
+diSPIM we will compute the spherical harmonic coefficient transformation matrix
+for a rotation that maps the $\mh{z}$ axis to the $\mh{x}$. The rotation matrix is
+given by
+\begin{align}
+  \mb{R}_{\mh{z}\rightarrow\mh{x}} =
+  \begin{bmatrix}
+    0&0&1\\
+    0&1&0\\
+    -1&0&0    
+  \end{bmatrix}, 
+\end{align}
+and the spherical harmonic coefficient transformation matrix is given by
+\begin{align}
+  \mathbf{M}_{\mh{z}\rightarrow\mh{x}} =
+  \begin{bmatrix}[c|ccc|cccccc]
+    1&0&0&0&0&0&0&0&0&\cdots\\ \hline 
+    0&0&0&1&0&0&0&0&0&\cdots\\
+    0&0&1&0&0&0&0&0&0&\cdots\\
+    0&-1&0&0&0&0&0&0&0&\cdots\\ \hline 
+    0&0&0&0&-1/2&0&0&\sqrt{3}/2&0&\cdots\\
+    0&0&0&0&0&-1&0&0&0&\cdots\\
+    0&0&0&0&0&0&0&0&-1&\cdots\\
+    0&0&0&0&\sqrt{3}/{2}&0&0&1/2&0&\cdots\\
+    0&0&0&0&0&0&1&0&0&\cdots\\    
+    \vdots&\vdots&\vdots&\vdots&\vdots&\vdots&\vdots&\vdots&\vdots&\ddots\\        
+  \end{bmatrix},
+\end{align}
+when the matrix elements are ordered as
+$[y_0^0 | y_1^1, y_1^{-1}, y_1^0 | y_2^0, y_2^1, y_2^{-1}, y_2^2, y_2^{-2}]$.
+For more complicated transformations (higher order coefficients or arbitrary
+rotations) we can use recurrence relations to find the spherical harmonic
+coefficient transformation matrix \cite{ivanic1996}.
+
+\bibliography{report}{}
+\bibliographystyle{unsrt}
+
+\end{document}
