@@ -83,7 +83,7 @@ real f = 0*pi; //phi
 triple Av = rv*expi(q,f);
 
 // Draw other lines
-draw(L=Label("$\mathbf{\hat{s}}_o = \cos\varphi\sin\vartheta\hat{\mathbf{x}} + \sin\varphi\sin\vartheta\hat{\mathbf{y}} + \cos\vartheta\hat{\mathbf{z}}$", position=Relative(1.1), align=SE), O--Av, thinblack, Arrow3(emissive(black))); 
+draw(L=Label("$\mathbf{\hat{s}}_o = \cos\varphi_o\sin\vartheta_o\hat{\mathbf{x}} + \sin\varphi_o\sin\vartheta_o\hat{\mathbf{y}} + \cos\vartheta_o\hat{\mathbf{z}}$", position=Relative(1.1), align=SE), O--Av, thinblack, Arrow3(emissive(black))); 
 //draw(2*Z--(2*Z+0.5*Y), thinblack, Arrow3);
 //label(L=Label("$\mathbf{\hat{p}_{\text{exc}}}$"), position=1.8*Z+0.5*Y);
 
