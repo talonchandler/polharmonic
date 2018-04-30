@@ -1,3 +1,4 @@
+
 \documentclass[11pt]{article}
 
 %%%%%%%%%%%%
@@ -177,32 +178,13 @@ where $\alpha = \arcsin(\text{NA}/n_o)$. I'm using bars on the constants to
 avoid notation overlap with the previous note set. We can rewrite this
 expression in terms of spherical harmonics as
 \begin{align}
-  h^{\mh{z}}_{\text{exc}}(\so{}; \mh{p}) \propto\, &[2A + (4/3)B]y_0^0(\so{}) - \frac{4\sqrt{5}}{15}By_2^0(\so{}) + \nonumber\\ &\frac{4C}{\sqrt{15}}\left\{[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2]y_2^2(\so{}) - (\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})y_2^{-2}(\so{})\right\}. \label{eq:genpsf}
+  h^{\mh{z}}_{\text{exc}}(\so{}; \mh{p}) \propto\, &[2\bar{A} + (4/3)\bar{B}]y_0^0(\so{}) - \frac{4\sqrt{5}}{15}\bar{B}y_2^0(\so{}) + \nonumber\\ &\frac{4\bar{C}}{\sqrt{15}}\left\{[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2]y_2^2(\so{}) - 2(\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})y_2^{-2}(\so{})\right\}. \label{eq:genpsf}
 \end{align}
-
-% We can rewrite this expression in vector 
-% notation as
-% \begin{align}
-% h^{\mh{z}}_{\text{exc}}(\so{}; \mh{p}) &= E + F[(\so{}\cdot\mh{x})^2 + (\so{}\cdot\mh{y})] + G\left[\mh{p} \cdot \frac{(\so{}\cdot\mh{x})\mh{x} + (\so{}\cdot\mh{y})\mh{y}}{\sqrt{(\so{}\cdot\mh{x})^2 + (\so{}\cdot\mh{y})^2}}\right]^2,
-% \end{align}
-% where
-% \begin{subequations}
-%   \begin{align}
-%     E &\equiv DA = \frac{1}{3} - \frac{1}{6}\cos\alpha - \frac{1}{6}\cos^2\alpha,\\
-%     F &\equiv D(B-C) = -\frac{7}{24} + \frac{1}{12}\cos\alpha + \frac{5}{24}\cos^2\alpha,\\
-%     G &\equiv 2DC = \frac{7}{12} + \frac{1}{3}\cos\alpha + \frac{1}{12}\cos^2\alpha.
-%   \end{align}
-% \end{subequations}
-% Finally, we can rewrite this expression in Cartesian coordinates as 
-% \begin{align}
-%     h^{\mh{z}}_{\text{exc}}(s_x, s_y; p_x, p_y) &= E + F[s_x^2 + s_y^2] + G\frac{(p_xs_x + p_ys_y)^2}{s_x^2 + s_y^2},
-% \end{align}
-% where $s_x^2 + s_y^2 + s_z^2 = 1$ and $p_x^2 + p_y^2 + p_z^2= 1$. 
 
 The light-sheet excitation point response function is given by Eq.
 \ref{eq:genpsf} in the limit of small NA which gives
 \begin{align}
-  h^{\mh{z}, \text{ls}}_{\text{exc}}(\so{}; \mh{p}) \equiv \lim_{\alpha \rightarrow 0} h^{\mh{z}}_{\text{exc}}(\so{}) \propto y_0^0(\so{}) + \frac{7}{4\sqrt{15}}\left\{[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2]y_2^2(\so{}) - (\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})y_2^{-2}(\so{})\right\}.
+  h^{\mh{z}, \text{ls}}_{\text{exc}}(\so{}; \mh{p}) \equiv \lim_{\alpha \rightarrow 0} h^{\mh{z}}_{\text{exc}}(\so{}) \propto y_0^0(\so{}) + \frac{7}{4\sqrt{15}}\left\{[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2]y_2^2(\so{}) - 2(\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})y_2^{-2}(\so{})\right\}.
 \end{align}
 To find the excitation point response function for illumination along the
 $\mh{x}$ axis we need to change every $\mh{x}$ and $\mh{y}$ to $\mh{z}$ and
@@ -211,7 +193,7 @@ but we show the relevant transformation matrix in Appendix \ref{sec:sh}. The
 excitation point response function for illumination along the $\mh{x}$ axis is
 given by
 \begin{align}
-  h^{\mh{x}, \text{ls}}_{\text{exc}}(\so{}; \mh{p}) \propto y_0^0(\so{}) + \frac{7}{4\sqrt{15}}\left\{[(\mh{p}\cdot\mh{z})^2 - (\mh{p}\cdot\mh{y})^2]\left[\frac{\sqrt{3}}{2}y_2^0(\so{}) + \frac{1}{2}y_2^2(\so{})\right] + (\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})y_2^{-1}(\so{})\right\}.
+  h^{\mh{x}, \text{ls}}_{\text{exc}}(\so{}; \mh{p}) \propto y_0^0(\so{}) + \frac{7}{4\sqrt{15}}\left\{[(\mh{p}\cdot\mh{z})^2 - (\mh{p}\cdot\mh{y})^2]\left[\frac{\sqrt{3}}{2}y_2^0(\so{}) + \frac{1}{2}y_2^2(\so{})\right] + 2(\mh{p}\cdot\mh{z})(\mh{p}\cdot\mh{y})y_2^{-1}(\so{})\right\}.
 \end{align}
 
 To find the excitation transfer functions we need to calculate
@@ -222,9 +204,9 @@ This calculation is straightforward now that we've expressed the excitation
 point response functions in terms of spherical harmonics. The excitation
 transfer functions are
 \begin{align}
-  H^{m,\mh{z}}_{l,\text{exc}}(\mh{p}) \propto\, &[2A + (4/3)B]\delta(l, m) - \frac{4\sqrt{5}}{15}B\delta(l-2, m)(\so{}) + \nonumber\\ &\frac{4C}{\sqrt{15}}\left\{[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2]\delta(l-2, m-2) - (\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})\delta(l-2, m+2)\right\},\\
-  H^{m,\mh{z}, \text{ls}}_{l,\text{exc}}(\mh{p}) \propto\, &\delta(l,m) + \frac{7}{4\sqrt{15}}\left\{[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2]\delta(l-2,m-2) - (\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})\delta(l-2, m+2)\right\},\\
-  H^{m,\mh{x}, \text{ls}}_{l, \text{exc}}(\mh{p}) \propto\, &\delta(l,m) + \frac{7}{4\sqrt{15}}\left\{[(\mh{p}\cdot\mh{z})^2 - (\mh{p}\cdot\mh{y})^2]\left[\frac{\sqrt{3}}{2}\delta(l-2,m) + \frac{1}{2}\delta(l-2, m-2)\right] + (\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})\delta(l-2, m+1)\right\}.                                                              
+  H^{m,\mh{z}}_{l,\text{exc}}(\mh{p}) \propto\, &[2\bar{A} + (4/3)\bar{B}]\delta(l, m) - \frac{4\sqrt{5}}{15}\bar{B}\delta(l-2, m)(\so{}) + \nonumber\\ &\frac{4\bar{C}}{\sqrt{15}}\left\{[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2]\delta(l-2, m-2) - 2(\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})\delta(l-2, m+2)\right\},\\
+  H^{m,\mh{z}, \text{ls}}_{l,\text{exc}}(\mh{p}) \propto\, &\delta(l,m) + \frac{7}{4\sqrt{15}}\left\{[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2]\delta(l-2,m-2) - 2(\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})\delta(l-2, m+2)\right\},\\
+  H^{m,\mh{x}, \text{ls}}_{l, \text{exc}}(\mh{p}) \propto\, &\delta(l,m) + \frac{7}{4\sqrt{15}}\Bigg\{[(\mh{p}\cdot\mh{z})^2 - (\mh{p}\cdot\mh{y})^2]\left[\frac{\sqrt{3}}{2}\delta(l-2,m) + \frac{1}{2}\delta(l-2, m-2)\right]\nonumber\\ &\hspace{20em}+ 2(\mh{p}\cdot\mh{z})(\mh{p}\cdot\mh{y})\delta(l-2, m+1)\Bigg\}.                                                              
 \end{align}
 
 \section{Polarized detection}
@@ -241,8 +223,13 @@ the paraxial approximation is given by
     y_1^1(\so{}) -\frac{2r_b}{f_o}\cos\phi_by_1^0(\so{})\\
     y_1^{-1}(\so{}) -\frac{2r_b}{f_o}\sin\phi_by_1^0(\so{})\\
     0
-  \end{bmatrix}.
+  \end{bmatrix}.\label{eq:bfp}
 \end{align}
+In these notes we will ignore the phase term in the back focal plane---see the
+previous notes for more details on shift invariance. Alternatively, we can say
+that Eq. \ref{eq:bfp} is the electric field in the back focal plane created by a
+single dipole at the focal point of the objective.
+
 If we place a polarizer oriented along $\mh{p}_d$ in the back focal plane then
 the electric field becomes
 \begin{align}
@@ -258,17 +245,204 @@ two-dimensional Fourier transform of each component. The dot product with the
 polarizer is linear, so we can pull the Fourier transform inside and use the same
 result from the previous notes
 \begin{align}
-  \tilde{\mb{e}}^{(p)}_d(\rd{}', \so{}; \mh{p}_d) &\propto \mh{p}_d \cdot
+  \tilde{\mb{e}}'^{(p)}_d(\ro{}', \so{}; \mh{p}_d) &\propto \mh{p}_d \cdot
   \begin{bmatrix}
-    a^{(p)}(r_d')y_1^{1}(\so{}) + 2ib^{(p)}(r_d')\cos\phi_d'y_1^{0}(\so{})\\
-    a^{(p)}(r_d')y_1^{-1}(\so{}) + 2ib^{(p)}(r_d')\sin\phi_d'y_1^{0}(\so{})\\
+    a^{(p)}(r_o')y_1^{1}(\so{}) + 2ib^{(p)}(r_o')\cos\phi_o'y_1^{0}(\so{})\\
+    a^{(p)}(r_o')y_1^{-1}(\so{}) + 2ib^{(p)}(r_o')\sin\phi_o'y_1^{0}(\so{})\\
     0\\
   \end{bmatrix}\label{eq:paracsf}. 
 \end{align}
 Finally, we can find the spatio-angular point spread function by taking the
-squared modulus of the electric field on the detector.
+squared modulus of the electric field on the detector
+\begin{align}
+  h'^{(p)}(\ro{}', \so{}; \mh{p}_d) &\equiv |\tilde{\mb{e}}'^{(p)}_d(\ro{}', \so{}; \mh{p}_d)|^2.
+\end{align}
+Expanding, factoring, and normalizing the result gives   
+\begin{align}
+    h'^{(p)}(\ro{}', \so{}; \mh{p}_d) &= {h'}_0^{0(p)}(\ro{}')y_0^0(\so{}) + {h'}_2^{0(p)}(\ro{}')y_2^0(\so{}) + {h'}_2^{2(p)}(\ro{}')y_2^2(\so{}) + {h'}_2^{-2(p)}(\ro{}')y_2^{-2}(\so{}),
+\end{align}
+where
+\begin{align}
+  {h'}_0^{0(p)}(\ro{}'; \mh{p}_d) &\equiv {a^{(p)}}^2(r_o') + 4{b^{(p)}}^2(r_o')(\mh{r}'_o\cdot\mh{p}_d)^2,\\
+{h'}_2^{0(p)}(\ro{}'; \mh{p}_d) &\equiv \frac{1}{\sqrt{5}}\left[-{a^{(p)}}^2(r_o') + 8{b^{(p)}}^2(r_o')(\mh{r}'_o\cdot\mh{p}_d)^2\right],\\
+  {h'}_2^{2(p)}(\ro{}'; \mh{p}_d) &\equiv \sqrt{\frac{3}{5}}{a^{(p)}}^2(r_o')\left[(\mh{p}_d\cdot\mh{x})^2 - (\mh{p}_d\cdot\mh{y})^2\right],\\
+  {h'}_2^{-2(p)}(\ro{}'; \mh{p}_d) &\equiv -2\sqrt{\frac{3}{5}}{a^{(p)}}^2(r_o')(\mh{p}_d\cdot\mh{x})(\mh{p}_d\cdot\mh{y}).  
+\end{align}
 
-In progress. Calculate the spatio-angular PSF then the spatio-angular OTF. 
+\begin{figure}[ht]
+ \captionsetup{width=1.0\linewidth}
+ \centering
+   \centering
+   \includegraphics[width = 1.\textwidth]{../calculations/psfs0.pdf}
+   \caption{Spatio-angular point spread function for a single-view fluorescence
+     microscope with $\text{NA}=0.8$, $n_o=1.33$ and an $\mh{x}$-oriented
+     polarizer under the paraxial approximation. \textbf{Columns:} Each term of
+     the spatio-angular point spread function. \textbf{Row 1:} Images of each
+     term with contours at $\pm 0.1$ and \textbf{Row 2:} horizontal (solid) and
+     vertical (dashed) profiles through each term. The ${h'}_0^0$ and ${h'}_2^0$
+     terms have a $\cos^2\phi_o$ dependence, so two profiles are sufficient to
+     characterize their images. The ${h'}_2^2$ and ${h'}_2^{-2}$ terms are
+     radially symmetric, so one profile is sufficient.}
+   \label{fig:psf}
+\end{figure}
+
+The spatio-angular point spread function for a fluorescence microscope with a
+polarized detection path has four terms---see Figures \ref{fig:psf} and \ref{fig:psf2} for plots.
+The ${h'}_0^0$ and ${h'}_0^2$ terms are familiar from the unpolarized case, but
+now they have an extra factor of $(\ro{}'\cdot\mh{p}_d)^2$ that accounts for the
+polarizer and breaks radial symmetry. Notice that if we average over all
+polarizer orientations then $(\ro{}'\cdot\mh{p}_d)^2 \rightarrow 1/2$, and we
+recover the spatio-angular point spread function for a microscope without a
+detection polarizer.
+
+One of the interesting predictions of the polarized spatio-angular point spread
+function is the elongated point spread function in the ${h'}_0^0$ term (which
+corresponds to a physically realizable uniform distribution of dipoles). The
+long axis of the point spread function is parallel with the transmission axis of
+the polarizing filter---this is not an intuitive result. If we applied the usual
+reasoning for the width of point spread functions---broader distributions of
+intensity in the back focal plane cause narrower point spread functions---we
+would predict that the point spread function for the ${h'}_0^0$ term would be
+elongated perpendicular to the transmission axis of the polarizer. This
+reasoning fails because we need to add the intensities at the detector, not at
+the back focal plane.
+
+The ${h'}_2^2$ and ${h'}_2^{-2}$ terms are only non-zero when a polarizing
+filter is in the detection path. These terms correspond to distributions of
+fluorophores with positive and negative fluorophores near the transverse plane
+only. Without a polarizer, the ``intensity contributions'' from the positive and
+negative fluorophores cancel, and we have no contribution from these
+distributions. With a polarizer, the intensity contribution from the positive or
+negative fluorophores dominate, and we end up with a rotationally symmetric
+contribution to the point spread function.  
+
+It's interesting to compare polarizing filters with phase and amplitude filters.
+Adding a phase filter can extend the band limit of a microscope to measure new
+information about the object without blocking any photons. For example, cubic
+phase masks and microlens arrays can increase the axial band limit of a
+microscope. All lenses can be considered as phase filters, so it's almost
+obvious that phase filters can increase the band limit of an imaging system.
+Amplitude filters, on the other hand, cannot extend the band limit of a
+microscope. Amplitude filters can change the contrast for different spatial
+frequencies by blocking photons, but they do not allow new information to be
+measured. Polarizing filters share properties with phase and amplitude
+filters---they block photons \textbf{and} extend the angular band limit of the
+microscope. 
+
+\begin{figure}[ht]
+ \captionsetup{width=1.0\linewidth}
+ \centering
+   \centering
+   \includegraphics[width = 1.\textwidth]{../calculations/psfsp3.pdf}
+   \caption{Spatio-angular point spread function for a single-view fluorescence
+     microscope with $\text{NA}=0.8$, $n_o=1.33$ and an
+     ($\mh{x}/2 + \sqrt{3}\mh{y}/2$)-oriented polarizer under the paraxial
+     approximation. \textbf{Columns:} Each term of the spatio-angular point
+     spread function. \textbf{Row 1:} Images of each term with contours at
+     $\pm 0.1$ and \textbf{Row 2:} horizontal (solid) and vertical (dashed)
+     profiles through each term. The ${h'}_0^0$ and ${h'}_2^0$ terms have a
+     $\cos^2\phi_o$ dependence, so two profiles are sufficient to characterize
+     their images. The ${h'}_2^2$ and ${h'}_2^{-2}$ terms are radially
+     symmetric, so one profile is sufficient.}
+   \label{fig:psf2}
+\end{figure}
+
+To find the transfer function we need to calculate the Fourier transform of the
+point spread function. We can use the following Fourier transforms that we
+evaluated in the previous notes
+\begin{align}
+\mathcal{F}_2\left\{{a^{(p)}}^2(r_o')\right\} &= 8\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+\mathcal{F}_2\left\{{b^{(p)}}^2(r_o')\cos^2\phi'_o\right\} &= 4\left(\frac{\text{NA}}{n_o}\right)^2\Bigg[\arccos\left(\frac{\nu}{2\nu_o}\right) - \frac{1}{3}\left[5 - 2\left(\frac{\nu}{2\nu_o}\right)^2\right]\frac{\nu}{2\nu_o} \sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\nonumber\\ &\hspace{17em} - \frac{8}{3}\cos^2\phi_\nu\frac{\nu}{2\nu_o}\sqrt[3]{1 - \left(\frac{\nu}{2\nu_o}\right)}\Bigg]\Pi\left(\frac{\nu}{2\nu_o}\right).              
+\end{align}
+
+Applying these results and normalizing gives the spatio-angular transfer function for
+a fluorescence microscope with a polarizer along the detection path
+\begin{align}
+    H_m^{l(p)}(\bs{\nu}; \mh{p}_d) &= {H}_0^{0(p)}(\bs{\nu})\delta(l, m) + {H}_2^{0(p)}(\bs{\nu})\delta(l-2, m) + {H}_2^{2(p)}(\nu)\delta(l-2, m-2) + {H}_2^{-2(p)}(\nu)\delta(l-2, m+2),
+\end{align}
+where
+\begin{align}
+  {H}_0^{0(p)}(\bs{\nu}; \mh{p}_d) &\equiv \frac{1}{1 + (\text{NA}/n_o)^2}\left[{A^{(p)}}(\nu) + 2{B^{(p)}}(\nu) + 2{C^{(p)}}(\nu)\left\{2(\mh{\bs{\nu}}\cdot\mh{p}_d)^2 - 1\right\}\right],\\
+  {H}_2^{0(p)}(\bs{\nu}; \mh{p}_d) &\equiv \frac{1}{\sqrt{5}[1 + (\text{NA}/n_o)^2]}\left[-{A^{(p)}}(\nu) + 4{B^{(p)}}(\nu) + 4{C^{(p)}}(\nu)\left\{2(\mh{\bs{\nu}}\cdot\mh{p}_d)^2 - 1\right\}\right],\\
+  {H}_2^{2(p)}(\nu; \mh{p}_d) &\equiv \sqrt{\frac{3}{5}}\frac{1}{[1 + (\text{NA}/n_o)^2]}{A^{(p)}}(\nu)\left[(\mh{\bs{\nu}}\cdot\mh{x})^2 - (\mh{\bs{\nu}}\cdot\mh{y})^2\right],\\
+  {H}_2^{-2(p)}(\nu; \mh{p}_d) &\equiv -2\sqrt{\frac{3}{5}}\frac{1}{[1 + (\text{NA}/n_o)^2]}{A^{(p)}}(\nu)(\mh{\bs{\nu}}\cdot\mh{x})(\mh{\bs{\nu}}\cdot\mh{y}),
+\end{align}
+and
+\begin{align}
+  {A}^{(p)}(\nu) &\equiv \frac{2}{\pi}\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+  B^{(p)}(\nu) &\equiv \frac{1}{\pi}\left(\frac{\text{NA}}{n_o}\right)^2\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \left[3 - 2\left(\frac{\nu}{2\nu_o}\right)^2\right]\frac{\nu}{2\nu_o} \sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+  C^{(p)}(\nu) &\equiv \frac{1}{\pi}\left(\frac{\text{NA}}{n_o}\right)^2\left[-\frac{4}{3}\frac{\nu}{2\nu_o} \sqrt[3]{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right).                 
+\end{align}
+
+Figures \ref{fig:otf} and \ref{fig:otf2} show plots of the spatio-angular OTF
+for two different polarizer orientations. Notice that the polarizer does not
+change the spatial band limit of the microscope, but it does change the contrast
+at high frequencies. If we use the cutoff frequency as a resolution criterion,
+we would conclude that polarizers do not change the spatial resolution of our
+microscope. However, if we use a spatial-domain resolution criteria like the
+Rayleigh or Sparrow criteria, then we would conclude that adding a polarizer
+improves the spatial resolution in the direction perpendicular to the polarizer.
+
+Notice that the $H_0^0$ term in Figure \ref{fig:otf} is negative for spatial
+frequencies near the cutoff frequency parallel to the polarizer transmission
+axis. This means that we expect to see a contrast inversion for angularly
+uniform distributions of dipoles when the spatial frequency pattern is parallel
+to the polarizer transmission axis. In the spatial domain, this contrast
+inversion is caused by the elongation of the point spread function. The point
+spread function is wide enough that three fluorescent points spaced near the
+cutoff frequency give an intensity minimum that reports the position of the
+central fluorescent point---see Figure \ref{fig:psfmin}.
+
+\begin{figure}[H]
+ \captionsetup{width=1.0\linewidth}
+ \centering
+   \centering
+   \includegraphics[width = 1.\textwidth]{../calculations/otfs0.pdf}
+   \caption{Spatio-angular orientation transfer function for a single-view
+     fluorescence microscope with $\text{NA}=0.8$, $n_o=1.33$ and an
+     $\mh{x}$-oriented polarizer under the paraxial approximation.
+     \textbf{Columns:} Each term of the spatio-angular optical transfer
+     function. \textbf{Row 1:} Images of each term and \textbf{Row 2:}
+     horizontal (solid) and vertical (dashed) profiles through each term.}
+   \label{fig:otf}
+\end{figure}
+
+
+\begin{figure}[H]
+ \captionsetup{width=1.0\linewidth}
+ \centering
+   \centering
+   \includegraphics[width = 1.\textwidth]{../calculations/otfs3.pdf}
+   \caption{Spatio-angular orientation transfer function for a single-view
+     fluorescence microscope with $\text{NA}=0.8$, $n_o=1.33$ and an
+     ($\mh{x}/2 + \sqrt{3}\mh{y}/2$)-oriented polarizer under the paraxial
+     approximation. \textbf{Columns:} Each term of the spatio-angular optical
+     transfer function. \textbf{Row 1:} Images of each term and \textbf{Row 2:}
+     horizontal (solid), and vertical (dashed) profiles through each term.}
+   \label{fig:otf2}
+\end{figure}
+
+\begin{figure}[H]
+ \captionsetup{width=1.0\linewidth}
+ \centering
+   \centering
+   \includegraphics[width = 0.8\textwidth]{../calculations/psf-min.pdf}
+   \caption{A polarizer creates a contrast inversion for uniformly distributed
+     dipoles at high spatial frequencies along the direction parallel to the
+     polarizer transmission axis. \textbf{Column 1:} Without a polarizer, three
+     point sources with an angularly uniform distribution create an intensity
+     pattern with three distinct peaks---the peaks report the position of the
+     point sources. \textbf{Column 2:} With a polarizer, the point sources
+     create an intensity pattern with two central peaks---the valley reports the
+     position of the central point source. All of the sources in the figures are
+     ``resolvable'' in the sense that they are spaced at a distance greater than
+     the inverse of the cutoff frequency. This figure demonstrates contrast
+     inversion at high spatial frequencies parallel to the polarizer
+     transmission axis. }
+   \label{fig:psfmin}
+\end{figure}
+
+
 % \begin{equation}
 %   \begin{split}
 %   h(\rd{}', \so{}; \mh{p}_d) \propto &\left(a^2(r_d') + 2b^2(r_d') + c^2(r_d')\right)y_0^0(\so{}) -\frac{2\sqrt{15}}{5}a(r_d')c(r_d')\sin(2\phi_d')y_2^{-2}(\so{})\\ &+ \frac{1}{\sqrt{5}}\left(-a^2(r_d') + 4b^2(r_d') - c^2(r_d')\right)y_2^{0}(\so{}) +\frac{2\sqrt{15}}{5}a(r_d')c(r_d')\cos(2\phi_d')y_2^{2}(\so{}). \label{eq:kerna}
@@ -276,11 +450,10 @@ In progress. Calculate the spatio-angular PSF then the spatio-angular OTF.
 % \end{equation}
 
 \appendix
-\section{Rotation of spherical harmonics} \label{sec:sh}
-Given a spherical function and its spherical harmonic coefficients $c_j$ (we're
-using a single index over the spherical harmonics), the spherical harmonic
-coefficients of the rotated function $c'_i$ can be computed with the linear
-transformation
+\section{Rotation of spherical harmonics} \label{sec:sh} Given a spherical
+function and its spherical harmonic coefficients $c_j$ (where $j$ is a single
+index over the spherical harmonics), the spherical harmonic coefficients of the
+rotated function $c'_i$ can be computed with the linear transformation
 \begin{align}
   c_i' = \sum_j M_{ij}c_j, 
 \end{align}
