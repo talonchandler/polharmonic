@@ -119,3 +119,24 @@ def myfft(image, pad=1000):
         ))
     xF = np.fft.fftshift(np.fft.fftfreq(2*pad + N, 4/N))
     return xF, np.abs(F)
+
+# Convert between spherical harmonic indices (l, m) and matrix index (j)
+def i2lm(i):
+    if i < 0:
+        return None
+    l = 0
+    while True:
+        x = l*(l+1)
+        if abs(i - x) <= l:
+            return l, int(i-x)
+        else:
+            l = l+1
+
+def lm2i(l, m):
+    if abs(m) > l:
+        return None
+    else:
+        return int(l*(l+1) + m)
+
+def maxl2maxi(l):
+    return int(l*(l+2))

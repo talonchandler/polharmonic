@@ -27,6 +27,7 @@ print("Working...")
 theta = Symbol('theta', real=True)
 phi = Symbol('phi', real=True)
 
+import pdb; pdb.set_trace() 
 # Calculate expansions
 b = 1
 for m1 in range(-b, b+1):
