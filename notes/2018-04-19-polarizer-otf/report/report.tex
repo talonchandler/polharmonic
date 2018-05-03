@@ -180,11 +180,22 @@ expression in terms of spherical harmonics as
 \begin{align}
   h^{\mh{z}}_{\text{exc}}(\so{}; \mh{p}) \propto\, &[2\bar{A} + (4/3)\bar{B}]\bar{D}y_0^0(\so{}) - \frac{4\sqrt{5}}{15}\bar{B}\bar{D}y_2^0(\so{}) + \nonumber\\ &\frac{4\bar{C}\bar{D}}{\sqrt{15}}\left\{[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2]y_2^2(\so{}) - 2(\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})y_2^{-2}(\so{})\right\}. \label{eq:genpsf}
 \end{align}
+We can simplify this result further by redefining the constants and normalizing
+\begin{align}
+  h^{\mh{z}}_{\text{exc}}(\so{}; \mh{p}) &= y_0^0(\so{}) - \frac{1}{\sqrt{5}}\tilde{A}y_2^0(\so{}) + \sqrt{\frac{3}{5}}\tilde{B}\left\{[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2]y_2^2(\so{}) - 2(\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})y_2^{-2}(\so{})\right\}, \label{eq:genpsf}
+\end{align}
+where
+\begin{subequations}
+\begin{align}
+  \tilde{A} &\equiv \cos^2(\alpha/2)\cos(\alpha),\\
+  \tilde{B} &\equiv \frac{1}{12}(\cos^2\alpha + 4\cos\alpha + 7).
+\end{align}\label{eq:coefficients}%
+\end{subequations}
 
 The light-sheet excitation point response function is given by Eq.
-\ref{eq:genpsf} in the limit of small NA which gives
+\ref{eq:genpsf} in the limit of small NA ($\tilde{A} \rightarrow 1$ and $\tilde{B} \rightarrow 1$) which gives
 \begin{align}
-  h^{\mh{z}, \text{ls}}_{\text{exc}}(\so{}; \mh{p}) \equiv \lim_{\alpha \rightarrow 0} h^{\mh{z}}_{\text{exc}}(\so{}) \propto y_0^0(\so{}) + \frac{1}{\sqrt{5}}y_2^0(\so{}) + \sqrt{\frac{3}{5}}\left\{[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2]y_2^2(\so{}) - 2(\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})y_2^{-2}(\so{})\right\}.
+  h^{\mh{z}, \text{ls}}_{\text{exc}}(\so{}; \mh{p}) \equiv \lim_{\alpha \rightarrow 0} h^{\mh{z}}_{\text{exc}}(\so{}) = y_0^0(\so{}) - \frac{1}{\sqrt{5}}y_2^0(\so{}) + \sqrt{\frac{3}{5}}\left\{[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2]y_2^2(\so{}) - 2(\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})y_2^{-2}(\so{})\right\}.
 \end{align}
 To find the excitation point response function for illumination along the
 $\mh{x}$ axis we need to change every $\mh{x}$ and $\mh{y}$ to $\mh{z}$ and
@@ -193,7 +204,7 @@ but we show the relevant transformation matrix in Appendix \ref{sec:sh}. The
 excitation point response function for illumination along the $\mh{x}$ axis is
 given by
 \begin{align}
-  h^{\mh{x}, \text{ls}}_{\text{exc}}(\so{}; \mh{p}) \propto y_0^0(\so{}) + \frac{1}{\sqrt{5}}y_2^0(\so{}) + \sqrt{\frac{3}{5}}\left\{[(\mh{p}\cdot\mh{z})^2 - (\mh{p}\cdot\mh{y})^2]\left[\frac{\sqrt{3}}{2}y_2^0(\so{}) + \frac{1}{2}y_2^2(\so{})\right] + 2(\mh{p}\cdot\mh{z})(\mh{p}\cdot\mh{y})y_2^{-1}(\so{})\right\}.
+  h^{\mh{x}, \text{ls}}_{\text{exc}}(\so{}; \mh{p}) = y_0^0(\so{}) - \frac{1}{\sqrt{5}}y_2^0(\so{}) + \sqrt{\frac{3}{5}}\left\{[(\mh{p}\cdot\mh{z})^2 - (\mh{p}\cdot\mh{y})^2]\left[\frac{\sqrt{3}}{2}y_2^0(\so{}) + \frac{1}{2}y_2^2(\so{})\right] + 2(\mh{p}\cdot\mh{z})(\mh{p}\cdot\mh{y})y_2^{-1}(\so{})\right\}.
 \end{align}
 
 To find the excitation transfer functions we need to calculate
@@ -204,9 +215,9 @@ This calculation is straightforward now that we've expressed the excitation
 point response functions in terms of spherical harmonics. The excitation
 transfer functions are
 \begin{align}
-  H^{m,\mh{z}}_{l,\text{exc}}(\mh{p}) \propto\, &[2\bar{A} + (4/3)\bar{B}]\bar{D}\delta(l, m) - \frac{4\sqrt{5}}{15}\bar{B}\bar{D}\delta(l-2, m)(\so{}) + \nonumber\\ &\frac{4\bar{C}\bar{D}}{\sqrt{15}}\left\{[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2]\delta(l-2, m-2) - 2(\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})\delta(l-2, m+2)\right\},\\
-  H^{m,\mh{z}, \text{ls}}_{l,\text{exc}}(\mh{p}) \propto\, &\delta(l,m) + \frac{1}{\sqrt{5}}\delta(l-2, m) + \sqrt{\frac{3}{5}}\left\{[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2]\delta(l-2,m-2) - 2(\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})\delta(l-2, m+2)\right\},\\
-  H^{m,\mh{x}, \text{ls}}_{l, \text{exc}}(\mh{p}) \propto\, &\delta(l,m) + \frac{1}{\sqrt{5}}\delta(l-2, m) + \sqrt{\frac{3}{5}}\Bigg\{[(\mh{p}\cdot\mh{z})^2 - (\mh{p}\cdot\mh{y})^2]\left[\frac{\sqrt{3}}{2}\delta(l-2,m) + \frac{1}{2}\delta(l-2, m-2)\right]\nonumber\\ &\hspace{20em}+ 2(\mh{p}\cdot\mh{z})(\mh{p}\cdot\mh{y})\delta(l-2, m+1)\Bigg\}.     \end{align}
+  H^{m,\mh{z}}_{l,\text{exc}}(\mh{p}) &= \delta(l, m) - \frac{1}{\sqrt{5}}\tilde{A}\delta(l-2, m)(\so{}) + \sqrt{\frac{3}{5}}\left\{[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2]\delta(l-2, m-2) - 2(\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})\delta(l-2, m+2)\right\},\\
+  H^{m,\mh{z}, \text{ls}}_{l,\text{exc}}(\mh{p}) &= \delta(l,m) - \frac{1}{\sqrt{5}}\delta(l-2, m) + \sqrt{\frac{3}{5}}\left\{[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2]\delta(l-2,m-2) - 2(\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})\delta(l-2, m+2)\right\},\\
+  H^{m,\mh{x}, \text{ls}}_{l, \text{exc}}(\mh{p}) &= \delta(l,m) - \frac{1}{\sqrt{5}}\delta(l-2, m) + \sqrt{\frac{3}{5}}\Bigg\{[(\mh{p}\cdot\mh{z})^2 - (\mh{p}\cdot\mh{y})^2]\left[\frac{\sqrt{3}}{2}\delta(l-2,m) + \frac{1}{2}\delta(l-2, m-2)\right]\nonumber\\ &\hspace{20em}+ 2(\mh{p}\cdot\mh{z})(\mh{p}\cdot\mh{y})\delta(l-2, m+1)\Bigg\}.     \end{align}
 
 \section{Polarized detection}
 In the previous note set we found the spatio-angular detection point spread
