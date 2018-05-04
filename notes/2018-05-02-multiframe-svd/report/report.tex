@@ -1,0 +1,338 @@
+
+\documentclass[11pt]{article}
+
+%%%%%%%%%%%%
+% Packages %
+%%%%%%%%%%%%
+\usepackage[dvipsnames]{xcolor}
+\hyphenpenalty=10000
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+
+\usepackage{tocloft}
+\renewcommand\cftsecleader{\cftdotfill{\cftdotsep}}
+\def\undertilde#1{\mathord{\vtop{\ialign{##\crcr
+$\hfil\displaystyle{#1}\hfil$\crcr\noalign{\kern1.5pt\nointerlineskip}
+$\hfil\tilde{}\hfil$\crcr\noalign{\kern1.5pt}}}}}
+\usepackage{cleveref}
+\usepackage{xcolor}
+\usepackage[colorlinks = true,
+            linkcolor = black,
+            urlcolor  = blue,
+            citecolor = black,
+            anchorcolor = black]{hyperref}
+\usepackage{epstopdf}
+\usepackage{braket}
+\usepackage{upgreek}
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{subcaption}
+\usepackage{amssymb,latexsym,amsmath,gensymb}
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{pdflscape}
+\usepackage{url}
+\usepackage{array}
+\newcolumntype{C}{>{$\displaystyle} c <{$}}
+\usepackage{tikz, calc}
+\usetikzlibrary{shapes.geometric, arrows, calc}
+\tikzstyle{norm} = [rectangle, rounded corners, minimum width=2cm, minimum height=1cm,text centered, draw=black]
+\tikzstyle{arrow} = [thick, ->, >=stealth]
+
+\newcommand{\argmin}{\arg\!\min}
+\newcommand{\me}{\mathrm{e}}
+\providecommand{\e}[1]{\ensuremath{\times 10^{#1}}} 
+\providecommand{\mb}[1]{\mathbf{#1}}
+\providecommand{\mf}[1]{\mathbf{#1}}
+\providecommand{\ro}[1]{\mathbf{\mathbf{r}}_o}
+\providecommand{\so}[1]{\mathbf{\hat{s}}_o}
+\providecommand{\rb}[1]{\mathbf{r}_b}
+\providecommand{\rbm}[1]{r_b^{\text{m}}}
+\providecommand{\rd}[1]{\mathbf{r}_d}
+\providecommand{\mh}[1]{\mathbf{\hat{#1}}}
+\providecommand{\mbb}[1]{\mathbb{#1}}
+\providecommand{\bs}[1]{\boldsymbol{#1}} 
+\providecommand{\intinf}{\int_{-\infty}^{\infty}}
+\providecommand{\fig}[4]{
+  % filename, width, caption, label
+\begin{figure}[h]
+ \captionsetup{width=1.0\linewidth}
+ \centering
+ \includegraphics[width = #2\textwidth]{#1}
+ \caption{#3}
+ \label{fig:#4}
+\end{figure}
+}
+
+\makeatletter
+\renewcommand*\env@matrix[1][*\c@MaxMatrixCols c]{%
+  \hskip -\arraycolsep
+  \let\@ifnextchar\new@ifnextchar
+  \array{#1}}
+\makeatother
+
+\newcommand{\tensor}[1]{\overset{\text{\tiny$\leftrightarrow$}}{\mb{#1}}}
+\newcommand{\tunderbrace}[2]{\underbrace{#1}_{\textstyle#2}}
+\providecommand{\figs}[7]{
+  % filename1, filename2, caption1, caption2, label1, label2, shift
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{.45\textwidth}
+  \centering
+  \includegraphics[width=1.0\linewidth]{#1}
+  \captionsetup{justification=justified, singlelinecheck=true}
+  \caption{#3}
+  \label{fig:#5}
+\end{minipage}
+\hspace{2em}
+\begin{minipage}[b]{.45\textwidth}
+  \centering
+  \includegraphics[width=1.0\linewidth]{#2}
+  \vspace{#7em}
+  \captionsetup{justification=justified}
+  \caption{#4}
+  \label{fig:#6}
+\end{minipage}
+\end{figure}
+}
+\makeatletter
+
+\providecommand{\code}[1]{
+\begin{center}
+\lstinputlisting{#1}
+\end{center}
+}
+
+\newcommand{\crefrangeconjunction}{--}
+%%%%%%%%%%%
+% Spacing %
+%%%%%%%%%%%
+% Margins
+\usepackage[
+top    = 1.5cm,
+bottom = 1.5cm,
+left   = 1.5cm,
+right  = 1.5cm]{geometry}
+
+% Indents, paragraph space
+%\usepackage{parskip}
+\setlength{\parskip}{1.5ex}
+
+% Section spacing
+\usepackage{titlesec}
+\titlespacing*{\title}
+{0pt}{0ex}{0ex}
+\titlespacing*{\section}
+{0pt}{0ex}{0ex}
+\titlespacing*{\subsection}
+{0pt}{0ex}{0ex}
+\titlespacing*{\subsubsection}
+{0pt}{0ex}{0ex}
+
+% Line spacing
+\linespread{1.1}
+
+%%%%%%%%%%%%
+% Document %
+%%%%%%%%%%%%
+\begin{document}
+\title{\vspace{-2.5em} Singular value decomposition of multiframe\\ polarized
+  fluorescence microscopes\vspace{-1em}} \author{Talon Chandler, Min Guo, Hari
+  Shroff, Rudolf Oldenbourg, Patrick La Rivi\`ere}
+\date{\vspace{-1em}\today\vspace{-1em}}
+\maketitle
+\section{Introduction}
+In these notes we will develop the continuous models for several multiframe
+polarized fluorescence microscopes. For each design we will calculate the
+spatio-angular point spread function, optical transfer function, and singular
+system consisting of the singular values, object-space singular functions, and
+data-space singular functions.
+
+All of the microscopes we will consider are imaging fields of oriented
+fluorophores. To a good approximation any field of oriented fluorophores can be
+represented by a member of the set
+$\mbb{U} = \mbb{L}_2(\mbb{R}^3 \times \mbb{S}^2)$---square-integrable functions
+that assign a scalar value to each position and orientation.
+
+We will be considering multiframe microscopes that capture multiple images of
+the same object (we assume that the object is static over the imaging time). The
+data for the $i$th frame can be represented by a member of
+$\mbb{V}_i = \mbb{L}_2(\mbb{R}^{N})$---square-integrable functions that assign a
+scalar value to each point in a $2$-dimensional Euclidean space. If the
+microscope collects $N$ frames, then all of the data can be represented by a
+member of the larger set $\mbb{V} = \mbb{L}_2(\mbb{R}^{2N})$---square-integrable
+functions that assign a scalar value to each point in a $2N$-dimensional
+Euclidean space. We can say that the complete data space $\mbb{V}$ is built by
+taking the \textit{orthogonal direct sum} of the data space for each frame
+$\mbb{V}_i$
+\begin{align}
+  \mbb{V} = \bigoplus_{i=1}^N \mbb{V}_i.
+\end{align}
+Notice that we are assuming that data space is continuous---we
+are ignoring the effects of finite pixels and a finite field-of-view.
+
+We can model any linear relationship between object space and data space using
+an integral transform
+\begin{align}
+  g(\mathfrak{r}_d) = \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^3}d\ro{}\, h(\mathfrak{r}_d; \ro{}, \so{})f(\ro{}, \so{}), \label{eq:full}
+\end{align}
+where $g(\mathfrak{r}_d) \in \mbb{U}$ is the data, $f(\ro{}, \so{}) \in \mbb{V}$
+is the object, and $h(\mathfrak{r}_d; \ro{}, \so{}) \in \mbb{U} \times \mbb{V}$ is
+the point response function of the imaging system. Notice that $\mathfrak{r}_d$
+is a 2$N$-dimensional coordinate where the first two dimensions are the
+coordinates of the first image, the next two dimensions are the coordinates of
+the second image, and so on. Usually it will be more convenient for us to
+rewrite Eq.~\ref{eq:full} as the sum of $N$ terms
+\begin{align}
+    g(\mathfrak{r}_d) = \sum_{i=1}^N \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^3}d\ro{}\, h_i(\rd{}; \ro{}, \so{})f(\ro{}, \so{}), \label{eq:sys2}
+\end{align}
+where $\rd{}$ is a 2-dimensional coordinate for each frame. We can also rewrite
+the forward model as $N$ separate equations
+\begin{align}
+    g_i(\rd{}) = \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^3}d\ro{}\, h_i(\rd{}; \ro{}, \so{})f(\ro{}, \so{}),\qquad i=1, 2,\ldots,N, \label{eq:system}
+\end{align}
+but this is potentially less convenient than Eqs. \ref{eq:full} and
+\ref{eq:sys2} because it hides the fact there is a single integral transform
+that relates object space to data space.
+
+In these notes we'll only be considering shift-invariant microscopes, so we can
+simplify the model to
+\begin{align}
+    g(\mathfrak{r}_d) = \sum_{i=1}^N \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^3}d\ro{}\, h_i(\rd{} - \ro{}, \so{})f(\ro{}, \so{}). \label{eq:sys3}
+\end{align}
+We can rewrite the complete forward model in Eq. \ref{eq:sys3}) more compactly
+using operator notation
+\begin{align}
+  g(\mathfrak{r}_d) = [\mathcal{H}\mathbf{f}](\mathfrak{r}_d).
+\end{align}
+In these notes we will ignore magnification---in the previous notes we showed
+that we can make a change of variables that puts a system with magnification in
+the form of a system without magnification. In other words, we can drop the
+primes that indicated magnified quantities in previous note sets. We will also
+restrict ourselves to the paraxial approximation and drop the $(p)$
+superscripts.
+
+\section{Polarized epi-illumination with unpolarized epi-detection}
+We will start by restricting our analysis of epi-illumination microscopes to
+in-focus objects. This means that our object space is
+$\mbb{L}_2(\mbb{R}^2 \times \mbb{S}^2)$.
+
+\subsection{Point response function}
+In the previous notes we showed that the excitation point response function for
+polarized epi-illumination is given by
+\begin{align}
+  h^{\mh{z}}_{\text{exc}}(\so{}; \mh{p}) &= y_0^0(\so{}) - \frac{1}{\sqrt{5}}\tilde{A}y_2^0(\so{}) + \sqrt{\frac{3}{5}}\tilde{B}\left\{[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2]y_2^2(\so{}) - 2(\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y})y_2^{-2}(\so{})\right\}, \label{eq:genpsf}
+\end{align}
+where
+\begin{subequations}
+\begin{align}
+  \tilde{A} &\equiv \cos^2(\alpha/2)\cos(\alpha),\\
+  \tilde{B} &\equiv \frac{1}{12}(\cos^2\alpha + 4\cos\alpha + 7),
+\end{align}\label{eq:coefficients}%
+\end{subequations}
+and $\alpha \equiv \arcsin(\text{NA}/n_o)$.
+
+We also showed that the point response function for unpolarized epi-detection is
+given by
+\begin{align}
+  h_{\text{det}}(\ro{}, \so{}) &= [{a}^2(r_o) + 2b^2(r_o)]y_0^0(\so{}) + \frac{1}{\sqrt{5}}\left[- a^2(r_o) + 4b^2(r_o)\right]y_2^0(\so{}),
+\end{align}
+where
+\begin{align}
+  a(r_o) = \frac{J_1(2\pi \nu_or_o)}{\pi \nu_or_o}, 
+  &\hspace{2em}
+    b(r_o) = \frac{\text{NA}}{n_o}\left[\frac{J_2(2\pi \nu_or_o)}{\pi \nu_or_o}\right],  \label{eq:abparadef}
+  \intertext{and}
+  \nu_o \equiv \frac{\text{NA}}{\lambda},&\hspace{2em}
+  \text{NA} = n_o\sin\alpha.
+\end{align}
+The excitation and detection processes are incoherent, so to find the complete
+point response function we can multiply the excitation and detection point response
+functions which gives
+\begin{align}
+  h(\ro{}, \so{}; \mh{p}) = h^{\mh{z}}_{\text{exc}}(\so{}; \mh{p})h_{\text{det}}(\ro{}, \so{}) = \frac{1}{\tilde{N}}\sum_{l=0}^{\infty}\sum_{m=-l}^l h_l^m(\ro{}; \mh{p})y_l^m(\so{}), 
+\end{align}
+where $\tilde{N} = \frac{\tilde{A}}{10} + \frac{1}{2}$ is a normalization constant
+and the terms in the series are given by
+\begin{align}
+  h_0^0(r_o) &= \left[\frac{\tilde{A}}{10} + \frac{1}{2}\right]a^2(r_o) + \left[-\frac{2\tilde{A}}{5} + 1\right]b^2(r_o),\\
+  h_2^{-2}(r_o; \mh{p}) &= \left[\frac{9\sqrt{15}}{70}a^2(r_o) + \frac{3\sqrt{15}}{35}b^2(r_o)\right]\tilde{B}[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2],\\
+  h_2^0(r_o) &= \left[-\frac{\sqrt{5}\tilde{A}}{14} + \frac{\sqrt{5}}{10}\right]a^2(r_o) + \left[-\frac{11\sqrt{5}\tilde{A}}{35} + \frac{2}{\sqrt{5}}\right]b^2(r_o),\\
+  h_2^2(r_o; \mh{p}) &= -2\left[\frac{9\sqrt{15}}{70}a^2(r_o) + \frac{3\sqrt{15}}{35}b^2(r_o)\right]\tilde{B}(\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y}),\\
+  h_4^{-2}(r_o; \mh{p}) &= \left[-\frac{3\sqrt{5}}{70}a^2(r_o) + \frac{6\sqrt{5}}{35}b^2(r_o)\right]\tilde{B}[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2],\\
+  h_4^0(r_o) &= \frac{3\tilde{A}}{35}[a^2(r_o) - 4b^2(r_o)],\\
+  h_4^2(r_o; \mh{p}) &= -2\left[-\frac{3\sqrt{5}}{70}a^2(r_o) + \frac{6\sqrt{5}}{35}b^2(r_o)\right]\tilde{B}(\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y}),
+\end{align}
+and all other $h_l^m$ terms in the series are zero. Finally, the complete
+forward model for this class of microscope is given by
+\begin{align}
+    g(\mathfrak{r}_d) = \sum_{i=1}^N\int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^3}d\ro{}\, h(\rd{} - \ro{}, \so{}; \mh{p}_i)f(\ro{}, \so{}),\qquad i=1, 2,\ldots,N. \label{eq:fwdpolillum}
+\end{align}
+Notice that we have used a single function $h(\rd{} - \ro{}, \so{}; \mh{p}_i)$
+to describe the complete imaging system, and we have shifted the index $i$ to
+the illumination polarization. A typical choice of frames is given by $N=4$ and
+\begin{align}
+  \mh{p}_1 = \mh{x},\hspace{2em}
+  \mh{p}_2 = \frac{1}{\sqrt{2}}(\mh{x} + \mh{y}),\hspace{2em}
+  \mh{p}_3 = \mh{y},\hspace{2em}
+  \mh{p}_4 = \frac{1}{\sqrt{2}}(\mh{x} - \mh{y}). 
+\end{align}
+\indent The point response function of the microscope now contains seven terms
+in the $l=0$, 2, and 4 bands. Each term is radially symmetric which means that
+we expect a radially symmetric point spread function for any angular
+distribution of fluorophores. Notice that the $h_l^0$ terms do not depend on the
+polarizer orientation, while the $h_l^{-2}$ and $h_l^{2}$ do depend on the
+polarizer orientation. This is because the fluorophore distributions
+corresponding to the $h_l^0$ terms are rotationally symmetric about the optic
+axis, while the other terms are not rotationally symmetric.
+
+\subsection{Optical transfer function}
+The optical transfer function for this microscope is given by
+\begin{align}
+  H_l^m(\nu; \mh{p}) = \frac{1}{\tilde{M}}\sum_{l'=0}^{\infty}\sum_{m'=-l'}^{l'} H_{l'}^{m'}(\nu; \mh{p})\delta(l - l', m - m'),  
+\end{align}
+where
+$\tilde{M} = \left[\frac{\tilde{A}}{10} + \frac{1}{2}\right] + \left(\frac{\text{NA}}{n_o}\right)\left[-\frac{2\tilde{A}}{10} + \frac{1}{2}\right]$ is a
+normalization constant, and
+\begin{align}
+  H_0^0(\nu) &= \left[\frac{\tilde{A}}{10} + \frac{1}{2}\right]A(\nu) + \left[-\frac{2\tilde{A}}{5} + 1\right]B(\nu),\\
+  H_2^{-2}(\nu; \mh{p}) &= \left[\frac{9\sqrt{15}}{70}A(\nu) + \frac{3\sqrt{15}}{35}B(\nu)\right]\tilde{B}[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2],\\
+  H_2^0(\nu) &= \left[-\frac{\sqrt{5}\tilde{A}}{14} + \frac{\sqrt{5}}{10}\right]A(\nu) + \left[-\frac{11\sqrt{5}\tilde{A}}{35} + \frac{2}{\sqrt{5}}\right]B(\nu),\\
+  H_2^2(\nu; \mh{p}) &= -2\left[\frac{9\sqrt{15}}{70}A(\nu) + \frac{3\sqrt{15}}{35}B(\nu)\right]\tilde{B}(\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y}),\\
+  H_4^{-2}(\nu; \mh{p}) &= \left[-\frac{3\sqrt{5}}{70}A(\nu) + \frac{6\sqrt{5}}{35}B(\nu)\right]\tilde{B}[(\mh{p}\cdot\mh{x})^2 - (\mh{p}\cdot\mh{y})^2],\\
+  H_4^0(\nu) &= \frac{3\tilde{A}}{35}[A(\nu) - 4B(\nu)],\\
+  H_4^2(\nu; \mh{p}) &= -2\left[-\frac{3\sqrt{5}}{70}A(\nu) + \frac{6\sqrt{5}}{35}B(\nu)\right]\tilde{B}(\mh{p}\cdot\mh{x})(\mh{p}\cdot\mh{y}),
+\end{align}
+all other $H_l^m$ terms in the series are zero, and  
+\begin{align}
+  A(\nu) &= \frac{2}{\pi}\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
+  B(\nu) &= \frac{1}{\pi}\left(\frac{\text{NA}}{n_o}\right)^2\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \left[3 - 2\left(\frac{\nu}{2\nu_o}\right)^2\right]\frac{\nu}{2\nu_o} \sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right).                 
+\end{align}
+
+\subsection{Singular system}
+% To find the singular system of the microscope we will carry out four steps.
+% First, we will calculate the kernel of the microscope given by
+% \begin{align}
+%   k(\ro{} - \ro{}', \so{}, \so{}') = \sum_{i=0}^N\int_{\mathbb{R}^2}d\rd{}\, h(\rd{} - \ro{}, \so{})h(\rd{} - \ro{}', \so{}').
+% \end{align}
+% Second, we will use the kernel to set up the eigenvalue problem
+% \begin{align}
+%   [\mathcal{H}^{\dagger}\mathcal{H}]\mb{f}](\ro{}, \so{}) = \int_{\mbb{S}^2}d\so{}'\int_{\mbb{R}^2}d\ro{}'\, k(\ro{} - \ro{}', \so{}, \so{}')f(\ro{}', \so{}). \label{eq:eigeq}
+% \end{align}
+% Third, we will postulate the form of the eigenfunctions as a single spatial harmonic multiplied by a linear combination of spherical harmonics
+% \begin{align}
+%   u_{\bs{\rho},n}(\ro{}, \so{}) = \sum_{l=0}^\infty\sum_{m=-l}^l c_n^{lm}(\bs{\rho})y_l^m(\so{})\, \me{}^{-i 2\pi \ro{}\cdot\bs{\rho}}. \label{eq:eigfunc}
+% \end{align}
+% We will plug Eq. \ref{eq:eigfunc} into Eq. \ref{eq:eigeq} and solve for the
+% singular values and object space singular vectors of the imaging system. Finally,
+% we will find the data space singular vectors by calculating
+% \begin{align}
+%     v_{\bs{\rho},n,i}(\rd{}) = \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^3}d\ro{}\, h_i(\rd{}; \ro{}, \so{})u_{\bs{\rho},n}(\ro{}, \so{}),\qquad i=1, 2,\ldots,N, \label{eq:system}
+% \end{align}
+
+\bibliography{report}{}
+\bibliographystyle{unsrt}
+
+\end{document}
