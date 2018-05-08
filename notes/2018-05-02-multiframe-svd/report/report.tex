@@ -158,54 +158,35 @@ that assign a scalar value to each position and orientation.
 
 We will be considering multiframe microscopes that capture multiple images of
 the same object (we assume that the object is static over the imaging time). The
-data for the $i$th frame can be represented by a member of
-$\mbb{V}_i = \mbb{L}_2(\mbb{R}^{N})$---square-integrable functions that assign a
+data for the $n$th frame can be represented by a member of
+$\mbb{V}_n = \mbb{L}_2(\mbb{R}^{2})$---square-integrable functions that assign a
 scalar value to each point in a $2$-dimensional Euclidean space. If the
 microscope collects $N$ frames, then all of the data can be represented by a
 member of the larger set $\mbb{V} = \mbb{L}_2(\mbb{R}^{2N})$---square-integrable
 functions that assign a scalar value to each point in a $2N$-dimensional
 Euclidean space. We can say that the complete data space $\mbb{V}$ is built by
 taking the \textit{orthogonal direct sum} of the data space for each frame
-$\mbb{V}_i$
+$\mbb{V}_n$
 \begin{align}
-  \mbb{V} = \bigoplus_{i=1}^N \mbb{V}_i.
+  \mbb{V} = \bigoplus_{n=1}^N \mbb{V}_n.
 \end{align}
-Notice that we are assuming that data space is continuous---we
-are ignoring the effects of finite pixels and a finite field-of-view.
+Notice that we are assuming that data space is continuous---we are ignoring the
+effects of finite pixels and a finite field-of-view.
 
 We can model any linear relationship between object space and data space using
 an integral transform
 \begin{align}
-  g(\mathfrak{r}_d) = \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^3}d\ro{}\, h(\mathfrak{r}_d; \ro{}, \so{})f(\ro{}, \so{}), \label{eq:full}
+  g_n(\rd{}) = [\mathcal{H}f]_n(\rd{}) = \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^3}d\ro{}\, h_n(\rd{}; \ro{}, \so{})f(\ro{}, \so{}),\qquad  n=1, 2,\ldots,N, \label{eq:full}
 \end{align}
-where $g(\mathfrak{r}_d) \in \mbb{U}$ is the data, $f(\ro{}, \so{}) \in \mbb{V}$
-is the object, and $h(\mathfrak{r}_d; \ro{}, \so{}) \in \mbb{U} \times \mbb{V}$ is
-the point response function of the imaging system. Notice that $\mathfrak{r}_d$
-is a 2$N$-dimensional coordinate where the first two dimensions are the
-coordinates of the first image, the next two dimensions are the coordinates of
-the second image, and so on. Usually it will be more convenient for us to
-rewrite Eq.~\ref{eq:full} as the sum of $N$ terms
-\begin{align}
-    g(\mathfrak{r}_d) = \sum_{i=1}^N \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^3}d\ro{}\, h_i(\rd{}; \ro{}, \so{})f(\ro{}, \so{}), \label{eq:sys2}
-\end{align}
-where $\rd{}$ is a 2-dimensional coordinate for each frame. We can also rewrite
-the forward model as $N$ separate equations
-\begin{align}
-    g_i(\rd{}) = \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^3}d\ro{}\, h_i(\rd{}; \ro{}, \so{})f(\ro{}, \so{}),\qquad i=1, 2,\ldots,N, \label{eq:system}
-\end{align}
-but this is potentially less convenient than Eqs. \ref{eq:full} and
-\ref{eq:sys2} because it hides the fact there is a single integral transform
-that relates object space to data space.
+where $g_n(\rd{}) \in \mbb{V}_n$ is the data for the $n$th frame,
+$f(\ro{}, \so{}) \in \mbb{U}$ is the object, and
+$h_n(\rd{}; \ro{}, \so{}) \in \mbb{U} \times \mbb{V}_n$ is the point response
+function of the imaging system for the $n$th frame.
 
 In these notes we'll only be considering shift-invariant microscopes, so we can
 simplify the model to
 \begin{align}
-    g(\mathfrak{r}_d) = \sum_{i=1}^N \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^3}d\ro{}\, h_i(\rd{} - \ro{}, \so{})f(\ro{}, \so{}). \label{eq:sys3}
-\end{align}
-We can rewrite the complete forward model in Eq. \ref{eq:sys3}) more compactly
-using operator notation
-\begin{align}
-  g(\mathfrak{r}_d) = [\mathcal{H}\mathbf{f}](\mathfrak{r}_d).
+  g_n(\rd{}) = [\mathcal{H}f]_n(\rd{}) = \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^3}d\ro{}\, h_n(\rd{} - \ro{}, \so{})f(\ro{}, \so{}),\qquad  n=1, 2,\ldots,N. \label{eq:full}
 \end{align}
 In these notes we will ignore magnification---in the previous notes we showed
 that we can make a change of variables that puts a system with magnification in
@@ -213,6 +194,119 @@ the form of a system without magnification. In other words, we can drop the
 primes that indicated magnified quantities in previous note sets. We will also
 restrict ourselves to the paraxial approximation and drop the $(p)$
 superscripts.
+
+\section{Calculating the singular value decomposition}
+In this section we will lay out the steps to calculate the singular value
+decomposition of a multiframe polarized fluorescence microscope. We will follow
+Section 2A of \cite{burvall06} closely and find the data-space singular
+functions first. In Patrick's notes we found the object-space singular functions
+first, but both approaches will give identical results and the eigenvalue
+problem is smaller for the data-space singular functions.
+
+The forward operator for the system is given by
+\begin{align}
+    [\mathcal{H}f]_n(\rd{}) = \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^3}d\ro{}\, h_n(\rd{} - \ro{}, \so{})f(\ro{}, \so{}),\qquad  n=1, 2,\ldots,N, \label{eq:fwd}
+\end{align}
+and the adjoint operator for the system is given by
+\begin{align}
+    [\mathcal{H}^{\dagger}\mb{g}](\ro{}, \so{}) = \sum_{j=1}^N\int_{\mbb{R}^2}d\mb{r}_{d}\, h_n(\rd{} - \ro{}, \so{})g(\rd{}).\label{eq:adj}
+\end{align}
+We will also need the data-space to data-space operator
+\begin{align}
+  [\mathcal{H}\mathcal{H}^{\dagger}\mb{g}]_n(\rd{}) = \sum_{n'=1}^N\int_{\mbb{R}^2}d\rd{}'\, k_{nn'}(\rd{} - \rd{}')g_{n'}(\rd{}'), \label{eq:backfwd}
+\end{align}
+where 
+\begin{align}
+  k_{nn'}(\rd{} - \rd{}') &= \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^2}d\ro{}\, h_n(\rd{} - \ro{}, \so{})h_{n'}(\rd{} - \ro{}, \so{}). \label{eq:kern}
+\end{align}
+To find the data-space singular functions and singular values, we need to
+solve the following eigenequation
+\begin{align}
+  [\mathcal{H}\mathcal{H}^{\dagger}\mb{v}_{\bs{\rho}, j}]_n(\rd{}) = \mu_{\bs{\rho}, n} \mb{v}_{\bs{\rho}, j}(\rd{}). \label{eq:eigval}
+\end{align}
+where $\mb{v}_{\bs{\rho}, j}(\rd{})$ are the data-space eigenfunctions and
+$\mu_{\bs{\rho}, j}$ are the eigenvalues. Each $\mb{v}_{\bs{\rho}, j}(\rd{})$ is
+an $N\times 1$ vector where each element is a function of $\rd{}$. The eigenfunctions $\mb{v}_{\bs{\rho}, j}(\rd{})$ are indexed by a
+continuous two-dimensional vector index $\bs{\rho}$ associated with the
+transverse directions and a discrete index $j$ associated with the angular
+directions. Since the imaging system is linear shift invariant, the lateral part
+of the data-space eigenfunctions will be complex exponentials. We still need to
+solve for the angular part, so the data-space eigenfunctions will be in the form
+\begin{align}
+  \mb{v}_{\bs{\rho},j}(\rd{}) = \mb{V}_j(\bs{\rho})\me{}^{i 2\pi \bs{\rho}\cdot\rd{}}. \label{eq:eigfunc}
+\end{align}
+Inserting Eqs. \ref{eq:eigfunc} and \ref{eq:kern} into \ref{eq:backfwd} yields
+\begin{align}
+  [\mathcal{H}\mathcal{H}^{\dagger}\mb{v}_{\bs{\rho},j}]_n(\rd{}) = \me{}^{i 2\pi \ro{}\cdot\bs{\rho}} \sum_{n'=1}^N K_{nn'}(\bs{\rho})[\mb{V}_j(\bs{\rho})]_{n'}, \label{eq:exp}
+\end{align}
+where
+\begin{align}
+  K_{nn'}(\bs{\rho}) = \int_{\mbb{R}^2}d\rd{}'\, k_{nn'}(\rd{}')\me{}^{-i 2\pi \bs{\rho}\cdot\rd{}'}. \label{eq:kft}
+\end{align}
+Comparing Eqs. \ref{eq:eigfunc} and \ref{eq:exp} yield the eigenvalue problem
+\begin{align}
+  \mathsf{K}(\bs{\rho})\mb{V}_j(\bs{\rho}) = \mu_{\bs{\rho}, j}\mb{V}_j(\bs{\rho}), \label{eq:evp}
+\end{align}
+where $\mathsf{K}(\bs{\rho})$ is an $N\times N$ matrix containing the elements
+$K_{nn'}(\bs{\rho})$. To simplify the calculation of the elements
+$K_{nn'}(\bs{\rho})$ we notice that we need to take the Fourier transform (Eq.
+\ref{eq:kft}) of the autocorrelation of the spatio-angular point spread function
+(Eq. \ref{eq:kern}). We can use the autocorrelation theorem to relate the
+elements of $\mathsf{K}(\bs{\rho})$ to the spatio-angular optical transfer
+function as
+\begin{align}
+  K_{nn'}(\bs{\rho}) = \sum_{l=0}^{\infty}\sum_{m=-l}^l H_{l,n}^m(\bs{\rho}) H_{l,n'}^m(\bs{\rho}). \label{eq:ksimp}
+\end{align}
+Once we have solved the $N\times N$ eigenvalue problem in Eq. \ref{eq:evp} for
+each value of $\bs{\rho}$, we can build the complete data-space eigenfunctions using
+Eq. \ref{eq:eigfunc}. Finally, we can calculate the object-space eigenfunctions from
+the data-space eigenfunctions using
+\begin{align}
+  [\mathcal{H}^{\dagger}\mb{v}_{\bs{\rho},j}](\ro{}, \so{}) = \sqrt{\mu_{\bs{\rho}, j}}u_{\bs{\rho},j}(\ro{}, \so{}).
+\end{align}
+Plugging in Eq. \ref{eq:adj} and solving for $u_{\bs{\rho},j}(\ro{}, \so{})$ yields
+\begin{align}
+  u_{\bs{\rho},j}(\ro{}, \so{}) = \frac{1}{\sqrt{\mu_{\bs{\rho},j}}}\me{}^{i2\pi\bs{\rho}\cdot\ro{}}\sum_{n=1}^N[\mb{V}_j(\bs{\rho})]_n \sum_{l=0}^{\infty}\sum_{m=-l}^l H_{l,n}^m(\bs{\rho})y_l^m(\so{}).
+\end{align}
+As we'd expect from Patrick's notes, we can rewrite the object-space singular
+functions as a complex exponential multiplied by a linear combination of
+spherical harmonics
+\begin{align}
+u_{\bs{\rho},j}(\ro{}, \so{}) = U_j(\bs{\rho}, \so{}) \me{}^{i2\pi\bs{\rho}\cdot\ro{}},
+\end{align}
+where
+\begin{align}
+  U_{\bs{\rho},j}(\ro{}, \so{}) = \frac{1}{\sqrt{\mu_{\bs{\rho},j}}}\sum_{n=1}^N[\mb{V}_j(\bs{\rho})]_n \sum_{l=0}^{\infty}\sum_{m=-l}^l H_{l,n}^m(\bs{\rho})y_l^m(\so{}).
+\end{align}
+In summary, these are the steps to calculate the singular system for a
+polarized multiframe microscope.
+\begin{enumerate}
+\item Calculate the spatio-angular point spread function
+  $h_n(\rd{} - \ro{}, \so{})$ for $n = 1, 2, \ldots, N$.
+\item Calculate the spatio-angular optical transfer function
+  $H_{l,n}^{m}(\bs{\nu})$ for $n = 1, 2, \ldots, N$.
+\item Calculate the elements of the matrix $\mathsf{K}(\bs{\rho})$ using
+  $K_{nn'}(\bs{\rho}) = \sum_{l=0}^{\infty}\sum_{m=-l}^l H_{l,n}^m(\bs{\rho}) H_{l,n'}^m(\bs{\rho})$.
+\item Solve the eigenvalue problem
+  $\mathsf{K}(\bs{\rho})\mb{V}_j(\bs{\rho}) = \mu_{\bs{\rho}, j}\mb{V}_j(\bs{\rho})$ at each value of $\bs{\rho}$. Store the eigenvalues $\mu_{\bs{\rho}, j}$ and eigenvectors $\mb{V}_j(\bs{\rho})$. 
+\item Calculate the data-space singular functions using $\mb{v}_{\bs{\rho},j}(\rd{}) = \mb{V}_j(\bs{\rho})\me{}^{i 2\pi \bs{\rho}\cdot\rd{}}$.
+\item Calculate the object-space singular functions using
+  \begin{align}
+   u_{\bs{\rho},j}(\ro{}, \so{}) = \frac{1}{\sqrt{\mu_{\bs{\rho},j}}}\me{}^{i2\pi\bs{\rho}\cdot\ro{}}\sum_{n=1}^N[\mb{V}_j(\bs{\rho})]_n \sum_{l=0}^{\infty}\sum_{m=-l}^l H_{l,n}^m(\bs{\rho})y_l^m(\so{}). 
+  \end{align}
+\end{enumerate}
+
+Under the paraxial approximation we will be able to perform steps 1 and 2
+analytically. We could perform step 3 analytically, but I don't think this step
+will yield much insight so I will do it numerically. Step 4 can be performed
+analytically for $N \leq 4$ ($N > 4$ yields a quintic equation which has no
+solution in terms of radicals), but I will solve it numerically in all of the
+cases we'll consider. Steps 5 and 6 can be carried out numerically.
+
+Outside of the paraxial approximation we will only be able to write the
+spatio-angular point spread function in terms of an integral, so we will
+perform all steps numerically. In these notes we'll only consider the paraxial
+case, though.
 
 \section{Polarized epi-illumination with unpolarized epi-detection}
 We will start by restricting our analysis of epi-illumination microscopes to
@@ -268,10 +362,10 @@ and the terms in the series are given by
 and all other $h_l^m$ terms in the series are zero. Finally, the complete
 forward model for this class of microscope is given by
 \begin{align}
-    g(\mathfrak{r}_d) = \sum_{i=1}^N\int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^3}d\ro{}\, h(\rd{} - \ro{}, \so{}; \mh{p}_i)f(\ro{}, \so{}),\qquad i=1, 2,\ldots,N. \label{eq:fwdpolillum}
+    g_n(\rd{}) = \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^3}d\ro{}\, h(\rd{} - \ro{}, \so{}; \mh{p}_n)f(\ro{}, \so{}),\qquad  n=1, 2,\ldots,N. \label{eq:fwdpolillum}
 \end{align}
-Notice that we have used a single function $h(\rd{} - \ro{}, \so{}; \mh{p}_i)$
-to describe the complete imaging system, and we have shifted the index $i$ to
+Notice that we have used a single function $h(\rd{} - \ro{}, \so{}; \mh{p}_n)$
+to describe the complete imaging system, and we have shifted the index $n$ to
 the illumination polarization. A typical choice of frames is given by $N=4$ and
 \begin{align}
   \mh{p}_1 = \mh{x},\hspace{2em}
@@ -311,26 +405,6 @@ all other $H_l^m$ terms in the series are zero, and
   B(\nu) &= \frac{1}{\pi}\left(\frac{\text{NA}}{n_o}\right)^2\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \left[3 - 2\left(\frac{\nu}{2\nu_o}\right)^2\right]\frac{\nu}{2\nu_o} \sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right).                 
 \end{align}
 
-\subsection{Singular system}
-% To find the singular system of the microscope we will carry out four steps.
-% First, we will calculate the kernel of the microscope given by
-% \begin{align}
-%   k(\ro{} - \ro{}', \so{}, \so{}') = \sum_{i=0}^N\int_{\mathbb{R}^2}d\rd{}\, h(\rd{} - \ro{}, \so{})h(\rd{} - \ro{}', \so{}').
-% \end{align}
-% Second, we will use the kernel to set up the eigenvalue problem
-% \begin{align}
-%   [\mathcal{H}^{\dagger}\mathcal{H}]\mb{f}](\ro{}, \so{}) = \int_{\mbb{S}^2}d\so{}'\int_{\mbb{R}^2}d\ro{}'\, k(\ro{} - \ro{}', \so{}, \so{}')f(\ro{}', \so{}). \label{eq:eigeq}
-% \end{align}
-% Third, we will postulate the form of the eigenfunctions as a single spatial harmonic multiplied by a linear combination of spherical harmonics
-% \begin{align}
-%   u_{\bs{\rho},n}(\ro{}, \so{}) = \sum_{l=0}^\infty\sum_{m=-l}^l c_n^{lm}(\bs{\rho})y_l^m(\so{})\, \me{}^{-i 2\pi \ro{}\cdot\bs{\rho}}. \label{eq:eigfunc}
-% \end{align}
-% We will plug Eq. \ref{eq:eigfunc} into Eq. \ref{eq:eigeq} and solve for the
-% singular values and object space singular vectors of the imaging system. Finally,
-% we will find the data space singular vectors by calculating
-% \begin{align}
-%     v_{\bs{\rho},n,i}(\rd{}) = \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^3}d\ro{}\, h_i(\rd{}; \ro{}, \so{})u_{\bs{\rho},n}(\ro{}, \so{}),\qquad i=1, 2,\ldots,N, \label{eq:system}
-% \end{align}
 
 \bibliography{report}{}
 \bibliographystyle{unsrt}
