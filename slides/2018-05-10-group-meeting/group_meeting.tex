@@ -49,7 +49,7 @@
 
 \maketitle
 
-\begin{frame}
+\begin{frame}{CC-CD Model: $\mbb{L}_2(\mbb{R}^2 \times \mbb{S}^2) \rightarrow \mbb{L}_2(\mbb{R}^{2N})$}
   \vspace{-2em}
   \begin{align*}
     \intertext{Forward model:}
@@ -189,6 +189,24 @@
       \includegraphics[width=1.0\columnwidth]{pol_detect3/svs.pdf}
     \end{column}
   \end{columns}
+\end{frame}
+
+
+\begin{frame}{More insight from CC-CC model? $\mbb{L}_2(\mbb{R}^2 \times \mbb{S}^2) \rightarrow \mbb{L}_2(\mbb{R}^{2}\times \mbb{S}^1)$}
+  \vspace{-2em}
+  \begin{align*}
+    \intertext{Forward model:}
+    [\mathcal{H}f](\rd{}, \hat{\mb{p}}) = \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^2}d\ro{}\, h(\rd{} -\ro{}, \so{}; \hat{\mb{p}})f(\ro{}, \so{}),
+  \end{align*}
+    \begin{align*}    
+    \intertext{Adjoint:}
+    [\mathcal{H}^{\dagger}g](\ro{}, \so{}) = \int_{\mbb{S}^1}d\hat{\mb{p}}\, \int_{\mbb{R}^2}d\mb{r}_{d}\, h(\rd{} - \ro{}, \so{}; \hat{\mb{p}})g(\rd{}, \hat{\mb{p}}).
+    \end{align*}
+  %   \begin{align*}
+  %   \intertext{Eigenvalue problems:}
+  %     \mathcal{H}^{\dagger}\mathcal{H}u_{\bs{\rho},j}(\ro{}, \so{}) &= \mu_{\bs{\rho},j}u_{\bs{\rho},j}(\ro{}, \so{})\\
+  %   \mathcal{H}\mathcal{H}^{\dagger}\mb{v}_{\bs{\rho},j}(\rd{}) &= \mu_{\bs{\rho},j}\mb{v}_{\bs{\rho},j}(\rd{})         
+  % \end{align*}
 \end{frame}
 
   
