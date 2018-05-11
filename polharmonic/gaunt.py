@@ -45,6 +45,20 @@ def Rgaunt(l1, l2, l3, m1, m2, m3):
                 result += U1*U2*U3*gaunt(l1, l2, l3, m1p, m2p, m3p)
     return result.evalf()
 
+# Compute and save an array with all of the gaunt coefficients up to specified
+# band
+def calc_gaunt_tensor(filename, lmax=4):
+    jmax = myutil.maxl2maxj(lmax)
+    G = np.zeros((jmax, jmax, jmax))
+    for index, g in np.ndenumerate(G):
+        print(index)
+        l1, m1 = myutil.j2lm(index[0])
+        l2, m2 = myutil.j2lm(index[1])
+        l3, m3 = myutil.j2lm(index[2])
+        G[index] = Rgaunt(l1, l2, l3, m1, m2, m3)
+    np.save(filename, G)
+    return 1
+
 # Multiply two vectors of even band real spherical harmonic coefficients.
 # Vectors must have the same length and be ordered like
 #
@@ -55,6 +69,8 @@ def Rgaunt(l1, l2, l3, m1, m2, m3):
 # multiply_sh_coefficients([2, 1, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0])
 #
 # gives the coefficients of (2y_0^0 + y_2^-2) x y_2^-2.
+#
+# Slow compared to precomputing the "gaunt tensor"---see shcoeffs.py
 def multiply_sh_coefficients(a, b):
     maxl, m = myutil.j2lm(len(a) - 1)
     c = [0]*(myutil.maxl2maxj(maxl + 2))
