@@ -1,0 +1,308 @@
+
+\documentclass[11pt]{article}
+
+%%%%%%%%%%%%
+% Packages %
+%%%%%%%%%%%%
+\usepackage[dvipsnames]{xcolor}
+\hyphenpenalty=10000
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+\usepackage{tocloft}
+\renewcommand\cftsecleader{\cftdotfill{\cftdotsep}}
+\def\undertilde#1{\mathord{\vtop{\ialign{##\crcr
+$\hfil\displaystyle{#1}\hfil$\crcr\noalign{\kern1.5pt\nointerlineskip}
+$\hfil\tilde{}\hfil$\crcr\noalign{\kern1.5pt}}}}}
+\usepackage{cleveref}
+\usepackage{xcolor}
+\usepackage[colorlinks = true,
+            linkcolor = black,
+            urlcolor  = blue,
+            citecolor = black,
+            anchorcolor = black]{hyperref}
+\usepackage{epstopdf}
+\usepackage{braket}
+\usepackage{upgreek}
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{subcaption}
+\usepackage{amssymb,latexsym,amsmath,gensymb}
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{pdflscape}
+\usepackage{url}
+\usepackage{array}
+\newcolumntype{C}{>{$\displaystyle} c <{$}}
+\usepackage{tikz, calc}
+\usetikzlibrary{shapes.geometric, arrows, calc}
+\tikzstyle{norm} = [rectangle, rounded corners, minimum width=2cm, minimum height=1cm,text centered, draw=black]
+\tikzstyle{arrow} = [thick, ->, >=stealth]
+
+\newcommand{\argmin}{\arg\!\min}
+\newcommand{\me}{\mathrm{e}}
+\providecommand{\e}[1]{\ensuremath{\times 10^{#1}}} 
+\providecommand{\mb}[1]{\mathbf{#1}}
+\providecommand{\mc}[1]{\mathcal{#1}}
+\providecommand{\mf}[1]{\mathbf{#1}}
+\providecommand{\ro}[1]{\mathbf{\mathbf{r}}_o}
+\providecommand{\so}[1]{\mathbf{\hat{s}}_o}
+\providecommand{\rb}[1]{\mathbf{r}_b}
+\providecommand{\rbm}[1]{r_b^{\text{m}}}
+\providecommand{\rd}[1]{\mathbf{r}_d}
+\providecommand{\mh}[1]{\mathbf{\hat{#1}}}
+\providecommand{\mbb}[1]{\mathbb{#1}}
+\providecommand{\bs}[1]{\boldsymbol{#1}} 
+\providecommand{\intinf}{\int_{-\infty}^{\infty}}
+\providecommand{\fig}[4]{
+  % filename, width, caption, label
+\begin{figure}[h]
+ \captionsetup{width=1.0\linewidth}
+ \centering
+ \includegraphics[width = #2\textwidth]{#1}
+ \caption{#3}
+ \label{fig:#4}
+\end{figure}
+}
+
+\makeatletter
+\renewcommand*\env@matrix[1][*\c@MaxMatrixCols c]{%
+  \hskip -\arraycolsep
+  \let\@ifnextchar\new@ifnextchar
+  \array{#1}}
+\makeatother
+
+\newcommand{\tensor}[1]{\overset{\text{\tiny$\leftrightarrow$}}{\mb{#1}}}
+\newcommand{\tunderbrace}[2]{\underbrace{#1}_{\textstyle#2}}
+\providecommand{\figs}[7]{
+  % filename1, filename2, caption1, caption2, label1, label2, shift
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{.45\textwidth}
+  \centering
+  \includegraphics[width=1.0\linewidth]{#1}
+  \captionsetup{justification=justified, singlelinecheck=true}
+  \caption{#3}
+  \label{fig:#5}
+\end{minipage}
+\hspace{2em}
+\begin{minipage}[b]{.45\textwidth}
+  \centering
+  \includegraphics[width=1.0\linewidth]{#2}
+  \vspace{#7em}
+  \captionsetup{justification=justified}
+  \caption{#4}
+  \label{fig:#6}
+\end{minipage}
+\end{figure}
+}
+\makeatletter
+
+\providecommand{\code}[1]{
+\begin{center}
+\lstinputlisting{#1}
+\end{center}
+}
+
+\newcommand{\crefrangeconjunction}{--}
+%%%%%%%%%%%
+% Spacing %
+%%%%%%%%%%%
+% Margins
+\usepackage[
+top    = 1.5cm,
+bottom = 1.5cm,
+left   = 1.5cm,
+right  = 1.5cm]{geometry}
+
+% Indents, paragraph space
+%\usepackage{parskip}
+\setlength{\parskip}{1.5ex}
+
+% Section spacing
+\usepackage{titlesec}
+\titlespacing*{\title}
+{0pt}{0ex}{0ex}
+\titlespacing*{\section}
+{0pt}{0ex}{0ex}
+\titlespacing*{\subsection}
+{0pt}{0ex}{0ex}
+\titlespacing*{\subsubsection}
+{0pt}{0ex}{0ex}
+
+% Line spacing
+\linespread{1.1}
+
+%%%%%%%%%%%%
+% Document %
+%%%%%%%%%%%%
+\begin{document}
+\title{\vspace{-2.5em} Geometry of anisotropic media and polarized light
+  microscopy data \vspace{-1em}} \author{Talon Chandler, Min Guo, Hari Shroff,
+  Rudolf Oldenbourg, Patrick La Rivi\`ere}
+\date{\vspace{-1em}\today\vspace{-1em}}
+\maketitle
+\section{Introduction}
+We describe the geometry of object space and data space for a large class of
+polarized light microscopes. We briefly examine the mappings between object
+and data spaces. Finally, we consider the transfer functions that can simplify
+the mappings.
+
+We denote the set of points on the $n$-dimensional real line $\mbb{R}^n$, the
+set of points on the $n$-dimensional sphere $\mbb{S}^n$, and the set of
+$n\times n$ Hermitian matrices $\mbb{H}^n$.
+
+\section{Object spaces}
+In fluorescence microscopy, the object is a three-dimensional field of oriented
+fluorophores which can be described by a member of the set
+$\mbb{L}_2(\mbb{R}^3\times\mbb{S}^2)$---the set of square integrable functions that
+assign a scalar value to each direction at each point in 3D space.
+
+In anisotropic microscopy, the object is a three-dimensional field of
+anisotropic objects. Each point in the field can be described by its
+generalized Jones matrix \cite{ortega13}---a $3\times3$ Hermitian matrix.
+Although tempting, the object space is \textbf{not}
+$\mbb{L}_2(\mbb{R}^3 \times \mbb{H}^3)$---the set of square integrable functions
+that assigns a scalar value to each Hermitian matrix at each point in 3D
+space---because the object only has a single Hermitian matrix at each point.
+Instead, we will denote the object space as
+$\mbb{L}_2(\mbb{R}^3; \mbb{H}^3)$---the set of square integrable functions that
+assign a Hermitian matrix to each point in 3D space. Using this notation, the
+objects in fluorescence microscopy would be members of the set
+$\mbb{L}_2(\mbb{R}^3\times\mbb{S}^2; \mbb{H}^1)$ because $\mbb{H}^1$ are
+scalars. Note that Barrett \cite{barrett2004} assumes scalar-valued functions so
+the second argument of $\mbb{L}_2$ is assumed to be $\mbb{H}^1$. Meanwhile,
+Sharafutdinov \cite{shara1994} makes no assumptions, so he only uses the second
+argument and drops the first.
+
+If we don't constrain the symmetric matrices, then
+$\mbb{L}_2(\mbb{R}^3; \mbb{H}^3)$ can describe fields that display linear and
+circular birefringence and dichroism. We often assume or know that our object
+displays only birefringence or dichroism, and this prior can be formulated as a
+constraint on the Hermitian matrix. Therefore, birefringence microscopy is a
+subset of anisotropy microscopy. We will revisit these constraints later.
+
+Also, we often assume or know that a birefringent object is uniaxial. To make
+a Hermitian matrix describe a uniaxial object we constrain it to be rank 2.
+
+\section{Data space}
+The data space for a multiview microscope with variable polarizers on the
+detection or illumination arm is a member of
+$\mbb{V} = \mbb{L}_2(\mbb{S}^1\times\mbb{S}^2\times\mbb{R}^3)$ where the
+$\mbb{S}^1$ dimension specifies the orientation of the detection or illumination
+polarizer, the $\mbb{S}^2$ dimensions specify the optical axis of the view, and
+the $\mbb{R}^3$ dimensions specifies the position on the 2D detector with 1D
+defocusing. All of the polarized light microscopes we have considered so far
+take discrete samples of $\mbb{V}$. Notice that $\mbb{V}$ is independent of the
+object---we can use the same data space for fluorescence and anisotropy imaging.
+
+Rudolf's existing PolScope designs take a single sample of the optical axis
+dimensions (they are single view microscopes), four or five samples of the
+polarizer dimension (one for each polarizer setting), and many samples of the
+detector dimension (one for each pixel at each defocus position).
+
+Our current diSPIM design takes two samples of the optical axis dimensions, four
+samples of the polarizer dimension (eight would be double counting), and many
+samples of the detector dimension. 
+
+Light-field designs take a dense sampling of the optical axis dimension over a
+small range of angles at a single detector plane. Locally, $\mbb{S}^2$ is
+approximated by $\mbb{R}^2$, and one slice of $\mbb{R}^3$ is $\mbb{R}^2$, so a
+polarized light-field microscope's data space is approximately
+$\mbb{L}_2(\mbb{S}^1\times\mbb{R}^4)$. This identification points towards a link
+between our multiview analysis and Ng's 4-dimensional light-field analysis
+\cite{ng2005}.
+
+If we would like to consider microscopes with polarizers on the illumination and
+detection arms, we can add an extra $\mbb{S}^1$ dimension and the data space
+becomes $\mbb{L}_2(\mbb{S}^1\times\mbb{S}^1\times\mbb{S}^2\times\mbb{R}^3)$.
+
+\section{Mapping object space to data space}
+In fluorescence microscopy we can describe the relationship between the object
+and data spaces using an integral transform
+\begin{align}
+    [\mathcal{H}f](\hat{\mb{s}}_v, \hat{\mb{p}}, \rd{}) = \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^3}d\ro{}\, h(\rd{} -\ro{}, \so{}; \hat{\mb{s}}_v, \hat{\mb{p}})f(\ro{}, \so{}).\label{eq:beginning}
+\end{align}
+where $h(\rd{} -\ro{}, \so{}; \hat{\mb{s}}_v, \hat{\mb{p}})$ is the kernel of
+the integral transform (when data space is larger than $\mbb{L}_2(\mbb{R}^2)$ I
+think that ``kernel'' is more accurate than ``point spread function''). More
+work is required to write the complete kernel for arbitrary viewing directions $\hat{\mb{s}}_v$.
+The full kernel will be necessary for analyzing fluorescence light-field
+microscopes.
+
+I think we can make progress in anisotropic microscopy if we describe the
+data as a spatially filtered tensor ray transform of the object. If we
+illuminate the object incoherently (using a wide condenser back aperture under
+K\"ohler illumination) and the sample is weakly anisotropic, then the electric
+field at the output of the object will be the (input polarization dependent)
+tensor ray transform of the object. Finally, we can propagate the output
+electric field to the detector using the formalism we've developed for
+fluorescence microscopy---this operation is essentially a low-pass spatial
+filter.
+
+Sharafutdinov 2.1.10 \cite{shara1994} gives an expressions for the tensor ray
+transform that is a generalization of the Radon transform
+\begin{align}
+  [\mathcal{I}f](x, \xi) = \int \langle f(x + t\xi), \xi\rangle dt. 
+\end{align}
+I'm still digesting the details of how to evaluate this integral in practice,
+but the analogy with the Radon transform and the physical meaning are clear.
+
+The mapping between the object space and data space will look something like
+\begin{align}
+    [\mathcal{H}f](\hat{\mb{s}}_v, \hat{\mb{p}}, \rd{}) = \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^2}d\ro{}\, h(\rd{} -\ro{}, \so{}; \hat{\mb{s}}_v, \hat{\mb{p}})[\mathcal{I}f](\ro{}, \so{}).\label{eq:final}
+\end{align}
+One difference between Eq. \ref{eq:beginning} and Eq. \ref{eq:final} is the
+interpretation of the variable $\so{}$. In the fluorescence case, $\so{}$ refers
+to the orientation of the dipole axis of a fluorophore. In the anisotropy case,
+$\so{}$ refers to the propagation direction of a light ray.
+
+The incoherence of the light incident on the sample is an important simplifying
+assumption. If the incident light is partially coherent, then the relationship
+between the object and data is a bilinear integral transform (see Barrett 5.2
+\cite{barrett2004}, Goodman 7.4 \cite{goodman1985}). This type of relationship
+does not allow for a simple transfer function analysis, but a transmission
+cross-coefficient analysis is still possible.
+
+\section{Transfer functions}
+All of the mappings we considered in the previous section are linear, so we can
+rewrite them in terms of the transfer function. 
+
+The first task is to find the geometry and dimension of the transfer function.
+The transfer function must account for each dimension of the object and data
+spaces while not double counting invariant dimensions between the spaces. For
+example, a fluorescence microscope maps objects in
+$\mbb{L}(\mbb{S}^2\times\mbb{R}^2)$ to data in
+$\mbb{L}_2(\mbb{S}^1\times\mbb{S}^2\times\mbb{R}^2)$. The two spatial dimensions
+are shift invariant, so we assign a single continuous spatial frequency index
+$\bs{\nu}$ to those dimensions. I expect (calculation in progress) that the two
+orientation dimensions are rotation invariant, so we can assign the indices $l$
+and $m$ to those dimensions. Finally, we can assign the index $k$ to the data
+space $\mbb{S}^1$ polarizer dimension. Therefore, the transfer function will be
+of the form
+\begin{align}
+  H_{l,k}^{m}(\bs{\nu}) = \int_{\mbb{S}^1}d\hat{\mb{p}}\, z_k(\hat{\mb{p}}) \int_{\mbb{S}^2}d\so{}\, y_l^m(\so{})\int_{\mbb{R}^2}d\rd{}\, \me^{-i2\pi\bs{\nu}\cdot\rd{}} h(\rd{} -\ro{}, \so{}; \hat{\mb{s}}_v, \hat{\mb{p}}),
+\end{align}
+where $y_l^m(\so{})$ are the real spherical harmonics and $z_k(\hat{\mb{p}})$
+are the real circular harmonics.
+
+I expect to find similar transfer functions for the anisotropy imaging case,
+but I can't make much more progress until I spend more time understanding the
+tensor ray transform. Sharafutdinov 2.1.15 \cite{shara1994} gives the
+relationship between the an object's tensor ray transform and its Fourier
+transform (a generalization of the Fourier-Slice theorem), but I don't
+understand all of the notation yet.
+
+I suspect that the nine Gell-Mann matrices will play a role in the Fourier
+analysis of anisotropy microscopes \cite{ortega13}. The Gell-Mann matrices are
+an orthonormal basis for $3\times 3$ Hermitian matrices $\mbb{H}^3$, so they
+take the role of the spherical harmonics in fluorescence imaging. The Gell-Mann
+matrices have direct physical interpretations in terms of birefringence and
+dichroism of the object, so we can formulate physical priors about the object as
+constraining specific Gell-Mann matrices to zero.
+
+\bibliography{report}{}
+\bibliographystyle{unsrt}
+
+\end{document}

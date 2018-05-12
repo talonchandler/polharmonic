@@ -1,0 +1,29 @@
+\begin{thebibliography}{1}
+
+\bibitem{ortega13}
+No\'{e} Ortega-Quijano and Jos\'{e}~Luis Arce-Diego.
+\newblock Generalized jones matrices for anisotropic media.
+\newblock {\em Opt. Express}, 21(6):6895--6900, Mar 2013.
+
+\bibitem{barrett2004}
+H.H. Barrett and K.J. Myers.
+\newblock {\em Foundations of image science}.
+\newblock Wiley series in pure and applied optics. Wiley-Interscience, 2004.
+
+\bibitem{shara1994}
+V.A. Sharafutdinov.
+\newblock {\em Integral Geometry of Tensor Fields}.
+\newblock Inverse and ill-posed problems series. VSP, 1994.
+\newblock \url{http://www.math.nsc.ru/~sharafutdinov/files/book.pdf}.
+
+\bibitem{ng2005}
+Ren Ng.
+\newblock Fourier slice photography.
+\newblock {\em ACM Trans. Graph.}, 24(3):735--744, July 2005.
+
+\bibitem{goodman1985}
+J.W. Goodman.
+\newblock {\em Statistical Optics}.
+\newblock A Wiley-Interscience publication. Wiley, 1985.
+
+\end{thebibliography}
