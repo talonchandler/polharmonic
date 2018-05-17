@@ -1,0 +1,103 @@
+\documentclass[presentation]{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{fixltx2e}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{marvosym}
+\usepackage{wasysym}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\tolerance=1000
+\usepackage{graphicx} \DeclareMathOperator{\argmin}{argmin}
+
+\newcommand{\me}{\mathrm{e}}
+\providecommand{\e}[1]{\ensuremath{\times 10^{#1}}} 
+\providecommand{\mb}[1]{\mathbf{#1}}
+\providecommand{\mf}[1]{\mathbf{#1}}
+\providecommand{\ro}[1]{\mathbf{\mathbf{r}}_o}
+\providecommand{\so}[1]{\mathbf{\hat{s}}_o}
+\providecommand{\rb}[1]{\mathbf{r}_b}
+\providecommand{\rbm}[1]{r_b^{\text{m}}}
+\providecommand{\rd}[1]{\mathbf{r}_d}
+\providecommand{\mh}[1]{\mathbf{\hat{#1}}}
+\providecommand{\mbb}[1]{\mathbb{#1}}
+\providecommand{\bs}[1]{\boldsymbol{#1}} 
+\providecommand{\intinf}{\int_{-\infty}^{\infty}}
+
+
+
+\newcommand{\under}[2]{\underset{\scriptscriptstyle#1}{#2}}
+
+
+\usetheme{simple}
+\usecolortheme{}
+\usefonttheme{serif}
+\useinnertheme{}
+\useoutertheme{}
+\author{Talon Chandler}
+\date{May 16, 2018}
+\title{Update on multiframe polarized light microscope singular spectra}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}{Continuous model $\mbb{L}_2(\mbb{R}^2 \times \mbb{S}^2) \rightarrow \mbb{L}_2(\mbb{R}^{2}\times \mbb{S}^1)$}
+  \vspace{-2em}
+  \begin{align*}
+    \intertext{Forward model:}
+    [\mathcal{H}f](\rd{}, \hat{\mb{p}}) = \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^2}d\ro{}\, h(\rd{} -\ro{}, \so{}; \hat{\mb{p}})f(\ro{}, \so{}),
+  \end{align*}
+    \begin{align*}    
+    \intertext{Adjoint:}
+    [\mathcal{H}^{\dagger}g](\ro{}, \so{}) = \int_{\mbb{S}^1}d\hat{\mb{p}}\, \int_{\mbb{R}^2}d\mb{r}_{d}\, h(\rd{} - \ro{}, \so{}; \hat{\mb{p}})g(\rd{}, \hat{\mb{p}}).
+    \end{align*}
+  \end{frame}
+
+\begin{frame}[label=sec-1]{4-frame polarized illumination singular spectrum}
+  \begin{columns}
+    \begin{column}{0.25\textwidth}
+      \centering
+      \includegraphics[width=1.0\columnwidth]{pol_illum/scene.pdf}
+    \end{column}
+    \begin{column}{0.75\textwidth}
+      \centering
+      \includegraphics[width=1.0\columnwidth]{pol_illum/svs.pdf}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Polarized illumination SVD}
+\begin{align*}
+  \mu_{\bs{\rho},0} &= \{H_{0,0}^{0}(\rho)\}^2 + \{H_{2,0}^{0}(\rho)\}^2 + \{H_{4,0}^{0}(\rho)\}^2,\\
+  \mu_{\bs{\rho},1} = \mu_{\bs{\rho},2} &= \{H_{2,2}^{2}(\rho)\}^2 + \{H_{4,2}^{2}(\rho)\}^2,
+\end{align*}
+\begin{align*}
+  u_{\bs{\rho},0}(\ro{}, \so{}) &= \me{}^{i2\pi\bs{\rho}\cdot\ro{}}[H_{0,0}^0(\rho)y_0^0(\so{}) + H_{2,0}^0(\rho)y_2^0(\so{}) + H_{4,0}^0(\rho)y_4^0(\so{})],\\
+  u_{\bs{\rho},1}(\ro{}, \so{}) &= \me{}^{i2\pi\bs{\rho}\cdot\ro{} }[H_{2,-2}^{-2}(\rho)y_2^{-2}(\so{}) + H_{4,-2}^{-2}(\rho)y_4^{-2}(\so{})],\\
+  u_{\bs{\rho},2}(\ro{}, \so{}) &= \me{}^{i2\pi\bs{\rho}\cdot\ro{} }[H_{2,2}^2(\rho)y_2^2(\so{}) + H_{4,2}^2(\rho)y_4^2(\so{})].
+    \end{align*}
+\begin{align*}
+  v_{\bs{\rho},0}(\rd{}, \mh{p}) &= \me{}^{i2\pi\bs{\rho}\cdot\rd{}}z_0(\mh{p}),\\
+  v_{\bs{\rho},1}(\rd{}, \mh{p}) &= \me{}^{i2\pi\bs{\rho}\cdot\rd{}}z_{-2}(\mh{p}),\\
+  v_{\bs{\rho},2}(\rd{}, \mh{p}) &= \me{}^{i2\pi\bs{\rho}\cdot\rd{}}z_2(\mh{p}).
+\end{align*}
+\end{frame}
+
+\begin{frame}[label=sec-1]{Symmetries}
+      \centering
+      \includegraphics[width=1.0\columnwidth]{symmetry.pdf}
+\end{frame}
+
+
+
+
+  
+\end{document}
