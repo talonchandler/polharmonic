@@ -34,7 +34,7 @@ def U(l, m, mu):
 # Real gaunt coefficients
 # See Eqs. 26. The sympy gaunt function does not use a complex conjugate.
 # This sum could be truncated using selection rules, but this is fairly quick.
-def Rgaunt(l1, l2, l3, m1, m2, m3):
+def Rgaunt(l1, l2, l3, m1, m2, m3, evaluate=True):
     result = 0
     for m1p in range(-l1, l1+1):
         U1 = U(l1, m1p, m1)
@@ -43,7 +43,10 @@ def Rgaunt(l1, l2, l3, m1, m2, m3):
             for m3p in range(-l3, l3+1):
                 U3 = U(l3, m3p, m3)
                 result += U1*U2*U3*gaunt(l1, l2, l3, m1p, m2p, m3p)
-    return result.evalf()
+    if evaluate:
+        return result.evalf()
+    else:
+        return result
 
 # Compute and save an array with all of the gaunt coefficients up to specified
 # band
@@ -71,7 +74,7 @@ def calc_gaunt_tensor(filename, lmax=4):
 # gives the coefficients of (2y_0^0 + y_2^-2) x y_2^-2.
 #
 # Slow compared to precomputing the "gaunt tensor"---see shcoeffs.py
-def multiply_sh_coefficients(a, b):
+def multiply_sh_coefficients(a, b, evaluate=True):
     maxl, m = myutil.j2lm(len(a) - 1)
     c = [0]*(myutil.maxl2maxj(maxl + 2))
     for i, ai in enumerate(a):
@@ -81,5 +84,5 @@ def multiply_sh_coefficients(a, b):
             for k, ci in enumerate(c):
                 l3, m3 = myutil.j2lm(k)
                 if ai != 0 and bi != 0:
-                    c[k] += ai*bi*Rgaunt(l1, l2, l3, m1, m2, m3)
+                    c[k] += ai*bi*Rgaunt(l1, l2, l3, m1, m2, m3, evaluate=evaluate)
     return c
