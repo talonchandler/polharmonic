@@ -62,6 +62,30 @@ def calc_gaunt_tensor(filename, lmax=4):
     np.save(filename, G)
     return 1
 
+# Compute and save an array with all of the circular harmonic triple integrals
+# up to specified band
+def calc_chtriple_tensor(filename, nmax=2):
+    def ch(n):
+        if n == 0:
+            return 1/sqrt(2*pi)
+        if n > 0:
+            return cos(n*x)/sqrt(pi)
+        if n < 0:
+            return sin(n*x)/sqrt(pi)
+    
+    nlen = 2*nmax + 1
+    P = np.zeros((nlen, nlen, nlen))
+    x = Symbol('x')
+    for index, p in np.ndenumerate(P):
+        n1 = myutil.i2n(index[0])
+        n2 = myutil.i2n(index[1])
+        n3 = myutil.i2n(index[2])
+        P[index] = integrate(ch(n1)*ch(n2)*ch(n3), (x, 0, 2*pi))
+        print(index, P[index])
+    print(P)
+    np.save(filename, P)
+    return 1
+
 # Multiply two vectors of even band real spherical harmonic coefficients.
 # Vectors must have the same length and be ordered like
 #

@@ -157,7 +157,7 @@ value decomposition of the forward operator to find the limits of these designs.
   z_n(\theta) =
   \begin{cases}
     \frac{1}{\sqrt{\pi}}\cos(n\theta), & n > 0,\\
-    \frac{1}{\sqrt{\pi}}, & n = 0,\\
+    \frac{1}{\sqrt{2\pi}}, & n = 0,\\
     \frac{1}{\sqrt{\pi}}\sin(n\theta), & n < 0.\\
   \end{cases}
 \end{align}
@@ -437,7 +437,12 @@ where
   h_{\text{det},2,\pm 2}^0(\ro{}) &= 4\sqrt{\frac{\pi}{5}}b^2(r_0)z_{\pm 2}(\ro{}),\\
   h_{\text{det},2,2}^2(\ro{}) &= -h_{\text{det},2,-2}^{-2}(\ro{}) = \sqrt{\frac{3}{5}}a^2(r_o).
 \end{align}
-The complete kernel for unpolarized illumination and polarized detection is given by
+The complete kernel for unpolarized illumination and polarized detection is
+given by the product of the excitation and detection kernels. In the previous
+case we were able to calculate this product in terms of the circular and
+spherical harmonics by hand, but this task is difficult in the general case. To
+simplify this task we precompute the triple integrals of the circular and spherical
+harmonics---see Appendix A for details. 
 \begin{align}
   h(\ro{}, \so{}; \mh{p}_d) = h_{\text{exc}}(\so{})h_{\text{det}}(\ro{}, \so{}; \mh{p}_d) = \sum_{l=0}^{\infty}\sum_{m=-l}^l\sum_{n=-\infty}^{\infty} h_{l,n}^m(\ro{})y_l^m(\so{})z_n(\mh{p}_d), 
 \end{align}
@@ -530,4 +535,82 @@ of the eigenvalues and eigenvectors shown in Fig. XXX.
 \bibliography{report}{}
 \bibliographystyle{unsrt}
 
+
+\appendix
+\section{Calculating products of circular and spherical harmonics}
+To calculate the kernels of arbitrary microscope designs we need an efficient
+way to calculate the products of functions that are linear combinations of
+circular and spherical harmonics. We start by considering the simplest case of
+multiplying two linear combinations of circular harmonics given by
+\begin{align}
+  f(\mh{p}) = \sum_{n=0}^\infty c_nz_n(\mh{p}), \qquad f'(\mh{p}) = \sum_{n'=0}^\infty c_{n'}'z_{n'}(\mh{p}). 
+\end{align}
+The product of these two functions is given by 
+\begin{align}
+  f''(\mh{p}) &= f(\mh{p})f'(\mh{p})=\sum_{n=0}^\infty \sum_{n'=0}^\infty c_n c_{n'}' z_n(\mh{p}) z_{n'}(\mh{p}) = \sum_{n''=0}^{\infty} c_{n''}''z_{n''}(\mh{p}), \label{eq:two}
+  \end{align}
+  and we would like to find a relationship between the input coefficients ($c_n$
+  $c_{n'}'$) and the output coefficients $c_{n''}''$. To find this relationship
+  we can rewrite the product the circular harmonics as a linear combination of
+  circular harmonics
+  \begin{align}
+    z_n(\mh{p})z_{n'}(\mh{p}) = \sum_{j''=0}^{\infty}P_{n,n',n''}z_{j''}(\mh{p})\label{eq:product}
+  \end{align}
+  where $P^{n''}_{n,n'}$ are the triple integrals of the circular harmonics
+  \begin{align}
+    P_{n,n',n''} = \int_{\mbb{S}^1}d\mh{p}\, z_{n}(\mh{p})z_{n'}(\mh{p})z_{n''}(\mh{p}).\label{eq:triple}
+  \end{align}
+  Plugging Eq. \ref{eq:product} into Eq. \ref{eq:two} gives
+  \begin{align}
+    \sum_{n=0}^\infty \sum_{n'=0}^\infty c_n c_{n'}' \left[\sum_{j''=0}^{\infty}P^{n''}_{n,n'}z_{j''}(\mh{p})\right] = \sum_{n''=0}^{\infty} c_{n''}''z_{n''}(\mh{p}).    
+  \end{align}
+  Therefore, the coefficients are related by
+  \begin{align}
+    c_{n''}'' = \sum_{n=0}^\infty \sum_{n'=0}^\infty P_{n,n',n''} c_n c_{n'}'.
+  \end{align}
+  Rewriting this equation in Einstein notation (summation over matching indices
+  is implied, upper indices are ``column'' indices, lower indices are ``row''
+  indices) gives
+  \begin{align}
+    {c''}^{n''} = P^{n''}_{n,n'} c_n c_{n'}'.
+  \end{align}
+  We can precompute the triple integrals $P_{n,n',n''}$ using a symbolic package
+  like Sympy.
+  
+  The discussion above applies to spherical harmonics as well---we only need to replace
+  the triple integral of the circular harmonics $P_{n,n',n''}$ with the triple integral
+  of the spherical harmonics
+  \begin{align}
+    G_{j,j',j''} = \int_{\mbb{S}^2}d\mh{s}\, y_{j}(\mh{s})y_{j'}(\mh{s})y_{j''}(\mh{s}).
+  \end{align}
+  where each of the $j$ indices are a single index over the spherical harmonics.
+  We could compute the triple integrals symbolically, but these integrals can
+  take several minutes. Instead, we can write the integral in terms of the Gaunt
+  coefficients \cite{homeier1996} which are products of the Clebsch-Gordan
+  coefficients or Wigner 3-j symbols. The Gaunt coefficients have a closed form
+  expression in terms of $j,j'$, and $j''$ (usually expressed in terms of
+  $l,l',l'',m,m',m''$) that is implemented in the Sympy library \cite{sympy}.
+
+  To calculate the kernel for general polarized light microscopes we will need to multiply functions in the following form
+  \begin{align}
+  f(\mh{p}, \mh{s}) = \sum_{n=0}^\infty\sum_{j=0}^\infty c_{n,j} z_n(\mh{p})y_j(\mh{s}), \qquad f'(\mh{p}, \mh{s}) = \sum_{n'=0}^\infty\sum_{j'=0}^\infty c_{n',j'}' z_n(\mh{p})y_j(\mh{s}).
+\end{align}
+The product will be in the form
+\begin{align}
+  f(\mh{p}, \mh{s})f'(\mh{p}, \mh{s}) = \sum_{n=0}^\infty\sum_{j=0}^\infty c_{n'',j''}'' z_{n''}(\mh{p})y_{j''}(\mh{s}),
+\end{align}
+where
+\begin{align}
+  {c''}^{n'', j''} = P_{n,n'}^{n''} G_{j,j'}^{j''} c_{n,j} c_{n', j'}'.\label{eq:final}
+\end{align}
+Equation \ref{eq:final} is the main result of this section. It shows that we can
+precalculate the triple integrals of the circular and spherical harmonics and
+use the results to efficiently find the coefficients of the product of two
+arbitrary kernels. We can think of Eq. \ref{eq:final} as a bilinear map that
+acts within the vector space of harmonic function coefficients. The bilinear map
+takes two elements of the vector space and maps them to another element of the
+vector space by a rank-6 tensor product. A lower dimensional example of a
+bilinear map is the cross product which takes two vectors in three-dimensional
+Euclidean space and maps them to another vector by a rank-3 tensor product.
 \end{document}
+
