@@ -4,6 +4,7 @@ from polharmonic import util, gaunt
 import matplotlib.pyplot as plt
 from PIL import Image
 import os
+import itertools
 
 # Compute gaunt coefficients
 # gaunt.calc_gaunt_tensor('gaunt_l4.npy', lmax=4) # Expensive precomputation
@@ -33,23 +34,35 @@ class SHCoeffs:
         self.coeffs = temp
 
     def __add__(self, other):
-        return self.coeffs + other.coeffs
+        return SHCoeffs(self.coeffs + other.coeffs)
         
     def __mul__(self, other):
+        # Slow alternative
         # result = gaunt.multiply_sh_coefficients(self.coeffs, other.coeffs)
+        
+        if not isinstance(other, SHCoeffs):
+            return SHCoeffs(np.array(self.coeffs)*other)
 
         # Pad inputs
         x1 = np.pad(np.array(self.coeffs), (0, 2*(self.lmax + 2) + 1), 'constant')
-        x2 = np.pad(np.array(other.coeffs), (0, 2*(self.lmax + 2) + 1), 'constant')        
+        x2 = np.pad(np.array(other.coeffs), (0, 2*(self.lmax + 2) + 1), 'constant')
 
         # Multiply
         result = np.dot(np.dot(G, x1), x2)
         
         return SHCoeffs(result)
 
+    def __rmul__(self, other):
+        return self.__mul__(other)
+
     def __truediv__(self, scalar):
         return SHCoeffs(self.coeffs/scalar)
 
+    def __repr__(self):
+        string = 'SHCoeffs: \n'
+        string += str(self.coeffs) + '\n'
+        return string
+    
     def plot(self, folder=''):
         if not os.path.exists(folder):
             os.makedirs(folder)

@@ -1,17 +1,18 @@
 import numpy as np
 import polharmonic.shcoeffs as sh
+import polharmonic.tfcoeffs as tf
 import polharmonic.util as util
 from scipy import special
 
 class Detector:
     """A Detector is specified by its optical axis, numerical aperture, 
-    the index of refraction of the sample, and polarizer orientation.
+    the index of refraction of the sample, and precence of a polarizer.
 
     By default we use the paraxial approximation.
     """
     def __init__(self, optical_axis=[0,0,1], na=0.8, n=1.33,
-                 polarizer=None, paraxial=True, detect_all=False):
-        self.optical_axis = optical_axis        
+                 polarizer=False, paraxial=True, detect_all=False):
+        self.optical_axis = optical_axis
         self.na = na
         self.n = n
         self.polarizer = polarizer
@@ -20,40 +21,32 @@ class Detector:
 
     def h(self, r, phi=0):
         if self.detect_all:
-            return sh.SHCoeffs([1.0, 0, 0, 0, 0, 0])
-        
+            return tf.TFCoeffs([[1.0, 0, 0, 0, 0, 0], 6*[0], 6*[0]])
+
         a = self.a
         b = self.b
-        p = self.polarizer
-        if p is None:
-            return sh.SHCoeffs([a(r) + 2*b(r), 0, 0, (-a(r) + 4*b(r))/np.sqrt(5)])
+        n0 = [a(r) + 2*b(r), 0, 0, (-a(r) + 4*b(r))/np.sqrt(5), 0, 0]
+        if self.polarizer:
+            n_2 = [2*b(r)*np.sin(2*phi), -np.sqrt(0.6)*a(r), 0, (4.0/np.sqrt(5))*b(r)*np.sin(2*phi), 0, 0]
+            n2 = [2*b(r)*np.cos(2*phi), 0, 0, (4.0/np.sqrt(5))*b(r)*np.cos(2*phi), 0, np.sqrt(0.6)*a(r)]
+            return tf.TFCoeffs([n0, n_2, n2])
         else:
-            r_vec = [np.cos(phi), np.sin(phi), 0]
-            return sh.SHCoeffs([a(r) + 4*b(r)*np.dot(r_vec, p)**2,
-                                -2*np.sqrt(0.6)*a(r)*p[0]*p[1],
-                                0,
-                                (-a(r) + 8*b(r)*np.dot(r_vec, p)**2)/np.sqrt(5),
-                                0,
-                                np.sqrt(0.6)*a(r)*(p[0]**2 - p[1]**2)])
+            return tf.TFCoeffs([n0, 6*[0], 6*[0]])
 
     def H(self, nu, phi_nu=0):
         if self.detect_all:
-            return sh.SHCoeffs([1.0, 0, 0, 0, 0, 0])
-        
+            return tf.TFCoeffs([[1.0, 0, 0, 0, 0, 0], 6*[0], 6*[0]])
+
         A = self.A
         B = self.B
         C = self.C
-        p = self.polarizer
-        if p is None:
-            return sh.SHCoeffs([A(nu) + 2*B(nu), 0, 0, (-A(nu) + 4*B(nu))/np.sqrt(5)])
+        n0 = [A(nu) + 2*B(nu), 0, 0, (-A(nu) + 4*B(nu))/np.sqrt(5), 0, 0]
+        if self.polarizer:
+            n_2 = [2*C(nu)*np.cos(2*phi_nu), -np.sqrt(0.6)*A(nu), 0, (4.0/np.sqrt(5))*C(nu)*np.cos(2*phi_nu), 0, 0]
+            n2 = [2*C(nu)*np.sin(2*phi_nu), 0, 0, (4.0/np.sqrt(5))*C(nu)*np.sin(2*phi_nu), 0, np.sqrt(0.6)*A(nu)]
+            return tf.TFCoeffs([n0, n_2, n2])
         else:
-            nu_vec = [np.cos(phi_nu), np.sin(phi_nu), 0]
-            return sh.SHCoeffs([A(nu) + 2*B(nu) + 2*C(nu)*(2*(np.dot(nu_vec, p)**2) - 1),
-                                -2*np.sqrt(0.6)*A(nu)*p[0]*p[1],
-                                0,
-                                (-A(nu) + 4*B(nu) + 4*C(nu)*(2*(np.dot(nu_vec, p)**2) - 1))/np.sqrt(5),
-                                0,
-                                np.sqrt(0.6)*A(nu)*(p[0]**2 - p[1]**2)])
+            return tf.TFCoeffs([n0, 6*[0], 6*[0]])
         
     # PSF helper functions
     def a(self, r):

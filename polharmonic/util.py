@@ -234,6 +234,13 @@ def lm2j(l, m):
 def maxl2maxj(l):
     return int(0.5*(l + 1)*(l + 2))
 
+# Convert between positive index and circular harmonic index
+def i2n(i):
+    if i%2 == 0:
+        return i
+    else:
+        return -(i+1)
+
 # Draw microscope schematic (move to Microscope class?)
 def draw_scene(scene_string, filename='out.png', my_ax=None, dpi=300,
                save_file=False, chop=True):

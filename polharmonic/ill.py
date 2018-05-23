@@ -1,5 +1,6 @@
 import numpy as np
 import polharmonic.shcoeffs as sh
+import polharmonic.tfcoeffs as tf
 import polharmonic.util as util
 from scipy import special
 
@@ -10,7 +11,7 @@ class Illuminator:
     By default we use the paraxial approximation.
     """
     def __init__(self, optical_axis=[0,0,1], na=0.8, n=1.33,
-                 polarizer=None, paraxial=True, illuminate_all=False):
+                 polarizer=True, paraxial=True, illuminate_all=False):
         self.optical_axis = optical_axis
         self.na = na
         self.n = n
@@ -20,24 +21,21 @@ class Illuminator:
         self.illuminate_all = illuminate_all
 
         self.alpha = np.arcsin(self.na/self.n)
-        self.Atilde = (np.cos(self.alpha/2.0)**2)*np.cos(self.alpha)
-        self.Btilde = (1.0/12.0)*(np.cos(self.alpha/2)**2 + 4*np.cos(self.alpha) + 7)
+        self.At = (np.cos(self.alpha/2.0)**2)*np.cos(self.alpha)
+        self.Bt = (1.0/12.0)*(np.cos(self.alpha/2)**2 + 4*np.cos(self.alpha) + 7)
 
     def h(self):
         if self.illuminate_all:
-            return sh.SHCoeffs([1.0, 0, 0, 0, 0, 0])
-        
-        p = self.polarizer
-        if p is None:
-            return sh.SHCoeffs([1, 0, 0, -self.Atilde/np.sqrt(5)])
-        else:
-            return sh.SHCoeffs([1,
-                                -2*np.sqrt(0.6)*self.Btilde*p[0]*p[1],
-                                0,
-                                -self.Atilde/np.sqrt(5),
-                                0,
-                                np.sqrt(0.6)*self.Btilde*(p[0]**2 - p[1]**2)])
+            return tf.TFCoeffs([[1.0, 0, 0, 0, 0, 0], 6*[0], 6*[0]])
 
-    # No spatioangular coupling -> h == H
+        n0 = [1, 0, 0, -self.At/np.sqrt(5), 0, 0]
+        if self.polarizer:
+            n_2 = [0, -np.sqrt(0.6*np.pi)*self.Bt, 0, 0, 0, 0]
+            n2 = [0, 0, 0, 0, 0, np.sqrt(0.6*np.pi)*self.Bt]
+            return tf.TFCoeffs([n0, n_2, n2])
+        else:
+            return tf.TFCoeffs([n0, 6*[0], 6*[0]])
+
+    # No detection spatioangular coupling -> h == H
     def H(self): 
         return self.h()
