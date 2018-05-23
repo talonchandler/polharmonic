@@ -1,3 +1,14 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{1}
+
+\bibitem{homeier1996}
+Herbert~H.H. Homeier and E.Otto Steinborn.
+\newblock Some properties of the coupling coefficients of real spherical
+  harmonics and their relation to gaunt coefficients.
+\newblock {\em Journal of Molecular Structure: THEOCHEM}, 368:31 -- 37, 1996.
+\newblock Proceedings of the Second Electronic Computational Chemistry
+  Conference.
+
+\bibitem{sympy}
+\url{http://docs.sympy.org/latest/modules/physics/wigner.html#sympy.physics.wigner.gaunt}.
 
 \end{thebibliography}

@@ -314,9 +314,10 @@ and all other $H_{l,n}^m(\nu)$ terms in the series are zero, and
 
 \subsection{Singular value decomposition}
 Plugging the transfer function into the frequency-domain eigenvalue problem (Eq.
-\ref{eq:freqsvd}) yields a $3\times 3$ eigenvalue problem (we suppress the index
-$\bs{\rho}$ and understand that we need to solve this eigenvalue problem at each
-value of $\bs{\rho}$)
+\ref{eq:freqsvd}) yields a denumerably infinite eigenvalue problem with only
+$3\times 3$ non-zero entries in the matrix (we suppress the index $\bs{\rho}$
+and understand that we need to solve this eigenvalue problem at each value of
+$\bs{\rho}$)
 \begin{align}
   \mathsf{K}\mathsf{V}_j &= \mu_{j}\mathsf{V}_j,\\
   \begin{bmatrix}
@@ -572,7 +573,7 @@ The product of these two functions is given by
   is implied, upper indices are ``column'' indices, lower indices are ``row''
   indices) gives
   \begin{align}
-    {c''}^{n''} = P^{n''}_{n,n'} c_n c_{n'}'.
+    {c''}^{n''} = P^{n''}_{n,n'} c^n {c'}^{n'}.
   \end{align}
   We can precompute the triple integrals $P_{n,n',n''}$ using a symbolic package
   like Sympy.
@@ -601,7 +602,7 @@ The product will be in the form
 \end{align}
 where
 \begin{align}
-  {c''}^{n'', j''} = P_{n,n'}^{n''} G_{j,j'}^{j''} c_{n,j} c_{n', j'}'.\label{eq:final}
+  {c''}^{n'', j''} = P_{n,n'}^{n''} G_{j,j'}^{j''} c^{n,j} {c'}^{n', j'}.\label{eq:final}
 \end{align}
 Equation \ref{eq:final} is the main result of this section. It shows that we can
 precalculate the triple integrals of the circular and spherical harmonics and
