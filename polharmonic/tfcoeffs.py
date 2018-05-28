@@ -56,7 +56,7 @@ class TFCoeffs:
         Ploc = P[:3, :3, :3]
         
         # Multiply
-        result = np.einsum('abc,def,ad,be->cf', Ploc, G, x1, x2, optimize=True)
+        result = np.einsum('abc,def,ad,be->cf', Ploc, G, x1, x2)
         return TFCoeffs(result)
 
     def __truediv__(self, scalar):

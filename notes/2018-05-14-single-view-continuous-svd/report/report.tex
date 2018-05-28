@@ -197,7 +197,7 @@ image taken with a single polarizer setting.
 If the imaging system is spatially shift-invariant, then the forward and adjoint operators are given by the following integral transforms
 \begin{align}
   g(\rd{}, \mh{p}) = [\mathcal{H}f](\rd{}, \hat{\mb{p}}) &= \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^2}d\ro{}\, h(\rd{} -\ro{}, \so{}; \hat{\mb{p}})f(\ro{}, \so{}),\\
-  f(\ro{}, \so{}) =  [\mathcal{H}^{\dagger}g](\ro{}, \so{}) &= \int_{\mbb{S}^1}d\hat{\mb{p}}\, \int_{\mbb{R}^2}d\mb{r}_{d}\, h(\rd{} - \ro{}, \so{}; \hat{\mb{p}})g(\rd{}, \hat{\mb{p}}).
+  f(\ro{}, \so{}) =  [\mathcal{H}^{\dagger}g](\ro{}, \so{}) &= \int_{\mbb{S}^1}d\hat{\mb{p}}\, \int_{\mbb{R}^2}d\mb{r}_{d}\, h(\rd{} - \ro{}, \so{}; \hat{\mb{p}})g(\rd{}, \hat{\mb{p}}),
 \end{align}
 where $f(\ro{}, \so{})$ is the object, $g(\rd{}, \hat{\mb{p}})$ is the data, and
 $h(\rd{} -\ro{}, \so{}; \hat{\mb{p}})$ is the kernel of the integral transform.
@@ -206,9 +206,6 @@ complete data space as a ``donut'' of images. A delta function at a point in obj
 space will give rise to the kernel evaluated at that point in data space.
 
 We can write the forward and adjoint operators in the frequency domain as
-% \begin{align}
-%   g(\rd{}, \hat{\mb{p}}) = \sum_{n=-\infty}^{\infty} z_n(\mh{p}) \sum_{l=0}^{\infty}\sum_{m=-l}^{l} \int_{\mbb{R}^2}d\bs{\nu}\, H_{l,n}^m(\bs{\nu})F_l^m(\bs{\nu}), 
-    %   \end{align}
 \begin{align}
   G_n(\bs{\nu}) &= \sum_{l=0}^{\infty}\sum_{m=-l}^{l}H_{l,n}^m(\bs{\nu})F_l^m(\bs{\nu}),\label{eq:fwd}\\
   F_l^m(\bs{\nu}) &= \sum_{n=-\infty}^{\infty}H_{l,n}^m(\bs{\nu})G_n(\bs{\nu}),
@@ -216,7 +213,7 @@ We can write the forward and adjoint operators in the frequency domain as
 where
 \begin{align}
   G_{n}(\bs{\nu}) &= \int_{\mbb{S}^1}d\mh{p}\, z_n(\mh{p})\int_{\mbb{R}^2}d\rd{}\, \me{}^{i2\pi\rd{}\cdot\bs{\nu}}g(\rd{}, \mh{p}),\\
-  H_{l,n}^m(\bs{\nu}) &= \int_{\mbb{S}^1}d\mh{p}\, z_n(\mh{p})\int_{\mbb{S}^2}d\so{}\, y_l^m(\so{})\int_{\mbb{R}^2}d\ro{}\, \me{}^{i2\pi\ro{}\cdot\bs{\nu}}h(\ro{}, \so{}; \mh{p}),\\
+  H_{l,n}^m(\bs{\nu}) &= \int_{\mbb{S}^1}d\mh{p}\, z_n(\mh{p})\int_{\mbb{S}^2}d\so{}\, y_l^m(\so{})\int_{\mbb{R}^2}d\ro{}\, \me{}^{i2\pi\ro{}\cdot\bs{\nu}}h(\ro{}, \so{}; \mh{p}),\label{eq:genft}\\ 
   F_{l}^m(\bs{\nu}) &= \int_{\mbb{S}^2}d\so{}\, y_l^m(\so{})\int_{\mbb{R}^2}d\ro{}\, \me{}^{i2\pi\ro{}\cdot\bs{\nu}}f(\ro{}, \so{}).
 \end{align}
 To find the singular value decomposition of the forward operator, we need to solve
@@ -259,8 +256,38 @@ and $\alpha \equiv \arcsin(\text{NA}/n_o)$. It is more convenient to write the p
 \begin{align}
     h^{\mh{z}}_{\text{exc}}(\so{}; \mh{p}) &= y_0^0(\so{}) - \frac{1}{\sqrt{5}}\tilde{A}y_2^0(\so{}) + \sqrt{\frac{3}{5}}\tilde{B}\left\{y_2^2(\so{})z_2(\mh{p}) - y_2^{-2}(\so{})z_{-2}(\mh{p})\right\}.
 \end{align}
+We derived this excitation kernel using the model from Chandler et al.
+\cite{chandler17}---a model modified from Fourkas \cite{fourkas2001}. Both
+papers claim that their equations model aplanatic (shift-invariant) objectives,
+but this is not strictly true. Fourkas and Chandler ignore the
+$1/\sqrt{\cos\theta}$ apodization factor for aplanatic objectives and
+unknowingly model a non-aplanatic objective that satisfies the Herschel
+condition instead of Abbe's sine condition. The difference between these
+models is small but non-zero under the paraxial approximation. 
 
-We also showed that the point response function for unpolarized epi-detection is
+In the most recent string of note sets I have been modeling a true aplanatic
+objective under the paraxial approximation. The correct paraxial excitation model
+for an aplanatic objective is 
+\begin{align}
+  h^{\text{(ap)},\mh{z}}_{\text{exc}}(\so{}; \mh{p}) &= y_0^0(\so{}) - \frac{1}{\sqrt{5}}\left[1 - 2\left(\frac{\text{NA}}{n_o}\right)^2\right]y_2^0(\so{}) + \sqrt{\frac{3}{5}}\left\{y_2^2(\so{})z_2(\mh{p}) - y_2^{-2}(\so{})z_{-2}(\mh{p})\right\}. \label{eq:aplan}
+\end{align}
+We will drop the (ap) superscript unless there is possibility for confusion. Eq.
+\ref{eq:aplan} shows that for an aplanatic objective under the paraxial
+approximation, the $y_2^0$ term is excited less relative to the $y_0^0$ term as
+the NA increases (recall that the kernel is normalized). We also see that the
+$y_2^2$ and $y_2^{-2}$ terms do not depend on the NA, but they do depend on the
+polarizer orientation.
+
+Relevant discussion of Abbe's sine condition, the Herschel condition,
+apodization functions, and the paraxial approximation can be found in Barrett
+9.6.7 \cite{barrett2004}, Mansuripur 1.0 \cite{mansuripur2002}, and especially
+Gu 6.3 \cite{gu2000}. Although we (and Fourkas) incorrectly stated that we were
+modeling an aplanatic objective in \cite{chandler17}, we brought attention to
+our lack of apodization in the discussion section. All of our major conclusions
+would still hold if we used the correct apodization (and our numerical results
+hold for Herschel objectives although these are rarely used in microscopy).
+
+We also showed that the kernel for unpolarized epi-detection is
 given by
 \begin{align}
   h_{\text{det}}(\ro{}, \so{}) &= [{a}^2(r_o) + 2b^2(r_o)]y_0^0(\so{}) + \frac{1}{\sqrt{5}}\left[- a^2(r_o) + 4b^2(r_o)\right]y_2^0(\so{}),
@@ -275,42 +302,94 @@ where
   \text{NA} = n_o\sin\alpha.
 \end{align}
 The excitation and detection processes are incoherent, so to find the complete
-point response function we can multiply the excitation and detection point response
-functions which gives
+kernel we multiply the excitation and detection kernels
 \begin{align}
-  h(\ro{}, \so{}; \mh{p}) = h^{\mh{z}}_{\text{exc}}(\so{}; \mh{p})h_{\text{det}}(\ro{}, \so{}) = \frac{1}{\tilde{N}}\sum_{l=0}^{\infty}\sum_{m=-l}^l\sum_{n=-\infty}^{\infty} h_{l,n}^m(\ro{})y_l^m(\so{})z_n(\mh{p}), 
+  h(\ro{}, \so{}; \mh{p}) = h^{\mh{z}}_{\text{exc}}(\so{}; \mh{p})h_{\text{det}}(\ro{}, \so{}) = \sum_{l=0}^{\infty}\sum_{m=-l}^l\sum_{n=-\infty}^{\infty} h_{l,n}^m(\ro{})y_l^m(\so{})z_n(\mh{p}).
 \end{align}
-where $\tilde{N} = \frac{\tilde{A}}{10} + \frac{1}{2}$ is a normalization constant
-and the terms in the series are given by
-\begin{align}
-  h_{0,0}^0(r_o) &= \left[\frac{\tilde{A}}{10} + \frac{1}{2}\right]a^2(r_o) + \left[-\frac{2\tilde{A}}{5} + 1\right]b^2(r_o),\\
-  h_{2,2}^{2}(r_o) &= -h_{2,-2}^{-2}(r_o) = \frac{3\sqrt{15}\tilde{B}}{35}\left[\frac{3}{2}a^2(r_o) + b^2(r_o)\right],\\
-  h_{2,0}^0(r_o) &= \left[-\frac{\sqrt{5}\tilde{A}}{14} + \frac{\sqrt{5}}{10}\right]a^2(r_o) + \left[-\frac{11\sqrt{5}\tilde{A}}{35} + \frac{2}{\sqrt{5}}\right]b^2(r_o),\\
-  h_{4,2}^{2}(r_o) &= -h_{4,-2}^{-2}(r_o) = \frac{6\sqrt{5}\tilde{B}}{35}\left[-\frac{1}{4}a^2(r_o) + b^2(r_o)\right],\\
-  h_{4,0}^0(r_o) &= \frac{3\tilde{A}}{35}[a^2(r_o) - 4b^2(r_o)],\\
-\end{align}
-and all other $h_{l,n}^m(r_o)$ terms in the series are zero. 
+In previous notes we were able to calculate these products in terms of the
+circular and spherical harmonics by hand, but this is time consuming and error
+prone. To simplify the multiplication we precompute the triple integrals of the
+circular and spherical harmonics and compute the product using a tensor
+product---see Appendix A for details.
+
+We can write a closed form expression for the kernel, but the expression is long
+and not particularly useful. Instead, we plot each term of the kernel in Fig.
+\ref{fig:illkern}.
+
+\fig{../calculations/out/hhill.pdf}{1.0}{Five-dimensional kernel
+  $h_{l,n}^m(\ro{})$ for a single-view polarized illumination microscope with
+  0.8 NA epi-illumination and epi-detection. \textbf{Rows:} $l$ indexes the
+  object-space spherical harmonic band. \textbf{Columns:} $m$ indexes the
+  object-space spherical harmonic degree, and $n$ indexes the data-space
+  circular harmonic band. \textbf{Entries:} Each column and row contains a
+  continuous two-dimensional plot indexed by the vector $\ro{}$ ranging from
+  $-2\lambda/\text{NA}$ to $+2\lambda/\text{NA}$ (although $\ro{}$ is
+  rotationally symmetric so one dimension would suffice). All values are
+  normalized between $-1$ \textcolor{blue}{(blue)} and $+1$
+  \textcolor{red}{(red)} with $0$ colored white.}{illkern}
+  % filename, width, caption, label
+
+Each of the ($l,m,n$) terms of the kernel shown in Fig. \ref{fig:illkern} can be
+interpreted as the shape of the $z_n(\mh{p})$ component of the intensity pattern
+detected when the object consists of $y_l^m(\so{})$ distributed dipoles. For
+example, the $l=0$, $m=0$, $n=0$ term shows the intensity pattern for the
+$z_0(\mh{p})$ (constant) component detected when the object consists of
+$y_0^0(\so{})$ (uniformly distributed) dipoles. Notice that the $l=0$, $m=0$,
+$n=\pm 2$ terms are zero which means that the intensity pattern from a uniform
+distribution of fluorophores is independent of the polarizer orientation.
+
+Interestingly, every ($l$, $m$) term in the kernel has a single $n$ term that is
+non-zero. This means that each spherical harmonic component in object space
+gives rise to a single circular harmonic component in data space. This property
+is specific to polarized illumination microscopes.
+
+Finally, notice that the polarizer dimension is limited to $n= \{-2, 0, 2\}$.
+The three terms mean that three polarizer orientations are sufficient to
+completely sample that dimension. We have suspected that three measurements are
+sufficient because the polarization dependence of an intensity signal can be
+specified with three numbers---an offset, an amplitude, and a phase. The three
+circular harmonic components of the signal capture the same information as the
+offset, amplitude, and phase; and they are orthogonal functions so they allow us
+to use frequency domain techniques.
 
 \subsection{Transfer function}
-The optical transfer function for this microscope is given by
+We can calculate the transfer function using Eq. \ref{eq:genft} and the kernel,
+but this will lead to a very long expression. Instead, we calculate the
+illumination transfer function and the detection transfer function then use the
+multiplication rules in Appendix A to find the complete transfer function.
+
+The illumination transfer function is
 \begin{align}
-  H_{l,n}^m(\nu) = \frac{1}{\tilde{M}}\sum_{l'=0}^{\infty}\sum_{m'=-l'}^{l'}\sum_{n'=-\infty}^{\infty} H_{l',n'}^{m'}(\nu)\delta_{l,l'}\delta_{m,m'}\delta_{n,n'},  
+  H^m_{\text{exc},l,n} &= \delta_{l,0}\delta_{m,0}\delta_{n,0} - \frac{1}{\sqrt{5}}\left[1 - 2\left(\frac{\text{NA}}{n_o}\right)^2\right]\delta_{l,2}\delta_{m,0}\delta_{n,0} + \sqrt{\frac{3}{5}}\left\{\delta_{l,2}\delta_{m,2}\delta_{n,2} - \delta_{l,-2}\delta_{m,-2}\delta_{n,-2}\right\}, 
+\end{align}
+and the detection transfer function is 
+\begin{align}
+  H^m_{\text{det},l,n}(\nu) &= [A(\nu) + 2B(\nu)]\delta_{l,0}\delta_{m,0}\delta_{n,0} + \frac{1}{\sqrt{5}}\left[- A(\nu) + 4B(\nu)\right]\delta_{l,2}\delta_{m,0}\delta_{n,0},
 \end{align}
 where
-$\tilde{M} = \left[\frac{\tilde{A}}{10} + \frac{1}{2}\right] + \left(\frac{\text{NA}}{n_o}\right)\left[-\frac{2\tilde{A}}{10} + \frac{1}{2}\right]$ is a
-normalization constant, and
-\begin{align}
-  H_{0,0}^0(\nu) &= \left[\frac{\tilde{A}}{10} + \frac{1}{2}\right]A(\nu) + \left[-\frac{2\tilde{A}}{5} + 1\right]B(\nu),\\
-  H_{2,2}^{2}(\nu) &= -H_{2,-2}^{-2}(\nu) = \frac{3\sqrt{15}\tilde{B}}{35}\left[\frac{3}{2}A(\nu) + B(\nu)\right],\\
-  H_{2,0}^0(\nu) &= \left[-\frac{\sqrt{5}\tilde{A}}{14} + \frac{\sqrt{5}}{10}\right]A(\nu) + \left[-\frac{11\sqrt{5}\tilde{A}}{35} + \frac{2}{\sqrt{5}}\right]B(\nu),\\
-  H_{4,2}^{2}(\nu) &= -H_{4,-2}^{-2}(\nu) = \frac{6\sqrt{5}\tilde{B}}{35}\left[-\frac{1}{4}A(\nu) + B(\nu)\right],\\
-  H_{4,0}^0(\nu) &= \frac{3\tilde{A}}{35}[A(\nu) - 4B(\nu)],
-\end{align}
-and all other $H_{l,n}^m(\nu)$ terms in the series are zero, and  
 \begin{align}
   A(\nu) &= \frac{2}{\pi}\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
   B(\nu) &= \frac{1}{\pi}\left(\frac{\text{NA}}{n_o}\right)^2\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \left[3 - 2\left(\frac{\nu}{2\nu_o}\right)^2\right]\frac{\nu}{2\nu_o} \sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right).                 
 \end{align}
+The complete transfer function is given by
+\begin{align}
+  H_{l,n}^m(\nu) = H^m_{\text{exc},l,n} * H^m_{\text{det},l,n}(\nu),
+\end{align}
+where $*$ denotes a generalized convolution over all five indices. In Appendix A
+we show how to evaluate the convolution over the discrete indices. The
+excitation pattern is spatially uniform, so the spatial convolution is trivial.
+We plot the complete transfer function in Fig. \ref{fig:illtran}.
+\fig{../calculations/out/Hill.pdf}{1.0}{Five-dimensional transfer function
+  $H_{l,n}^m(\bs{\nu})$ for a single-view polarized illumination microscope with
+  0.8 NA epi-illumination and epi-detection. \textbf{Rows:} $l$ indexes the
+  object-space spherical harmonic band. \textbf{Columns:} $m$ indexes the
+  object-space spherical harmonic degree, and $n$ indexes the data-space
+  circular harmonic band. \textbf{Entries:} Each column and row contains a
+  continuous two-dimension plot indexed by the vector $\bs{\nu}$ ranging from
+  $-2\text{NA}/\lambda$ to $+2\text{NA}/\lambda$. All values are normalized
+  between $-1$ \textcolor{blue}{(blue)} and $+1$ \textcolor{red}{(red)} with $0$
+  colored white. Black lines are contours at 0 and $\pm 0.1$.}{illtran}
+% filename, width, caption, label
 
 \subsection{Singular value decomposition}
 Plugging the transfer function into the frequency-domain eigenvalue problem (Eq.
@@ -384,19 +463,54 @@ Therefore, the complete singular functions in object space are
   u_{\bs{\rho},1}(\ro{}, \so{}) &= \me{}^{i2\pi\bs{\rho}\cdot\ro{} }[H_{2,-2}^{-2}(\rho)y_2^{-2}(\so{}) + H_{4,-2}^{-2}(\rho)y_4^{-2}(\so{})],\\
   u_{\bs{\rho},2}(\ro{}, \so{}) &= \me{}^{i2\pi\bs{\rho}\cdot\ro{} }[H_{2,2}^2(\rho)y_2^2(\so{}) + H_{4,2}^2(\rho)y_4^2(\so{})].
 \end{align}
+Finally, the singular values are the square root of the eigenvalues
+\begin{align}
+  \sigma_{\bs{\rho},j} = \sqrt{\mu_{\bs{\rho},j}}. 
+\end{align}
 
 We have found the complete singular system for a single view microscope with
-polarized illumination. We can look closer at the singular value spectrum to
-find the degeneracies of the microscope. The first major set of degeneracies is
-related to the fact that $\mu_{\bs{\rho},1} = \mu_{\bs{\rho},2}$. The
-corresponding singular functions in object space are related by changing the
-spherical harmonic index $m$ to $-m$. This transformation is a rotation about
-the optical axis, so this degeneracy corresponds to the rotational symmetry of
-the microscope. The second set of degeneracies is related to the fact that the
-singular values depend only on $\rho$, not the vector $\bs{\rho}$. The
-corresponding singular functions in object space are spatial harmonics at the
-same spatial frequency in different directions. Once again, this degeneracy
-corresponds to the rotational symmetry of the microscope.
+polarized illumination. In Fig. \ref{fig:illsvs} we show all three branches of
+the singular spectrum along with the angular part of the object space singular
+functions $u_{\bs{\rho},j}(0, \so{})$.
+
+\fig{../calculations/out/SVSill.pdf}{1.0}{Singular system for a single-view
+  polarized illumination microscope with 0.8 NA epi-illumination and
+  epi-detection. \textbf{Rows:} Discrete branches of the singular value system
+  indexed by $j$. \textbf{Column 1:} Continuous singular value spectra for each
+  branch $j$ indexed by spatial frequency $\bs{\rho}$. The singular value
+  spectra are normalized with contour lines at 0 and 0.1. \textbf{Columns 2-5:}
+  Angular part of the object-space singular vector at spatial frequencies marked
+  with `x's in the first column. The camera is facing the origin along the
+  [1,1,1] axis with the optical axis of the microscope pointing up along the
+  page. A \textcolor{red}{red} surface indicates positive values, a
+  \textcolor{blue}{blue} surface indicates negative values, and the distance
+  from the origin indicates the magnitude.}{illsvs}
+
+All three branches of the singular system have object-space singular functions
+that depend on the spatial frequency (the plots in each column and row of Fig.
+\ref{fig:illsvs} are different). This dependence is largest in the $j=0$ branch
+where at low spatial frequencies the singular functions are nearly spherical,
+while at high spatial frequencies the singular functions are negative along the
+optical axis. The fact that the singular functions of the $j=0$ branch are
+non-spherical and have a spatial-frequency dependence is the most important
+result of this section---it means that a single view microscope can distinguish
+distributions of fluorophores that have different out-of-transverse-plane
+components. The $j=1$ and $j=2$ object-space singular functions still depend on
+the spatial frequency---the high-frequency singular functions are ``flatter'' in
+the transverse plane than the low-frequency singular functions---but this
+dependence is relatively small.
+
+We can use the singular value spectrum to find the degeneracies and symmetries
+of the microscope. The first major set of degeneracies is related to the fact
+that $\sigma_{\bs{\rho},1} = \sigma_{\bs{\rho},2}$. The corresponding singular
+functions in object space are related by changing the spherical harmonic index
+$m$ to $-m$. This transformation is a rotation about the optical axis, so this
+degeneracy corresponds to the rotational symmetry of the microscope. The second
+set of degeneracies is related to the fact that the singular values depend only
+on $\rho$, not the vector $\bs{\rho}$. The corresponding singular functions in
+object space are spatial harmonics at the same spatial frequency in different
+directions. Once again, this degeneracy corresponds to the rotational symmetry
+of the microscope.
 
 Recall the mental image of data space being arranged on a donut. If we rotate
 the object that we are imaging then the data space will undergo two simultaneous
@@ -407,24 +521,23 @@ glaze on top would end up on the bottom). These two simultaneous rotations
 correspond with the two sets of degeneracies we see in the singular value
 spectrum.
 
-Plots forthcoming!
+We have only plotted the object space singular functions for spatial frequencies
+along the $x$-axis, but these are sufficient to characterize the singular
+functions for any spatial frequency direction. To see this, notice that the
+$j=0$ singular functions are rotationally symmetric about the optical axis and
+the $j=1$ and $j=2$ singular functions are degenerate and they span a
+rotationally symmetric space of singular functions.
 
 \section{Polarized detection}
 We'll use the same notation as the previous section, so there will be notation
 overlap.
 
 \subsection{Kernel}
-In previous notes we showed that the excitation point response function for
+Earlier we showed that the excitation point response function for
 unpolarized epi-illumination is given by
 \begin{align}
-  h_{\text{exc}}^{\mh{z}}(\so{}) = h_{\text{exc},0,0}^0y_0^0(\so{}) + h_{\text{exc},0,0}^2y_2^0(\so{}).
+  h^{\mh{z}}_{\text{exc}}(\so{}) &= y_0^0(\so{}) - \frac{1}{\sqrt{5}}\left[1 - 2\left(\frac{\text{NA}}{n_o}\right)^2\right]y_2^0(\so{}).
 \end{align}
-where
-\begin{align}
-  h_{\text{exc},0,0}^0 &= 1,\\
-  h_{\text{exc},2,0}^0 &= -\frac{1}{\sqrt{5}}\tilde{A}.
-\end{align}
-
 We also showed that the point response function for polarized detection is given
 by (rewritten in terms of the circular harmonics)
 \begin{align}
@@ -439,78 +552,64 @@ where
   h_{\text{det},2,2}^2(\ro{}) &= -h_{\text{det},2,-2}^{-2}(\ro{}) = \sqrt{\frac{3}{5}}a^2(r_o).
 \end{align}
 The complete kernel for unpolarized illumination and polarized detection is
-given by the product of the excitation and detection kernels. In the previous
-case we were able to calculate this product in terms of the circular and
-spherical harmonics by hand, but this task is difficult in the general case. To
-simplify this task we precompute the triple integrals of the circular and spherical
-harmonics---see Appendix A for details. 
-\begin{align}
-  h(\ro{}, \so{}; \mh{p}_d) = h_{\text{exc}}(\so{})h_{\text{det}}(\ro{}, \so{}; \mh{p}_d) = \sum_{l=0}^{\infty}\sum_{m=-l}^l\sum_{n=-\infty}^{\infty} h_{l,n}^m(\ro{})y_l^m(\so{})z_n(\mh{p}_d), 
-\end{align}
-where
-\begin{align}
-  h_{0,0}^0(\ro{}) &= h_{\text{exc},0,0}^0 h_{\text{det},0,0}^0(\ro{}) + h_{\text{exc},2,0}^0 h_{\text{det},2,0}^0(\ro{}),\\
-  h_{0,\pm 2}^0(\ro{}) &= h_{\text{exc},0,0}^0 h_{\text{det},0,\pm 2}^0(\ro{}) + h_{\text{exc},2,0}^0 h_{\text{det},2,\pm 2}^0(\ro{}),\\
-  h_{2,0}^0(\ro{}) &= h_{\text{exc},0,0}^0 h_{\text{det},0,0}^0(\ro{}) + h_{\text{exc},2,0}^0 h_{\text{det},2,0}^0(\ro{}) + \frac{2\sqrt{5}}{7}h_{\text{exc},2,0}^0h_{\text{det},2,0}^0(\ro{}),\\
-  h_{2,\pm 2}^0(\ro{}) &= h_{\text{exc},0,0}^0 h_{\text{det},0,\pm 2}^0(\ro{}) + h_{\text{exc},2,0}^0 h_{\text{det},2,\pm 2}^0(\ro{}) + \frac{2\sqrt{5}}{7}h_{\text{exc},2,0}^0h_{\text{det},2,\pm 2}^0(\ro{}),\\
-  h_{2,\pm 2}^{\pm 2}(\ro{}) &= h_{\text{det},2,\pm 2}^{\pm 2}(\ro{})\left[h_{\text{exc},0,0}^0 - \frac{2\sqrt{5}}{7}h_{\text{exc},2,0}^0\right],\\
-  h_{4,0}^0(\ro{}) &= \frac{6}{7}h_{\text{exc},2,0}^0h_{\text{det},2,0}^0(\ro{}),\\
-  h_{4,\pm 2}^0(\ro{}) &= \frac{6}{7}h_{\text{exc},2,0}^0h_{\text{det},2,\pm 2}^0(\ro{}),\\
-  h_{4,\pm 2}^{\pm 2}(\ro{}) &= \frac{\sqrt{15}}{7}h_{\text{exc},2,0}^0h_{\text{det},2,\pm 2}^{\pm 2}(\ro{}),
-\end{align}
-% hh0
-% [h000d*h000e + h200d*h200e, 0, 0, h000d*h200e + h000e*h200d + 2*sqrt(5)*h200d*h200e/7, 0, 0, 0, 0, 0, 0, 6*h200d*h200e/7, 0, 0, 0, 0]
+given by the product of the excitation and detection kernels. We plot the
+result in Fig. \ref{fig:detkern}.
 
-% hh2
-% [h000e*h002d + h200e*h202d, 0, 0, h000e*h202d + h002d*h200e + 2*sqrt(5)*h200e*h202d/7, 0, h222d*(7*h000e - 2*sqrt(5)*h200e)/7, 0, 0, 0, 0, 6*h200e*h202d/7, 0, sqrt(15)*h200e*h222d/7, 0, 0]
+\fig{../calculations/out/hhdet.pdf}{1.0}{Five-dimensional kernel
+  $h_{l,n}^m(\ro{})$ for a single-view polarized detection microscope with
+  0.8 NA epi-illumination and epi-detection. \textbf{Rows:} $l$ indexes the
+  object-space spherical harmonic band. \textbf{Columns:} $m$ indexes the
+  object-space spherical harmonic degree, and $n$ indexes the data-space
+  circular harmonic band. \textbf{Entries:} Each column and row contains a
+  continuous two-dimensional plot indexed by the vector $\ro{}$ ranging from
+  $-2\lambda/\text{NA}$ to $+2\lambda/\text{NA}$ (although $\ro{}$ is
+  rotationally symmetric so one dimension would suffice). All values are
+  normalized between $-1$ \textcolor{blue}{(blue)} and $+1$
+  \textcolor{red}{(red)} with $0$ colored white.}{detkern}
+  % filename, width, caption, label
 
-% hh_2
-% [h000e*h00_2d + h200e*h20_2d, h2_2_2d*(7*h000e - 2*sqrt(5)*h200e)/7, 0, h000e*h20_2d + h00_2d*h200e + 2*sqrt(5)*h200e*h20_2d/7, 0, 0, 0, 0, sqrt(15)*h200e*h2_2_2d/7, 0, 6*h200e*h20_2d/7, 0, 0, 0, 0]
-and the remaining terms in the series are zero. Plugging in the excitation and
-detection point response functions gives the following
-\begin{align}
-  h_{0,0}^0(\ro{}) &= \left[\frac{\tilde{A}}{5} + 1\right]a^2(r_o) + \left[-\frac{4\tilde{A}}{5} + 2\right]b^2(r_o),\\ 
-  h_{0,\pm 2}^0(\ro{}) &= 2\sqrt{\pi}\left[1 - \frac{2\tilde{A}}{5}\right]b^2(r_o)z_{\pm 2}(\ro{}),\\ 
-  h_{2,0}^0(\ro{}) &= \frac{\sqrt{5}}{35}\left\{-\left[5\tilde{A} + 7\right]a^2(r_o) + \left[-22\tilde{A} + 28\right]b^2(r_0)\right\},\\ 
-  h_{2,\pm 2}^0(\ro{}) &= \frac{2\sqrt{5\pi}}{35}\left[-11\tilde{A} + 14\right]b^2(r_o)z_{\pm 2}(\ro{})\\ 
-  h_{2,2}^{2}(\ro{}) &= h_{2,-2}^{-2}(\ro{}) = \frac{\sqrt{15}}{5}\left[\frac{2\tilde{A}}{7} + 1\right]a^2(r_o),\\ 
-  h_{4,0}^0(\ro{}) &= \frac{6\tilde{A}}{35}\left[a^2(r_o) - 4b^2(r_o)\right],\\ 
-  h_{4,\pm 2}^0(\ro{}) &= -\frac{24\sqrt{\pi}}{35}\tilde{A}b^2(r_o)z_{\pm 2}(\ro{}),\\ 
-  h_{4,2}^{2}(\ro{}) &= h_{4,-2}^{-2}(\ro{}) = -\frac{3\sqrt{5}}{35}\tilde{A}a^2(r_o). 
-\end{align}
-% hh0
-% [At*(a - 4*b)/5 + a + 2*b, 0, 0, sqrt(5)*(-5*At*a - 22*At*b - 7*a + 28*b)/35, 0, 0, 0, 0, 0, 0, 6*At*(a - 4*b)/35, 0, 0, 0, 0]
-
-% hh2
-% [2*sqrt(pi)*b*z2*(-2*At + 5)/5, 0, 0, 2*sqrt(5)*sqrt(pi)*b*z2*(-11*At + 14)/35, 0, a*(2*sqrt(15)*At/35 + sqrt(15)/5), 0, 0, 0, 0, -24*sqrt(pi)*At*b*z2/35, 0, -sqrt(15)*sqrt(3)*At*a/35, 0, 0]
-
-% hh_2
-% [2*sqrt(pi)*b*z_2*(-2*At + 5)/5, a*(0.221313334068995*At + 0.774596669241483), 0, 2*sqrt(5)*sqrt(pi)*b*z_2*(-11*At + 14)/35, 0, 0, 0, 0, -0.110656667034498*sqrt(3)*At*a, 0, -24*sqrt(pi)*At*b*z_2/35, 0, 0, 0, 0]
-
+In the polarized illumination case every ($l$, $m$) term in the kernel had a
+single $n$ term that is non-zero. For polarized detection this is no longer
+true---for example there are non-zero components for $l=0$, $m=0$ in the
+$n=0, \pm 2$ terms. This means that each spherical harmonic component in object
+space gives rise to multiple circular harmonic components in data space.
 
 \subsection{Transfer function}
-The transfer function for unpolarized illumination and polarized detection is
-given by
+The transfer function for unpolarized illumination is
 \begin{align}
-  H_{l,n}^m(\bs{\nu}) = \sum_{l=0}^{\infty}\sum_{m=-l}^l\sum_{n=-\infty}^{\infty} H_{l,n}^m(\bs{\nu})\delta_{ll'}\delta_{mm'}\delta_{nn'},
+  H^m_{\text{exc}, l,n} &= \delta_{l,0}\delta_{m,0}\delta_{n,0} - \frac{1}{\sqrt{5}}\left[1 - 2\left(\frac{\text{NA}}{n_o}\right)^2\right]\delta_{l,2}\delta_{m,0}\delta_{n,0},
+\end{align}
+and the transfer function for polarized detection is
+\begin{align}
+  H_{\text{det},l,n}^m(\bs{\nu}) = \sum_{l=0}^{\infty}\sum_{m=-l}^l\sum_{n=-\infty}^{\infty} H_{\text{det},l,n}^m(\bs{\nu})\delta_{l,l'}\delta_{m,m'}\delta_{n,n'}, 
 \end{align}
 where
 \begin{align}
-  H_{0,0}^0(\bs{\nu}) &= \left[\frac{\tilde{A}}{5} + 1\right]A(\nu) + \left[-\frac{4\tilde{A}}{5} + 2\right]B(\nu),\\ 
-  H_{0,\pm 2}^0(\bs{\nu}) &= 2\sqrt{\pi}\left[1 - \frac{2\tilde{A}}{5}\right]C(\nu)z_{\pm 2}(\bs{\nu}),\\ 
-  H_{2,0}^0(\bs{\nu}) &= \frac{\sqrt{5}}{35}\left\{-\left[5\tilde{A} + 7\right]A(\nu) + \left[-22\tilde{A} + 28\right]B(r_0)\right\},\\ 
-  H_{2,\pm 2}^0(\bs{\nu}) &= \frac{2\sqrt{5\pi}}{35}\left[-11\tilde{A} + 14\right]C(\nu)z_{\pm 2}(\bs{\nu})\\ 
-  H_{2,2}^{2}(\bs{\nu}) &= H_{2,-2}^{-2}(\bs{\nu}) = \frac{\sqrt{15}}{5}\left[\frac{2\tilde{A}}{7} + 1\right]A(\nu),\\ 
-  H_{4,0}^0(\bs{\nu}) &= \frac{6\tilde{A}}{35}\left[A(\nu) - 4B(\nu)\right],\\ 
-  H_{4,\pm 2}^0(\bs{\nu}) &= -\frac{24\sqrt{\pi}}{35}\tilde{A}C(\nu)z_{\pm 2}(\bs{\nu}),\\ 
-  H_{4,2}^{2}(\bs{\nu}) &= H_{4,-2}^{-2}(\bs{\nu}) = -\frac{3\sqrt{5}}{35}\tilde{A}A(\nu). 
+  H_{\text{det},0,0}^0(\bs{\nu}) &= A(\nu) + 2B(\nu),\\
+  H_{\text{det},0,\pm 2}^0(\bs{\nu}) &= 2\sqrt{\pi} C(\nu)z_{\pm 2}(\bs{\nu}),\\
+  H_{\text{det},2,0}^0(\bs{\nu}) &= \frac{1}{\sqrt{5}}\left[-A(\nu) + 4B(\nu)\right],\\
+  H_{\text{det},2,\pm 2}^0(\bs{\nu}) &= 4\sqrt{\frac{\pi}{5}}C(\nu)z_{\pm 2}(\bs{\nu}),\\
+  H_{\text{det},2,2}^2(\bs{\nu}) &= -H_{\text{det},2,-2}^{-2}(\bs{\nu}) = \sqrt{\frac{3}{5}}A(\nu).
 \end{align}
-where 
+and
 \begin{align}
-  A(\nu) &= \frac{2}{\pi}\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
-  B(\nu) &= \frac{1}{\pi}\left(\frac{\text{NA}}{n_o}\right)^2\left[\arccos\left(\frac{\nu}{2\nu_o}\right) - \left[3 - 2\left(\frac{\nu}{2\nu_o}\right)^2\right]\frac{\nu}{2\nu_o} \sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right),\\
   C(\nu) &= \frac{1}{\pi}\left(\frac{\text{NA}}{n_o}\right)^2\left[-\frac{4}{3}\frac{\nu}{2\nu_o}\sqrt[3]{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right]\Pi\left(\frac{\nu}{2\nu_o}\right).
 \end{align}
+Fig. \ref{fig:dettran} shows the complete transfer function for a polarized
+detection microscope. 
+
+\fig{../calculations/out/Hdet.pdf}{1.0}{Five-dimensional transfer function
+  $H_{l,n}^m(\bs{\nu})$ for a single-view polarized detection microscope with
+  0.8 NA epi-illumination and epi-detection. \textbf{Rows:} $l$ indexes the
+  object-space spherical harmonic band. \textbf{Columns:} $m$ indexes the
+  object-space spherical harmonic degree, and $n$ indexes the data-space
+  circular harmonic band. \textbf{Entries:} Each column and row contains a
+  continuous two-dimension plot indexed by the vector $\bs{\nu}$ ranging from
+  $-2\text{NA}/\lambda$ to $+2\text{NA}/\lambda$. All values are normalized
+  between $-1$ \textcolor{blue}{(blue)} and $+1$ \textcolor{red}{(red)} with $0$
+  colored white. Black lines are contours at 0 and $\pm 0.1$.}{dettran}
+% filename, width, caption, label
+
 
 \subsection{Singular value decomposition}
 We follow the same procedure and plug the transfer function into the
@@ -531,7 +630,55 @@ where the entries of $\mathsf{K}$ are given by
 The eigenvalues and eigenvectors can be computed in a closed form (and I've done
 this using a symbolic package), but writing the result would fill several pages
 with notation and provide little insight. Instead we proceed straight to plots
-of the eigenvalues and eigenvectors shown in Fig. XXX. 
+of the singular system shown in Fig. \ref{fig:detsvs}.
+
+\fig{../calculations/out/SVSdet.pdf}{1.0}{Singular system for a single-view
+  polarized detection microscope with 0.8 NA epi-illumination and
+  epi-detection. \textbf{Rows:} Discrete branches of the singular value system
+  indexed by $j$. \textbf{Column 1:} Continuous singular value spectra for each
+  branch $j$ indexed by spatial frequency $\bs{\rho}$. The singular value
+  spectra are normalized with contour lines at 0 and 0.1. \textbf{Columns 2-5:}
+  Angular part of the object-space singular vector at spatial frequencies marked
+  with `x's in the first column. The camera is facing the origin along the
+  [1,1,1] axis with the optical axis of the microscope pointing up along the
+  page. A \textcolor{red}{red} surface indicates positive values, a
+  \textcolor{blue}{blue} surface indicates negative values, and the distance
+  from the origin indicates the magnitude.}{detsvs}
+
+First, notice that the DC term ($\bs{\rho} = 0$, $j=0$) of the polarized
+detection singular system in Fig. \ref{fig:detsvs} is identical to the DC term
+of the polarized illumination singular system in FIg. \ref{fig:illsvs}. This is
+a result we've seen before---if we ignore spatio-angular coupling then polarized
+illumination and polarized detection microscopes measure identical components of
+the object.
+
+Second, notice that there are no longer any degeneracies between the three
+branches of the singular spectrum (except at $\bs{\rho} = 0$). This means that
+moving the polarizer to the detection arm breaks a symmetry. Rotating each
+individual point in object space no longer has a corresponding transformation in
+data space because the polarizer introduces spatio-angular coupling. Each of the
+branches of the singular spectrum is still rotationally symmetric, though, so we
+preserve one of the symmetries---rotating the object about the optical axis will
+still rotate the data space about the curved axis that runs through the center
+of donut (the ``glaze inversion''!).
+
+Third, notice that the singular values of the polarized detection microscope are
+larger than the singular values of the polarized illumination microscope at all
+spatial frequencies except $\bs{\rho} = 0$ where they are equal. This means that
+a polarized detection microscope passes orthogonal components of the object more
+efficiently (the signal is less corruptible by noise) than a polarized
+illumination microscope. Although the difference is not extremely large---3-4\%
+at most---this is the most convincing reason that we should prefer polarized
+detection over polarized illumination. 
+
+Finally, consider the singular functions. The singular functions are no longer
+rotationally symmetric at non-zero spatial frequencies which means that we would
+see rotated singular functions if we showed the singular functions for spatial
+frequencies off of the $x$-axis. We also see that the singular functions contain
+out-of-plane components at high spatial frequencies (espsecially in the $j=1$
+branch) just like the the polarized illumination case.
+
+
 
 \bibliography{report}{}
 \bibliographystyle{unsrt}
@@ -552,7 +699,7 @@ The product of these two functions is given by
   \end{align}
   and we would like to find a relationship between the input coefficients ($c_n$
   $c_{n'}'$) and the output coefficients $c_{n''}''$. To find this relationship
-  we can rewrite the product the circular harmonics as a linear combination of
+  we can write the product the circular harmonics as a linear combination of
   circular harmonics
   \begin{align}
     z_n(\mh{p})z_{n'}(\mh{p}) = \sum_{j''=0}^{\infty}P_{n,n',n''}z_{j''}(\mh{p})\label{eq:product}

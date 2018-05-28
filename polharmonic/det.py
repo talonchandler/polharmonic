@@ -42,11 +42,12 @@ class Detector:
         C = self.C
         n0 = [A(nu) + 2*B(nu), 0, 0, (-A(nu) + 4*B(nu))/np.sqrt(5), 0, 0]
         if self.polarizer:
-            n_2 = [2*C(nu)*np.cos(2*phi_nu), -np.sqrt(0.6)*A(nu), 0, (4.0/np.sqrt(5))*C(nu)*np.cos(2*phi_nu), 0, 0]
-            n2 = [2*C(nu)*np.sin(2*phi_nu), 0, 0, (4.0/np.sqrt(5))*C(nu)*np.sin(2*phi_nu), 0, np.sqrt(0.6)*A(nu)]
-            return tf.TFCoeffs([n0, n_2, n2])
+            n_2 = [2*C(nu)*np.sin(2*phi_nu), -np.sqrt(0.6)*A(nu), 0, (4.0/np.sqrt(5))*C(nu)*np.sin(2*phi_nu), 0, 0]
+            n2 = [2*C(nu)*np.cos(2*phi_nu), 0, 0, (4.0/np.sqrt(5))*C(nu)*np.cos(2*phi_nu), 0, np.sqrt(0.6)*A(nu)]
+            return tf.TFCoeffs([n0, n_2, n2])#/n0[0]
         else:
-            return tf.TFCoeffs([n0, 6*[0], 6*[0]])
+            return tf.TFCoeffs([n0, 6*[0], 6*[0]])#/n0[0]
+
         
     # PSF helper functions
     def a(self, r):

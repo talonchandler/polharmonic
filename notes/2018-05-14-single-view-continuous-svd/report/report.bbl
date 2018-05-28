@@ -1,5 +1,34 @@
 \begin{thebibliography}{1}
 
+\bibitem{chandler17}
+Talon Chandler, Shalin Mehta, Hari Shroff, Rudolf Oldenbourg, and Patrick J.~La
+  Rivi\`{e}re.
+\newblock Single-fluorophore orientation determination with multiview polarized
+  illumination: modeling and microscope design.
+\newblock {\em Opt. Express}, 25(25):31309--31325, Dec 2017.
+
+\bibitem{fourkas2001}
+John~T. Fourkas.
+\newblock Rapid determination of the three-dimensional orientation of single
+  molecules.
+\newblock {\em Opt. Lett.}, 26(4):211--213, Feb 2001.
+
+\bibitem{barrett2004}
+H.H. Barrett and K.J. Myers.
+\newblock {\em Foundations of image science}.
+\newblock Wiley series in pure and applied optics. Wiley-Interscience, 2004.
+
+\bibitem{mansuripur2002}
+M.~Mansuripur.
+\newblock {\em Classical Optics and Its Applications}.
+\newblock Classical Optics and Its Applications. Cambridge University Press,
+  2002.
+
+\bibitem{gu2000}
+M.~Gu.
+\newblock {\em Advanced Optical Imaging Theory}.
+\newblock Springer Series in Optical Sciences. Springer, 2000.
+
 \bibitem{homeier1996}
 Herbert~H.H. Homeier and E.Otto Steinborn.
 \newblock Some properties of the coupling coefficients of real spherical

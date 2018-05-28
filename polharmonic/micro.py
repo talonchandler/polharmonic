@@ -1,5 +1,6 @@
+import os
 import numpy as np
-from polharmonic import util, ill, det
+from polharmonic import util, ill, det, gaunt, shcoeffs
 import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.rcParams['contour.negative_linestyle'] = 'solid'
@@ -29,7 +30,8 @@ class Microscope:
     def H(self, nu, phi_nu=0):
         return self.ill.H()*self.det.H(nu, phi_nu=phi_nu)/self.Hnorm
 
-    def plot(self, func=h, filename='micro.pdf', n_px=2**6, plot_m=[-2, 0, 2]):
+    def plot(self, func=h, filename='micro.pdf', n_px=2**6, plot_m=[-2, 0, 2],
+             contours=True):
         print('Plotting: ' + filename)
         
         # Calculate data for plotting
@@ -42,7 +44,7 @@ class Microscope:
         data = np.zeros((n_px, n_px, self.n_len, self.j_len))
         for index, r in np.ndenumerate(R):
             data[index[0], index[1], :, :] = (func(r, Phi[index])).coeffs
-                
+
         # Layout windows
         if plot_m is None:
             mcols = self.h0.rmax
@@ -73,7 +75,12 @@ class Microscope:
                 if index[1] % 3 == 1:
                     ax.annotate('$n='+str(n)+'$', xy=(1, 1), xytext=(0.5, 1.4),
                                 textcoords='axes fraction', ha='center', va='center')
-                    
+            if index[1] % 3 == 2 and index[1] != axs.shape[1] - 1:
+                ax.annotate("",
+                            xy=(1, -0.05), xycoords='axes fraction',
+                            xytext=(1, 1.3), textcoords='axes fraction',
+                            arrowprops=dict(arrowstyle="-", 
+                                            linewidth=0.5))
                 
             if index[1] == 0:
                 ax.annotate('$l='+str(l)+'$', xy=(1, 1), xytext=(-0.15, 0.5),
@@ -83,50 +90,115 @@ class Microscope:
             if j is not None:
                 ax.imshow(data[:,:,n,j], cmap="bwr", vmin=-1, vmax=1, interpolation='none')
                 levels = [-0.1, -1e-5, 1e-5, 0.1]
-                ct = ax.contour(data[:,:,n,j], levels, colors='k',linewidths=0.5)
+                if contours:
+                    ct = ax.contour(data[:,:,n,j], levels, colors='k',linewidths=0.5)
             else:
                 ax.imshow(np.zeros(data[:,:,0,0].shape), cmap="bwr", vmin=-1, vmax=1, interpolation='none')
                 
         f.savefig(filename, bbox_inches='tight')
 
     def calc_SVD(self, n_px=2**6):
-        w = 2.05
+        w = 2.0
         self.xcoords = np.linspace(-w, w, n_px),
         [X, Y] = np.meshgrid(self.xcoords, self.xcoords)
         R = np.sqrt(X**2 + Y**2)
         Phi = np.nan_to_num(np.arctan(Y/X))
 
         # For each position and frame calculate K and solve eigenequation
-        mu = np.zeros((n_px, n_px, self.n_len))
+        sigma = np.zeros((n_px, n_px, self.n_len))
         for index, r in np.ndenumerate(R):
-            HH = self.H(r, Phi[index]).coeffs
-            K = np.dot(HH, HH.T)
-            w, v = np.linalg.eigh(K)
-            mu[index[0], index[1], :] = w[::-1]
+            u, s, v = self.calc_point_SVD(r, Phi[index])
+            sigma[index[0], index[1], :] = s
 
-        self.mu = np.sqrt(mu/np.max(mu))
+        self.sigma = sigma
+        self.sigma_max = np.max(sigma)
 
-    def plot_SVS(self, filename='svs.pdf', n_px=2**6):
+    def calc_point_SVD(self, nu, phi_nu):
+        HH = self.H(nu, phi_nu).coeffs
+        K = np.dot(HH, HH.T)
+        mu, v = np.linalg.eigh(K)
+        u = np.dot(HH.T, v)
+
+        return u[:,::-1], np.sqrt(mu[::-1]), v[:,::-1] # Transpose
+
+    def plot_SVS(self, filename='svs.pdf', n_px=2**6, marks=[[1e-5,0], [0.5,0], [1.0,0], [1.5,0]]):
         print('Plotting: ' + filename)
 
         # Layout windows
-        inches = 1
-        f, axs = plt.subplots(1, self.n_len + 1,
-                              figsize=(inches*(self.n_len + 1), inches),
-                              gridspec_kw={'hspace':0.0, 'wspace':0.05})
+        inches = 1.5
+        rows = self.sigma.shape[-1] + 1
+        cols = len(marks) + 1
+        f, axs = plt.subplots(rows, cols,
+                              figsize=(inches*cols, inches*(rows - 0.75)),
+                              gridspec_kw={'hspace':0.05, 'wspace':0.10, 'height_ratios':[1,1,1,0.05]})
 
-        for j, ax in enumerate(axs[1:]):
+        # Label top row with arrow
+        axs[0,0].annotate('', xy=(-0.03, 1.1), xytext=(0.55, 1.1),
+                          textcoords='axes fraction', xycoords='axes fraction', ha='center', va='center',
+                          arrowprops=dict(arrowstyle='<->, head_width=0.05, head_length=0.1',
+                                          connectionstyle="arc3", linewidth=0.5),)
+        axs[0,0].annotate(r'$2\textrm{NA}/\lambda$', xy=(0,0), xytext=(0.25, 1.2),
+                          textcoords='axes fraction', xycoords='axes fraction', ha='center', va='center', fontsize=7)
+
+        # Top row singular values        
+        for j, ax in enumerate(axs[:-1,0]):
             ax.axis('off')
-            ax.annotate('$j='+str(j)+'$', xy=(1, 1), xytext=(0.5, 1.15),
+            ax.annotate('$j='+str(j)+'$', xy=(1, 1), xytext=(-0.15, 0.5),
+                        textcoords='axes fraction', ha='center', va='center', rotation=90)
+            extent= [-2,2,-2,2]
+            origin = 'lower'
+            ax.imshow(self.sigma[:,:,j]/self.sigma_max, cmap="bwr", vmin=-1, vmax=1, interpolation='none', extent=extent, origin=origin)
+            ax.set_xlim([-2.05,2.05])
+            ax.set_ylim([-2.05,2.05])            
+            levels = [-0.1, -1e-5, 1e-5, 0.1]
+            ct = ax.contour(self.sigma[:,:,j]/self.sigma_max, levels, colors='k',linewidths=0.5, extent=extent, origin=origin)
+            for mark in marks:
+                ax.plot(mark[0]*np.cos(mark[1]), mark[0]*np.sin(mark[1]), 'xk', ms=2.5, mew=0.5)
+
+        # Colorbars
+        X, Y = np.meshgrid(np.linspace(0, 1, 100),
+                             np.linspace(0, 1, 100))
+        axs[-1,0].imshow(X, cmap="bwr", vmin=-1, vmax=1, interpolation='none', extent=[0,1,0,1], origin='lower', aspect='auto')
+        axs[-1,0].contour(X, levels, colors='k',linewidths=0.5, extent=[0,1,0,1], origin='lower',)
+        axs[-1,0].set_xlim([0,1])
+        axs[-1,0].set_ylim([0,1])
+        axs[-1,0].tick_params(direction='out', bottom=True, top=False)
+        axs[-1,0].xaxis.set_ticks([0, 0.5, 1.0])
+        axs[-1,0].yaxis.set_ticks([])
+        for j, ax in enumerate(axs[-1, 1:]):
+            ax.axis('off')
+
+        # For saving singular function pngs
+        folder = 'singular'
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+
+        # Object space singular functions
+        for j, ax in np.ndenumerate(axs[:-1,1:]):
+            u, s, v = self.calc_point_SVD(marks[j[1]][0], marks[j[1]][1])
+
+            # Labels
+            if j[0] == 0:
+                rho_label = str(marks[j[1]][0])
+                if marks[j[1]][0] < 1e-3:
+                    rho_label = '0'
+                ax.annotate(r'$\rho = '+rho_label+'$', xy=(1, 1), xytext=(0.5, 1.15),
+                            textcoords='axes fraction', ha='center', va='center')
+                ax.annotate(r'$\phi_{\rho} = '+str(marks[j[1]][1])+'$', xy=(1, 1), xytext=(0.5, 0.95),
+                            textcoords='axes fraction', ha='center', va='center')
+            ax.axis('off')
+            ax.annotate('$\sigma='+'{:.2f}'.format(s[j[0]]/self.sigma_max)+'$', xy=(1, 1), xytext=(0.5, 0),
                         textcoords='axes fraction', ha='center', va='center')
 
-            axs[0].plot(self.xcoords[0], self.mu[:,int(self.mu.shape[0]/2),j], 'k-', lw=0.5)
-            ax.imshow(self.mu[:,:,j], cmap="bwr", vmin=-1, vmax=1, interpolation='none')
-            levels = [-0.1, -1e-5, 1e-5, 0.1]
-            ct = ax.contour(self.mu[:,:,j], levels, colors='k',linewidths=0.5)
+            # Create singular function plots
+            sh = shcoeffs.SHCoeffs(u[:,j[0]])
+            shfilename = folder+'/'+str(j[0])+str(j[1])+'.png'
+            sh.plot_dist(filename=folder+'/'+str(j[0])+str(j[1])+'.png', r=1.1)
 
-        axs[0].set_xlim([-2.05, 2.05])
-        axs[0].set_ylim([0, 1.05])
+            from PIL import Image
+            im1 = np.asarray(Image.open(shfilename))
+            ax.imshow(im1, interpolation='none')
+        
         f.savefig(filename, bbox_inches='tight')
 
     def scene_string(self):

@@ -109,10 +109,20 @@ class SHCoeffs:
 
         f.savefig(filename, bbox_inches='tight')
 
-    def plot_dist(self, filename='dist.png', n_pts=2500, r=1, mag=1, show=False):
+    def plot_dist(self, filename='dist.png', n_pts=2500, r=1, mag=1, show=False,
+                  force_positive=True):
         from mayavi import mlab
         print('Plotting: ' + filename)
-        
+
+        # Flip sign if [1,1,0] direction is negative
+        if force_positive:
+            test_radii = 0
+            for i, c in enumerate(self.coeffs):
+                l, m = util.j2lm(i)
+                test_radii += c*util.spZnm(l, m, np.pi/2, np.pi/4)
+            if test_radii < 0:
+                self.coeffs = -self.coeffs 
+            
         # Calculate radii
         tp = util.fibonacci_sphere(n_pts)
         xyz = util.fibonacci_sphere(n_pts, xyz=True)
@@ -120,11 +130,11 @@ class SHCoeffs:
         for i, c in enumerate(self.coeffs):
             l, m = util.j2lm(i)
             radii += c*util.spZnm(l, m, tp[:,0], tp[:,1])
-        radii = radii/np.max(radii)
+        radii = radii/np.max(np.abs(radii))
         
         # Split into positive and negatives
-        n = radii.clip(max=0) 
-        p = radii.clip(min=0)*(-1)
+        n = r*radii.clip(max=0) 
+        p = r*radii.clip(min=0)*(-1)
 
         # Triangulation
         from scipy.spatial import ConvexHull

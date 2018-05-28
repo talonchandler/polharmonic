@@ -60,7 +60,7 @@ def calc_gaunt_tensor(filename, lmax=4):
         l3, m3 = myutil.j2lm(index[2])
         G[index] = Rgaunt(l1, l2, l3, m1, m2, m3)
     np.save(filename, G)
-    return 1
+    return G
 
 # Compute and save an array with all of the circular harmonic triple integrals
 # up to specified band

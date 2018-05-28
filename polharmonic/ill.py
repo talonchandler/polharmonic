@@ -21,21 +21,23 @@ class Illuminator:
         self.illuminate_all = illuminate_all
 
         self.alpha = np.arcsin(self.na/self.n)
-        self.At = (np.cos(self.alpha/2.0)**2)*np.cos(self.alpha)
-        self.Bt = (1.0/12.0)*(np.cos(self.alpha/2)**2 + 4*np.cos(self.alpha) + 7)
+        # self.At = (np.cos(self.alpha/2.0)**2)*np.cos(self.alpha)
+        # self.Bt = (1.0/12.0)*(np.cos(self.alpha/2)**2 + 4*np.cos(self.alpha) + 7)
 
     def h(self):
         if self.illuminate_all:
             return tf.TFCoeffs([[1.0, 0, 0, 0, 0, 0], 6*[0], 6*[0]])
 
-        n0 = [1, 0, 0, -self.At/np.sqrt(5), 0, 0]
+        n0 = [1 + (self.na/self.n)**2, 0, 0, -(1 - 2*((self.na/self.n)**2))/np.sqrt(5), 0, 0]
         if self.polarizer:
-            n_2 = [0, -np.sqrt(0.6*np.pi)*self.Bt, 0, 0, 0, 0]
-            n2 = [0, 0, 0, 0, 0, np.sqrt(0.6*np.pi)*self.Bt]
-            return tf.TFCoeffs([n0, n_2, n2])
+            n_2 = [0, -np.sqrt(3/5), 0, 0, 0, 0]
+            n2 = [0, 0, 0, 0, 0, np.sqrt(3/5)]
+            return tf.TFCoeffs([n0, n_2, n2])#/n0[0]
         else:
-            return tf.TFCoeffs([n0, 6*[0], 6*[0]])
+            return tf.TFCoeffs([n0, 6*[0], 6*[0]])#/n0[0]
 
     # No detection spatioangular coupling -> h == H
     def H(self): 
         return self.h()
+
+    
