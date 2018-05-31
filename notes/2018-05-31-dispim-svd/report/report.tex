@@ -1,0 +1,316 @@
+
+\documentclass[11pt]{article}
+
+%%%%%%%%%%%%
+% Packages %
+%%%%%%%%%%%%
+\usepackage[dvipsnames]{xcolor}
+\hyphenpenalty=10000
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+
+\usepackage{tocloft}
+\renewcommand\cftsecleader{\cftdotfill{\cftdotsep}}
+\def\undertilde#1{\mathord{\vtop{\ialign{##\crcr
+$\hfil\displaystyle{#1}\hfil$\crcr\noalign{\kern1.5pt\nointerlineskip}
+$\hfil\tilde{}\hfil$\crcr\noalign{\kern1.5pt}}}}}
+\usepackage{cleveref}
+\usepackage{xcolor}
+\usepackage[colorlinks = true,
+            linkcolor = black,
+            urlcolor  = blue,
+            citecolor = black,
+            anchorcolor = black]{hyperref}
+\usepackage{epstopdf}
+\usepackage{braket}
+\usepackage{upgreek}
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{subcaption}
+\usepackage{amssymb,latexsym,amsmath,gensymb}
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{pdflscape}
+\usepackage{url}
+\usepackage{array}
+\newcolumntype{C}{>{$\displaystyle} c <{$}}
+\usepackage{tikz, calc}
+\usetikzlibrary{shapes.geometric, arrows, calc}
+\tikzstyle{norm} = [rectangle, rounded corners, minimum width=2cm, minimum height=1cm,text centered, draw=black]
+\tikzstyle{arrow} = [thick, ->, >=stealth]
+
+\newcommand{\argmin}{\arg\!\min}
+\newcommand{\me}{\mathrm{e}}
+\providecommand{\e}[1]{\ensuremath{\times 10^{#1}}} 
+\providecommand{\mb}[1]{\mathbf{#1}}
+\providecommand{\mc}[1]{\mathcal{#1}}
+\providecommand{\ro}[1]{\mathbf{\mathfrak{r}}_o}
+\providecommand{\so}[1]{\mathbf{\hat{s}}_o}
+\providecommand{\rb}[1]{\mathbf{r}_b}
+\providecommand{\rbm}[1]{r_b^{\text{m}}}
+\providecommand{\rd}[1]{\mathbf{\mathfrak{r}}_d}
+\providecommand{\mh}[1]{\mathbf{\hat{#1}}}
+\providecommand{\mf}[1]{\mathfrak{#1}}
+\providecommand{\mbb}[1]{\mathbb{#1}}
+\providecommand{\bs}[1]{\boldsymbol{#1}} 
+\providecommand{\intinf}{\int_{-\infty}^{\infty}}
+\providecommand{\fig}[4]{
+  % filename, width, caption, label
+\begin{figure}[h]
+ \captionsetup{width=1.0\linewidth}
+ \centering
+ \includegraphics[width = #2\textwidth]{#1}
+ \caption{#3}
+ \label{fig:#4}
+\end{figure}
+}
+
+\makeatletter
+\renewcommand*\env@matrix[1][*\c@MaxMatrixCols c]{%
+  \hskip -\arraycolsep
+  \let\@ifnextchar\new@ifnextchar
+  \array{#1}}
+\makeatother
+
+\newcommand{\tensor}[1]{\overset{\text{\tiny$\leftrightarrow$}}{\mb{#1}}}
+\newcommand{\tunderbrace}[2]{\underbrace{#1}_{\textstyle#2}}
+\providecommand{\figs}[7]{
+  % filename1, filename2, caption1, caption2, label1, label2, shift
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{.45\textwidth}
+  \centering
+  \includegraphics[width=1.0\linewidth]{#1}
+  \captionsetup{justification=justified, singlelinecheck=true}
+  \caption{#3}
+  \label{fig:#5}
+\end{minipage}
+\hspace{2em}
+\begin{minipage}[b]{.45\textwidth}
+  \centering
+  \includegraphics[width=1.0\linewidth]{#2}
+  \vspace{#7em}
+  \captionsetup{justification=justified}
+  \caption{#4}
+  \label{fig:#6}
+\end{minipage}
+\end{figure}
+}
+\makeatletter
+
+\providecommand{\code}[1]{
+\begin{center}
+\lstinputlisting{#1}
+\end{center}
+}
+
+\newcommand{\crefrangeconjunction}{--}
+%%%%%%%%%%%
+% Spacing %
+%%%%%%%%%%%
+% Margins
+\usepackage[
+top    = 1.5cm,
+bottom = 1.5cm,
+left   = 1.5cm,
+right  = 1.5cm]{geometry}
+
+% Indents, paragraph space
+%\usepackage{parskip}
+\setlength{\parskip}{1.5ex}
+
+% Section spacing
+\usepackage{titlesec}
+\titlespacing*{\title}
+{0pt}{0ex}{0ex}
+\titlespacing*{\section}
+{0pt}{0ex}{0ex}
+\titlespacing*{\subsection}
+{0pt}{0ex}{0ex}
+\titlespacing*{\subsubsection}
+{0pt}{0ex}{0ex}
+
+% Line spacing
+\linespread{1.1}
+
+%%%%%%%%%%%%
+% Document %
+%%%%%%%%%%%%
+\begin{document}
+\title{\vspace{-2.5em} Singular value decomposition of a dual\\ orthogonal-view
+  fluorescence microscope\vspace{-1em}} % \author{Talon Chandler, Min Guo, Hari
+  % Shroff, Rudolf Oldenbourg, Patrick La Rivi\`ere}
+\date{\vspace{-3em}\today\vspace{-1em}}
+\maketitle
+\section{Introduction}
+In these notes we will find the kernel, transfer function, and singular value
+decomposition of a dual orthogonal view fluorescence microscope (diSPIM). We
+will model the relationship between the spatial density of fluorophores in a
+three-dimensional sample---a member of $\mbb{L}_2(\mbb{R}^3)$---and the two
+three-dimensional volumes---two members of $\mbb{L}_2(\mbb{R}^3)$. We could
+consider the diSPIM as a microscope that makes two samples of a larger space
+$\mbb{L}_2(\mbb{R}^3 \times \mbb{S}^2)$, but I don't think this will give us any
+extra insight at this point.
+
+\section{Kernel}
+The diSPIM illuminates the sample with a uniform-width Gaussian beam (we ignore
+light-sheet broadening). In path A the light sheet is in the $xy$ plane for
+viewing by an objective with an optical axis along the $z$ axis. In path B the
+roles are reversed and the light sheet is in the $yz$ plane for viewing by an
+objective with an optical axis along the $x$ axis.
+
+We can model the relationship between the object and the data using an integral
+transform
+\begin{align}
+  g_{\text{v}}(\rd{}) = \left[\mc{H}f\right]_{\text{v}}(\rd{}) = \int_{\mbb{R}^3}d\ro{}\, h_{\text{v}}(\rd{} - \ro{})f(\ro{}), \qquad \text{v} = \{\text{A}, \text{B}\}, 
+\end{align}
+where $g_{\text{v}}(\rd{})$ is the three-dimensional data collected from the
+$\text{v}$th view, $f(\ro{})$ is the three-dimensional density of fluorophores,
+and $h_{\text{v}}(\rd{} - \ro{})$ is the kernel (or point-spread function) for
+the ${\text{v}}$th view. A typical model for the kernels of the diSPIM is
+\begin{align}
+  h_{\text{A}}(\ro{}) &= \mf{g}(r_x, \sigma_{\text{tr}})\mf{g}(r_y, \sigma_{\text{tr}})\mf{g}(r_z, \sigma_{\text{ax}}), \label{eq:ha}\\
+  h_{\text{B}}(\ro{}) &= \mf{g}(r_x, \sigma_{\text{ax}})\mf{g}(r_y, \sigma_{\text{tr}})\mf{g}(r_z, \sigma_{\text{tr}}), \label{eq:hb}
+\end{align}
+where $\mf{g}(x, \sigma) \equiv \text{exp}(x^2/2\sigma^2)/\sqrt{2\pi\sigma^2}$,
+$\ro{} = r_x\mh{x} + r_y\mh{y} + r_z\mh{z}$ is the three-dimensional position
+vector in the object, $\sigma_{\text{tr}}$ is the spatial standard deviation of
+the transverse point spread function (set by the detection NA), and
+$\sigma_{\text{ax}}$ is the spatial standard deviation of the axial point spread
+function (width/thickness of the light sheet).
+
+The adjoint of forward operator is given by
+\begin{align}
+  f(\ro{}) = [\mc{H}^{\dagger}g](\ro{}) = \sum_{{\text{v}} = \{\text{A}, \text{B}\}}\int_{\mbb{R}^3}d\rd{}\, h_{\text{v}}(\rd{} - \ro{})g_v(\rd{}). 
+\end{align}
+\section{Transfer function}
+We can rewrite the forward and adjoint operators in the frequency domain as
+\begin{align}
+  G_{\text{v}}(\bs{\nu}) &= H_{\text{v}}(\bs{\nu})F(\bs{\nu}), \label{eq:fwd} \\
+  F(\bs{\nu}) &= \sum_{{\text{v}} = \{\text{A}, \text{B}\}}H_{\text{v}}(\bs{\nu})G_{\text{v}}(\bs{\nu}),\label{eq:adj}
+\end{align}
+where
+\begin{align}
+  G_{\text{v}}(\bs{\nu}) &= \int_{\mbb{R}^3}d\rd{}\, g_{\text{v}}(\rd{})e^{i2\pi\rd{}\cdot\bs{\nu}},\\
+  H_{\text{v}}(\bs{\nu}) &= \int_{\mbb{R}^3}d\ro{}\, h_{\text{v}}(\ro{})e^{i2\pi\ro{}\cdot\bs{\nu}},\\
+  F(\bs{\nu}) &= \int_{\mbb{R}^3}d\ro{}\, f(\ro{})e^{i2\pi\ro{}\cdot\bs{\nu}}.
+\end{align}
+If we use the kernels in Eqs. \ref{eq:ha} and \ref{eq:hb} then the transfer
+functions are
+\begin{align}
+  H_{\text{A}}(\bs{\nu}) &= \mf{g}(\nu_x, 1/\sigma_{\text{tr}})\mf{g}(\nu_y, 1/\sigma_{\text{tr}})\mf{g}(\nu_z, 1/\sigma_{\text{ax}}),\\
+  H_{\text{B}}(\bs{\nu}) &= \mf{g}(\nu_x, 1/\sigma_{\text{ax}})\mf{g}(\nu_y, 1/\sigma_{\text{tr}})\mf{g}(\nu_z, 1/\sigma_{\text{tr}}), 
+\end{align}
+where $\bs{\nu} = \nu_x\mh{x} + \nu_y\mh{y} + \nu_z\mh{z}$ is a
+three-dimensional spatial frequency vector.
+
+\section{Singular value decomposition}
+To find the singular value decomposition of the imaging operator we need to
+solve the eigenvalue problem
+\begin{align}
+  [\mc{H}^{\dagger}\mc{H}]u_{\bs{\rho}}(\ro{}) = \mu_{\bs{\rho}}u_{\bs{\rho}}(\ro{}), \label{eq:eig}
+\end{align}
+where $u_{\bs{\rho}}(\ro{})$ are the object space singular functions of the
+system. This eigenvalue problem is easily solved in the frequency domain, so we
+write the object-space singular functions as
+\begin{align}
+  u_{\bs{\rho}}(\ro{}) = U(\bs{\rho})e^{i2\pi\ro{}\cdot\bs{\rho}}. \label{eq:ftu}
+\end{align}
+Plugging Eqs. \ref{eq:fwd}, \ref{eq:adj}, and \ref{eq:ftu} into Eq. \ref{eq:eig}
+gives a new eigenvalue equation
+\begin{align}
+  \sum_{{\text{v}} = \{\text{A}, \text{B}\}}H_{\text{v}}(\bs{\rho})H_{\text{v}}(\bs{\rho})U(\bs{\rho}) = \mu_{\bs{\rho}}U(\bs{\rho}).
+\end{align}
+Therefore, the eigenvalues are given by
+\begin{align}
+  \mu_{\bs{\rho}} = \sum_{{\text{v}} = \{\text{A}, \text{B}\}}H^2_{\text{v}}(\bs{\rho}),
+\end{align}
+and the eigenvectors are constants
+\begin{align}
+  U(\bs{\rho}) = 1. 
+\end{align}
+The singular values are given by the square root of the eigenvalues
+\begin{align}
+  \sigma_{\bs{\rho}} = \sqrt{\sum_{\text{v} = \{\text{A}, \text{B}\}}H^2_\text{v}(\bs{\rho})} = \sqrt{H^2_{\text{A}}(\bs{\rho}) + H^2_{\text{B}}(\bs{\rho})},
+\end{align}
+and the object-space singular functions are the usual Fourier components of the
+object
+\begin{align}
+  u_{\bs{\rho}}(\ro{}) = e^{i2\pi\ro{}\cdot\bs{\rho}}. 
+\end{align}
+Finally, the data space singular functions are given by
+\begin{align}
+  [v_{\bs{\rho}}]_{\text{v}}(\rd{}) = \frac{1}{\sigma_{\bs{\rho}}}\mc{H}_{\text{v}}u_{\bs{\rho}}(\ro{}) = \frac{H_{\text{v}}(\bs{\rho})}{\sqrt{H^2_{\text{A}}(\bs{\rho}) + H^2_{\text{B}}(\bs{\rho})}}e^{i2\pi\rd{}\cdot\bs{\rho}}.
+\end{align}
+
+\section{Operator decompositions}
+We can use the singular vectors and singular values to decompose the forward and
+adjoint operators of the microscope. Table 1.2 of Barrett is particularly
+helpful.
+
+The forward operator decomposes into
+\begin{align}
+  \mc{H}_{\text{v}}f(\ro{}) = \sigma_{\bs{\rho}}\mb{v}\mb{u}^{\dagger}f(\ro{}) = \mc{F}^{-1}\left\{H_{\text{v}}(\bs{\rho})\mc{F}\left\{f(\ro{})\right\}\right\}. 
+\end{align}
+This result is essentially the Fourier-convolution theorem---it means that we
+can apply the forward operator by taking the Fourier transform of the object,
+multiplying the result by the Fourier transform of the kernel, then taking the
+inverse Fourier transform.
+
+The adjoint operator decomposes into 
+\begin{align}
+  \mc{H}^{\dagger}g_\text{v}(\rd{}) = \sigma_{\bs{\rho}}\mb{u}\mb{v}^{\dagger}g_\text{v}(\rd{}) = \mc{F}^{-1}\left\{\sum_{\text{v} = \{\text{A}, \text{B}\}}H_{\text{v}}(\bs{\rho})\mc{F}\left\{g_{\text{v}}(\ro{})\right\}\right\}. 
+\end{align}
+Once again this result is not too surprising, and I suspect that this is how the
+existing MLEM/RL reconstructions have implemented the adjoint operator.
+
+A potentially useful result is to decompose the Moore-Penrose pseudoinverse
+operator
+\begin{align}
+  \mc{H}^+g_{\text{v}}(\rd{}) = \frac{1}{\sigma_{\bs{\rho}}}\mb{u}\mb{v}^{\dagger}g_{\text{v}}(\rd{}) = \mc{F}^{-1}\left\{\sum_{\text{v} = \{\text{A}, \text{B}\}}\frac{H_{\text{v}}(\bs{\rho})}{H_{\text{A}}^2(\bs{\rho}) + H_{\text{B}}^2(\bs{\rho})}\mc{F}\left\{g_{\text{v}}(\ro{})\right\}\right\}. \label{eq:mp}
+\end{align}
+This gives us a (new?) one-step reconstruction algorithm. In words:
+\begin{enumerate}
+\item Calculate or measure the kernel and transfer function of the microscope
+  for both views and precalculate two filters:
+  $H_{\text{A}}(\bs{\rho})/[H^2_{\text{A}}(\bs{\rho}) + H^2_{\text{B}}(\bs{\rho})]$ and $H_{\text{B}}(\bs{\rho})/[H^2_{\text{A}}(\bs{\rho}) + H^2_{\text{B}}(\bs{\rho})]$.
+\item Take the 3D Fourier transform of the data from each view, multiply the
+  result by the corresponding precalculated filter from step 1, then add the
+  results.
+\item Take the inverse Fourier transform. 
+\end{enumerate}
+This reconstruction is fast---it only requires three 3D Fourier transforms and a
+single product---so it might be useful for live reconstructions during imaging.
+
+The reconstruction has two limitations compared to MLEM/RL. First, the
+Moore-Penrose pseudoinverse solution is a minimum-norm least-squares solution so
+it assumes Gaussian noise and does not account for Poisson noise at low counts.
+Second, the reconstruction is not constrained to positive values so noisy data
+may cause a (usually slightly) negative value in the reconstructed object. These
+limitations might not be a problem if an online reconstruction can help guide
+the experiment while its happening and a complete MLEM/RL reconstruction can be
+performed offline.
+
+\section{Discussion}
+The singular values of the dual view microscope confirm a result that matches
+our intuition---the singular spectrum for a dual view microscope is the root sum
+of squares of the transfer functions for each view. If we can describe the
+imaging system as linear-shift invariant, I expect that this result will hold
+for other multiview designs---the three-view diSPIM, possibly the mirror
+diSPIM(?), and possibly unpolarized light-field designs. An analogous
+calculation for the light-field microscope might yield a reconstruction
+algorithm that is much faster than Broxton's spatial-domain reconstruction. TBD.
+ 
+We've considered the diSPIM as a CC-CD imaging system and shown that the CD part
+of the microscope is described by a rank-1 operator. Compare this with polarized
+light microscopes where the angular part of the microscope is described by a
+rank-3 (single-view) or rank-6 (dual-view) operator.
+
+Finally, notice that the Moore-Penrose pseudoinverse operator in Eq.
+\ref{eq:mp} reduces to a simple inverse filter if we only use the data from one
+view.
+
+\end{document}
+
