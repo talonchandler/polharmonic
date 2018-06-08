@@ -281,8 +281,9 @@ This gives us a (new?) one-step reconstruction algorithm. In words:
   results.
 \item Take the inverse Fourier transform. 
 \end{enumerate}
-This reconstruction is fast---it only requires three 3D Fourier transforms and a
-single product---so it might be useful for live reconstructions during imaging.
+This reconstruction is fast---it only requires three 3D Fourier transforms, two
+scalings, and a sum---so it might be useful for live reconstructions during
+imaging.
 
 The reconstruction has two limitations compared to MLEM/RL. First, the
 Moore-Penrose pseudoinverse solution is a minimum-norm least-squares solution so
@@ -311,6 +312,16 @@ rank-3 (single-view) or rank-6 (dual-view) operator.
 Finally, notice that the Moore-Penrose pseudoinverse operator in Eq.
 \ref{eq:mp} reduces to a simple inverse filter if we only use the data from one
 view.
+
+\section{Tikhonov regularization}
+The pseudoinverse solution amplifies high-frequency noise, so we prefer a
+one-step algorithm with Tikhonov regularization. Barrett 15.114 (and discussion
+around 15.155 and 1.5156) gives the Tikhonov regularized reconstruction operator
+as
+\begin{align}
+  \mc{H}^{+\text{Tik}}_{\eta}[g_{\text{v}}(\rd{})] = \frac{\sigma_{\bs{\rho}}}{\sigma^2_{\bs{\rho}} + \eta}\mb{u}\mb{v}^{\dagger}[g_{\text{v}}(\rd{})] = \mc{F}^{-1}\left\{\sum_{\text{v} = \{\text{A}, \text{B}\}}\frac{H_{\text{v}}(\bs{\rho})}{H_{\text{A}}^2(\bs{\rho}) + H_{\text{B}}^2(\bs{\rho}) + \eta}\mc{F}\left\{g_{\text{v}}(\ro{})\right\}\right\}.
+\end{align}
+The Tikhonov regularized solution is identical to the pseudoinverse solution when $\eta = 0$ as expected. 
 
 \end{document}
 
