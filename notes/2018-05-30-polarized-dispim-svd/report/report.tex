@@ -1,0 +1,418 @@
+\documentclass[11pt]{article}
+
+%%%%%%%%%%%%
+% Packages %
+%%%%%%%%%%%%
+\usepackage[dvipsnames]{xcolor}
+\hyphenpenalty=10000
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+
+\usepackage{tocloft}
+\renewcommand\cftsecleader{\cftdotfill{\cftdotsep}}
+\def\undertilde#1{\mathord{\vtop{\ialign{##\crcr
+$\hfil\displaystyle{#1}\hfil$\crcr\noalign{\kern1.5pt\nointerlineskip}
+$\hfil\tilde{}\hfil$\crcr\noalign{\kern1.5pt}}}}}
+\usepackage{cleveref}
+\usepackage{xcolor}
+\usepackage[colorlinks = true,
+            linkcolor = black,
+            urlcolor  = blue,
+            citecolor = black,
+            anchorcolor = black]{hyperref}
+\usepackage{epstopdf}
+\usepackage{braket}
+\usepackage{upgreek}
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{subcaption}
+\usepackage{amssymb,latexsym,amsmath,gensymb}
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{pdflscape}
+\usepackage{url}
+\usepackage{array}
+\newcolumntype{C}{>{$\displaystyle} c <{$}}
+\usepackage{tikz, calc}
+\usetikzlibrary{shapes.geometric, arrows, calc}
+\tikzstyle{norm} = [rectangle, rounded corners, minimum width=2cm, minimum height=1cm,text centered, draw=black]
+\tikzstyle{arrow} = [thick, ->, >=stealth]
+
+\newcommand{\argmin}{\arg\!\min}
+\newcommand{\me}{\mathrm{e}}
+% \providecommand{\e}{\ensuremath{\times 10^{#1}}} 
+\providecommand{\mb}[1]{\mathbf{#1}}
+\providecommand{\mc}[1]{\mathcal{#1}}
+\providecommand{\ro}{\mathbf{\mathfrak{r}}_o}
+\providecommand{\so}{\mathbf{\hat{s}}_o}
+\providecommand{\rb}{\mathbf{r}_b}
+\providecommand{\rbm}{r_b^{\text{m}}}
+\providecommand{\rd}{\mathbf{\mathfrak{r}}_d}
+\providecommand{\mh}[1]{\mathbf{\hat{#1}}}
+\providecommand{\mf}[1]{\mathfrak{#1}}
+\providecommand{\ms}[1]{\mathsf{#1}}
+\providecommand{\mbb}[1]{\mathbb{#1}}
+\providecommand{\bs}[1]{\boldsymbol{#1}}
+\providecommand{\tv}{\text{v}}
+\providecommand{\tx}[1]{\text{#1}}
+\providecommand{\bv}{\bs{\nu}}
+\providecommand{\bp}{\bs{\rho}}
+\providecommand{\p}{\mh{p}}
+\providecommand{\lmsum}{\sum_{l=0}^\infty\sum_{m=-l}^{l}}
+\providecommand{\intr}[1]{\int_{\mbb{R}^{#1}}}
+\providecommand{\ints}[1]{\int_{\mbb{S}^{#1}}}
+\providecommand{\intinf}{\int_{-\infty}^{\infty}}
+\providecommand{\fig}[4]{
+  % filename, width, caption, label
+\begin{figure}[h]
+ \captionsetup{width=1.0\linewidth}
+ \centering
+ \includegraphics[width = #2\textwidth]{#1}
+ \caption{#3}
+ \label{fig:#4}
+\end{figure}
+}
+
+\makeatletter
+\renewcommand*\env@matrix[1][*\c@MaxMatrixCols c]{%
+  \hskip -\arraycolsep
+  \let\@ifnextchar\new@ifnextchar
+  \array{#1}}
+\makeatother
+
+\newcommand{\tensor}[1]{\overset{\text{\tiny$\leftrightarrow$}}{\mb{#1}}}
+\newcommand{\tunderbrace}[2]{\underbrace{#1}_{\textstyle#2}}
+\providecommand{\figs}[7]{
+  % filename1, filename2, caption1, caption2, label1, label2, shift
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{.45\textwidth}
+  \centering
+  \includegraphics[width=1.0\linewidth]{#1}
+  \captionsetup{justification=justified, singlelinecheck=true}
+  \caption{#3}
+  \label{fig:#5}
+\end{minipage}
+\hspace{2em}
+\begin{minipage}[b]{.45\textwidth}
+  \centering
+  \includegraphics[width=1.0\linewidth]{#2}
+  \vspace{#7em}
+  \captionsetup{justification=justified}
+  \caption{#4}
+  \label{fig:#6}
+\end{minipage}
+\end{figure}
+}
+\makeatletter
+
+\providecommand{\code}[1]{
+\begin{center}
+\lstinputlisting{#1}
+\end{center}
+}
+
+\newcommand{\crefrangeconjunction}{--}
+%%%%%%%%%%%
+% Spacing %
+%%%%%%%%%%%
+% Margins
+\usepackage[
+top    = 1.5cm,
+bottom = 1.5cm,
+left   = 1.5cm,
+right  = 1.5cm]{geometry}
+
+% Indents, paragraph space
+%\usepackage{parskip}
+\setlength{\parskip}{1.5ex}
+
+% Section spacing
+\usepackage{titlesec}
+\titlespacing*{\title}
+{0pt}{0ex}{0ex}
+\titlespacing*{\section}
+{0pt}{0ex}{0ex}
+\titlespacing*{\subsection}
+{0pt}{0ex}{0ex}
+\titlespacing*{\subsubsection}
+{0pt}{0ex}{0ex}
+
+% Line spacing
+\linespread{1.1}
+
+%%%%%%%%%%%%
+% Document %
+%%%%%%%%%%%%
+\begin{document}
+\title{\vspace{-2.5em} Singular value decomposition of a dual orthogonal-view\\
+  polarized fluorescence microscope\vspace{-1em}} \author{Talon Chandler, Min
+  Guo, Hari Shroff, Rudolf Oldenbourg, Patrick La Rivi\`ere}
+\date{\vspace{-1em}\today\vspace{-1em}}
+\maketitle
+\section{Introduction}
+In these notes we will find the kernel, transfer function, and singular value
+decomposition of a dual orthogonal view polarized fluorescence microscope
+(diSPIM). We will model the relationship between the spatio-angular density of
+fluorophores in a three-dimensional sample---a member of
+$\mbb{L}_2(\mbb{R}^3 \times \mbb{S}^2)$---and the two three-dimensional volumes
+for each illumination polarization setting---two members of
+$\mbb{L}_2(\mbb{R}^3 \times \mbb{S}^1)$. We could consider the diSPIM as a
+microscope that makes two samples of a larger space
+$\mbb{L}_2(\mbb{R}^3 \times \mbb{S}^1 \times \mbb{S}^2)$, but I don't think this
+will give us any extra insight at this point.
+
+We can write the forward model for the polarized diSPIM as
+\begin{align}
+  g_{\tv}(\rd, \p) = \left[\mc{H}f\right]_\tv(\rd, \p) = \intr{3}d\ro \ints{2}d\so\, h_{\tv}(\rd - \ro, \p, \so)f(\ro, \so), \label{eq:fwd}
+\end{align}
+where $\tv \in \{\text{A}, \text{B}\}$ is the light path index, $\rd$ is the
+three-dimensional detection coordinate, and all other coordinates have been
+introduced in previous note sets. The adjoint operator is given by
+\begin{align}
+  f(\ro, \so) = [\mc{H}^\dagger \mb{g}](\ro, \so) = \sum_{\tv \in \{\text{A}, \text{B}\}} \intr{3}d\rd\ints{1}d\p\, h_{\tv}(\rd - \ro, \p, \so)g_{\tv}(\rd, \p). \label{eq:adj}
+\end{align}
+\section{Kernel}
+The polarized diSPIM illuminates the sample with a uniform-width Gaussian beam
+(we ignore light-sheet broadening) with variable polarization. In path A the
+light sheet is in the $xy$ plane for viewing by an objective with an optical
+axis along the $z$ axis. In path B the roles are reversed and the light sheet is
+in the $yz$ plane for viewing by an objective with an optical axis along the $x$
+axis.
+
+In the
+\href{https://github.com/talonchandler/polharmonic/blob/master/notes/2018-05-14-single-view-continuous-svd/report/report.pdf}{May
+  14 notes} we derived the excitation kernel for a polarized collimated beam (NA
+= 0) traveling along the $z$ axis. The excitation kernel for path B of the
+diSPIM is identical to the previously derived excitation kernel weighted by
+Gaussian profile of the light sheet
+\begin{align}
+  h_{\tx{B}, \tx{exc}}(\ro, \so; \mh{p}) = \left[z_{0}^{\tx{B}}(\mh{p})y_0^0(\so) + \sqrt{\frac{3}{5}}z_{-2}^{\tx{B}}(\mh{p})y_2^{-2}(\so) - \frac{1}{\sqrt{5}}z_{0}^{\tx{B}}(\mh{p})y_2^0(\so) + \sqrt{\frac{3}{5}}z_{2}^{\tx{B}}(\mh{p})y_2^{2}(\so)\right]\mf{g}(r_x, \sigma_{\tx{ls}}),\label{eq:pathbexc}
+\end{align}
+where $\mf{g}(x, \sigma) \equiv \tx{exp}(x^2/2\sigma^2)/\sqrt{2\pi\sigma^2}$,
+$\ro = r_x\mh{x} + r_y\mh{y} + r_z\mh{z}$ is the three-dimensional position
+vector in the object, and $\sigma_{\tx{ls}}$ is the spatial standard deviation
+(width) of the light sheet.
+
+We can find the excitation kernel for path A by swapping the $x$ and $z$
+coordinates in Eq. \ref{eq:pathbexc}. This is a simple modification for the
+spatial part of the excitation kernel (change $\mf{g}(r_x, \sigma_{\tx{ls}})$
+to $\mf{g}(r_z, \sigma_{\tx{ls}})$), and the coefficients of the spherical
+harmonics are transformed by a matrix multiplication
+\begin{align}
+  \begin{bmatrix}
+    {c'}_0^{0}\\ {c'}_2^{-2}\\ {c'}_2^{-1}\\ {c'}_2^0\\ {c'}_2^1\\ {c'}_2^2\\
+  \end{bmatrix} =
+  \begin{bmatrix}
+      1&0&0&0&0&0\\
+      0&0&-1&0&0&0\\
+      0&-1&0&0&0&0\\
+      0&0&0&-1/2&0&\sqrt{3}/2\\
+      0&0&0&0&1&0\\
+      0&0&0&\sqrt{3}/{2}&0&1/2\\
+  \end{bmatrix}
+  \begin{bmatrix}
+    {c}_0^{0}\\ {c}_2^{-2}\\ {c}_2^{-1}\\ {c}_2^0\\ {c}_2^1\\ {c}_2^2
+  \end{bmatrix}, \label{eq:transform}
+\end{align}
+where $c_l^m$ is coefficient of the $y_l^m$ spherical harmonic in the original
+frame and ${c'}_l^m$ is the coefficient of the same spherical harmonic in the
+rotated frame. Applying this transformation gives
+\begin{align}
+  h_{\tx{A}, \tx{exc}}(\ro, \so; \mh{p}) = \Bigg[z_{0}^{\tx{A}}(\mh{p})y_0^0(\so) + \sqrt{\frac{3}{5}}z^{\tx{A}}_{-2}(\mh{p})y_2^{-1}(\so) &+ \frac{1}{2\sqrt{5}}\left\{3z_2^{\tx{A}}(\mh{p}) - z_{0}^{\tx{A}}(\mh{p}) \right\} y_2^0(\so)\nonumber \\ &+ \frac{1}{2}\sqrt{\frac{3}{5}}\left\{z^{\tx{A}}_{2}(\mh{p}) - z_{0}^{\tx{A}}(\mh{p})\right\}y_2^{2}(\so)\Bigg]\mf{g}(r_z, \sigma_{\tx{ls}}).\label{eq:pathaexc}
+\end{align}
+Notice that we have used a different set of circular harmonics for each view.
+The $z_n^{\tx{B}}(\mh{p})$ circular harmonics are defined by the angle to the $x$-axis
+from the $+y$-axis direction, and the $z_n^{\tx{A}}(\mh{p})$ circular harmonics are
+defined by the angle to the $z$-axis from the $+y$-axis direction. This change
+of definition follows directly from swapping the $x$ and $z$ coordinates to go
+from path B to path A.
+
+In the
+\href{https://github.com/talonchandler/polharmonic/blob/master/notes/2018-05-14-single-view-continuous-svd/report/report.pdf}{May
+  14 notes} we derived the two-dimensional detection kernel. The kernel is
+two-dimensional because it only considers thin in-focus objects. For a complete
+non-paraxial three-dimensional model I would eventually like to follow Backer
+and Moerner \cite{backer2014}, but there is still a few weeks of work required
+to find the associated transfer functions. Instead I'll follow the early diSPIM
+deconvolution models \cite{wu2013} and use an axial Gaussian function to model
+the detection kernel. 
+
+The detection kernel for an objective along the $z$ axis (path A) as
+\begin{align}
+  h_{\tx{A}, \tx{det}}(\ro, \so) &= \left[[{a}^2(r_{xy}) + 2b^2(r_{xy})]y_0^0(\so) + \frac{1}{\sqrt{5}}\left[- a^2(r_{xy}) + 4b^2(r_{xy})\right]y_2^0(\so)\right]\mathfrak{g}(r_z, \sigma_{\tx{det}}), \label{eq:det1}
+\end{align}
+where
+\begin{align}
+  a(r) = \frac{J_1(2\pi \nu_or)}{\pi \nu_or}, 
+  &\hspace{2em}
+    b(r) = \frac{\tx{NA}}{n_o}\left[\frac{J_2(2\pi \nu_or)}{\pi \nu_or}\right],  \label{eq:abparadef}
+    \intertext{and}
+  r_{xy} \equiv \sqrt{r_x^2 + r_y^2},\hspace{2em}
+  \nu_o \equiv &\frac{\tx{NA}}{\lambda},\hspace{2em}
+  \tx{NA} = n_o\sin\alpha.
+\end{align}
+
+To find the two-dimensional detection kernel for path B we transform the
+spherical harmonic coefficients using Eq. \ref{eq:transform}
+\begin{align}
+  h_{\tx{B}, \tx{det}}(\ro, \so) = \Bigg[[{a}^2(r_{yz}) + 2b^2(r_{yz})]y_0^0(\so) &+ \frac{1}{2\sqrt{5}}\left[- a^2(r_{yz}) + 4b^2(r_{yz})\right]y_2^0(\so) \nonumber \\ &+ \frac{1}{2}\sqrt{\frac{3}{5}}\left[- a^2(r_{yz}) + 4b^2(r_{yz})\right]y_2^2(\so)\Bigg]\mathfrak{g}(r_x, \sigma_{\tx{det}}), \label{eq:det2}
+\end{align}
+where $r_{yz} \equiv \sqrt{r_y^2 + r_z^2}$. 
+
+The complete kernel is the product of the excitation and detection kernels
+\begin{align}
+  h_{\tv}(\ro, \so; \mh{p}) &= h_{\tv, \tx{exc}}(\ro, \so; \mh{p})h_{\tv, \tx{det}}(\ro, \so).
+\end{align}
+
+Notice that the both the excitation and detection kernels are Gaussian along the
+axial detection axis, so the complete kernel is also Gaussian along that
+dimension with standard deviation
+$\sigma_{\tx{ax}} = \sqrt{\sigma_{\tx{ls}}^2 + \sigma_{\tx{det}}^2}$. Therefore,
+we can rewrite the kernel in the form
+\begin{align}
+  h_{\tx{A}}(\ro, \so; \mh{p}) &= \left[\sum_{l=0}^{\infty}\sum_{m=-l}^l\sum_{n=-\infty}^{\infty} h_{l,n,\tx{A}}^{m}(r_{xy})y_l^m(\so)z_n(\mh{p})\right]\mathfrak{g}(r_z, \sigma_{\tx{ax}}),\\
+  h_{\tx{B}}(\ro, \so; \mh{p}) &= \left[\sum_{l=0}^{\infty}\sum_{m=-l}^l\sum_{n=-\infty}^{\infty} h_{l,n, \tx{B}}^{m}(r_{yz})y_l^m(\so)z_n(\mh{p})\right]\mathfrak{g}(r_x, \sigma_{\tx{ax}}).
+\end{align}
+% Figures \ref{fig:kernA} and \ref{fig:kernB} show the kernels for both viewing
+% directions. 
+
+% \fig{../calculations/out/hhillx.pdf}{1.0}{Kernel $h_{l,n,\tx{A}}^m(\mb{r}_{xy})$
+%   for view A of a polarized diSPIM microscope with a 0.8 NA detection objective.
+%   \textbf{Rows:} $l$ indexes the object-space spherical harmonic band.
+%   \textbf{Columns:} $m$ indexes the object-space spherical harmonic degree, and
+%   $n$ indexes the data-space circular harmonic band. \textbf{Entries:} Each
+%   column and row contains a continuous two-dimensional plot indexed by the
+%   vector $\mb{r}_{xy}$ ranging from $-\lambda/2\text{NA}$ to
+%   $+\lambda/2\text{NA}$ (although $\mb{r}_{xy}$ is rotationally symmetric so one
+%   dimension would suffice). All values are normalized between $-1$
+%   \textcolor{blue}{(blue)} and $+1$ \textcolor{red}{(red)} with $0$ colored
+%   white.}{kernA}
+%   % filename, width, caption, label
+
+% \fig{../calculations/out/hhillz.pdf}{1.0}{Kernel $h_{l,n,\tx{B}}^m(\mb{r}_{yz})$
+%   for view B of a polarized diSPIM microscope with a 0.8 NA detection objective.
+%   See caption of Fig. \ref{fig:kernA} for details.}{kernB}
+%   % filename, width, caption, label
+
+\section{Transfer function}
+We can rewrite Eqs. \ref{eq:fwd} and \ref{eq:adj} in the frequency domain as
+\begin{align}
+  G_{\tv, n}(\bv) &= \lmsum H_{l,n,\tv}^{m}(\bv)F_l^m(\bv), \label{eq:ffwd}\\
+  F_l^m(\bv) &= \sum_{\tv \in \{\tx{A}, \tx{B}\}}\sum_{n=-\infty}^\infty H_{l,n,\tv}^{m}(\bv)G_{\tv, n}(\bv) \label{eq:fadj},
+\end{align}
+where
+\begin{align}
+  G_{\tv, n}(\bv) &= \intr{3}d\rd\, \me^{i2\pi\rd\cdot\bv}\ints{1}d\p\, z_n(\p) g_{\tv}(\rd, \p),\\
+  H_{l,n,\tv}^m(\bv) &= \intr{3}d\ro\, \me^{i2\pi\ro\cdot\bv}\ints{1}d\p\, z_n(\p)\ints{2}d\so\, y_l^m(\so) h_{\tv}(\ro, \p, \so),\\
+  F_l^m(\bv) &= \intr{3}d\ro\, \me^{i2\pi\ro\cdot\bv}\ints{2}d\so\, y_l^m(\so) f(\ro, \so).
+\end{align}
+In Figs. \ref{fig:tfA} and \ref{fig:tfB} we plot the transverse part of the
+diSPIM transfer function. Extending these plots to three-dimensions is simple
+given our assumption that the axial part is Gaussian. Notice that view B has a
+non-zero element in the $m=-1$ column---this is a first for the microscopes
+we've considered so far. Also notice that each view contributes new
+information---we'll see this result in a clearer form when we find the complete
+SVD.
+
+\fig{../calculations/out/Hillx.pdf}{1.0}{Transverse transfer function
+  $H_{l,n,\tx{A}}^m(\bv_{xy})$ for view A of a polarized diSPIM microscope with
+  a 0.8 NA detection objective. \textbf{Rows:} $l$ indexes the object-space
+  spherical harmonic band. \textbf{Columns:} $m$ indexes the object-space
+  spherical harmonic degree, and $n$ indexes the data-space circular harmonic
+  band. \textbf{Entries:} Each column and row contains a continuous
+  two-dimensional plot indexed by the vector $\mb{r}_{xy}$ ranging from
+  $-2\text{NA}/\lambda$ to $+2\text{NA}/\lambda$ (although $\mb{r}_{xy}$ is
+  rotationally symmetric so one dimension would suffice). All values are
+  normalized between $-1$ \textcolor{blue}{(blue)} and $+1$
+  \textcolor{red}{(red)} with $0$ colored white.}{tfA}
+  % filename, width, caption, label
+
+\fig{../calculations/out/Hillz.pdf}{1.0}{Transverse transfer function
+  $H_{l,n,\tx{B}}^m(\bv_{yz})$ for view B of a polarized diSPIM microscope with
+  a 0.8 NA detection objective. See caption of Fig. \ref{fig:tfA} for
+  details.}{tfB}
+  % filename, width, caption, label
+
+\section{Single-view singular value decomposition}
+We'll start by looking at the singular value decomposition of each view by
+itself. We have already developed all of the tools we need for this computation
+in the
+\href{https://github.com/talonchandler/polharmonic/blob/master/notes/2018-05-14-single-view-continuous-svd/report/report.pdf}{May
+  14 notes}, so we will jump straight to the results.
+
+Figures \ref{fig:sysA} and \ref{fig:sysB} show the singular systems for the two
+individual views of the diSPIM. As we'd expect, the object space singular
+functions for the two views are identical except for a swap of the $x$ and $z$
+axes. From the object space singular functions in the second and third branches
+of both views, we can see each view is most sensitive to orientations
+perpendicular to the illumination optical axis---this is what we'd expect for a
+polarized illumination microscope.
+
+Also notice that uniform distributions (or anything resembling a uniform
+distribution) are not in the measurement space of either view. We saw the same
+thing for single-view epi-illumination microscopes, although in that case there
+were distributions that were mostly uniform with slight depressions along the
+optical axis.
+
+\fig{../calculations/out/SVSx.pdf}{1.0}{Singular system for view A
+  ($x$-illumination, $z$-detection) of a polarized diSPIM microscope with a 0.8
+  NA detection objective. \textbf{Rows:} Discrete branches of the singular value
+  system indexed by $j$. \textbf{Column 1:} Continuous singular value spectra
+  for each branch $j$ indexed by spatial frequency $\bs{\rho}$. The singular
+  value spectra are normalized with contour lines at 0 and 0.1. \textbf{Columns
+    2-5:} Angular part of the object-space singular vector at spatial
+  frequencies marked with `x's in the first column. The camera is facing the
+  origin along the [1,1,1] axis with the $z$ axis pointing up along the page. A
+  \textcolor{red}{red} surface indicates positive values, a
+  \textcolor{blue}{blue} surface indicates negative values, and the distance
+  from the origin indicates the magnitude.}{sysA}
+  % filename, width, caption, label
+
+\fig{../calculations/out/SVSz.pdf}{1.0}{Singular system for view B
+  ($z$-illumination, $x$-detection) of a polarized diSPIM microscope with a 0.8
+  NA detection objective. See Fig. \ref{fig:sysA} caption for details. }{sysB}
+  % filename, width, caption, label
+
+\section{Dual-view singular value decomposition}
+We will follow Burvall et al. \cite{burvall06} and the single-view case and
+calculate the singular value decomposition in data space. We want to find the
+eigenvalues $\mu_{\bp, j}$ and eigenfunctions $v_{\bp, j, \tv}(\rd, \p)$ that
+satisfy
+\begin{align}
+  [\mc{H}\mc{H}^\dagger \mb{v}_{\bp, j}]_{\tv}(\rd, \p) = \mu_{\bp, j}v_{\bp, j, \tv}(\rd, \p). \label{eq:eig}
+\end{align}
+In the frequency domain the data-space singular functions will be in the form
+\begin{align}
+  v_{\bp, j, \tv}(\rd, \p) = \me^{i2\pi\bp\cdot\rd} \sum_{n=-\infty}^{\infty} \left[V_{n, \tv}(\bp)\right]_j z_n(\p). \label{eq:fdata}
+\end{align}
+Plugging Eqs. \ref{eq:ffwd}, \ref{eq:fadj}, and \ref{eq:fdata} in \ref{eq:eig} gives
+\begin{align}
+  \sum_{n=-\infty}^{n=\infty} \sum_{\tv \in \{\tx{A}, \tx{B}\}} \lmsum H_{l,\tv',n'}^m(\bp)H_{l,\tv,n}^m(\bp)\left[V_{n, \tv}(\bp)\right]_j = \mu_{\bp, j}\left[V_{n, \tv}(\bp)\right]_j. \label{eq:eig2}
+\end{align}
+If we combine the indices $n$ and $\tv$ into a multi-index $\mb{i} = (n, \tv)$ then we
+can rewrite \ref{eq:eig2} as
+\begin{align}
+  \sum_{\mb{i}} \left[\lmsum H_{l,\mb{i}'}^m(\bp)H_{l,\mb{i}}^m(\bp)\right]\left[V_{\mb{i}}(\bp)\right]_j = \mu_{\bp, j}\left[V_{\mb{i}}(\bp)\right]_j. \label{eq:eig3}
+\end{align}
+Finally, we can rewrite Eq. \ref{eq:eig3} in matrix form as
+\begin{align}
+  \ms{K}(\bp)\ms{V}_j(\bp) = \mu_{\bp, j}\ms{V}_j(\bp),
+\end{align}
+where the entries of $\ms{K}(\bp)$ are given by
+\begin{align}
+  K_{\mb{i}, \mb{i}'} (\bp) = \lmsum H_{l,\mb{i}'}^m(\bp)H_{l,\mb{i}}^m(\bp). 
+\end{align}
+nFor the diSPIM, the matrix $\mathsf{K}$ has $6\times 6$ non-zero entries---two
+views with three circular harmonics for each view---so solving this eigenvalue
+problem at each point in frequency space is computationally feasible.
+
+
+
+\bibliography{report}{}
+\bibliographystyle{unsrt}
+
+\end{document}
+

@@ -10,7 +10,7 @@ class Detector:
 
     By default we use the paraxial approximation.
     """
-    def __init__(self, optical_axis=[0,0,1], na=0.8, n=1.33,
+    def __init__(self, optical_axis=[0,0,1], na=0.8, n=1.33, sigma_ax=1.0,
                  polarizer=False, paraxial=True, detect_all=False):
         self.optical_axis = optical_axis
         self.na = na
@@ -18,37 +18,68 @@ class Detector:
         self.polarizer = polarizer
         self.paraxial = paraxial
         self.detect_all = detect_all
+        self.sigma_ax = sigma_ax
 
-    def h(self, r, phi=0):
+    def h(self, x, y, z):
         if self.detect_all:
             return tf.TFCoeffs([[1.0, 0, 0, 0, 0, 0], 6*[0], 6*[0]])
+
+        # Find cylindrical coordinates based on view
+        if self.optical_axis == [0,0,1]: # z-detection
+            r = np.sqrt(x**2 + y**2)
+            phi = np.arctan2(y, x)
+            z_ax = z
+        elif self.optical_axis == [1,0,0]: # x-detection
+            r = np.sqrt(y**2 + z**2)
+            phi = np.arctan2(z,y)
+            z_ax = x
 
         a = self.a
         b = self.b
         n0 = [a(r) + 2*b(r), 0, 0, (-a(r) + 4*b(r))/np.sqrt(5), 0, 0]
+        n_2 = 6*[0]
+        n2 = 6*[0]
         if self.polarizer:
             n_2 = [2*b(r)*np.sin(2*phi), -np.sqrt(0.6)*a(r), 0, (4.0/np.sqrt(5))*b(r)*np.sin(2*phi), 0, 0]
             n2 = [2*b(r)*np.cos(2*phi), 0, 0, (4.0/np.sqrt(5))*b(r)*np.cos(2*phi), 0, np.sqrt(0.6)*a(r)]
-            return tf.TFCoeffs([n0, n_2, n2])
-        else:
-            return tf.TFCoeffs([n0, 6*[0], 6*[0]])
-
-    def H(self, nu, phi_nu=0):
+        if self.optical_axis == [1,0,0]: # x-detection            
+            n0 = sh.SHCoeffs(n0).rotate().coeffs
+            n_2 = sh.SHCoeffs(n_2).rotate().coeffs            
+            n2 = sh.SHCoeffs(n2).rotate().coeffs
+            
+        return tf.TFCoeffs([n0, n_2, n2])
+    
+    def H(self, x, y, z):
         if self.detect_all:
             return tf.TFCoeffs([[1.0, 0, 0, 0, 0, 0], 6*[0], 6*[0]])
+
+        # Find cylindrical coordinates based on view
+        if self.optical_axis == [0,0,1]: # z-detection
+            nu = np.sqrt(x**2 + y**2)
+            phi_nu = np.arctan2(y, x)
+            z_ax = z
+        elif self.optical_axis == [1,0,0]: # x-detection
+            nu = np.sqrt(y**2 + z**2)
+            phi_nu = np.arctan2(z, y)
+            z_ax = x
 
         A = self.A
         B = self.B
         C = self.C
         n0 = [A(nu) + 2*B(nu), 0, 0, (-A(nu) + 4*B(nu))/np.sqrt(5), 0, 0]
+        n_2 = 6*[0]
+        n2 = 6*[0]
         if self.polarizer:
             n_2 = [2*C(nu)*np.sin(2*phi_nu), -np.sqrt(0.6)*A(nu), 0, (4.0/np.sqrt(5))*C(nu)*np.sin(2*phi_nu), 0, 0]
             n2 = [2*C(nu)*np.cos(2*phi_nu), 0, 0, (4.0/np.sqrt(5))*C(nu)*np.cos(2*phi_nu), 0, np.sqrt(0.6)*A(nu)]
-            return tf.TFCoeffs([n0, n_2, n2])#/n0[0]
-        else:
-            return tf.TFCoeffs([n0, 6*[0], 6*[0]])#/n0[0]
+        if self.optical_axis == [1,0,0]: # x-detection            
+            n0 = sh.SHCoeffs(n0).rotate().coeffs
+            n_2 = sh.SHCoeffs(n_2).rotate().coeffs            
+            n2 = sh.SHCoeffs(n2).rotate().coeffs
 
-        
+        ax_weight = np.exp(-(z_ax**2)/(2*(self.sigma_ax**2)))/(np.sqrt(2*np.pi*(self.sigma_ax**2)))
+        return tf.TFCoeffs([n0, n_2, n2])*ax_weight
+
     # PSF helper functions
     def a(self, r):
         if r == 0:

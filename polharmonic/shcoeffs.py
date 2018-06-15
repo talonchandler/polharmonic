@@ -62,6 +62,17 @@ class SHCoeffs:
         string = 'SHCoeffs: \n'
         string += str(self.coeffs) + '\n'
         return string
+
+    def rotate(self):
+        # Only rotate by 90 degrees about the y axis for diSPIM.
+        # Generalize later.
+        m = np.array([[1,0,0,0,0,0],
+                      [0,0,-1,0,0,0],
+                      [0,-1,0,0,0,0],
+                      [0,0,0,-1/2,0,np.sqrt(3)/2],
+                      [0,0,0,0,1,0],
+                      [0,0,0,np.sqrt(3)/2,0,1/2]])
+        return SHCoeffs(np.dot(m, self.coeffs))
     
     def plot(self, folder=''):
         if not os.path.exists(folder):
@@ -114,20 +125,21 @@ class SHCoeffs:
         from mayavi import mlab
         print('Plotting: ' + filename)
 
-        # Flip sign if [1,1,0] direction is negative
+        # Flip sign if [1,1,1] direction is negative
+        coeffs = self.coeffs
         if force_positive:
             test_radii = 0
-            for i, c in enumerate(self.coeffs):
+            for i, c in enumerate(coeffs):
                 l, m = util.j2lm(i)
-                test_radii += c*util.spZnm(l, m, np.pi/2, np.pi/4)
+                test_radii += c*util.spZnm(l, m, np.pi/4, np.pi/4)
             if test_radii < 0:
-                self.coeffs = -self.coeffs 
+                coeffs = -coeffs
             
         # Calculate radii
         tp = util.fibonacci_sphere(n_pts)
         xyz = util.fibonacci_sphere(n_pts, xyz=True)
         radii = np.zeros(tp.shape[0])
-        for i, c in enumerate(self.coeffs):
+        for i, c in enumerate(coeffs):
             l, m = util.j2lm(i)
             radii += c*util.spZnm(l, m, tp[:,0], tp[:,1])
         radii = radii/np.max(np.abs(radii))
