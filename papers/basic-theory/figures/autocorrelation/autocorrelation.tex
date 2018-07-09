@@ -1,0 +1,49 @@
+\documentclass[tikz]{standalone}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usepackage{pgfplots}
+\begin{document}
+
+\def\firstcircle{(0,0) circle (1.5cm)}
+\def\secondcircle{(0:2cm) circle (1.5cm)}
+
+\colorlet{circle edge}{black}
+\colorlet{circle area}{black!30}
+
+\tikzset{filled/.style={fill=circle area, draw=circle edge, thick},
+  outline/.style={draw=circle edge, thick}}
+
+\begin{tikzpicture}
+% left hand
+  \begin{scope}
+    \clip \firstcircle;
+    \fill[filled] \secondcircle;
+  \end{scope}
+  \draw[outline] \firstcircle node {};
+  \draw[outline] \secondcircle node (b) {};
+  
+  \node[right=1.5cm of b] (equal) {=$\, \, 4 \, \, \times$};
+
+  \begin{scope}[xshift=5.0cm, yshift=-0.5cm]
+    \draw[outline] (0.505, 0) -- (0,0) -- (0, 1.12);
+    \draw[outline] (0.5,0) arc (0:48.19:1.5);
+  \end{scope}
+
+  \node[right=3.5cm of b] (equal2) {=$\, \, 4\, \, \Bigg\{$};
+
+  \begin{scope}[xshift=7cm, yshift=-0.5cm]
+    \draw[outline] (1.5, 0) -- (0,0) -- (1, 1.12);
+    \draw[outline] (1.5,0) arc (0:48.19:1.5);
+  \end{scope}
+
+  \node[right=6.7cm of b] (equal2) {$-$};
+
+  \begin{scope}[xshift=9.5cm, yshift=-0.5cm]
+    \draw[outline] (1, 0) -- (0,0) -- (1, 1.12) -- (1, 0);
+  \end{scope}
+
+  \node[right=8.5cm of b] (equal2) {$\Bigg\}$};
+
+\end{tikzpicture}
+\end{document}
+
