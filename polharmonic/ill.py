@@ -15,6 +15,7 @@ class Illuminator:
         self.optical_axis = optical_axis
         self.na = na
         self.n = n
+        self.alpha = self.na/self.n
         
         self.polarizer = polarizer
         self.paraxial = paraxial
@@ -24,7 +25,7 @@ class Illuminator:
         if self.illuminate_all:
             return tf.TFCoeffs([[1.0, 0, 0, 0, 0, 0], 6*[0], 6*[0]])
 
-        n0 = [1 + (self.na/self.n)**2, 0, 0, -(1 - 2*((self.na/self.n)**2))/np.sqrt(5), 0, 0]
+        n0 = [1 + (self.alpha**2)/4, 0, 0, (-1 + (self.alpha**2)/2)/np.sqrt(5), 0, 0]
         n_2 = 6*[0]
         n2 = 6*[0]
         if self.polarizer:

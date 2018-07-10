@@ -142,7 +142,8 @@ class SHCoeffs:
         for i, c in enumerate(coeffs):
             l, m = util.j2lm(i)
             radii += c*util.spZnm(l, m, tp[:,0], tp[:,1])
-        radii = radii/np.max(np.abs(radii))
+        # radii = radii/np.max(np.abs(radii)) # Handle edge cases below
+        radii = np.nan_to_num(radii/np.max(np.abs(radii))) + 0.01
         
         # Split into positive and negatives
         n = r*radii.clip(max=0) 
