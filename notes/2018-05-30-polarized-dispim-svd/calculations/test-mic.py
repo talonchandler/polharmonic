@@ -2,8 +2,8 @@ from polharmonic import det, ill, micro
 import numpy as np
 
 #n_px=2**4 + 1
-n_px=2**6 + 1
-folder='out/'
+n_px=2**7 + 1
+folder='out2/'
 
 iz = ill.Illuminator(optical_axis=[0,0,1], na=0, polarizer=True, illuminate_all=False)
 dx = det.Detector(optical_axis=[1,0,0], polarizer=False)

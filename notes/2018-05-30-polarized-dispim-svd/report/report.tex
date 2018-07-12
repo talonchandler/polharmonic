@@ -231,34 +231,36 @@ of definition follows directly from swapping the $x$ and $z$ coordinates to go
 from path B to path A.
 
 In the
+\href{https://github.com/talonchandler/polharmonic/blob/master/papers/basic-theory/paper/paper.pdf}{paper
+  draft} we derive the two-dimensional detection kernel. Note that this model
+differs from the
 \href{https://github.com/talonchandler/polharmonic/blob/master/notes/2018-05-14-single-view-continuous-svd/report/report.pdf}{May
-  14 notes} we derived the two-dimensional detection kernel. The kernel is
-two-dimensional because it only considers thin in-focus objects. For a complete
-non-paraxial three-dimensional model I would eventually like to follow Backer
-and Moerner \cite{backer2014}, but there is still a few weeks of work required
-to find the associated transfer functions. Instead I'll follow the early diSPIM
+  14 model}---the old model contains an error that over predicts the
+spatio-angular coupling by a factor of 4. The kernel is two-dimensional because
+it only considers thin in-focus objects. For a complete non-paraxial
+three-dimensional model I would eventually like to follow Backer and Moerner
+\cite{backer2014}, but there is still a few weeks of work required to find the
+associated transfer functions. Instead I'll follow the early diSPIM
 deconvolution models \cite{wu2013} and use an axial Gaussian function to model
-the detection kernel. 
+the detection kernel.
 
 The detection kernel for an objective along the $z$ axis (path A) as
 \begin{align}
-  h_{\tx{A}, \tx{det}}(\ro, \so) &= \left[[{a}^2(r_{xy}) + 2b^2(r_{xy})]y_0^0(\so) + \frac{1}{\sqrt{5}}\left[- a^2(r_{xy}) + 4b^2(r_{xy})\right]y_2^0(\so)\right]\mathfrak{g}(r_z, \sigma_{\tx{det}}), \label{eq:det1}
+  h_{\tx{A}, \tx{det}}(\ro, \so) = \left\{\left[a_1(r_{xy}) + \frac{\alpha^2}{4}a_2(r_{xy})\right]y_0^0(\so) + \frac{1}{\sqrt{5}}\left[-a_1(r_{xy}) + \frac{\alpha^2}{2}a_2(r_{xy})\right]y_2^0(\so)\right\}\mathfrak{g}(r_z, \sigma_{\tx{det}}), \label{eq:det1}
 \end{align}
 where
 \begin{align}
-  a(r) = \frac{J_1(2\pi \nu_or)}{\pi \nu_or}, 
-  &\hspace{2em}
-    b(r) = \frac{\tx{NA}}{n_o}\left[\frac{J_2(2\pi \nu_or)}{\pi \nu_or}\right],  \label{eq:abparadef}
-    \intertext{and}
+  a_n(r) &\equiv \frac{n}{\pi}\left[\frac{J_n(2\pi\nu_o r)}{2\pi\nu_o r}\right],
+           \intertext{and}
   r_{xy} \equiv \sqrt{r_x^2 + r_y^2},\hspace{2em}
-  \nu_o \equiv &\frac{\tx{NA}}{\lambda},\hspace{2em}
-  \tx{NA} = n_o\sin\alpha.
+  \nu_o &\equiv \frac{\tx{NA}}{\lambda},\hspace{2em}
+  \alpha \equiv \frac{\tx{NA}}{n_0}.
 \end{align}
 
 To find the two-dimensional detection kernel for path B we transform the
 spherical harmonic coefficients using Eq. \ref{eq:transform}
 \begin{align}
-  h_{\tx{B}, \tx{det}}(\ro, \so) = \Bigg[[{a}^2(r_{yz}) + 2b^2(r_{yz})]y_0^0(\so) &+ \frac{1}{2\sqrt{5}}\left[- a^2(r_{yz}) + 4b^2(r_{yz})\right]y_2^0(\so) \nonumber \\ &+ \frac{1}{2}\sqrt{\frac{3}{5}}\left[- a^2(r_{yz}) + 4b^2(r_{yz})\right]y_2^2(\so)\Bigg]\mathfrak{g}(r_x, \sigma_{\tx{det}}), \label{eq:det2}
+  h_{\tx{B}, \tx{det}}(\ro, \so) = \Bigg\{\left[{a}_1(r_{yz}) + \frac{\alpha^2}{4}a_2(r_{yz})\right]y_0^0(\so) &+ \frac{1}{2\sqrt{5}}\left[- a_1(r_{yz}) + \frac{\alpha^2}{2}a_2(r_{yz})\right]y_2^0(\so) \nonumber \\ &+ \frac{1}{2}\sqrt{\frac{3}{5}}\left[- a_1(r_{yz}) + \frac{\alpha^2}{2}a_2(r_{yz})\right]y_2^2(\so)\Bigg\}\mathfrak{g}(r_x, \sigma_{\tx{det}}), \label{eq:det2}
 \end{align}
 where $r_{yz} \equiv \sqrt{r_y^2 + r_z^2}$. 
 
@@ -310,27 +312,27 @@ where
   F_l^m(\bv) &= \intr{3}d\ro\, \me^{i2\pi\ro\cdot\bv}\ints{2}d\so\, y_l^m(\so) f(\ro, \so).
 \end{align}
 In Figs. \ref{fig:tfA} and \ref{fig:tfB} we plot the transverse part of the
-diSPIM transfer function. Extending these plots to three-dimensions is simple
+diSPIM transfer function. Extending these plots to three dimensions is simple
 given our assumption that the axial part is Gaussian. Notice that view B has a
 non-zero element in the $m=-1$ column---this is a first for the microscopes
 we've considered so far. Also notice that each view contributes new
 information---we'll see this result in a clearer form when we find the complete
 SVD.
 
-\fig{../calculations/out/Hillx.pdf}{1.0}{Transverse transfer function
+\fig{../calculations/out2/Hillx.pdf}{1.0}{Transverse transfer function
   $H_{l,n,\tx{A}}^m(\bv_{xy})$ for view A of a polarized diSPIM microscope with
   a 0.8 NA detection objective. \textbf{Rows:} $l$ indexes the object-space
   spherical harmonic band. \textbf{Columns:} $m$ indexes the object-space
   spherical harmonic degree, and $n$ indexes the data-space circular harmonic
   band. \textbf{Entries:} Each column and row contains a continuous
-  two-dimensional plot indexed by the vector $\mb{r}_{xy}$ ranging from
-  $-2\text{NA}/\lambda$ to $+2\text{NA}/\lambda$ (although $\mb{r}_{xy}$ is
+  two-dimensional plot indexed by the vector $\bs{\nu}_{xy}$ ranging from
+  $-2\text{NA}/\lambda$ to $+2\text{NA}/\lambda$ (although $\bs{\nu}_{xy}$ is
   rotationally symmetric so one dimension would suffice). All values are
   normalized between $-1$ \textcolor{blue}{(blue)} and $+1$
   \textcolor{red}{(red)} with $0$ colored white.}{tfA}
   % filename, width, caption, label
 
-\fig{../calculations/out/Hillz.pdf}{1.0}{Transverse transfer function
+\fig{../calculations/out2/Hillz.pdf}{1.0}{Transverse transfer function
   $H_{l,n,\tx{B}}^m(\bv_{yz})$ for view B of a polarized diSPIM microscope with
   a 0.8 NA detection objective. See caption of Fig. \ref{fig:tfA} for
   details.}{tfB}
@@ -352,15 +354,17 @@ perpendicular to the illumination optical axis---this is what we'd expect for a
 polarized illumination microscope.
 
 Also notice that uniform distributions (or anything resembling a uniform
-distribution) are not in the measurement space of either view. We saw the same
-thing for single-view epi-illumination microscopes, although in that case there
-were distributions that were mostly uniform with slight depressions along the
-optical axis.
+distribution) are not object-space singular functions of either view. We saw the
+same thing for single-view epi-illumination microscopes, although in that case
+there were object-space singular functions that were mostly uniform with slight
+depressions along the optical axis. Note that we can still measure uniform
+distributions with either view, but these distributions have a component in the
+null space.
 
-\fig{../calculations/out/SVSx.pdf}{1.0}{Singular system for view A
+\fig{../calculations/out2/SVSx.pdf}{1.0}{Singular system for view A
   ($x$-illumination, $z$-detection) of a polarized diSPIM microscope with a 0.8
   NA detection objective. \textbf{Rows:} Discrete branches of the singular value
-  system indexed by $j$. \textbf{Column 1:} Continuous singular value spectra
+  system indexed by $j$. \textbf{Column 1:} Continuous singular value spectrum
   for each branch $j$ indexed by spatial frequency $\bs{\rho}$. The singular
   value spectra are normalized with contour lines at 0 and 0.1. \textbf{Columns
     2-5:} Angular part of the object-space singular vector at spatial
@@ -371,7 +375,7 @@ optical axis.
   from the origin indicates the magnitude.}{sysA}
   % filename, width, caption, label
 
-\fig{../calculations/out/SVSz.pdf}{1.0}{Singular system for view B
+\fig{../calculations/out2/SVSz.pdf}{1.0}{Singular system for view B
   ($z$-illumination, $x$-detection) of a polarized diSPIM microscope with a 0.8
   NA detection objective. See Fig. \ref{fig:sysA} caption for details. }{sysB}
   % filename, width, caption, label
@@ -405,10 +409,35 @@ where the entries of $\ms{K}(\bp)$ are given by
 \begin{align}
   K_{\mb{i}, \mb{i}'} (\bp) = \lmsum H_{l,\mb{i}'}^m(\bp)H_{l,\mb{i}}^m(\bp). 
 \end{align}
-nFor the diSPIM, the matrix $\mathsf{K}$ has $6\times 6$ non-zero entries---two
+For the diSPIM, the matrix $\mathsf{K}$ has $6\times 6$ non-zero entries---two
 views with three circular harmonics for each view---so solving this eigenvalue
 problem at each point in frequency space is computationally feasible.
 
+Figures \ref{fig:sysx}--\ref{fig:sysz} show the singular systems for a symmetric
+0.8 NA polarized illumination diSPIM microscope where the axial resolution
+($\propto 1/\sigma_{\text{ax}}$) is 1/3 of the lateral resolution for each view.
+I expect to modify this parameter based on bead measurements taken with the
+final system.
+
+\fig{../calculations/multi-out/SVS3Dx.pdf}{0.95}{Singular system for a symmetric
+  0.8 NA polarized illumination diSPIM microscope. \textbf{Rows:} Discrete
+  branches of the singular value system. \textbf{Column 1:} Maximum intensity
+  projections of the normalized singular value spectrum for each branch indexed
+  by 3D spatial frequency $\bs{\rho}$. \textbf{Columns 2-5:} Angular part of the
+  object-space singular vector at spatial frequencies marked with `x's in the
+  first column. The camera is facing the origin along the [1,1,1] axis with the
+  $z$ axis pointing up along the page. A \textcolor{red}{red} surface indicates
+  positive values, a \textcolor{blue}{blue} surface indicates negative values,
+  and the distance from the origin indicates the magnitude.}{sysx}
+  % filename, width, caption, label
+
+\fig{../calculations/multi-out/SVS3Dy.pdf}{1.0}{Identical to Figure
+  \ref{fig:sysx} with object space singular values along the $y$ axis.}{sysy}
+  % filename, width, caption, label
+
+\fig{../calculations/multi-out/SVS3Dz.pdf}{1.0}{Identical to Figure
+  \ref{fig:sysx} with object space singular values along the $z$ axis.}{sysz}
+  % filename, width, caption, label
 
 
 \bibliography{report}{}
