@@ -1,0 +1,978 @@
+\documentclass[11pt]{article}
+
+%%%%%%%%%%%%
+% Packages %
+%%%%%%%%%%%%
+\usepackage[dvipsnames]{xcolor}
+\hyphenpenalty=10000
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+
+\usepackage{tocloft}
+\usepackage[linesnumbered,ruled]{algorithm2e}
+\renewcommand\cftsecleader{\cftdotfill{\cftdotsep}}
+\def\undertilde#1{\mathord{\vtop{\ialign{##\crcr
+$\hfil\displaystyle{#1}\hfil$\crcr\noalign{\kern1.5pt\nointerlineskip}
+$\hfil\tilde{}\hfil$\crcr\noalign{\kern1.5pt}}}}}
+\usepackage{bold-extra}
+\usepackage{bm}
+\usepackage{cleveref}
+\usepackage{xcolor}
+\usepackage[colorlinks = true,
+            linkcolor = black,
+            urlcolor  = blue,
+            citecolor = black,
+            anchorcolor = black]{hyperref}
+\usepackage{epstopdf}
+\usepackage{braket}
+\usepackage{upgreek}
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{subcaption}
+\usepackage{amssymb,latexsym,amsmath,gensymb}
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{pdflscape}
+\usepackage{url}
+\usepackage{array}
+\newcolumntype{C}{>{$\displaystyle} c <{$}}
+\usepackage{tikz, calc}
+\usetikzlibrary{shapes.geometric, arrows, calc}
+\tikzstyle{norm} = [rectangle, rounded corners, minimum width=2cm, minimum height=1cm,text centered, draw=black]
+\tikzstyle{arrow} = [thick, ->, >=stealth]
+
+\newcommand{\argmin}{\arg\!\min}
+\newcommand{\argmax}{\arg\!\max}
+\newcommand{\me}{\mathrm{e}}
+\providecommand{\e}[1]{\ensuremath{\times 10^{#1}}}
+\providecommand{\mb}[1]{\mathbf{#1}}
+\providecommand{\mc}[1]{\mathcal{#1}}
+\providecommand{\ro}{\mathbf{\mathfrak{r}}_o}
+\providecommand{\so}{\mathbf{\hat{s}}_o}
+\providecommand{\rb}{\mathbf{r}_b}
+\providecommand{\rbm}{r_b^{\text{m}}}
+\providecommand{\rd}{\mathbf{\mathfrak{r}}_d}
+\providecommand{\mh}[1]{\mathbf{\hat{#1}}}
+\providecommand{\mf}[1]{\mathfrak{#1}}
+\providecommand{\ms}[1]{\mathsf{#1}}
+\providecommand{\mbb}[1]{\mathbb{#1}}
+\providecommand{\bs}[1]{\boldsymbol{#1}}
+\providecommand{\tv}{\texttt{v}}
+\providecommand{\tx}[1]{\text{#1}}
+\providecommand{\tb}[1]{\textbf{#1}}
+\providecommand{\ttt}[1]{\texttt{#1}}
+\providecommand{\bv}{\bs{\nu}}
+\providecommand{\bp}{\bs{\rho}}
+\providecommand{\p}{\mh{p}}
+\providecommand{\lmsum}{\sum_{l=0}^\infty\sum_{m=-l}^{l}}
+\providecommand{\intr}[1]{\int_{\mbb{R}^{#1}}}
+\providecommand{\ints}[1]{\int_{\mbb{S}^{#1}}}
+\providecommand{\intinf}{\int_{-\infty}^{\infty}}
+
+\providecommand{\fig}[4]{
+  % filename, width, caption, label
+\begin{figure}[H]
+ \captionsetup{width=1.0\linewidth}
+ \centering
+ \includegraphics[width = #2\textwidth]{#1}
+ \caption{#3}
+ \label{fig:#4}
+\end{figure}
+}
+
+\makeatletter
+\renewcommand*\env@matrix[1][*\c@MaxMatrixCols c]{%
+  \hskip -\arraycolsep
+  \let\@ifnextchar\new@ifnextchar
+  \array{#1}}
+\makeatother
+
+\newcommand{\tensor}[1]{\overset{\text{\tiny$\leftrightarrow$}}{\mb{#1}}}
+\newcommand{\tunderbrace}[2]{\underbrace{#1}_{\textstyle#2}}
+\providecommand{\figs}[7]{
+  % filename1, filename2, caption1, caption2, label1, label2, shift
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{.45\textwidth}
+  \centering
+  \includegraphics[width=1.0\linewidth]{#1}
+  \captionsetup{justification=justified, singlelinecheck=true}
+  \caption{#3}
+  \label{fig:#5}
+\end{minipage}
+\hspace{2em}
+\begin{minipage}[b]{.45\textwidth}
+  \centering
+  \includegraphics[width=1.0\linewidth]{#2}
+  \vspace{#7em}
+  \captionsetup{justification=justified}
+  \caption{#4}
+  \label{fig:#6}
+\end{minipage}
+\end{figure}
+}
+\makeatletter
+
+\providecommand{\code}[1]{
+\begin{center}
+\lstinputlisting{#1}
+\end{center}
+}
+
+\newcommand{\crefrangeconjunction}{--}
+%%%%%%%%%%%
+% Spacing %
+%%%%%%%%%%%
+% Margins
+\usepackage[
+top    = 1.5cm,
+bottom = 1.5cm,
+left   = 1.5cm,
+right  = 1.5cm]{geometry}
+
+% Indents, paragraph space
+%\usepackage{parskip}
+\setlength{\parskip}{1.5ex}
+
+% Section spacing
+\usepackage{titlesec}
+\titlespacing*{\title}
+{0pt}{0ex}{0ex}
+\titlespacing*{\section}
+{0pt}{0ex}{0ex}
+\titlespacing*{\subsection}
+{0pt}{0ex}{0ex}
+\titlespacing*{\subsubsection}
+{0pt}{0ex}{0ex}
+
+% Line spacing
+\linespread{1.1}
+
+%%%%%%%%%%%%
+% Document %
+%%%%%%%%%%%%
+\begin{document}
+\title{\vspace{-2.5em} Spatio-angular restoration of polarized diSPIM data:\\
+  analytical, numerical, and experimental results
+  \vspace{-1em}} % \author{Talon Chandler, Min Guo, Hari
+  % Shroff, Rudolf Oldenbourg, Patrick La Rivi\`ere}
+\date{\vspace{-3em}\today\vspace{-1em}}
+\maketitle
+\section{Introduction}
+These notes detail the spatio-angular restoration pipeline for data collected
+with the polarized diSPIM. In Section \ref{sec:fwd} we explain our forward
+model---the relationship between an arbitrary spatio-angular density and the
+data we collect with the polarized diSPIM. We will focus on our discrete
+implementation and the computational issues that we faced. In Section
+\ref{sec:inv} we will explain our inversion scheme---the set of computations
+that allow us to recover a spatio-angular density from noise-corrupted data. In
+Sections \ref{sec:num} and \ref{sec:exp} we will show numerical and experimental
+results.
+
+\section{Forward model} \label{sec:fwd}
+\subsection{Continuous-to-continuous model} \label{sec:cc}
+The objects we are attempting to simulate and reconstruct are spatio-angular
+densities of fluorophores $f(\ro, \so)$---the number of fluorophores at each 3D
+position $\ro$ oriented along a direction $\so$. Therefore, the complete object
+space $\mbb{U}$ is the function space $\mbb{L}_2(\mbb{R}^3 \times \mbb{S}^2)$.
+The data that we sample from each arm of the polarized diSPIM is
+$g(\rd, \p)$---the irradiance measured at each 3D detector position $\rd$ with
+the illumination polarizer oriented along $\p$. The data space for each view is
+a member of the function space $\mbb{L}_2(\mbb{R}^3 \times \mbb{S}^1)$. We have
+two views, so the complete data space $\mbb{V}$ is the function space
+$[\mbb{L}_2(\mbb{R}^3 \times \mbb{S}^1)]^2$. Although this section is named
+continuous-to-continuous (CC in Barrett's notation), strictly speaking this is
+already a CC-CD model because we have a discrete number of views.
+
+In previous note sets we have shown that we can write the CC model for the
+polarized diSPIM as
+\begin{align}
+  g_{\tv}(\rd, \p) = \intr{3}d\ro \ints{2}d\so\, h_{\tv}(\rd - \ro, \p, \so)f(\ro, \so), \label{eq:fwd}
+\end{align}
+where $\tv \in \{\text{A}, \text{B}\}$ is the light path index, and
+$h_{\tv}(\rd - \ro, \p, \so)$ is the kernel of the integral transform that maps
+objects space to data space. The imaging process consists of incoherent
+excitation and detection steps, so we can write the kernel as a product of an
+excitation and detection kernel
+\begin{align}
+  h_{\tv}(\ro, \so; \mh{p}) &= h_{\tv, \tx{exc}}(\ro, \so; \mh{p})h_{\tv, \tx{det}}(\ro, \so).\label{eq:split}
+\end{align}
+Notice that we are considering polarized illumination, so the polarizer
+coordinate $\p$ is a variable in the excitation kernel only.
+
+The excitation kernels for each view are given by
+\begin{align}
+  h_{\tx{B}, \tx{exc}}(\ro, \so; \mh{p}) &= \left[z_{0}(\mh{p})y_0^0(\so) + \sqrt{\frac{3}{5}}z_{-2}(\mh{p})y_2^{-2}(\so) - \frac{1}{\sqrt{5}}z_{0}(\mh{p})y_2^0(\so) + \sqrt{\frac{3}{5}}z_{2}(\mh{p})y_2^{2}(\so)\right]\mf{g}(r_x, \sigma_{\tx{ls}}),\\
+  h_{\tx{A}, \tx{exc}}(\ro, \so; \mh{p}) &= \mc{R}_{xz}\left\{h_{\tx{B}, \tx{exc}}(\ro, \so; \mh{p})\right\},
+\end{align}
+where $z_n(\p)$ are circular harmonic functions; $y_l^m(\so)$ are spherical
+harmonic functions; $\mf{g}(\mu, \sigma)$ is a Gaussian function with mean $\mu$
+and standard deviation $\sigma$; and $\mc{R}_{xz}$ is a rotation operator that
+swaps the $x$ and $z$ coordinates within the function. Note that the operator
+$\mc{R}_{xz}$ applies a rotation transformation to the circular and spherical
+harmonics as well.
+
+The detection kernels are given by
+\begin{align}
+  h_{\tx{A}, \tx{det}}(\ro, \so) &= \left\{\left[a_{1,\tx{A}}(r_{xy}) + \frac{\alpha_{\tx{A}}^2}{4}a_{2,\tx{A}}(r_{xy})\right]y_0^0(\so) + \frac{1}{\sqrt{5}}\left[-a_{1,\tx{A}}(r_{xy}) + \frac{\alpha_{\tx{A}}^2}{2}a_{2,\tx{A}}(r_{xy})\right]y_2^0(\so)\right\}\mathfrak{g}(r_z, \sigma_{\tx{det}}),\\
+  h_{\tx{B}, \tx{det}}(\ro, \so) &= \mc{R}_{xz}\left\{h_{\tx{A}, \tx{det}}(\ro, \so)\right\}.
+\end{align}
+where
+\begin{align}
+  a_{n,\tv}(r) &\equiv \frac{n}{\pi}\left[\frac{J_n(2\pi\nu_{o,\tv} r)}{2\pi\nu_{o,\tv} r}\right],
+           \intertext{and}
+  r_{xy} \equiv \sqrt{r_x^2 + r_y^2},\hspace{2em}
+  \nu_{o,\tv} &\equiv \frac{\tx{NA}_{\tv}}{\lambda},\hspace{2em}
+  \alpha_{\tv} \equiv \frac{\tx{NA}_{\tv}}{n_0}. \label{eq:alpha}
+\end{align}
+Notice that we have added a subscript $\tv$ to NA, $\alpha$, and $\nu_o$ to allow for the possibility of an asymmetric diSPIM. 
+
+Eqs. \ref{eq:fwd}--\ref{eq:alpha} are sufficient to simulate the forward model
+of a polarized diSPIM, but the integrals in Eq. \ref{eq:fwd} are extremely
+expensive to calculate. If we naively discretize $f(\ro, \so)$ into
+$N = 1000 \times 1000 \times 1000 \times 1000 = 10^{12}$ spatio-angular points
+and discretize the data into
+$M = 1000 \times 1000 \times 1000 \times 4\ \text{polarizers} \times 2\
+\text{views} = 8\e{9}$ data points (a realistic data set), then simulating the
+forward model (assuming the kernel is inexpensive to evaluate) would require
+$\mc{O}(NM) \approx 8\e{21}$ floating-point operations (FLOPs)---not realistic
+on a typical $10^{11}$ floating-point operations per second (FLOPS) machine (a
+very good laptop). Aside: there's a cute mnemonic for converting large numbers
+of seconds---$\pi$ seconds is approximately one nanocentury or
+$\pi\e{7}\ \text{s} \approx 1\ \text{y}$. Luckily we can evaluate the forward
+model much more quickly by exploiting the symmetries and rank of the integral
+operator.
+
+The first symmetry we'll exploit is shift invariance. We notice that the
+spatial integral is in the form of a convolution, so we apply the
+convolution theorem and rewrite Eq. \ref{eq:fwd} as
+\begin{align}
+  g_{\tv}(\rd, \p) = \mc{F}^{-1}_{\mbb{R}^3}\left\{\ints{2}d\so\, \mc{F}_{\mbb{R}^3}\left\{h_{\tv}(\ro, \mh{p}, \so)\right\} \mc{F}_{\mbb{R}^3}\left\{f(\ro, \so)\right\}\right\}, \label{eq:filter1}
+\end{align}
+where $\mc{F}_{\mbb{R}^3}$ denotes a three-dimensional Fourier transform given by
+\begin{align}
+  \mc{F}_{\mbb{R}^3}\left\{f_{\tv}(\ro, \so)\right\} &\equiv \intr{3}d\ro\, \me^{i2\pi\ro\cdot\bv} f_{\tv}(\ro, \so).
+\end{align}
+Eq. \ref{eq:filter1} is already much easier to compute than Eq. \ref{eq:fwd},
+but it still requires us to evaluate a spherical integral with two 3D Fourier
+transforms in the integrand. We can simplify this integral by exploiting the
+angular rank of the kernel. First, we apply the following identity
+\begin{align}
+  \ints{2}d\mh{s}{}\, f(\mh{s})g(\mh{s}) = \lmsum \mc{F}_{\mbb{S}^2}\left\{f(\mh{s})\right\}\mc{F}_{\mbb{S}^2}\left\{g(\mh{s})\right\}, \label{eq:plan}
+\end{align}
+where
+\begin{align}
+  \mc{F}_{\mbb{S}^2}\left\{f(\mh{s})\right\} \equiv \int_{\mbb{S}^2}f(\mh{s})y_l^m(\mh{s}).
+\end{align}
+Eq. \ref{eq:plan} is the generalized Plancharel theorem for spherical functions.
+It is a special case of the fact that scalar products are invariant under
+unitary transformations (see Barrett 3.78). Next, we plug Eq. \ref{eq:plan}
+into Eq. \ref{eq:filter1} to get
+\begin{align}
+  g_{\tv}(\rd, \p) = \mc{F}^{-1}_{\mbb{R}^3}\left\{\lmsum H_{l,\tv}^m(\bv, \mh{p}) \mc{F}_{\mbb{R}^3\times\mbb{S}^2}\left\{f(\ro, \so)\right\}\right\} \label{eq:filter}
+\end{align}
+where
+\begin{align}
+  H_{l,\tv}^m(\bv, \mh{p}) \equiv \mc{F}_{\mbb{R}^3\times\mbb{S}^2}\left\{h_{\tv}(\ro, \p, \so)\right\} &\equiv \intr{3}d\ro\, \me^{i2\pi\ro\cdot\bv}\ints{2}d\so\, y_l^m(\so) h_{\tv}(\ro, \p, \so).\label{eq:transfer}
+\end{align}
+Eq. \ref{eq:filter} is the main result of this section. Right now it is not
+obvious that Eq. \ref{eq:filter} is any more efficient than Eq.
+\ref{eq:filter1}, but when we calculate the transfer function we will see that
+the sum over spherical harmonics contains a small number of terms.
+
+We compute the transfer function $H_{l,\tv}^m(\bv, \mh{p})$ by plugging Eq.
+\ref{eq:split} into Eq. \ref{eq:transfer}
+\begin{align}
+  H_{l,\tv}^m(\bv, \mh{p}) = \mc{F}_{\mbb{R}^3\times\mbb{S}^2}\left\{h_{\tv, \tx{exc}}(\ro, \so; \mh{p})h_{\tv, \tx{det}}(\ro, \so)\right\}.
+\end{align}
+We can factor the kernel for both views into a transverse and axial part (a Gaussian) so
+\begin{align}
+  H_{l,\tv}^m(\bv, \mh{p}) &= \mc{F}_{\mbb{R}^3\times\mbb{S}^2}\left\{h^{\text{tr}}_{\tv, \tx{exc}}(\so; \mh{p})h^{\text{tr}}_{\tv, \tx{det}}(\ro, \so)\mf{g}(0, \sigma_{\text{ax}})\right\}.
+\end{align}
+Rearranging the Fourier transforms gives
+\begin{align}
+  H_{l,\tv}^m(\bv, \mh{p}) &= \mc{F}_{\mbb{S}^2}\left\{h^{\text{tr}}_{\tv, \tx{exc}}(\so; \mh{p})\mc{F}_{\mbb{R}^2}\left\{h^{\text{tr}}_{\tv, \tx{det}}(\ro, \so)\right\}\mc{F}_{\mbb{R}^1}\left\{\mf{g}(0, \sigma_{\text{ax}})\right\}\right\}.\label{eq:rearr}
+\end{align}
+The Fourier transform of a Gaussian is a Gaussian with inverse standard
+deviation, and in previous notes we evaluated the Fourier transform of the
+transverse detection kernel as
+\begin{align}
+  \mc{F}_{\mbb{R}^2}\left\{h^{\text{tr}}_{\tx{A}, \tx{det}}(\ro, \so)\right\} &= \left[A_{1,\tx{A}}(\nu_{xy}) + \frac{\alpha_{\tx{A}}^2}{4}A_{2,\tx{A}}(\nu_{xy})\right]y_0^0(\so) + \frac{1}{\sqrt{5}}\left[-A_{1,\tx{A}}(\nu_{xy}) + \frac{\alpha_{\tx{A}}^2}{2}A_{2,\tx{A}}(\nu_{xy})\right]y_2^0(\so),
+\end{align}
+where
+\begin{align}
+  A_{1,\tx{A}}(\nu_{xy}) &= \frac{2}{\pi}\left\{\cos^{-1}\left(\frac{\nu_{xy}}{2\nu_{o,\tx{A}}}\right) - \frac{\nu_{xy}}{2\nu_{o,\tx{A}}}\sqrt{1 - \left(\frac{\nu_{xy}}{2\nu_{o,\tx{A}}}\right)^2}\right\}\Pi\left(\frac{\nu_{xy}}{2\nu_{o,\tx{A}}}\right),\\
+  A_{2,\tx{A}}(\nu_{xy}) &= \frac{2}{\pi}\Bigg\{\cos^{-1}\left(\frac{\nu_{xy}}{2\nu_{o,\tx{A}}}\right) - \left[3 - 2\left(\frac{\nu_{xy}}{2\nu_{o,\tx{A}}}\right)^2\right]\frac{\nu_{xy}}{2\nu_{o,\tx{A}}}\sqrt{1 - \left(\frac{\nu_{xy}}{2\nu_{o,\tx{A}}}\right)^2}\Bigg\}\Pi\left(\frac{\nu_{xy}}{2\nu_{o,\tx{A}}}\right).
+\end{align}
+We have closed form solutions for the inner Fourier transforms of Eq.
+\ref{eq:rearr}, but we still need to evaluate the outer spherical Fourier
+transform. The function is the product of spherical Fourier transforms, so we
+need to take a spherical convolution of the coefficients of the spherical
+Fourier transforms of the individual functions. We could do this by hand and
+write out the result, but the equations would be long and wouldn't give much
+insight. Instead, we've implemented a spherical convolution that uses the Gaunt
+coefficients to efficiently compute the transfer function. The most important
+result is that we can compute $H_{l,\tv}^m(\bv, \mh{p})$ directly without
+evaluating expensive Bessel functions then taking the Fourier transform.
+
+We notice that both the excitation and detection kernels contain just a few
+spherical harmonic functions (four for the excitation kernel, two for the
+detection kernel), and these terms are all in the $l=0$ and $l=2$ bands. When we
+multiply out the spherical harmonics we get a total of 9 terms in the $l=0$,
+$l=2$, and $l=4$ bands. This means that the sum over spherical harmonics in Eq.
+\ref{eq:filter} contains only 9 terms which is an enormous computational savings
+over the complete spherical integral.
+
+\subsection{Continuous-to-discrete model}
+To convert the CC model to a CD model we weight Eq. \ref{eq:fwd} by a sampling
+aperture $w_{\tb{\ttt{r}}_{\ttt{d}}, \ttt{p}}(\rd, \p)$ and integrate over the
+continuous detector coordinates $\rd$ and $\p$ to obtain
+\begin{align}
+  g_{\tb{\ttt{r}}_{\ttt{d}},\ttt{p},\ttt{v}} = \intr{3}d\rd\ints{1}d\p\, w_{\tb{\ttt{r}}_{\ttt{d}}, \ttt{p}}(\rd, \p)\left[\intr{3}d\ro \ints{2}d\so\, h_{\tv}(\rd - \ro, \p, \so)f(\ro, \so)\right]. \label{eq:cd}
+\end{align}
+Notice that we use monospace type for discrete (integer) indices---$\ttt{p}$ is the
+polarizer setting index, $\ttt{v}$ is the view index, and
+$\tb{\ttt{r}}_{\ttt{d}}$ is the voxel multi-index.
+
+We will rearrange the integrals and group terms in Eq. \ref{eq:cd} to find 
+\begin{align}
+  g_{\tb{\ttt{r}}_{\ttt{d}},\ttt{p},\ttt{v}} = \intr{3}d\ro \ints{2}d\so\, h_{\tb{\ttt{r}}_{\ttt{d}}, \ttt{p}, \ttt{v}}(\ro, \so) f(\ro, \so), \label{eq:cd2}
+\end{align}
+where the new CD kernel is related to the CC kernel by
+\begin{align}
+   h_{\tb{\ttt{r}}_{\ttt{d}}, \ttt{p}, \ttt{v}}(\ro,\so) = \intr{3}d\rd\ints{1}d\p\, w_{\tb{\ttt{r}}_{\ttt{d}}, \ttt{p}}(\rd, \p) h_{\tv}(\rd - \ro, \p, \so).
+\end{align}
+
+We can interpret the sampling aperture
+$w_{\tb{\ttt{r}}_{\ttt{d}}, \ttt{p}}(\rd, \p)$ as the sensitivity of the
+$(\tb{\ttt{r}}_{\ttt{d}}, \ttt{p})\text{th}$ measurement to the irradiance at
+position $(\rd, \p)$. The simplest choice for the sampling aperture is 
+\begin{align}
+  w_{\tb{\ttt{r}}_{\ttt{d}}, \ttt{p}}(\rd, \p) = \delta(\rd - \mb{\epsilon}\tb{\ttt{r}}_{\ttt{d}})\delta(\mh{p} - \mb{\epsilon}_{\phi}\ttt{p}), \label{eq:sampling}
+\end{align}
+where $\mb{\epsilon}$ is the distance between voxels and $\mb{\epsilon}_{\phi}$
+is the angle between polarizer settings. With this choice of sampling aperture the
+CD forward model in Eq. \ref{eq:cd2} reduces to 
+\begin{align}
+  g_{\tb{\ttt{r}}_{\ttt{d}},\ttt{p},\ttt{v}} = \intr{3}d\ro \ints{2}d\so\, h_{\tv}(\mb{\epsilon}\tb{\ttt{r}}_{\ttt{d}} - \ro, \mb{\epsilon}_{\phi}\ttt{p}, \so)f(\ro, \so). 
+\end{align}
+Notice that the CD kernel is a sampled version of the CC kernel, but this is
+only true when the sampling aperture is given by Eq. \ref{eq:sampling}.
+
+A more realistic model of the sampling aperture is given by
+\begin{align}
+  w_{\tb{\ttt{r}}_{\ttt{d}}, \ttt{p}}(\rd, \p) = \frac{1}{\epsilon^3}\text{rect}\left(\frac{\rd - \mb{\epsilon}\tb{\ttt{r}}_{\ttt{d}}}{\mb{\epsilon}}\right)\delta(\mh{p} - \mb{\epsilon}_{\phi}\ttt{p}),
+\end{align}
+where the rect function models the aperture of each pixel. Finally, we mention
+the possibility of modeling a rotating polarizer by using the following sampling
+aperture
+\begin{align}
+  w_{\tb{\ttt{r}}_{\ttt{d}}, \ttt{p}}(\rd, \p) = \frac{1}{\epsilon^3\epsilon_{\phi}}\text{rect}\left(\frac{\rd - \mb{\epsilon}\tb{\ttt{r}}_{\ttt{d}}}{\mb{\epsilon}}\right)\text{rect}\left(\frac{\mh{p} - \mb{\epsilon}_{\phi}\ttt{p}}{\mb{\epsilon}_\phi}\right).
+\end{align}
+We might consider these sampling aperture in the future, but for now we will use
+the sampling aperture in Eq. \ref{eq:sampling} and move forward with the CD model in Eq. \ref{eq:cd}. 
+
+\subsection{Discrete-to-discrete model}
+To convert the CD model to a DD model we need to expand our object-space
+functions $f(\ro, \so)$ onto a discrete set of expansion functions with
+\begin{align}
+  f(\ro, \so) = \sum_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}} \theta_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}} \phi_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}}(\ro, \so).  \label{eq:exp}
+\end{align}
+We will choose our expansion functions as
+\begin{align}
+  \phi_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}}(\ro, \so) = \delta\left(\ro - \epsilon\ttt{\tb{r}}_{\ttt{o}}\right)y_{\ttt{j}}(\so), \label{eq:expansion}
+\end{align}
+where $\ttt{j}$ is a single index over the spherical harmonics. This choice of
+basis function may seem odd---we are representing the spatial part of our object
+in a sampled voxel basis and the angular part in a spherical harmonic basis. The
+main reason for this choice is that the diSPIM has a small angular rank, so we
+can't reconstruct more than a few angular coefficients anyway. By expanding our
+object in a spherical harmonic basis, we significantly reduce the storage and
+computation requirements for our simulations and reconstructions without any
+loss of accuracy.
+
+The expansion functions in Eq. \ref{eq:expansion} are orthonormal, but they do
+not form a complete basis for $\mbb{L}_2(\mbb{R}^3\times \mbb{S}^2)$. A good
+choice for a complete orthonormal basis is
+\begin{align}
+  \phi_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}}(\ro, \so) = \frac{1}{\epsilon^3}\text{rect}\left(\frac{\ro - \epsilon\ttt{\tb{r}}_{\ttt{o}}}{\epsilon}\right)y_{\ttt{j}}(\so), 
+\end{align}
+but we will use the basis in Eq. \ref{eq:expansion} for now to simplify our
+model.
+
+For a given object $f(\ro, \so)$, we can find the expansion coefficients using
+\begin{align}
+  \theta_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}} = \intr{3}d\ro\ints{2}d\so\, \phi_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}}(\ro, \so)f(\ro, \so). \label{eq:theta}
+\end{align}
+Plugging Eq. \ref{eq:expansion} into Eq. \ref{eq:theta} gives 
+\begin{align}
+  \theta_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}} = \ints{2}d\so\, f(\ro - \epsilon\ttt{\tb{r}}_{\ttt{o}},\so)y_{\ttt{j}}(\so) = \mc{F}_{\mbb{S}^2}\left\{f(\ro - \epsilon\ttt{\tb{r}}_{\ttt{o}},\so)\right\} \label{eq:f2sh}
+\end{align}
+which shows us the procedure to find the expansion coefficients of an
+object---sample the object on a spatial grid then take the spherical Fourier
+transform.
+
+If we plug Eq. \ref{eq:exp} into Eq. \ref{eq:cd} we find
+\begin{align}
+  g_{\tb{\ttt{r}}_{\ttt{d}},\ttt{p},\ttt{v}} = \intr{3}d\ro \ints{2}d\so\, h_{\tv}(\mb{\epsilon}\tb{\ttt{r}}_{\ttt{d}} - \ro, \mb{\epsilon}_{\phi}\ttt{p}, \so)\left[\sum_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}} \theta_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}} \phi_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}}(\ro, \so)\right].
+\end{align}
+After plugging in the expansion functions in Eq. \ref{eq:expansion}, evaluating
+the spatial integral, and rearranging terms we find
+\begin{align}
+  g_{\tb{\ttt{r}}_{\ttt{d}},\ttt{p},\ttt{v}} = \sum_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}}\ints{2}d\so\, h_{\tv}(\mb{\epsilon}[\tb{\ttt{r}}_{\ttt{d}} - \tb{\ttt{r}}_{\ttt{o}}], \mb{\epsilon}_{\phi}\ttt{p}, \so)y_{\ttt{j}}(\so)\theta_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}}.
+\end{align}
+We can rewrite this equation as a DD model
+\begin{align}
+  g_{\tb{\ttt{r}}_{\ttt{d}},\ttt{p},\ttt{v}} = \sum_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}}h_{\ttt{\tb{r}}_{\ttt{d}} - \ttt{\tb{r}}_{\ttt{o}},\ttt{p},\ttt{v},\ttt{j}}\theta_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}},\label{eq:dd}
+\end{align}
+where
+\begin{align}
+h_{\ttt{\tb{r}},\ttt{p},\ttt{v},\ttt{j}} = \ints{2}d\so\, h_{\tv}(\mb{\epsilon}\tb{\ttt{r}}, \mb{\epsilon}_{\phi}\ttt{p}, \so)y_{\ttt{j}}(\so).\label{eq:dd2}
+\end{align}
+Eqs. \ref{eq:dd} and \ref{eq:dd2} specify a discrete forward model, but they are
+expensive to compute because of the sum over $\ttt{\tb{r}}$ and the integral
+over $\mbb{S}^2$. Following the simplifications we made in Section \ref{sec:cc}, we
+apply the discrete convolution multiplication theorem to rewrite the forward
+model as
+\begin{align}
+  g_{\tb{\ttt{r}}_{\ttt{d}},\ttt{p},\ttt{v}} = \text{DFT}^{-1}\Big\{\sum_{\ttt{j}}H_{\bar{\bs{\nu}},\ttt{p},\ttt{v},\ttt{j}}\text{DFT}\left\{\theta_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}}\right\}\Big\}, \label{eq:fastfwd}
+\end{align}
+where
+\begin{align}
+  H_{\bar{\bs{\nu}},\ttt{p},\ttt{v},\ttt{j}} = \ints{2}d\so\, \text{DFT}\left\{h_{\tv}(\mb{\epsilon}\tb{\ttt{r}}, \mb{\epsilon}_{\phi}\ttt{p}, \so)\right\}y_{\ttt{j}}(\so) = H_{\ttt{v}, \ttt{j}}(\bar{\bs{\nu}}/\epsilon, \epsilon_{\phi}\ttt{p}), 
+\end{align}
+where the far LHS is the discrete spatio-angular transfer function and the far
+RHS is the sampled continuous spatio-angular transfer function from Section 2.1. 
+
+The forward model in Eq. \ref{eq:fastfwd} is extremely fast compared to the
+naive discretization we considered previously. The 3D DFTs require approximately
+$3N\log N$ FLOPs (about $10^4$ FLOPs for $N = 10^3$). We know that the sum over
+$\ttt{j}$ has 15 terms, and we need to calculate these 15 DFTs for each of 4
+polarizer settings and 2 views. Therefore, our approximate FLOP count is
+$10^4 \times 15 \times 4 \times 2 = 1.2\e{6}$---about 15 orders of magnitude
+faster than our naive approach.
+
+\subsection{Implementation details}
+For small input sizes we can precompute the entire array
+$H_{\bar{\bs{\nu}},\ttt{p},\ttt{v},\ttt{j}}$ and apply Eq. \ref{eq:fastfwd}
+directly. This array quickly becomes too large to store in memory
+though---$10^9$ spatial points $\times$ 4 polarizers $\times$ 2 views $\times$
+15 spherical harmonics $\times$ 32 bits = 480 GB. To avoid memory issues, we
+separate $H_{\bar{\bs{\nu}},\ttt{p},\ttt{v},\ttt{j}}$ into transverse and axial
+parts, precompute and store these small arrays, then assemble the complete array
+in pieces during the application of the forward model. We also exploit the
+8-fold spatial symmetry of the array
+$H_{\bar{\bs{\nu}},\ttt{p},\ttt{v},\ttt{j}}$ and only store the positive octant.
+Finally, the sum over $\ttt{j}$ needs to be computed at each point in
+$\bar{\bs{\nu}}$, so we parallelize this loop over multiple CPUs.
+
+\section{Inverse problem} \label{sec:inv} It will be convenient to rewrite the
+forward model in Eq. \ref{eq:fastfwd} completely in the spatial frequency domain
+as
+\begin{align}
+  G_{\bar{\bs{\nu}},\ttt{p},\ttt{v}} = \sum_{\ttt{j}}H_{\bar{\bs{\nu}},\ttt{p},\ttt{v},\ttt{j}}\Theta_{\bar{\bs{\nu}},\ttt{j}}, 
+\end{align}
+where
+\begin{align}
+  G_{\bar{\bs{\nu}},\ttt{p},\ttt{v}} = \text{DFT}\left\{g_{\tb{\ttt{r}}_{\ttt{d}},\ttt{p},\ttt{v}}\right\},\\
+    \Theta_{\bar{\bs{\nu}},\ttt{j}} = \text{DFT}\left\{\theta_{\tb{\ttt{r}}_{\ttt{o}},\ttt{j}}\right\}.
+\end{align}
+If we combine the indices $\ttt{p}$ and $\ttt{v}$ into a single multi-index $\ttt{\tb{q}} = (\ttt{p}, \ttt{v})$ then the forward model becomes
+\begin{align}
+  G_{\bar{\bs{\nu}},\ttt{\tb{q}}} = \sum_{\ttt{j}}H_{\bar{\bs{\nu}},\ttt{\tb{q}},\ttt{j}}\Theta_{\bar{\bs{\nu}},\ttt{j}} \label{eq:matrix}
+\end{align}
+which has the form of a matrix multiplication at each discrete spatial frequency
+$\bar{\bs{\nu}}$. We can rewrite Eq. \ref{eq:matrix} in matrix notation as
+\begin{align}
+  \mb{G}_{\bar{\bs{\nu}}} = \mb{H}_{\bar{\bs{\nu}}}\bs{\Theta}_{\bar{\bs{\nu}}}.  \label{eq:matrix2}
+\end{align}
+Taking the SVD of $\mb{H}_{\bar{\bs{\nu}}}$ gives
+\begin{align}
+  \mb{G}_{\bar{\bs{\nu}}} = \sum_{k=0}^R \sqrt{\mu_{\bar{\bs{\nu}}, k}}\textbf{v}_{\bar{\bs{\nu}}, k}\textbf{u}_{\bar{\bs{\nu}}, k}^{\dagger}\bs{\Theta}_{\bar{\bs{\nu}}}, \label{eq:svd}
+\end{align}
+where $\mu_{\bar{\bs{\nu}}, k}$, $\textbf{v}_{\bar{\bs{\nu}}, k}$,
+$\textbf{u}_{\bar{\bs{\nu}}, k}$, and $R$ are the singular values, data space
+singular vectors, object space singular vectors, and rank of
+$\mb{H}_{\bar{\bs{\nu}}}$, respectively. Notice that Eq. \ref{eq:svd} gives us
+an even more efficient way to compute the forward model---we only need to
+compute the sum up to the rank instead of summing over the spherical harmonic
+coefficients. Unfortunately, this trick is only feasible if we can store the
+singular value decomposition of $\mb{H}_{\bar{\bs{\nu}}}$ in memory. In our case
+we have to create $\mb{H}_{\bar{\bs{\nu}}}$ on the fly, and it would be too
+expensive to calculate the SVD at each point on the fly.
+
+We would like to estimate $\bs{\Theta}_{\bar{\bs{\nu}}}$ from noise-corrupted
+measurements $\mb{G}_{\bar{\bs{\nu}}}$. We can rearrange Eq. \ref{eq:svd}
+to find 
+\begin{align}
+  \bs{\hat{\Theta}}_{\bar{\bs{\nu}}} = \sum_{k=0}^R \frac{1}{\sqrt{\mu_{\bar{\bs{\nu}}, k}}}\textbf{u}_{\bar{\bs{\nu}}, k}\textbf{v}_{\bar{\bs{\nu}}, k}^{\dagger}\mb{G}_{\bar{\bs{\nu}}}. \label{eq:pinv}
+\end{align}
+where\, $\hat{\vspace{0.1em}}$\, denotes an estimate. This solution is called
+the Moore-Penrose pseudoinverse and it gives a least-squares solution to any set
+of linear equations. Notice that the sum in Eq. \ref{eq:pinv} is only up to the
+rank $R$, so this solution avoids division by zero.
+
+In practice, the pseudoinverse solution is susceptible to corruption by noise
+because of division by small singular values. To avoid this problem, we use
+a Tikhonov regularization parameter that suppresses the terms in Eq. \ref{eq:pinv}
+with small singular values. The Tikhonov-regularized solution is given by
+\begin{align}
+  \bs{\hat{\Theta}}_{\bar{\bs{\nu}}} = \sum_{k=0}^R \frac{\sqrt{\mu_{\bar{\bs{\nu}}, k}}}{\mu_{\bar{\bs{\nu}}, k} + \eta}\textbf{u}_{\bar{\bs{\nu}}, k}\textbf{v}_{\bar{\bs{\nu}}, k}^{\dagger}\mb{G}_{\bar{\bs{\nu}}},  \label{eq:tik}
+\end{align}
+where $\eta$ is the regularization parameter.
+
+Although we have derived the Tikhonov-regularized solution in a heuristic way in
+this section, it is possible to show that Eq. \ref{eq:tik} is the solution to the
+following optimization problem
+\begin{align}
+  \bs{\hat{\Theta}}_{\bar{\bs{\nu}}} = \argmin_{\bs{\Theta}_{\bar{\bs{\nu}}}}\left\{|| \mb{G}_{\bar{\bs{\nu}}} - \mb{H}_{\bar{\bs{\nu}}}\bs{\Theta}_{\bar{\bs{\nu}}}||^2 + \eta ||\bs{\Theta}_{\bar{\bs{\nu}}}||^2\right\}. 
+\end{align}
+In this form it is clear that increasing the regularization parameter $\eta$
+favors solutions with a smaller norm.
+
+After calculating $\bs{\hat{\Theta}}_{\bar{\bs{\nu}}}$ we can find the
+object-space coefficients $\hat{\theta}_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}}$ with
+an inverse DFT, and we have completed the inversion. In pseudocode the complete
+reconstruction algorithm is given by\\
+\begin{figure}[H]
+\centering
+\begin{minipage}{.65\linewidth}
+\begin{algorithm}[H]
+  \SetKwInOut{Input}{Input}
+  \SetKwInOut{Output}{Output}
+  \SetKwInOut{ForEach}{for each}
+  \Input{Data array $g_{\tb{\ttt{r}}_{\ttt{d}},\ttt{p},\ttt{v}}$, regularization parameter $\eta$}
+  \Output{Estimate of spatio-angular density coefficients $\hat{\theta}_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}}$}
+  $\hat{\Theta}_{\bar{\bs{\nu}},\ttt{j}} \leftarrow \text{Zeros}()$\\
+  $G_{\bar{\bs{\nu}},\ttt{p},\ttt{v}} \leftarrow \text{DFT}(g_{\tb{\ttt{r}}_{\ttt{d}},\ttt{p},\ttt{v}})$\\
+  \textbf{for each} $\bar{\nu}$ in $\bar{\bs{\nu}}$:\\
+  \qquad $H_{\ttt{p}, \ttt{v}, \ttt{j}} \leftarrow \text{CalculateH}(\bar{\nu}, \ttt{p}, \ttt{v}, \ttt{j})$\\
+  \qquad $G_{\bar{\nu}, \ttt{q}} \leftarrow \text{Flatten}(G_{\bar{\nu}, \ttt{p},\ttt{v}}, [\ttt{p},\ttt{v}])$\\
+  \qquad $H_{\ttt{q}, \ttt{j}} \leftarrow \text{Flatten}(H_{\ttt{p},\ttt{v}, \ttt{j}}, [\ttt{p},\ttt{v}])$\\
+  \qquad $U_{\ttt{k}, \ttt{j}}, \mu_{\ttt{k}}, V_{\ttt{k},\ttt{q}} \leftarrow \text{SVD}(H_{\ttt{q}, \ttt{j}})$\\
+  \qquad $\hat{\Theta}_{\bar{\nu},\ttt{j}} \leftarrow \sum_{\ttt{k}}^R\sum_{\ttt{q}}\frac{\sqrt{\mu_{\ttt{k}}}}{\mu_{\ttt{k}} + \eta}U_{\ttt{k},\ttt{j}}V_{\ttt{k},\ttt{q}}G_{\bar{\nu}, \ttt{q}} $\\
+  $\hat{\theta}_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}} \leftarrow \text{DFT}^{-1}(\hat{\Theta}_{\bar{\bs{\nu}},\ttt{j}}).$
+  \caption{diSPIM spatio-angular reconstruction}
+\end{algorithm}
+\end{minipage}
+\end{figure}
+Similar to the forward model calculation, we assemble
+$H_{\ttt{p}, \ttt{v}, \ttt{j}}$ from precalculated matrices to avoid memory
+limitations, we exploit the 8-fold symmetry of the kernel to reduce the number
+of SVDs calculated in the loop, and we parallelize the loop over multiple CPUs.
+
+\subsection{Summary parameters}
+Algorithm 1 shows the complete spatio-angular reconstruction, but our choice to
+reconstruct onto a spherical harmonic basis makes the result difficult to
+interpret. Therefore, we need another set of computations that can convert the
+spherical harmonic coefficients at each spatial point to interpretable values.
+Recall that we cannot reconstruct directly to a spatio-angular density because
+the result will not fit in memory---we need to reconstruct the spherical
+harmonic coefficients then calculate summary parameters only as necessary.
+
+The most informative (and expensive) set of summary parameters is to calculate
+the complete orientation distribution function (ODF) from the set of spherical
+harmonic coefficients. This computation is essentially an inverse spherical Fourier
+transform given by
+\begin{align}
+  f_{\ttt{\tb{r}}_{\ttt{o}}}(\so) =  \sum_{\ttt{j}} \theta_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}} y_{\ttt{j}}(\mathbf{\hat{s}}_{o}). \label{eq:odf}
+\end{align}
+To calculate a visually informative ODF we need to evaluate
+$f_{\ttt{\tb{r}}_{\ttt{o}}}(\so)$ at approximately 500 points, so calculating
+the ODF amounts to a $15 \times 500$ matrix multiplication at each voxel. This
+matrix multiplication is the most expensive computation in the entire pipeline,
+and it is not feasible to compute it in every voxel for large data sets.
+Typically we only calculate and visualize a subset of the ODFs---we either
+restrict ourselves to an ROI or calculate and visualize ODFs in every $N$th
+voxel.
+
+Another useful summary parameter is the spatial density of fluorophores. For
+angularly continuous functions the spatial density
+$\rho_{\ttt{\tb{r}}_{\ttt{o}}}$ is related to the spatio-angular density
+$f_{\ttt{\tb{r}}_{\ttt{o}}}(\so)$ by
+\begin{align}
+  \rho_{\ttt{\tb{r}}_{\ttt{o}}} = \int_{\mbb{S}^2}f_{\ttt{\tb{r}}_{\ttt{o}}}(\so). \label{eq:density}
+\end{align}
+The naive approach to computing $\rho_{\ttt{\tb{r}}_{\ttt{o}}}$ is to calculate
+$f_{\ttt{\tb{r}}_{\ttt{o}}}(\so)$ using Eq. \ref{eq:odf} then apply Eq.
+\ref{eq:density}. Instead we can calculate the density directly from the spherical
+harmonic coefficients using
+\begin{align}
+  \rho_{\ttt{\tb{r}}_{\ttt{o}}} = \int_{\mbb{S}^2}\sum_{\ttt{j}} \theta_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}}y_{\ttt{j}}(\so), 
+\end{align}
+then rearranging the sum and integral
+\begin{align}
+  \rho_{\ttt{\tb{r}}_{\ttt{o}}} = \sum_{\ttt{j}} \theta_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}}\int_{\mbb{S}^2}y_{\ttt{j}}(\so), 
+\end{align}
+and finally noting that only the $l=0$ spherical harmonics have a non-zero
+integral over the sphere
+\begin{align}
+  \rho_{\ttt{\tb{r}}_{\ttt{o}}} = \sum_{l}\theta_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}}\int_{\mbb{S}^2}y^0_{l}(\so). \label{eq:fd}
+\end{align}
+We can precompute the integrals then apply Eq. \ref{eq:fd} as a weighted sum
+over just three spherical harmonic coefficients.
+
+Another useful summary parameter is the generalized fractional anisotropy (GFA)
+that was defined in (Tuch 2004) to extend the fractional anisotropy used in
+diffusion tensor MRI to high-angular resolution MRI. Tuch defines the GFA as
+\begin{align}
+  \vartheta_{\ttt{\tb{r}}_{\ttt{o}}} = \frac{\text{StandardDeviation}\left\{f_{\ttt{\tb{r}}_{\ttt{o}}}(\so)\right\}}{\text{RootMeanSquare}\left\{f_{\ttt{\tb{r}}_{\ttt{o}}}(\so)\right\}}.\label{eq:gfa}
+\end{align}
+Similar to the density, the naive approach to computing
+$\vartheta_{\ttt{\tb{r}}_{\ttt{o}}}$ would be to sample using Eq. \ref{eq:odf}
+then apply Eq. \ref{eq:gfa}. We can improve on this by writing Eq. \ref{eq:gfa}
+in terms of integrals then simplifying the integrals. We start with
+\begin{align}
+  \vartheta_{\ttt{\tb{r}}_{\ttt{o}}} = \sqrt{\frac{\ints{2}d\so\left[f(\so) - (\rho_{\ttt{\tb{r}}_{\ttt{o}}}/4\pi)\right]^2}{\ints{2}d\so\left[f(\so)\right]^2}},\\
+\end{align}
+then plug in the spherical harmonic coefficients
+\begin{align}
+  \vartheta_{\ttt{\tb{r}}_{\ttt{o}}} = \sqrt{\frac{\ints{2}d\so\left[\sum_{\ttt{j}}\theta_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}}y_{\ttt{j}}(\so) - (\rho_{\ttt{\tb{r}}_{\ttt{o}}}/4\pi)\right]^2}{\ints{2}d\so\left[\sum_{\ttt{j}} \theta_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}}y_{\ttt{j}}(\so)\right]^2}}.
+\end{align}
+After expanding the square brackets and exploiting the orthogonality of the
+spherical harmonics we end up with
+\begin{align}
+  \vartheta_{\ttt{\tb{r}}_{\ttt{o}}} = \sqrt{\frac{\sum_{\ttt{j}} \theta^2_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}} + \rho^2_{\ttt{\tb{r}}_{\ttt{o}}}/2\pi + (\rho_{\ttt{\tb{r}}_{\ttt{o}}}/4\pi)^2}{\sum_{\ttt{j}} \theta^2_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}}}}.
+\end{align}
+
+The final summary parameter we would like to calculate is the direction along
+which the most fluorophores are oriented
+\begin{align}
+  \mathbf{\hat{s}}_{\ttt{\tb{r}}_{\ttt{o}}, \text{max}} =  \argmax_{\so} f_{\ttt{\tb{r}}_{\ttt{o}}}(\so). 
+\end{align}
+Our problem is to find the maximum point of a function on a sphere given its
+spherical harmonic coefficients. If we can tolerate an angular error of
+$\Delta \mathbf{\hat{s}}$ steradians, then the brute-force approach is to sample
+the sphere at $4\pi/\Delta \mathbf{\hat{s}}$ approximately equally spaced points
+then choose the maximum. 
+
+A faster approach is to use a simple optimization scheme that first samples
+coarsely over the sphere then performs a gradient descent on the best of the
+coarse samples. In general this type of scheme is not guaranteed to find the
+global maximum, but I expect that a wise choice of initial sample points will
+guarantee the global maximum for our bandlimited signals.
+
+Currently I am calculating all of the summary statistics using the naive
+approaches, and these calculations are the bottle neck in the reconstruction
+pipeline. I will implement the improved routines soon.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lll}\toprule
+  Parameter name & Symbol & Interpretation\\
+  \midrule
+  Orientation distribution function (ODF) & $f_{\ttt{\tb{r}}_{\ttt{o}}}(\so)$ & Number of fluorophores at $\ttt{\tb{r}}_{\ttt{o}}$ oriented along $\so$.\\
+  Density & $\rho_{\ttt{\tb{r}}_{\ttt{o}}}$ & Number of fluorophores at $\ttt{\tb{r}}_{\ttt{o}}$. \\
+  Generalized fractional anisotropy (GFA) & $\vartheta_{\ttt{\tb{r}}_{\ttt{o}}}$ & A scale-invariant statistic of the angular spread of\\
+                 & & fluorophores at $\ttt{\tb{r}}_{\ttt{o}}$. $\vartheta_{\ttt{\tb{r}}_{\ttt{o}}} = 1$ for very anisotropic distributions\\
+                 & & and $\vartheta_{\ttt{\tb{r}}_{\ttt{o}}} = 0$ for isotropic fluorophores.  \\
+  Peak direction (mode) & $\mathbf{\hat{s}}_{\ttt{\tb{r}}_{\ttt{o}}, \text{max}}$ & Direction along which most fluorophores are oriented at $\ttt{\tb{r}}_{\ttt{o}}$. \\
+  
+  \bottomrule
+\end{tabular}
+\caption{Summary of angular summary statistics.}
+\end{table}
+
+\section{Numerical results} \label{sec:num}
+\subsection{Bead studies}
+Figures \ref{fig:beadx}--\ref{fig:beadiso} show the results of numerical bead
+studies that we used to debug and verify our forward model. We placed a single
+bead in the center of a small field-of-view then applied our forward model to
+generate data that would be collected under the four polarizer settings and two
+viewing directions.
+
+First, we generated four numerical phantoms---$\mh{x}$, $\mh{y}$, and $\mh{z}$
+oriented beads and an isotropic bead. The continuous spatio-angular densities of
+these phantoms are given by
+\begin{align}
+  f_1(\ro, \so) &= \delta(\ro)\, \delta(\so - \mh{x}), \\
+  f_2(\ro, \so) &= \delta(\ro)\, \delta(\so - \mh{y}), \\
+  f_3(\ro, \so) &= \delta(\ro)\, \delta(\so - \mh{z}), \\
+  f_4(\ro, \so) &= \delta(\ro).
+\end{align}
+Next, we set the FOV by choosing the number of voxels (32 per side) and the
+voxel dimensions (130 nm per side). Finally, we calculated the object-space
+coefficients $\theta_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}}$ from the spatio-angular
+density using
+\begin{align}
+  \theta_{\ttt{\tb{r}}_{\ttt{o}},\ttt{j}} = \ints{2}d\so\, f(\ro - \epsilon\ttt{\tb{r}}_{\ttt{o}},\so)y_{\ttt{j}}(\so). \label{eq:spang2co}
+\end{align}
+
+Now that we have a numerical phantom, the next step is to specify a microscope.
+We used the following parameters for our numerical simulations
+\begin{align}
+  \text{NA}_{\text{A}} &= 1.1,\\
+  \text{NA}_{\text{B}} &= 0.71,\\
+  \lambda_{\text{em}} &= 525\, \text{nm} \leftarrow \text{Alexa 488 emission},\\
+  n &= 1.33 \leftarrow \text{water}.
+\end{align}
+We use these parameters when we calculate the elements of
+$H_{\bar{\bs{\nu}},\ttt{p},\ttt{v},\ttt{j}}$. Finally, we apply Eq.
+\ref{eq:fastfwd} to calculate the data
+$g_{\tb{\ttt{r}}_{\ttt{d}},\ttt{p},\ttt{v}}$. Figures
+\ref{fig:beadx}--\ref{fig:beadiso} show summary views of the five-dimensional
+datasets $g_{\tb{\ttt{r}}_{\ttt{d}},\ttt{p},\ttt{v}}$. For each polarizer
+setting and view we plot the maximum intensity projection along each of the
+three axes.
+
+Although the entire kernel is specified exactly in section 1, it is useful to
+have a few rules of thumb in mind when you look at the bead results:
+\begin{enumerate}
+\item The probability of exciting a dipole is proportional to
+  $|\mh{p}\cdot\bs{\mu}|^2 = \cos^2\theta$ where $\mh{p}$ is the polarizer
+  orientation and $\bs{\mu}$ is the excitation dipole moment---lots of
+  excitation when the polarization is parallel to the dipole moment.
+\item A dipole emitter radiates along a direction $\mh{s}$ with a power
+  proportional to $1 - |\mh{s}\cdot\bs{\mu}|^2 = \sin^2\theta$---lots of
+  radiation in the plane perpendicular to the dipole moment.
+\item An objective with NA $>$ 0 will collect the radiation from a cone of
+  $\mh{s}$ directions.
+\item When a dipole moment is parallel to the detection optical axis, then the
+  light in the back focal plane will be radially polarized and the resulting
+  image will look like a doughnut.
+\end{enumerate}
+
+\fig{../figures/beads/data0.pdf}{1.0}{Simulated data from a bead with $\mh{x}$-oriented
+  dipole moments.}{beadx}
+\fig{../figures/beads/data1.pdf}{1.0}{Simulated data from a bead with
+  $\mh{y}$-oriented dipole moments.}{}
+\fig{../figures/beads/data2.pdf}{1.0}{Simulated
+  data from a bead with $\mh{z}$-oriented dipole moments.}{bead4}
+\fig{../figures/beads/data3.pdf}{1.0}{Simulated data from an isotropic bead.}{beadiso}
+
+We have made several assumptions about the axial part of the kernel. First, we
+assume that the axial part can be described by a Gaussian. The axial part would
+be more accurately described by a widefield fluorescence kernel convolved with
+the Gaussian width of the light sheet, but we expect that the width of the light
+sheet dominates the kernel so a pure Gaussian is appropriate. Second, we have
+assumed that the width of the light sheet is constant which allows us to
+describe the system as shift-invariant. This assumption has been used in
+previous diSPIM deconvolutions, and it allows us to keep the computations
+tractable. Finally, we have chosen the width of the axial Gaussian to be
+$\sim 3\times$ broader than the transverse width of the transverse kernel of an
+isotropic bead. This width was chosen to match the axial FWHM of the kernels
+supplied by Min in $\ttt{PSFA\_1p1NA.tif}$ and $\ttt{PSFB\_0p71NA.tif}$.
+\textcolor{blue}{\textbf{Do you think these assumptions are appropriate? Do the
+    bead PSFs look reasonable?}}
+
+\subsection{Helix studies}
+We created a more complex spatio-angular phantom to test our forward model and
+inversion scheme. The helix phantom is shown in Figure \ref{fig:phant}---it
+consists of three helices with different coil directions and dipoles that are
+aligned along the tangent of the helix at each point. On one end of the helix
+the dipoles are almost completely aligned along the tangent, and at the other
+end of the helix the dipoles are isotropic.
+
+We would like to express the helix phantom as a continuous spatio-angular
+density. First, we specify a single helix with a parameterized line
+\begin{align}
+  c(t) = (r_{\text{h}}\cos t, r_{\text{h}}\sin t, p_{\text{h}} t)\quad \text{for}\, t \in [-2\pi, 2\pi].
+\end{align}
+Next, for each point in space $\ro$ we find the closest point on the helix then
+find the corresponding parameter $t$ and name it $t_{\ro}^*$
+\begin{align}
+t_{\ro}^* = \text{min}_t||c(t) - \ro||^2. 
+\end{align}
+Next, we build the complete helix using
+\begin{align}
+  f_{\text{helix}}(\ro, \so) =
+  \begin{cases}
+    w(\ro, \so, c'(t_{\ro}^*), \kappa(t_{\ro}^*)), & t_{\ro}^* < r_{\text{cyl}} \\
+    0 & t_{\ro}^* < r_{\text{cyl}}
+  \end{cases}\label{eq:helix}
+\end{align}
+where
+\begin{align}
+  w(\ro, \so, \mh{n}, \kappa) &= \frac{1}{4\pi{}_1F_1(1/2,3/2,\kappa)}e^{\kappa(\mh{n}\cdot\so)},\label{eq:watson}\\
+  \kappa(t) &= kt + k_o, \label{eq:kappa}
+\end{align}
+and ${}_1F_1(1/2,3/2,\kappa)$ is the Kummer confluent hypergeometric function.
+Eq. \ref{eq:helix} restricts the phantom to within $r_{\text{cyl}}$ of the
+helix, Eq. \ref{eq:watson} is a normalized Watson distribution with spread
+parameter $\kappa$, and Eq. \ref{eq:kappa} linearly increases the spread parameter as we move along the helix.
+
+Finally, we assemble three helices
+\begin{align}
+  f_{\text{phantom}}(\ro, \so) = f_{\text{helix}}(\ro - \mathbf{\mathfrak{r}}_0, \so) + \mc{R}_x\left\{f_{\text{helix}}(\ro - \mathbf{\mathfrak{r}}_1, \so)\right\} + \mc{R}_y\left\{f_{\text{helix}}(\ro - \mathbf{\mathfrak{r}}_2, \so)\right\}, 
+\end{align}
+where $\mathcal{R}_x$ is a rotation operator that rotates the helix direction to
+along the $\mh{x}$ direction. For our simulations we chose the following set of parameters
+\begin{align}
+  r_{\text{h}} &= 700\ \text{nm},\\
+  p_{\text{h}} &= 1000\ \text{nm},\\
+  \mathbf{\mathfrak{r}}_0 &= (-2080,-2080,2080)\ \text{nm},\\
+  \mathbf{\mathfrak{r}}_1 &= (0,0,0)\ \text{nm},\\
+  \mathbf{\mathfrak{r}}_2 &= (2080,2080,2080)\ \text{nm},\\
+  r_{\text{cyl}} &= 250\ \text{nm},\\
+  k &= \frac{5}{4\pi},\\
+  k_0 &= 2\pi.
+\end{align}
+We calculated the coefficients of the object using Eq. \ref{eq:spang2co}, then
+simulated the noise-free data with the same imaging parameters as the previous
+section. The data we generated is shown in Figure \ref{fig:data}.
+
+We applied our spatio-angular restoration algorithm to the noise-free data and
+recovered the object in Figure \ref{fig:recon}. Alternatively, we can interpret
+Figure \ref{fig:recon} as the measurement-space component of the helix
+phantom---we applied the forward model then reconstructed with the pseudoinverse
+solution which is identical to projection onto the measurement space (Barrett
+Table 1.2).
+
+Finally, we simulated data using the helix phantom with Poisson noise at SNR =
+10 (the maximum number of photons is 100), then attempted to reconstruct the
+object with several different Tikhonov regularization parameters. Figure
+\ref{fig:recontik} shows that the mean square error (MSE) between the phantom
+and the reconstructed object has a minimum at a specific regularization
+parameter as we would expect. The optimal regularization parameter will change
+as we vary the SNR, but we can use Figure \ref{fig:recontik} as evidence that
+the inversion algorithm is working well.
+
+\fig{../figures/helix/phantom.pdf}{1.0}{Helix phantom summary.}{phant}
+\fig{../figures/helix/data.pdf}{1.0}{Data generated by the helix phantom.}{data}
+\fig{../figures/helix/phantom-recon.pdf}{1.0}{Helix phantom reconstruction.}{recon}
+\fig{../figures/helix-noise/mse.pdf}{0.5}{Mean square error of helix phantom reconstruction with SNR = 10.}{recontik}
+  % filename, width, caption, label
+
+\section{Experimental results} \label{sec:exp}
+
+We collected several data sets with the polarized light asymmetric diSPIM (1.1
+and 0.71 NA). In this section we will review the preprocessing, calibration, and
+reconstructed results.
+
+\subsection{Min's preprocessing}
+Min applies the following preprocessing steps to the raw data
+\begin{enumerate}
+\item ``Deshearing'' the data to correct for stage scanning.
+\item ROI selection to reduce the size of the data.
+\item ``Isometrization'' to convert all of the data to isometric voxels.
+\item Registration of the two views so that they are in the same coordinate
+  system.
+\end{enumerate}
+
+\subsection{Talon's preprocessing}
+I applied the following preprocessing steps to prepare Min's preprocessed data for
+spatio-angular restoration.
+\begin{enumerate}
+\item Background correction.
+\item Correcting the views for power differences.
+\item Correcting the views for voxel size differences.
+\item Correcting the volumes (each view and polarization) with polarization
+  calibration data.
+\item TODO: I will apply a bleaching correction based on the first and last
+  polarizer setting. The data in these notes had negligible bleaching, so I
+  haven't needed this correction yet.
+\end{enumerate}
+
+For the background correction I subtracted the mean of a background ROI from all
+of the data. I applied the same background correction to the volumes from each
+polarizer setting, but I applied different background corrections to the data
+from each view.
+
+To correct the views for power differences I multiplied the data from the
+high-NA view by a factor of $(1.1/0.71)^2 = 2.4$. This correction models the fact the we
+balanced the input power of the two views so that the pixels from each view
+would collect approximately the same number of photons.
+
+Next, I applied a correction to account for the different voxel sizes of the raw
+data. Min's preprocessing outputs isometric voxels, but it does not preserve the
+total number of counts before and after the correction. For example, if we put a
+single (100, 100, 200) nm voxel with a value of 50 into Min's preprocessing
+algorithm, the output would be two (100, 100, 100) nm voxels each with a value
+of 50. I am applying a correction factor so that the output would be two (100,
+100, 100) nm voxels each with a value of 25.
+
+In the GUV dataset the raw voxel size in view A is (130, 130, 549)
+nm, and the raw voxel size in view B is (227, 227, 835.8) nm. To correct for
+this difference I multiply the data in view A by a factor of
+$(227/130)^2(835.8/549)$ = 4.64. \textcolor{blue}{\textbf{Min, Hari---does this make sense?}}
+
+Finally, I applied a correction factor to each volume to account for
+imperfections in the polarized illumination due to misalignment or polarization
+errors introduced during reflection by the dichroics. To collect calibration
+data Min imaged the center of a fluorescent lake of uniformly oriented
+fluorophores under each polarizer setting. He also collected data from the epi
+path and the imaging path for a total of 16 volumes (epi/imaging, 4 polarizer
+settings, 2 views). I manually selected an ROI in each of these 16 volumes and
+stored the mean value of these ROIs. Next, I applied correction factors to
+correct for errors on the illumination path. We would expect that the intensity
+measured from the epi path should be constant as the polarization changes, so I
+applied correction factors to account for any deviation from a constant---the
+largest correction factor was approximately 5\%. Finally, I applied correction
+factors to correct for errors on the detection path. We have a model that
+predicts the data we would expect to collect from a uniform lake of uniformly
+oriented fluorophore---namely, the transfer function evaluated at zero
+spatio-angular frequency $H_{0,\tv}^0(0,\mh{p})$. I compared the calibration
+data to our model and applied correction factor to account for any
+differences---the largest correction factor was approximately 10\%.
+\textcolor{blue}{\textbf{Min, Hari---does this make sense?}}
+
+I applied each of the correction factors to the data, but I could have applied
+the correction factors to the model. I have chosen to correct the data to make
+the comparison with the simulated data in the previous section easier. 
+
+\subsection{GUV study}
+Mai prepared a sample of giant unilamellar vesicles (GUVs) labelled with Alexa
+Fluor 488. From two-dimensional fluorescence orientation studies we expect to
+observe the dipole moments oriented normal to the surface of the vesicles.
+
+Figure \ref{fig:guv-data} shows the corrected data and Figure
+\ref{fig:guv-recon} shows the reconstructed spatio-angular density. The
+reconstructed peak orientations are approximately normal to the sphere's
+surface, although some orientations are not reconstructed well---the
+``degeneracy'' between $\mh{x} + \mh{z}$ and $\mh{x} - \mh{z}$ oriented dipoles
+is evident in the $xz$ projection of the peaks. In particular, it's
+clear that the density is not recovered well for dipoles oriented along
+$\mh{x} - \mh{z}$ at the points farthest from the cover slip. I suspect that
+these portions of the object are in the null space of the microscope, but I am
+still investigating. A GUV phantom will help us understand this issue.
+
+\fig{../figures/guv-recon/data-corrected.pdf}{1.0}{GUV data after corrections.}{guv-data}
+\vspace{-1em}
+\fig{{../figures/guv-recon/guv-recon-1.0e+00}.pdf}{1.0}{GUV reconstruction with $\eta = 1$.}{guv-recon}
+\vspace{-2em}
+\subsection{Xylem study}
+Tobias prepared a sample of xylem labeled with mScarlet. From two-dimensional
+fluorescence orientation studies we expect to observe the dipole moments
+oriented parallel to the helices.
+
+Figure \ref{fig:xylem-data} shows the corrected data and Figure
+\ref{fig:xylem-recon} shows the reconstructed spatio-angular density. The
+reconstructed peak orientations are approximately parallel to the helix surface,
+although once again the ``degeneracy'' between $\mh{x} + \mh{z}$ and
+$\mh{x} - \mh{z}$ oriented dipoles is evident in the $xz$ projection of the
+peaks. The $yz$ projection of the peak and ODFs is particularly promising---the
+reconstructed orientations are clearly parallel to the helix around the whole
+circle of orientations.
+
+One part of the helix near the center of the $xy$ projection is nearly absent in
+the data and the reconstruction. It is not clear to me why this region did not
+give a larger signal in the $-\mh{x} + \mh{y}$ polarizer data since the helix is
+parallel to the $-\mh{x} + \mh{y}$ direction in this region. In the numerical
+phantom we successfully recovered all of the orientations in the phantom, so
+it's not clear to me what is causing this problem. Reconstructing larger volumes
+may point us in the right direction.
+
+\fig{../figures/xylem-recon/data-corrected.pdf}{1.0}{Xylem data after corrections.}{xylem-data}
+\fig{{../figures/xylem-recon/guv-recon-1.0e+00}.pdf}{1.0}{Xylem reconstruction with $\eta = 1$.}{xylem-recon}
+\vspace{-2em}
+\section{Next priorities}
+Here are some of my next tasks in approximate order of priority. Feedback is
+always welcome!
+\begin{itemize}
+\item Optimize the summary statistics calculations. These optimizations will make
+  the full 1000 $\times$ 1000 $\times$ 1000 voxel reconstructions feasible.
+\item Directly compare the spatial resolution of the (1) raw data (2) density
+  after spatio-angular reconstruction (3) spatial deconvolution of data
+  averaged over polarizations.
+\item Continue reconstructing our existing data---the two color data in Gantt's
+  cells, Bob's cells from last year, and the remainder of the helix data.
+\item Draft a theory article for JOSA A or Optics Express. Working title:
+  ``Spatio-angular transfer functions for fluorescence microscopes I. Basic
+  theory''.
+\end{itemize}
+
+
+\end{document}
+
