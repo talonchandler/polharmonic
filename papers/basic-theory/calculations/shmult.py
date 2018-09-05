@@ -72,8 +72,20 @@ def multiply_sh_coefficients(a, b):
 alpha = Symbol('alpha')
 a1 = Symbol('a1')
 a2 = Symbol('a2')
-x1 = [1 + alpha**2/4, 0, 0, 0, 0, 0, (-1 + alpha**2/2)/sqrt(5)]
-x2 = [a1 + a2*alpha**2/4, 0, 0, 0, 0, 0, (-a1 + a2*alpha**2/2)/sqrt(5)]
+x1 = [1 + alpha**2/4,
+      0, 0, 0,
+      0, 0, (-1 + alpha**2/2)/sqrt(5), 0, 0,
+      0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0]
+x2 = [a1 + a2*alpha**2/4,
+      0, 0, 0,
+      0, 0, (-a1 + a2*alpha**2/2)/sqrt(5), 0, 0,
+      0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0]
 xx = multiply_sh_coefficients(x1, x2)
 yy = multiply_sh_coefficients(x1, x1)
+
+y00 = simplify(expand(xx[0])) 
+y20 = simplify(expand(xx[6])) 
+y40 = simplify(expand(xx[20]))
 import pdb; pdb.set_trace() 

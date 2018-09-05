@@ -405,7 +405,7 @@ G(\bs{\nu}) = \sum_{l=0}^{\infty}\sum_{m=-l}^{l}H_l^m(\bs{\nu})F_l^m(\bs{\nu}).
 
 In Appendix A we calculate the spatio-angular transfer function as
 \begin{align}
-  H_l^m(\bs{\nu}) = \frac{1}{C}\Bigg\{&\left[\left(1 + \frac{\alpha^2}{8}\right)A_1(\nu) + \left(\frac{\alpha^2}{8} + \frac{3\alpha^4}{32}\right)A_2(\nu)\right]\delta_{l0}\delta_{m0}+\nonumber\\&\frac{2\sqrt{5}}{7}\left[\left(-1 + \frac{\alpha^2}{16}\right)A_1(\nu) + \left(\frac{\alpha^2}{16} + \frac{3\alpha^4}{16}\right)A_2(\nu)\right]\delta_{l4}\delta_{m0}\Bigg\}, 
+  H_l^m(\bs{\nu}) = \frac{1}{C}\Bigg\{&\left[\left(1 + \frac{\alpha^2}{8}\right)A_1(\nu) + \left(\frac{\alpha^2}{8} + \frac{3\alpha^4}{32}\right)A_2(\nu)\right]\delta_{l0}\delta_{m0}+\nonumber\\&\frac{2\sqrt{5}}{7}\left[\left(-1 + \frac{\alpha^2}{16}\right)A_1(\nu) + \left(\frac{\alpha^2}{16} + \frac{3\alpha^4}{16}\right)A_2(\nu)\right]\delta_{l2}\delta_{m0}\nonumber\\&\frac{1}{7}\left[\left(1 - \frac{\alpha^2}{2}\right)A_1(\nu) + \left(-\frac{\alpha^2}{2} + \frac{\alpha^4}{4}\right)A_2(\nu)\right]\delta_{l4}\delta_{m0}\Bigg\}, 
 \end{align}
 where
 \begin{align}
@@ -453,11 +453,12 @@ into Eq. \ref{eq:satf} we find
 \end{align}
 After expanding the products of spherical harmonics
 \begin{align}
-  H_l^m(\bs{\nu}) \propto \int_{\mbb{S}^2}d\so{}y_l^m(\so{})&\Bigg\{\left[\frac{3}{5}A_1(\nu) + \frac{3\alpha^2}{40}[A_1(\nu) + A_2(\nu)] + \frac{9\alpha^4}{160}A_2(\nu)\right]y_0^0(\so{})+\nonumber\\&\frac{3\sqrt{5}}{280}\left[-16A_1(\nu) + \alpha^2[A_1(\nu) + A_2(\nu)] + 3\alpha^4 A_2(\nu)\right]y_4^0(\so{})\Bigg\},\\                             H_l^m(\bs{\nu}) \propto \int_{\mbb{S}^2}d\so{}y_l^m(\so{})&\Bigg\{\left[\left(1 + \frac{\alpha^2}{8}\right)A_1(\nu) + \left(\frac{\alpha^2}{8} + \frac{3\alpha^4}{32}\right)A_2(\nu)\right]y_0^0(\so{}) + \nonumber\\&\frac{\sqrt{5}}{56}\left[(-16 + \alpha^2)A_1(\nu) + (\alpha^2 + 3\alpha^4)A_2(\nu)\right]y_4^0(\so{})\Bigg\}.
+  H_l^m(\bs{\nu}) \propto \int_{\mbb{S}^2}d\so{}y_l^m(\so{})&\Bigg\{\left[\frac{3}{5}A_1(\nu) + \frac{3\alpha^2}{40}[A_1(\nu) + A_2(\nu)] + \frac{9\alpha^4}{160}A_2(\nu)\right]y_0^0(\so{})+\nonumber\\&\frac{3\sqrt{5}}{280}\left[-16A_1(\nu) + \alpha^2[A_1(\nu) + A_2(\nu)] + 3\alpha^4 A_2(\nu)\right]y_2^0(\so{})\nonumber\\&\frac{3}{35}\left[\left(1 - \frac{\alpha^2}{2}\right)A_1(\nu) + \left(-\frac{\alpha^2}{2} + \frac{\alpha^4}{4}\right)A_2(\nu)\right]y_4^0(\so{})\Bigg\},\\
+  H_l^m(\bs{\nu}) \propto \int_{\mbb{S}^2}d\so{}y_l^m(\so{})&\Bigg\{\left[\left(1 + \frac{\alpha^2}{8}\right)A_1(\nu) + \left(\frac{\alpha^2}{8} + \frac{3\alpha^4}{32}\right)A_2(\nu)\right]y_0^0(\so{}) + \nonumber\\&\frac{\sqrt{5}}{56}\left[(-16 + \alpha^2)A_1(\nu) + (\alpha^2 + 3\alpha^4)A_2(\nu)\right]y_2^0(\so{})\nonumber\\&\frac{1}{7}\left[\left(1 - \frac{\alpha^2}{2}\right)A_1(\nu) + \left(-\frac{\alpha^2}{2} + \frac{\alpha^4}{4}\right)A_2(\nu)\right]y_4^0(\so{})\Bigg\}.
 \end{align}
 Next, we use the orthogonality of spherical harmonics to evaluate the angular integral
 \begin{align}
-  H_l^m(\bs{\nu}) = \frac{1}{C}\Bigg\{&\left[\left(1 + \frac{\alpha^2}{8}\right)A_1(\nu) + \left(\frac{\alpha^2}{8} + \frac{3\alpha^4}{32}\right)A_2(\nu)\right]\delta_{l0}\delta_{m0}+\nonumber\\&\frac{2\sqrt{5}}{7}\left[\left(-1 + \frac{\alpha^2}{16}\right)A_1(\nu) + \left(\frac{\alpha^2}{16} + \frac{3\alpha^4}{16}\right)A_2(\nu)\right]\delta_{l4}\delta_{m0}\Bigg\}, 
+  H_l^m(\bs{\nu}) = \frac{1}{C}\Bigg\{&\left[\left(1 + \frac{\alpha^2}{8}\right)A_1(\nu) + \left(\frac{\alpha^2}{8} + \frac{3\alpha^4}{32}\right)A_2(\nu)\right]\delta_{l0}\delta_{m0}+\nonumber\\&\frac{2\sqrt{5}}{7}\left[\left(-1 + \frac{\alpha^2}{16}\right)A_1(\nu) + \left(\frac{\alpha^2}{16} + \frac{3\alpha^4}{16}\right)A_2(\nu)\right]\delta_{l2}\delta_{m0}\nonumber\\&\frac{1}{7}\left[\left(1 - \frac{\alpha^2}{2}\right)A_1(\nu) + \left(-\frac{\alpha^2}{2} + \frac{\alpha^4}{4}\right)A_2(\nu)\right]\delta_{l4}\delta_{m0}\Bigg\}, 
 \end{align}
 where $C = 1 + \frac{\alpha^2}{4} + \frac{3\alpha^4}{32}$ is a normalization
 constant.
