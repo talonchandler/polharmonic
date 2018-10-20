@@ -1,0 +1,63 @@
+\documentclass[crop,tikz]{standalone}% 'crop' is the default for v1.0, before it was 'preview'
+% \usetikzlibrary{...}% tikz package already loaded by 'tikz' option
+\usepackage{tikz}
+\usepackage{amsmath, amsthm, amssymb, amsfonts, bm}
+\usetikzlibrary{shapes,arrows.meta}
+\usepackage{mathptmx}
+\DeclareMathAlphabet{\mathcal}{OMS}{cmsy}{m}{n}
+
+% Talon's custom commands
+\newcommand{\argmin}{\arg\!\min}
+\newcommand{\me}{\mathrm{e}}
+\providecommand{\e}[1]{\ensuremath{\times 10^{#1}}} 
+\providecommand{\mb}[1]{\mathbf{#1}}
+\providecommand{\mf}[1]{\mathfrak{#1}}
+\providecommand{\mc}[1]{\mathcal{#1}}
+\providecommand{\ro}{\mathbf{\mathbf{r}}_o}
+\providecommand{\so}{\mathbf{\hat{s}}_o}
+\providecommand{\rb}{\mathbf{r}_b}
+\providecommand{\rbm}[1]{r_b^{\text{m}}}
+\providecommand{\rd}{\mathbf{r}_d}
+\providecommand{\rdf}{\mathpzc{r}_d}
+\providecommand{\mh}[1]{\mathbf{\hat{#1}}}
+\providecommand{\mbb}[1]{\mathbb{#1}}
+\providecommand{\bs}[1]{\boldsymbol{#1}}
+\providecommand{\bv}{\bs{\nu}}
+\providecommand{\bsh}[1]{\hat{\boldsymbol{#1}}}
+\providecommand{\nan}{\left(\frac{\text{NA}}{n_o}\right)}
+\providecommand{\lmsum}{\sum_{l=0}^\infty\sum_{m=-l}^{l}}
+\providecommand{\intr}[1]{\int_{\mbb{R}^{#1}}}
+\providecommand{\ints}[1]{\int_{\mbb{S}^{#1}}}
+\DeclareFontFamily{OT1}{pzc}{}
+\DeclareFontShape{OT1}{pzc}{m}{it}{<-> s * [1.10] pzcmi7t}{}
+\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
+\newcommand{\eqname}[1]{\tag*{#1}}
+\newcommand*\widefbox[1]{\fbox{\hspace{1em}#1\hspace{1em}}}
+
+\tikzstyle{block} = [draw, fill=white, rectangle, minimum height=4em, minimum width=7em, align=center]
+
+\begin{document}
+  \begin{tikzpicture}[auto, node distance=2cm,>={Latex[length=2mm]}]
+    \tikzset{font={\fontsize{9pt}{12}\selectfont}}
+    \node [block, align=center] (sad) {$f(\ro{}, \so)$\\ Spatio-angular\\ density};
+    \node [block,  right of=sad, node distance=4cm] (ads) {$F_\ell^m(\ro)$\\ Angular density\\ spectrum};
+    \node [block,  right of=ads, node distance=9cm] (irr) {$g(\rd)$\\ Irradiance};
+    \node [block, below of=ads, node distance=2.5cm] (sas) {$F_\ell^m(\bs{\nu})$\\ Spatio-angular\\ spectrum};
+    \node [block,  right of=sas, node distance=9cm] (is) {$G(\bs{\nu})$\\ Irradiance\\ spectrum};
+    \node [block, below of=sad, node distance=2.5cm] (sds) {$F(\bs{\nu}, \so)$\\ Spatial density\\ spectrum};
+    \draw [->] (sad) -- node[] {$\mathcal{F}_{\mathbb{S}^2}$} (ads);        
+    \draw [->] (ads) -- node[left] {$\mathcal{F}_{\mathbb{R}^2}$} (sas);
+    \draw [->] (sds) -- node[] {$\mathcal{F}_{\mathbb{S}^2}$} (sas);
+    \draw [->] (sad) -- node[left] {$\mathcal{F}_{\mathbb{R}^2}$} (sds);
+    \draw [->] (is) -- node[left] {$\mathcal{F}^{-1}_{\mathbb{R}^2}$} (irr);
+    
+    \draw [->] (ads) -- node[text width=4cm, align=center] (cap1) {Angular\\ transfer function\\ $\sum_{\ell m}H_\ell^m(\rd - \ro)F_\ell^m(\ro)$} (irr);
+    \draw [->] (sad.north) -- ++(0,1.0cm) -- node[right=2.cm, above, align=center] {Orientation-dependent\\ point spread function\\ $\int_{\mbb{S}^2}d\so\, \int_{\mbb{R}^2} d\ro\, h(\rd - \ro, \so)f(\ro, \so)$} ++(13cm,0) --  (irr.north);
+    \draw [->] (sds.south) -- ++(0,-1.0cm) -- node[right=1.95cm, above, align=center] {Orientation-dependent\\ optical transfer function\\ $\int_{\mbb{S}^2}d\so\, H(\bs{\nu}, \so)F(\bs{\nu}, \so)$} ++(13cm,0) -- (is.south);
+    \draw [->] (sas) -- node[text width=4cm, align=center] {Spatio-angular\\ transfer function\\ $\sum_{\ell m}H_\ell^m(\bs{\nu})F_\ell^m(\bs{\nu})$} (is);    
+
+    % Dashed box
+    \draw [dashed] (sad.north west) ++(-0.5cm,3cm) -- node[below, align=center] {Object space\\ $\mbb{U} = \mbb{L}_2(\mbb{R}^2\times\mbb{S}^2)$} ++(7.5cm,0) -- ++(0,-9cm) -- ++(-7.5cm,0) -- ++(0, 9cm);
+    \draw [dashed] (irr.north west) ++(-0.5cm,3cm) -- node[below, align=center] {Data space\\ $\mbb{V} = \mbb{L}_2(\mbb{R}^2)$} ++(3.4cm,0) -- ++(0,-9cm) -- ++(-3.4cm,0) -- ++(0, 9cm);
+      \end{tikzpicture}
+\end{document}

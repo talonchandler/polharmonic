@@ -89,27 +89,26 @@ for outer_row in range(outer_rows):
                     l4 = lines.Line2D([1+wsi/2,1+wsi/2], [-0.2,-0.3], c='k', lw=1, transform=ax.transAxes)
                     f.lines.extend([l1, l2, l3, l4])
 
-                    
-                if inner_col == 2:
-                    if inner_row == 0:
-                        rr = 1.7
-                        theta = np.arctan(0.5)
-                        x0 = -rr*np.cos(theta)
-                        y0 = rr*np.sin(theta)                        
-                        ax.arrow(x0, y0, -0.4*np.cos(theta + np.pi/2), 0.4*np.sin(theta + np.pi/2), head_width=0.05, fc='k', transform=ax.transData, clip_on=False)
-                        ax.scatter([x0], [y0], edgecolors='k', facecolors='w', marker='o', lw=0.5, clip_on=False, s=[10], zorder=9, transform=ax.transData)
-                        ax.scatter([x0], [y0], c='k', marker='.', lw=0.5, clip_on=False, s=[6.5], zorder=10, transform=ax.transData)
-                        ax.text(x0+0.4, y0+0.1, '$\hat{\\boldsymbol{\phi}}$', ha='center', va='center', transform=ax.transData)
-                        ax.text(x0+0.4, y0+0.6, '$\hat{ \\boldsymbol{\\theta}}$', ha='center', va='center', transform=ax.transData)
+                # if inner_col == 2:
+                    # if inner_row == 0:
+                    #     rr = 1.7
+                    #     theta = np.arctan(0.5)
+                    #     x0 = -rr*np.cos(theta)
+                    #     y0 = rr*np.sin(theta)                        
+                    #     ax.arrow(x0, y0, -0.4*np.cos(theta + np.pi/2), 0.4*np.sin(theta + np.pi/2), head_width=0.05, fc='k', transform=ax.transData, clip_on=False)
+                    #     ax.scatter([x0], [y0], edgecolors='k', facecolors='w', marker='o', lw=0.5, clip_on=False, s=[10], zorder=9, transform=ax.transData)
+                    #     ax.scatter([x0], [y0], c='k', marker='.', lw=0.5, clip_on=False, s=[6.5], zorder=10, transform=ax.transData)
+                        # ax.text(x0+0.4, y0+0.1, '$\hat{\\boldsymbol{\phi}}$', ha='center', va='center', transform=ax.transData)
+                        # ax.text(x0+0.4, y0+0.6, '$\hat{ \\boldsymbol{\\theta}}$', ha='center', va='center', transform=ax.transData)
 
-                        x0 = -2.45
-                        y0 = 1
-                        theta = 0
-                        ax.arrow(x0, y0, 0.4*np.cos(theta + np.pi/2), 0.4*np.sin(theta + np.pi/2), head_width=0.05, fc='k', transform=ax.transData, clip_on=False)
-                        ax.scatter([x0], [y0], edgecolors='k', facecolors='w', marker='o', lw=0.5, clip_on=False, s=[10], zorder=9, transform=ax.transData)
-                        ax.scatter([x0], [y0], c='k', marker='.', lw=0.5, clip_on=False, s=[6.5], zorder=10, transform=ax.transData)
-                        ax.text(x0-0.3, y0, '$\hat{\\boldsymbol{\phi}}$', ha='center', va='center', transform=ax.transData)
-                        ax.text(x0-0.3, y0+0.5, '$\hat{\\boldsymbol{\\rho}}$', ha='center', va='center', transform=ax.transData)
+                        # x0 = -2.45
+                        # y0 = 1
+                        # theta = 0
+                        # ax.arrow(x0, y0, 0.4*np.cos(theta + np.pi/2), 0.4*np.sin(theta + np.pi/2), head_width=0.05, fc='k', transform=ax.transData, clip_on=False)
+                        # ax.scatter([x0], [y0], edgecolors='k', facecolors='w', marker='o', lw=0.5, clip_on=False, s=[10], zorder=9, transform=ax.transData)
+                        # ax.scatter([x0], [y0], c='k', marker='.', lw=0.5, clip_on=False, s=[6.5], zorder=10, transform=ax.transData)
+                        # ax.text(x0-0.3, y0, '$\hat{\\boldsymbol{\phi}}$', ha='center', va='center', transform=ax.transData)
+                        # ax.text(x0-0.3, y0+0.5, '$\hat{\\boldsymbol{\\rho}}$', ha='center', va='center', transform=ax.transData)
 
                 def my_axes(x0, y0, theta, strings, ax, dot=True):
                     ax.arrow(x0, y0, 0.4*np.cos(theta), 0.4*np.sin(theta), head_width=0.05, fc='k', transform=ax.transData, clip_on=False)
@@ -160,12 +159,12 @@ for outer_row in range(outer_rows):
                         # Draw angles
                         l1 = lines.Line2D([0,0], [0,.95], c='k', lw=0.5, transform=ax.transData, zorder=9, ls=':')
                         tt = np.linspace(np.pi/2,s_theta,20)
-                        l3 = lines.Line2D(0.15*np.cos(tt), 0.15*np.sin(tt), c='k', lw=0.5, transform=ax.transData, zorder=3)
-                        ax.text(0.4*np.cos((-s_theta + np.pi/2)/2 + s_theta),0.4*np.sin((-s_theta+np.pi/2)/2 + s_theta),'$\\varphi$', ha='center', va='center', transform=ax.transData, clip_on=False)
+                        # l3 = lines.Line2D(0.15*np.cos(tt), 0.15*np.sin(tt), c='k', lw=0.5, transform=ax.transData, zorder=3)
+                        # ax.text(0.4*np.cos((-s_theta + np.pi/2)/2 + s_theta),0.4*np.sin((-s_theta+np.pi/2)/2 + s_theta),'$\\varphi$', ha='center', va='center', transform=ax.transData, clip_on=False)
                         tt = np.linspace(np.pi/2,-3*np.pi/4,20)
                         l4 = lines.Line2D(0.1*np.cos(tt), 0.1*np.sin(tt), c='k', lw=0.5, transform=ax.transData, zorder=3)
                         ax.text(0,-0.4,'$\\phi$', ha='center', va='center', transform=ax.transData, clip_on=False)
-                        f.lines.extend([l1, l3, l4])
+                        f.lines.extend([l1, l4])
                         
                 if inner_col == 0:
                     ax.set_xlim([-1,1])

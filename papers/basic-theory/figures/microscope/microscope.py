@@ -68,7 +68,7 @@ for outer_row in range(outer_rows):
                     f.lines.extend([l1, l2, l3, l4])
                 
                 if outer_col == 0 and inner_col == 0:
-                    row_labels = ['Detector\n intensity',
+                    row_labels = ['Detector\n irradiance',
                                   'Tube\n lens',
                                   'Back focal\n plane\n electric field',
                                   'Objective\n lens',
@@ -93,12 +93,12 @@ for outer_row in range(outer_rows):
                     if outer_col == 1 and inner_col == 0:
                         brace_lines(ax)
                         ax.text(1.0+wspace_inner/2,-0.4,'b) $\\vartheta = \pi/2$\n dipole radiator', ha='center', va='top', transform=ax.transAxes)
-                    if outer_col == 2 and inner_col == 0:
-                        brace_lines(ax)                        
-                        ax.text(1.0+wspace_inner/2,-0.4,'c) $\\vartheta = \pi/10$\n dipole radiator', ha='center', va='top', transform=ax.transAxes)
                     if outer_col == 3 and inner_col == 0:
                         brace_lines(ax)                        
-                        ax.text(1.0+wspace_inner/2,-0.4,'d) $\\vartheta = 0$\n dipole radiator', ha='center', va='top', transform=ax.transAxes)
+                        ax.text(1.0+wspace_inner/2,-0.4,'d) $\\vartheta = \pi/10$\n dipole radiator', ha='center', va='top', transform=ax.transAxes)
+                    if outer_col == 2 and inner_col == 0:
+                        brace_lines(ax)                        
+                        ax.text(1.0+wspace_inner/2,-0.4,'c) $\\vartheta = 0$\n dipole radiator', ha='center', va='top', transform=ax.transAxes)
 
                 if inner_row == 0:
                     if inner_col == 0:
@@ -118,10 +118,10 @@ for outer_row in range(outer_rows):
                     a = k*alpha
                     if outer_col == 0 or outer_col == 1:
                         z = (special.jn(1,a*r)/(a*r))**2
-                    if outer_col == 2:
+                    if outer_col == 3:
                         theta = np.pi/10
                         z = (1 - np.cos(theta)**2)*(special.jn(1,a*r)/(a*r))**2 + 0.5*np.cos(theta)**2*(special.jn(2,a*r)/(a*r))**2
-                    if outer_col == 3:
+                    if outer_col == 2:
                         z = (special.jn(2,a*r)/(a*r))**2
                     if inner_col == 0:
                         l1 = lines.Line2D(x, z[:,N//2]/np.max(z), c='k', lw=1, transform=ax.transData, zorder=0)
@@ -165,18 +165,18 @@ for outer_row in range(outer_rows):
                         u = 0.3*np.ones(x.shape)
                         v = np.zeros(y.shape)
                         ax.quiver(x, y, u, v, angles='xy', scale_units='xy', scale=1, color=ecolor, pivot='mid', width=0.02)
-                    if outer_col == 2 and inner_col == 0:
+                    if outer_col == 3 and inner_col == 0:
                         theta = np.pi/10
                         y = np.zeros(grid.shape)
                         u = -0.1*np.ones(y.shape) + 0.3*grid*np.cos(theta)
                         v = y
                         ax.quiver(grid, y, u, v, angles='xy', scale_units='xy', scale=1, color=ecolor, pivot='mid', width=0.02)
-                    if outer_col == 3 and inner_col == 0:
+                    if outer_col == 2 and inner_col == 0:
                         y = np.zeros(grid.shape)
                         u = 0.4*grid
                         v = y
                         ax.quiver(grid, y, u, v, angles='xy', scale_units='xy', scale=1, color=ecolor, pivot='mid', width=0.02)
-                    if outer_col == 2 and inner_col == 1:
+                    if outer_col == 3 and inner_col == 1:
                         xi, yi = np.meshgrid(grid, grid)
                         x = xi[xi**2 + yi**2 < .7]
                         y = yi[xi**2 + yi**2 < .7]
@@ -184,7 +184,7 @@ for outer_row in range(outer_rows):
                         u = -0.1*np.ones(x.shape) + 0.3*x*np.cos(theta)
                         v = 0.3*y*np.sin(theta)
                         ax.quiver(x, y, u, v, angles='xy', scale_units='xy', scale=1, color=ecolor, pivot='mid', width=0.02)
-                    if outer_col == 3 and inner_col == 1:
+                    if outer_col == 2 and inner_col == 1:
                         xi, yi = np.meshgrid(grid, grid)
                         x = xi[xi**2 + yi**2 < .7]
                         y = yi[xi**2 + yi**2 < .7]
@@ -210,9 +210,9 @@ for outer_row in range(outer_rows):
                         f.lines.extend([l1, l4])
                     if outer_col == 1:
                         z = np.where(r < 1, np.cos(theta - np.pi/2)**2*np.cos(2*np.pi*r/lamb)/(0.1 + r), 0)
-                    if outer_col == 2:
-                        z = np.where(r < 1, np.cos(theta + np.pi/10)**2*np.cos(2*np.pi*r/lamb)/(0.1 + r), 0)
                     if outer_col == 3:
+                        z = np.where(r < 1, np.cos(theta + np.pi/10)**2*np.cos(2*np.pi*r/lamb)/(0.1 + r), 0)
+                    if outer_col == 2:
                         z = np.where(r < 1, np.cos(theta)**2*np.cos(2*np.pi*r/lamb)/(0.1 + r), 0)
                     ax.imshow(z, vmin=-np.max(z), vmax=np.max(z), cmap='bwr', extent=[-1,1,-1,1], interpolation='bicubic', origin='lower')
                     

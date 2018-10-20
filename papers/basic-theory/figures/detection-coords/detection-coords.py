@@ -107,24 +107,24 @@ for outer_row in range(outer_rows):
                     if inner_row == 0:
                         ax.text(-2.75,0,'Axial view', ha='center', va='center', transform=ax.transData, rotation=90)
                         my_axes(-2,0,0,['\mathbf{\hat{z}}','\mathbf{\hat{y}}','\mathbf{\hat{x}}'], ax, dot=True)
-                        rr = 1.7
-                        theta = np.arctan(0.5)
-                        x0 = rr*np.cos(theta)
-                        y0 = rr*np.sin(theta)                        
-                        ax.arrow(x0, y0, 0.4*np.cos(theta + np.pi/2), 0.4*np.sin(theta + np.pi/2), head_width=0.05, fc='k', transform=ax.transData, clip_on=False)
-                        ax.scatter([x0], [y0], edgecolors='k', facecolors='w', marker='o', lw=0.5, clip_on=False, s=[10], zorder=9, transform=ax.transData)
-                        ax.scatter([x0], [y0], c='k', marker='.', lw=0.5, clip_on=False, s=[6.5], zorder=10, transform=ax.transData)
-                        ax.text(x0-0.4, y0+0.1, '$\hat{\\boldsymbol{\phi}}$', ha='center', va='center', transform=ax.transData)
-                        ax.text(x0-0.4, y0+0.6, '$\hat{ \\boldsymbol{\\theta}}$', ha='center', va='center', transform=ax.transData)
+                    #     rr = 1.7
+                    #     theta = np.arctan(0.5)
+                    #     x0 = rr*np.cos(theta)
+                    #     y0 = rr*np.sin(theta)                        
+                    #     ax.arrow(x0, y0, 0.4*np.cos(theta + np.pi/2), 0.4*np.sin(theta + np.pi/2), head_width=0.05, fc='k', transform=ax.transData, clip_on=False)
+                    #     ax.scatter([x0], [y0], edgecolors='k', facecolors='w', marker='o', lw=0.5, clip_on=False, s=[10], zorder=9, transform=ax.transData)
+                    #     ax.scatter([x0], [y0], c='k', marker='.', lw=0.5, clip_on=False, s=[6.5], zorder=10, transform=ax.transData)
+                    #     ax.text(x0-0.4, y0+0.1, '$\hat{\\boldsymbol{\phi}}$', ha='center', va='center', transform=ax.transData)
+                    #     ax.text(x0-0.4, y0+0.6, '$\hat{ \\boldsymbol{\\theta}}$', ha='center', va='center', transform=ax.transData)
 
-                        x0 = 2.45
-                        y0 = 1
-                        theta = 0
-                        ax.arrow(x0, y0, 0.4*np.cos(theta + np.pi/2), 0.4*np.sin(theta + np.pi/2), head_width=0.05, fc='k', transform=ax.transData, clip_on=False)
-                        ax.scatter([x0], [y0], edgecolors='k', facecolors='w', marker='o', lw=0.5, clip_on=False, s=[10], zorder=9, transform=ax.transData)
-                        ax.scatter([x0], [y0], c='k', marker='.', lw=0.5, clip_on=False, s=[6.5], zorder=10, transform=ax.transData)
-                        ax.text(x0+0.3, y0, '$\hat{\\boldsymbol{\phi}}$', ha='center', va='center', transform=ax.transData)
-                        ax.text(x0+0.3, y0+0.5, '$\hat{\\boldsymbol{\\rho}}$', ha='center', va='center', transform=ax.transData)
+                    #     x0 = 2.45
+                    #     y0 = 1
+                    #     theta = 0
+                    #     ax.arrow(x0, y0, 0.4*np.cos(theta + np.pi/2), 0.4*np.sin(theta + np.pi/2), head_width=0.05, fc='k', transform=ax.transData, clip_on=False)
+                    #     ax.scatter([x0], [y0], edgecolors='k', facecolors='w', marker='o', lw=0.5, clip_on=False, s=[10], zorder=9, transform=ax.transData)
+                    #     ax.scatter([x0], [y0], c='k', marker='.', lw=0.5, clip_on=False, s=[6.5], zorder=10, transform=ax.transData)
+                    #     ax.text(x0+0.3, y0, '$\hat{\\boldsymbol{\phi}}$', ha='center', va='center', transform=ax.transData)
+                    #     ax.text(x0+0.3, y0+0.5, '$\hat{\\boldsymbol{\\rho}}$', ha='center', va='center', transform=ax.transData)
                         # my_axes(rr*np.cos(theta),rr*np.sin(theta),theta, ['\hat{\\theta}','\hat{\phi}','\mathbf{\hat{x}}'], ax, dot=False)
                     else:
                         ax.text(-2.75,0,'Transverse view', ha='center', va='center', transform=ax.transData, rotation=90)

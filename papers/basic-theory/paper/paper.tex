@@ -20,6 +20,10 @@
 \articletype{Research Article}
 % Note that article type is not required for Express journals (OE, BOE, OME and OSAC)
 
+% Talon's custom libraries
+\usepackage{empheq}
+% \usepackage{bm}
+
 % Talon's custom commands
 \newcommand{\argmin}{\arg\!\min}
 \newcommand{\me}{\mathrm{e}}
@@ -39,13 +43,13 @@
 \providecommand{\bv}{\bs{\nu}}
 \providecommand{\bsh}[1]{\hat{\boldsymbol{#1}}}
 \providecommand{\nan}{\left(\frac{\text{NA}}{n_o}\right)}
-\providecommand{\lmsum}{\sum_{l=0}^\infty\sum_{m=-l}^{l}}
+\providecommand{\lmsum}{\sum_{\ell=0}^\infty\sum_{m=-\ell}^{\ell}}
 \providecommand{\intr}[1]{\int_{\mbb{R}^{#1}}}
 \providecommand{\ints}[1]{\int_{\mbb{S}^{#1}}}
+\providecommand{\tb}[1]{\textcolor{blue}{#1}}
 \DeclareFontFamily{OT1}{pzc}{}
 \DeclareFontShape{OT1}{pzc}{m}{it}{<-> s * [1.10] pzcmi7t}{}
 \DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
-\usepackage{empheq}
 \newcommand{\eqname}[1]{\tag*{#1}}
 \newcommand*\widefbox[1]{\fbox{\hspace{1em}#1\hspace{1em}}}
 
@@ -68,27 +72,33 @@
 
 \begin{abstract*}
   We introduce the basic elements of a spatio-angular theory of fluorescence
-  microscopy. We start by analyzing a paraxial single-view fluorescence
-  microscope imaging an ensemble of in-focus fluorophores without using the
-  monopole or scalar approximations. We define and calculate the spatio-angular
-  transfer function (SATF) and show that fluorescence microscopes have an
-  angular band limit. We demonstrate the value of the transfer function approach
-  by efficiently simulating the imaging process with numerical phantoms.
-  Notably, we show that information about the out-of-plane orientation of
+  microscopy. We start by modeling a microscope imaging an ensemble of in-focus
+  fluorescent dipoles as a linear Hilbert-space operator with domain
+  $\mbb{L}_2(\mbb{R}^2\times\mbb{S}^2)$ and range $\mbb{L}_2(\mbb{R}^2)$, and we
+  express the operator in terms of four different sets of object-space basis
+  functions. We show that the operator takes a particularly convenient form when
+  expressed in a basis of spatial and spherical harmonics---a form we call the
+  spatio-angular transfer function (SATF). We demonstrate our formalism by
+  analyzing a paraxial single-view fluorescence microscope without using the
+  monopole or scalar approximations. We show that this microscope has an angular
+  band limit, and we demonstrate the value of the transfer function approach by
+  efficiently simulating the imaging process with numerical phantoms. Notably,
+  we show that information about the out-of-plane orientation of ensembles of
   in-focus fluorophores is imaged in paraxial widefield fluorescence
   microscopes. We discuss the implications of our analysis for all quantitative
-  fluorescence microscopy studies.
+  fluorescence microscopy studies and lay out a path towards a complete theory.
 \end{abstract*}
 
-\section{Introduction}
-Fluorescence microscopes are widely used in biology [XXX], materials science
-[XXX], and metrology [XXX] for measuring the distribution of fluorophores
-throughout a sample. While an unprocessed fluorescence micrograph reports the
-approximate distribution of fluorophores throughout a sample, all microscopes
-are diffraction limited, so the image is a blurred version of the true
-fluorophore distribution. Therefore, microscopists who are interested in optimal
-measurements will perform a computational restoration to recover some of the
-information lost during the imaging process.
+\section{Introduction \tb{needs work}}
+
+Fluorescence microscopes are widely used in the biological sciences for
+measuring the distribution of fluorophores throughout a sample [cite]. While an
+unprocessed fluorescence micrograph reports the approximate distribution of
+fluorophores throughout a sample, all microscopes are diffraction limited
+[cite], so the image is a blurred version of the true fluorophore distribution.
+Therefore, microscopists who are interested in optimal measurements will perform
+a computational restoration to recover some of the information lost during the
+imaging process.
 
 Restoration techniques attempt to recover the true distribution of fluorophores
 using the measured data and a model of the imaging process. A model of the
@@ -97,56 +107,46 @@ instrument under idealized conditions), experimentally (by measuring the
 instrument's response to a known input), or by a combination of theory and
 experiment (by measuring parameters of an instrument model). In all cases the
 accuracy of the restored fluorophore distribution is limited by the accuracy of
-the imaging model.
-
-All theoretical imaging models of make simplifying approximations that limit the
-accuracy of restorations, so it is important to verify that the approximations
-introduce an acceptable level of error. This work investigates the errors
-introduced by two common approximations in models of fluorescence
-microscopes---the \textit{monopole approximation} and the \textit{scalar
-  approximation}.
-
-by ignoring the
-dipole excitation and emission processes and to (2) treat light propagation
-under the \textit{scalar approximation} by ignoring the polarization of light.
-These approximations can limit the accuracy of restoration in all types of
-fluorescence microscopes. The goal of this work is to analyze fluorescence
-microscopes without these approximations and find the conditions under which
-these approximations are justified.
+the imaging model. All theoretical imaging models make simplifying
+approximations that limit the accuracy of restorations, so it is important to
+verify that the approximations introduce an acceptable level of error. This work
+investigates the errors introduced by two common approximations in models of
+fluorescence microscopes---the \textit{monopole approximation} and the
+\textit{scalar approximation}.
 
 This work lies at the intersection of three classes of fluorescence microscopy:
 (1) single-molecule localization microscopy (SMLM), (2) spatial ensemble
 fluorescence microscopy including widefield, confocal, and light-sheet
 techniques, and (3) polarized fluorescence microscopy. We briefly review these
-three classes and focus on their use of the monopole and scalar approximations.
+three classes and focus on their restoration techniques and use of the monopole
+and scalar approximations.
 
 The SMLM community has pioneered the use of rigorous electromagnetic models of
-fluorescence microscopes \cite{backer2014, lieb2004} [Novotny]. When a single
-molecule is fluorescing in the sample, the measured intensity pattern is
+fluorescence microscopes \cite{backer2014, lieb2004} [cite Novotny]. When a
+single molecule is fluorescing in the sample, the measured intensity pattern is
 strongly dependent on the orientation of the emitting molecule. Backlund and Lew
 \cite{backlund2014} have shown that ignoring the orientation of fluorophores can
-bias position estimates. Therefore, the most accurate SMLM experiments must
-jointly estimate the position and orientation of each molecule.
-
-A major limitation of SMLM experiments is speed
+bias position estimates, so the most accurate SMLM experiments must jointly
+estimate the position and orientation of each molecule.
 
 Meanwhile, most fluorescence microscopists image ensembles of fluorophores and
 restore their images without considering the role that the monopole and scalar
 approximations play in the restoration process. A typical fluorescence
 microscopist is only interested in the spatial distribution of fluorophores, so
-they reason (possibly erroneously) that they can ignore the orientation of the
-emitters.
+they reason that they can ignore the orientation of the emitters.
 
 A smaller community of microscopists is interested in measuring the orientation
-of ensembles of fluorophores \cite{mehta2016} [Forkey, Goldman, Moerner].
-These techniques typically use a combination of 
-Current restoration techniques use a model of the dipole excitation and emission
-process to restore the orientation of fluorophores using pixel-wise arithmetic,
-but these techniques do not perform any spatial restoration so they are
-sub-optimal. To our knowledge no work has been done to model the complete
-spatio-angular response of fluorescence microscopes to ensembles of oriented
-fluorophores.
+of ensembles of fluorophores \cite{mehta2016} [Forkey, Goldman, Moerner,
+Oldenbourg]. These techniques typically use polarized illumination or polarized
+detection to make multiple measurements of the same object. Current angular
+restoration techniques use a model of the dipole excitation and emission
+processes [Fourkas] to recover the orientation of fluorophores using pixel-wise
+arithmetic, but these techniques do not perform any spatial restoration so they
+do not use all of the information available to the microscopist. To our
+knowledge no work has been done to model the complete spatio-angular response of
+fluorescence microscopes to ensembles of oriented fluorophores.
 
+\tb{Out of date}
 In this work we model ensembles of in-focus dipole absorber/emitters using
 electromagnetic optics and the paraxial approximation. In section 2 we model the
 excitation and detection processes of dipoles, and we define the most important
@@ -157,7 +157,7 @@ scalar models. In section 4 we discuss the implications of our work for
 fluorescence microscopy and lay out a path towards a complete spatio-angular
 theory of fluorescence microscopy.
 
-\section{Theory}
+\subsection{Monopole emission vs. dipole emission \tb{not sure where this section should live}}
 Consider a single dipole radiator at the origin with its dipole moment oriented
 along a direction $\so$. The dipole emitter creates a time-harmonic electric
 field at a position $\mb{r}$ far from the dipole proportional to
@@ -167,11 +167,11 @@ field at a position $\mb{r}$ far from the dipole proportional to
 A typical approach to deriving Equation \ref{eq:dip} is to (1) use Maxwell's
 equations to derive the inhomogeneous electromagnetic wave equations then (2)
 use potentials to solve the wave equations with a dipole source term, then (3)
-drop the terms that decay faster than $1/|\mb{r}|$---see Jackson, Novotny, Teich
-for clear expositions. Equation~\ref{eq:dip} succinctly shows that dipole
-radiators emit spherical wavefronts of polarized light with amplitude
-proportional to $\cos\theta$ where $\theta$ is the angle between the field point
-$\mb{r}$ and the dipole axis $\so$.
+drop the terms that decay faster than $1/|\mb{r}|$ [cite Jackson, Novotny,
+Teich]. Equation~\ref{eq:dip} shows that dipole radiators emit spherical
+wavefronts of polarized light with amplitude proportional to $\cos\theta$ where
+$\theta$ is the angle between the field point $\mb{r}$ and the dipole axis
+$\so$.
 
 Many models of fluorophores approximate the vector field on the left hand side
 of Equation \ref{eq:dip} with a scalar field---the \textit{scalar
@@ -181,46 +181,239 @@ side---the \textit{monopole approximation}. The approximated field is given by
   U_{\text{ff}}(\mb{r}) \propto \frac{\text{exp}[ik|\mb{r}|]}{|\mb{r}|}. \label{eq:mono}
 \end{align}
 Models that use Equation \ref{eq:mono} as a starting point do not account for
-polarization or dipole orientation effects. In Section \ref{sec:monopole} we
-will review the derivation of the monopole imaging model starting with Equation
-\ref{eq:mono}. These results are widely known, but they serve as a review of the
-concepts we will need for the dipole imaging case. In Section \ref{sec:dipole}
-will derive a dipole imaging model starting with Equation \ref{eq:dip}. Finally,
-in Section \ref{sec:trans} we will calculate the SATF for the dipole imaging
-model.
+polarization or dipole orientation effects.
 
-\subsection{Monopole imaging model}\label{sec:monopole}
-We briefly analyze a paraxial 4$f$ fluorescence imaging system using the
-monopole and scalar approximations---a similar treatment can be found in
-\cite{goodman1996}. We start by considering a field of in-focus monopoles that
-have been excited by a spatially uniform beam. As the fluorophores relax, they
-emit scalar waves in the form of Equation \ref{eq:mono}. The waves propagate
-through the microscope and we measure the irradiance on a two dimensional
-detector.
+\section{Theory \tb{outline is okay, subsections vary, recently moved changes of basis to the front}}
+We begin our analysis with the abstract Hilbert space formalism of Barrett and
+Myers \cite{barrett2004}. Our first task is to formulate the imaging process as
+a mapping between two Hilbert spaces $\mc{H}: \mbb{U} \rightarrow \mbb{V}$ where
+$\mbb{U}$ is a set than contains all possible objects, $\mbb{V}$ is a set that
+contains all possible datasets, and $\mc{H}$ is a model of the instrument that
+maps between these two spaces. We denote (possibly infinite-dimensional)
+Hilbert-space vectors in $\mbb{U}$ with $\mb{f}$, Hilbert-space vectors in
+$\mbb{V}$ with $\mb{g}$, and the mapping between the spaces with
 
-We can represent the object as a two-dimensional function $f(\ro)$ that we call
-the \textit{monopole density}---the number of monopoles at position $\ro$ per
-unit area. In the language of image science, we say that $f(\ro)$ is a member of
-the set of square integrable functions on the plane $\mbb{L}_2(\mbb{R}^2)$. The
-data we collect is the irradiance on a plane $g(\rd)$, so the data is a member
-of the same set $\mbb{L}_2(\mbb{R}^2)$.
+\begin{align}
+  \mb{g} = \mc{H}\mb{f}.
+\end{align}
+
+Once we have identified the spaces $\mbb{U}$ and $\mbb{V}$, we can start
+expressing the mapping between the spaces in a specific object-space and
+data-space basis. In most cases the easiest mapping to find uses a
+delta-function basis---we expand object and data space into delta functions then
+express the mapping as an integral transform. After finding this mapping we can
+start to investigate the same mapping in different bases.
+
+The above discussion is quite abstract, but it is a powerful point of view that
+will enable us to draw new conclusions about all fluorescence microscopes. In
+Section \ref{sec:monopole} we will demonstrate the formalism by examining a
+familiar monopole imaging model, and we will show that the point spread
+function and the optical transfer function are mappings between object and data
+space expressed in two different bases. In Section \ref{sec:dipole} we will
+extend the monopole imaging model to dipoles and examine the mapping in four
+different bases. In Section \ref{sec:para} we will examine the mappings for a
+more specific case---a paraxial epi-illumination single-view fluorescence
+microscope.
+
+\subsection{Monopole imaging in different bases \tb{50\%}}\label{sec:monopole}
+We start by considering a microscope that images a field of in-focus monopoles
+by recording the irradiance on a two-dimensional detector. We can represent
+the object as a function that assigns a real number to each point on a plane,
+so we identify object space as $\mbb{U} = \mbb{L}_2(\mbb{R}^2)$. Similarly, we
+have a two-dimensional detector that measures a real number at every point on 
+a plane, so data space is the same set $\mbb{V} = \mbb{L}_2(\mbb{R}^2)$. Our
+first task is complete---we have identified the geometry of object and data
+space.
+
+Next, we find and name the representations of our object and data in a
+specific basis. In a delta function basis the object can be represented by a
+function $f(\ro)$ called the \textit{monopole density}---the number of
+monopoles at the two-dimensional position $\ro$ per unit area. Similarly, in a
+delta function basis the data can be represented by a function $g(\rd)$ called
+the \textit{irradiance}---the power received by a surface at position $\rd$
+per unit area. It may seem pedantic to emphasize that these representations
+are in a delta function basis, but we highlight this point to make it clear
+that the delta function basis is not special---we can choose a different basis
+at will.
+
+% We start by considering a field of in-focus monopoles that have been excited by test
+% a spatially uniform beam. As the fluorophores relax, they emit scalar waves in
+% the form of Equation \ref{eq:mono}. The waves propagate through the microscope
+% and we measure the irradiance on a two dimensional detector.
 
 A reasonable starting point is to assume that the relationship between the
-object and the data is \textit{linear}---this seems plausibly since a scaled sum
-of monopoles will result in a scaled sum of the irradiance patterns created by
-the individual monopoles. Therefore, we can write the irradiance as the integral
-over a field of monopoles weighted by the detector response due to single
-monopoles
-\begin{empheq}[box=\widefbox]{gather}
-g(\rd{}) = \int_{\mbb{R}^2}d\ro{}\, h(\rd{}, \ro{})f(\ro{}). \label{eq:fwdmono} \\ \text{Monopole imaging model} \nonumber 
-\end{empheq}
+object and the data is \textit{linear}---this is usually true in fluorescence
+microscopes since fluorophores emit incoherently so a scaled sum of fluorophores
+will result in a scaled sum of the irradiance patterns created by the individual
+fluorophores. If the mapping is linear we can write the irradiance as the
+integral over a field of monopoles weighted by the detector response due to
+single monopoles
+\begin{align}
+g(\rd) = \int_{\mbb{R}^2}d\ro\, h(\rd,\ro)f(\ro), \label{eq:fwdmono}
+\end{align}
 where $h(\rd{}, \ro{})$ is the kernel of the integral transform. 
 
+Most fluorescence microscopes are (at least approximately) shift-invariant,
+which means that shifting the object will result in a corresponding shift of the
+data. The mapping between an object and the data in a linear shift-invariant
+fluorescence microscope can be written as
+\begin{align}
+  g(\rd) = \int_{\mbb{R}^2}d\ro\, h(\rd - \ro)f(\ro).  \label{eq:lsi}
+\end{align}
+When the imaging system is shift invariant the kernel $h(\rd - \ro)$ is usually
+called the \textit{point spread function}.
 
-The first step is to calculate the field in the back focal plane of the
-objective lens. We can model a paraxial thin lens as a quadratic phase element,
-so it converts a spherical wave to a plane wave in the back focal plane with a
-sharp cutoff at the exit pupil of the lens
+The mapping between the object and the data in linear shift-invariant
+microscopes takes a particularly simple form in a spatial harmonic basis. If we
+apply the Fourier convolution theorem to Eq. \ref{eq:lsi} we find that
+\begin{align}
+  G(\bs{\nu}) = H(\bs{\nu})F(\bs{\nu}),\label{eq:freq}
+\end{align}
+where the \textit{irradiance spectrum} is given by
+\begin{align}
+  G(\bs{\nu}) = \int_{\mbb{R}^2}d\mb{r}\, g(\mb{r})\, \text{exp}(-2\pi i\mb{r}\cdot\bs{\nu}),
+\end{align}
+the \textit{optical transfer function} is given by
+\begin{align}
+  H(\bs{\nu}) = \int_{\mbb{R}^2}d\mb{r}\, h(\mb{r})\, \text{exp}(-2\pi i\mb{r}\cdot\bs{\nu}),
+\end{align}
+and the \textit{monopole spectrum} is given by
+\begin{align}
+    F(\bs{\nu}) = \int_{\mbb{R}^2}d\mb{r}\, f(\mb{r})\, \text{exp}(-2\pi i\mb{r}\cdot\bs{\nu}).
+\end{align}
+Notice that Eqs. \ref{eq:lsi} and \ref{eq:freq} are expressions of the same
+mapping between object and data space in different bases. Figure
+\ref{fig:monopole-block} summarizes the relationship between object and data
+space in both bases.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=1.0]{../figures/monopole-block/monopole-block.pdf}
+  \caption{We can compute the mapping between object space and data space using
+    two different bases.}
+     \label{fig:monopole-block}      
+\end{figure}
+
+\subsection{Dipole imaging in different bases \tb{50\%}}\label{sec:dipole}
+Now we consider a microscope imaging a field of in-focus \textit{dipoles} by
+recording the irradiance on a two-dimensional detector. A function that assigns
+a real number to each point on a plane is not sufficient to specify a field of
+dipoles because the dipoles can have different orientations. To represent the
+object we need to extend object space to
+$\mbb{U} = \mbb{L}_2(\mbb{R}^2\times\mbb{S}^2)$ where $\mbb{S}^2$ is the
+two-dimensional sphere (the usual sphere embedded in $\mbb{R}^3$).
+
+In a delta function basis the object can be represented by a function
+$f(\ro, \so)$ called the \textit{spatio-angular density}---the number of dipoles
+at position $\ro{}$ per unit area oriented along $\so{}$ per unit solid angle.
+If the imaging system is linear and shift invariant then the mapping between
+object and data space can be expressed in a delta function basis as
+  \begin{align}
+g(\rd{}) = \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^2}d\ro{}\, h(\rd{} -\ro{}, \so{})f(\ro, \so), \label{eq:odpsf}
+  \end{align}
+  where $h(\rd - \ro, \so)$ is the \textit{orientation-dependent point spread
+    function}.
+
+  We can make our first change of basis by applying the Fourier-convolution
+  theorem to Eq. \ref{eq:odpsf} which yields
+\begin{align}
+G(\bs{\nu}) = \int_{\mbb{S}^2}d\mh{s}\, H(\bs{\nu}, \mh{s})F(\bs{\nu}, \mh{s}) \label{eq:odotf},
+\end{align}
+where we define the \textit{irradiance spectrum} as
+\begin{align}
+  G(\bs{\nu}) &= \int_{\mbb{R}^2}d\mb{r}\, g(\mb{r})\, \text{exp}(-2\pi i\mb{r}\cdot\bs{\nu}),
+  \end{align}
+  the \textit{orientation-dependent optical transfer function} as
+  \begin{align}
+  H(\bs{\nu}, \mh{s}) &= \int_{\mbb{R}^2}d\mb{r}\, h(\mb{r}, \mh{s})\, \text{exp}(-2\pi i\mb{r}\cdot\bs{\nu}),
+  \end{align}
+  and the \textit{spatial density spectrum} as
+  \begin{align}
+  F(\bs{\nu}, \mh{s}) &= \int_{\mbb{R}^2}d\mb{r}\, f(\mb{r}, \mh{s})\, \text{exp}(-2\pi i\mb{r}\cdot\bs{\nu}). 
+  \end{align}
+  This basis is well suited for simulating objects that are angularly sparse and
+  spatially dense.
+  
+  The spherical harmonics provide another set of convenient basis functions. We
+  can change basis from spherical delta functions to spherical harmonics by
+  making use of the generalized Plancharel theorem for spherical functions
+\begin{align}
+  \ints{2}d\mh{s}{}\, h(\mh{s})f(\mh{s}) = \lmsum H_\ell^m F_\ell^m, \label{eq:plan}
+\end{align}
+where
+\begin{align}
+  F_\ell^m \equiv \int_{\mbb{S}^2}d\mh{s}\, f(\mh{s})\bar{Y}_\ell^m(\mh{s}), 
+\end{align}
+is the spherical Fourier transform of $f(\mh{s})$, $\bar{z}$ denotes the complex
+conjugate of $z$, and $Y_{\ell}^m(\mh{s})$ are the spherical harmonic functions
+defined in Appendix \ref{sec:sph}. Eq. \ref{eq:plan} expresses the fact that
+scalar products are invariant under a change of basis (see Eq. 3.78 of
+\cite{barrett2004}). The left-hand side of Eq. \ref{eq:plan} is the scalar
+product of $\mbb{L}_2(\mbb{S}^2)$ functions in a delta function basis and the
+right hand side is the scalar product of $\mbb{L}_2(\mbb{S}^2)$ functions in a
+spherical harmonic function basis. Applying Eq. \ref{eq:plan} to Eq.
+\ref{eq:odpsf} yields
+\begin{align}
+  g(\rd) = \lmsum H_\ell^m(\rd - \ro)F_\ell^m(\ro) \label{eq:atf-form}
+\end{align}
+where we have defined the \textit{angular transfer function} as
+\begin{align}
+  H_\ell^m(\mb{r}) = \int_{\mbb{S}^2}d\mh{s}\, h(\mb{r}, \mh{s})\bar{Y}_{\ell}^m(\mh{s}),\label{eq:atf-prep} 
+\end{align}
+and the \textit{angular density spectrum} as
+\begin{align}
+  F_\ell^m(\mb{r}) = \int_{\mbb{S}^2}d\mh{s}\, f(\mb{r}, \mh{s})\bar{Y}_{\ell}^m(\mh{s}).
+\end{align}
+This basis is well suited for simulating objects that are spatially sparse and
+angularly dense.
+
+We can arrive at our final basis in two ways: by applying the generalized
+Plancharel theorem for spherical functions to Eq. \ref{eq:odotf} or by applying
+the Fourier convolution theorem to Eq. \ref{eq:atf-form}. We follow the
+second path and find that
+\begin{align}
+G(\bs{\nu}) = \lmsum H_\ell^m(\bs{\nu})F_\ell^m(\bs{\nu}) \label{eq:saft},
+\end{align}
+where we have defined the \textit{spatio-angular transfer function} (SATF) as
+  \begin{align}
+  H_\ell^m(\bs{\nu}) &\equiv \int_{\mbb{S}^2}d\mh{s}\, H(\bs{\nu}, \mh{s})\bar{Y}_\ell^m(\mh{s}),
+  \end{align}
+  and the \textit{spatio-angular density spectrum} as
+  \begin{align}
+  F_\ell^m(\bs{\nu}) &\equiv \int_{\mbb{S}^2}d\mh{s}\, F(\bs{\nu}, \mh{s})\bar{Y}_\ell^m(\mh{s}).
+  \end{align}
+  This basis is well suited for simulating arbitrary samples because it exploits
+  the sparsity of the imaging system---we will see this explicitly when we
+  calculate a specific case of the spatio-angular transfer function.
+
+  Figure \ref{fig:dipole-block} summarizes the relationship between the four
+  bases that we can use to compute the image of a field of dipoles.
+    
+\begin{figure}
+  \hspace{-5em}
+  \includegraphics[scale=1.0]{../figures/dipole-block/dipole-block.pdf}
+  \caption{We can compute the mapping between object space and data space using
+    four different bases.}
+   \label{fig:dipole-block}      
+    \end{figure}
+
+\subsection{Paraxial epi-fluorescence microscope}\label{sec:para}
+\tb{This section is probably the most mature, but it still has some mismatch with
+  newer sections. I've quit using ``kernel'' and haven't fixed it.}
+In this section we apply the tools we developed in the previous two sections to
+analyze a paraxial epi-fluorescence microscope. We start by reviewing the
+derivation of the monopole point spread function in preparation for the
+derivation of the orientation-dependent point spread function. We conclude the
+section by analyzing the dipole imaging map in the four bases we described
+earlier.
+
+\subsubsection{Monopole point spread function}
+In this section we derive the form of the monopole point spread function $h(\mb{r})$.
+First, we place a monopole emitter at the focal point of an objective lens and
+calculate the field created in the back focal plane. We can model a paraxial
+thin lens as a quadratic phase element, so it converts a spherical wave to a
+plane wave in the back focal plane with a sharp cutoff at the exit pupil of the
+lens
 \begin{align}
   U_{\text{bfp}}(\mb{r}_b) \propto \Pi\left(\frac{|\mb{r}_b|}{\alpha}\right) \equiv
   \begin{cases}
@@ -236,255 +429,166 @@ field on the detector is given by
   U_{\text{det}}(\mb{r}_d) \propto \mc{F}_{\mbb{R}^2}\left\{U_{\text{bfp}}(\mb{r}_b)\right\} = \frac{J_1(k\alpha|\mb{r}_d|)}{k\alpha|\mb{r}_d|}.
 \end{align}
 Finally, the detector measures the irradiance instead of the field, so we take
-the modulus squared of the field to find that the measurable image of a single
-monopole radiator at the origin is the familiar Airy disk
+the modulus squared of the field to find that the measurable irradiance created
+by a single monopole radiator at the origin is the familiar Airy disk
 \begin{align}
   h(\mb{r}_d, \ro = 0) \propto |U_{\text{det}}(\mb{r}_d)|^2 = \left[\frac{J_1(k\alpha|\mb{r}_d|)}{k\alpha|\mb{r}_d|}\right]^2.
 \end{align}
 Shifting the monopole in the transverse plane will introduce a linear phase
-factor in the back focal plane which will manifest as a shift on the detector.
-Therefore, our imaging system is shift invariant and we can rewrite the
-irradiance on the detector due to a monopole at $\ro$ as
+factor in the back focal plane which will manifest as a shift on the detector
+due to the Fourier shift theorem. Therefore, the monopole imaging system is
+shift invariant and we can rewrite the irradiance on the detector due to a
+monopole at $\ro$ as
 \begin{align}
   h(\rd, \ro) = h(\rd - \ro). \label{eq:shift}
 \end{align}
-For convenience we have used the same letter for both functions in Equation
-\ref{eq:shift} even though they have a different number of variables. We will
-continue to rewrite functions with fewer variables in the same way throughout
-this paper. Also, Equation \ref{eq:shift} only applies directly to microscopes
-with unit magnification, but a similar relationship can be found for magnifying
-microscopes by making a change of variables---see Barrett section 7.2.7.
+We have modeled a microscope with unit magnification, but a similar point spread
+function can be found for magnifying microscopes by making a change of
+variables---see Barrett section 7.2.7.
 
 Rotating a monopole will leave its image unchanged. Therefore, our imaging
-system is rotation invariant and we can simplify the kernel further with
+system is rotation invariant and we can simplify the orientation-dependent point spread function further with
 \begin{align}
   h(\rd - \ro) = h(|\rd - \ro|). \label{eq:rotational}
 \end{align}
 
-In the language of image science, Equation \ref{eq:fwdmono} specifies an
-integral transform relationship between objects that are members of the space of
-square-integrable functions on the plane $\mbb{U} = \mbb{L}_2(\mbb{R}^2)$ and
-data that lives in the same space $\mbb{V} = \mbb{L}_2(\mbb{R}^2)$. We can
-rewrite Equation \ref{eq:fwdmono} more abstractly as
+\subsubsection{Orientation-dependent point spread function}
+In the next two subsections we will calculate the orientation dependent point
+spread function $h(\mb{r}, \mh{s})$ of a paraxial epi-fluroescence microscope.
+We can make our first simplifying step by realizing the excitation and detection
+processes are incoherent which means that the orientation-dependent PSF is
+separable
 \begin{align}
-  \mb{g} = \mc{H}\mb{f} \label{eq:abstract}
+  h(\rd, \ro, \so) = h_{\text{exc}}(\ro, \so)\,h_{\text{det}}(\rd, \ro, \so). \label{eq:kernelsep}
 \end{align}
-where $\mc{H}: \mbb{L}_2(\mbb{R}^2) \rightarrow \mbb{L}_2(\mbb{R}^2)$ is the
-forward operator of the imaging system. We say that the shift invariance and
-rotational invariance introduced in Equations \ref{eq:shift} and
-\ref{eq:rotational} are \textit{symmetries of the forward operator}. Specifying
-a linear operator that maps $\mbb{L}_2(\mbb{R}^2)$ to $\mbb{L}_2(\mbb{R}^2)$
-always requires us to specify a kernel in the set $\mbb{L}_2(\mbb{R}^4)$, but we
-can exploit the symmetries of the forward operator to specify the complete
-kernel with a ``smaller'' function in the set $\mbb{L}_2(\mbb{R})$.
-
-Just as a finite-dimensional linear operator can be represented by a matrix in a
-specific basis, the infinite-dimensional linear operator in Equation
-\ref{eq:abstract} can be represented by an integral transform in a specific
-basis. Equation \ref{eq:fwdmono} is an integral transform representation of the
-monopole imaging process in a \textit{spatial basis} with basis functions of the
-form $\delta(\mb{r} - \ro)$, but this is not always the best choice. We can
-exploit the shift-invariance of the forward operator by choosing basis functions
-of the form $\text{exp}[i2\pi \mb{r}\cdot\bs{\nu}]$ and use the Fourier
-transform to reexpress the monopole imaging model in a \textit{spatial-frequency
-  basis} as
-\begin{align}
-  G(\bs{\nu}) = H(\bs{\nu})F(\bs{\nu})\label{eq:freq}
-\end{align}
-where $\bs{\nu}$ is a two-dimensional spatial frequency, $G(\bs{\nu})$ is the
-spectrum of the irradiance, $F(\bs{\nu})$ is the spectrum of the monopole
-density, and $H(\bs{\nu})$ is the two-dimensional optical transfer function.
-Because the fast Fourier transform provides an efficient method to change
-between the spatial and spatial-frequency bases, Equation \ref{eq:freq} provides
-a computational advantage over Equation \ref{eq:fwdmono} because we only need to
-multiply two functions in $\mbb{L}_2(\mbb{R}^2)$.
-
-The optical transfer function above exploits shift invariance but does not
-exploit rotational invariance. We can define a similar transfer function that
-exploits both shift and rotational invariance by choosing the same Fourier basis
-(see Barrett 7.2.9 for related discussion) and express the transfer function
-as a member of the set $\mbb{L}_2(\mbb{R})$
-\begin{align}
-  G(\bs{\nu}) = H(|\bs{\nu}|)F(\bs{\nu}).\label{eq:freq2}
-\end{align}
-% Again, we have used the same letter symbol $H$ in Equations \ref{eq:freq} and
-% \ref{eq:freq2} to denote a function with two real variables and one real
-% variable, respectively.
-
-\begin{figure}[h]
- \centering
-   \centering
-   \includegraphics[scale=.9]{../figures/detection-coords/detection-coords.pdf}
-   \caption{Detection geometry and coordinates.}
-   \label{fig:mono}
- \end{figure}
-\begin{figure}[h]
- \centering
-   \centering
-   \includegraphics[scale=.9]{../figures/excitation-coords/excitation-coords.pdf}
-   \caption{Illumination geometry and coordinates.}
-   \label{fig:microscope}
- \end{figure}
-
-\subsection{Dipole imaging model}\label{sec:dipole}
-We seek to extend the monopole imaging model to dipoles. Comparing Equations
-\ref{eq:dip} and \ref{eq:mono} shows that we will need to consider the
-orientation of the dipole radiators. We also notice that both monopoles and
-dipoles emit spherical wavefronts, so our argument for shift invariance in the
-monopole imaging model holds for the dipole imaging model as well. Finally, it
-is reasonable to assume that rotational invariance will be maintained under the
-paraxial approximation. Therefore, we can plausibly extend the monopole imaging
-model in Equation \ref{eq:fwdmono} to dipoles with
-\begin{empheq}[box=\widefbox]{gather}
-g(\rd{}) = \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^2}d\ro{}\, h(\rd{}, \ro{}, \so{})f(\ro, \so). \label{eq:fwddip}\\ \text{Dipole imaging model}\nonumber 
-\end{empheq}
-where $f(\ro, \so)$ is the \textit{spatio-angular density}---the number of
-dipoles at position $\ro{}$ per unit area oriented along $\so{}$ per unit solid
-angle---and $\mbb{S}^2$ is the unit sphere. Notice that the functional form of
-our data is left unchanged $\mbb{V} = \mbb{L}_2(\mbb{R}^2)$ while we have
-extended the set of possible objects to
-$\mbb{U} = \mbb{L}_2(\mbb{R}^2\times\mbb{S}^2)$. Similar to the monopole case,
-the most general linear operator mapping between these two spaces would require
-a kernel in $\mbb{L}_2(\mbb{R}^4\times\mbb{S}^2)$, but we can exploit symmetries
-and specify the complete kernel with a function in
-$\mbb{L}_2(\mbb{R}\times\mbb{S}^2)$.
-
-At this point we have only asserted the plausibility of Equation
-\ref{eq:fwddip}---we still need to calculate the form of the kernel
-$h(r, \so{})$. Our first step is to notice that the kernel can be separated into
-the product of an excitation part and a detection part
-\begin{align}
-  h(r, \so) = h_{\text{exc}}(\so)\,h_{\text{det}}(r, \so). \label{eq:kernelsep}
-\end{align}
-In the next two subsections we will calculate the excitation and detection
-kernels explicitly.
+We can calculate the excitation and detection PSFs separately then take their product to find the complete orientation-dependent PSF. 
 
 \subsubsection{Dipole excitation model}
 When we developed the monopole imaging model we ignored the excitation process
 because we excited the fluorophores with a spatially uniform excitation beam and
 monopoles have no orientation dependence. For the dipole imaging model we must
-account for the excitation process because the excitation process is not
-angularly uniform (except for carefully calibrated TIRF systems).
+model the excitation process because the excitation process is rarely angularly
+uniform (carefully calibrated TIRF systems are an exception).
 
-In this section we will calculate the excitation kernel $h_{\text{exc}}(\so)$
-for epi-illuminationn microscopes. We can interpret $h_{\text{exc}}(\so)$ as the
-relative probability of exciting a molecule with dipole orientation $\so$. Our
-approach is similar to previous work \cite{fourkas2001, chandler2017}, but here
-we consider unpolarized and incoherent illumination and restrict ourselves to
-the paraxial approximation.
-
-We start by expressing the dipole moment $\so{}$ in spherical coordinates [see
-Fig. 1(a)] as
+In this section we will calculate the excitation kernel
+$h_{\text{exc}}(\ro, \so)$ for the paraxial epi-illumination microscope under
+unpolarized K\"{o}ehler illumination shown in Figure \ref{fig:microscope}. We
+will only consider spatially uniform excitation, so the excitation kernel will
+no depend on $\ro$
 \begin{align}
-  \so{} &= \cos\varphi\sin\vartheta\mh{x} + \sin\varphi\sin\vartheta\mh{y} + \cos\vartheta\mh{z}. \label{eq:spherical}
+  h_{\text{exc}}(\ro, \so) = h_{\text{exc}}(\so).
 \end{align}
-We can rewrite Eq. \ref{eq:spherical} in terms of spherical harmonic functions
-(see Appendix \ref{sec:sph}) as
+We can interpret $h_{\text{exc}}(\so)$ as the relative probability of exciting a
+molecule with dipole orientation $\so$. Our approach is similar to previous work
+\cite{fourkas2001, chandler2017}, but here we consider paraxial, incoherent, and
+unpolarized illumination.
+
+\begin{figure}[h]
+ \centering
+   \centering
+   \includegraphics[scale=.9]{../figures/excitation-coords/excitation-coords.pdf}
+   \caption{Illumination geometry and coordinates. We calculate the excitation
+     kernel $h_{\text{exc}}(\so)$ for a paraxial, unpolarized, incoherent
+     light source (or its image) in the back focal plane of the condenser lens. }
+   \label{fig:microscope}
+ \end{figure}
+
+We start by expressing the dipole moment $\so{}$ in Cartesian coordinates
 \begin{align}
-  \so{} &=\sqrt{\frac{3}{4\pi}}\left[y_1^1(\vartheta, \varphi)\,\mh{x} + y_1^{-1}(\vartheta, \varphi)\,\mh{y} + y_1^0(\vartheta, \varphi)\, \mh{z}\right]. \label{eq:sphharm}
+  \so{} &= s_x\mh{x} + s_y\mh{y} + s_z\mh{z}. \label{eq:spherical}
 \end{align}
 We place the dipole in the focal plane of an aplanatic and
 polarization-preserving objective lens with its optical axis aligned with the
 $\mh{z}$ axis. Next, we place a spatially incoherent, spatially uniform,
-unpolarized thermal light source (or its image) in the back aperture of the
-objective lens to illuminate the focal plane. In this geometry each point in the
-back focal plane generates a plane wave that illuminates the sample.
+unpolarized light source (or its image) in the back aperture of the objective
+lens to illuminate the focal plane. In this geometry each point in the back
+focal plane generates a plane wave that illuminates the sample.
 
-To model the unpolarized light source we will use polarized ray tracing [cite
-Torok] to find the response for a single polarized ray, then integrate over the
-rays and polarizations to find the complete response. First, we model the
-electric field at every point on the back focal plane as
+To model the unpolarized light source we will use polarized ray tracing
+\cite{foreman2011} to find the response for a single polarized ray, then
+integrate over the rays and polarizations to find the complete response. First,
+we model the electric field at every point on the back focal plane as
 \begin{align}
    \mb{E}_{\text{bfp}}(\phi_{\text{pol}}) &\propto \cos\phi_{\text{pol}}\mh{x} + \sin\phi_{\text{pol}}\mh{y}, \label{eq:bfp0}
 \end{align}
 where $\phi_{\text{pol}}$ is the polarization orientation and \{$\mh{x}$,
 $\mh{y}$\} are transverse Cartesian basis vectors. Note that Eq. \ref{eq:bfp0}
 describes the incoherent electric fields at every point in the back focal
-plane--- it does not describe a coherent plane wave. Immediately after the lens
-the electric field is
+plane--- it does not describe a coherent plane wave. To find the electric field
+immediately after the paraxial lens we apply a position-dependent rotation
+matrix (see the rotation matrices in \cite{foreman2011, backer2014} under the
+paraxial approximation)
+
 \begin{align}
-  \mb{E}_{\text{ff}}(\theta, \phi, \phi_{\text{pol}}) \propto \left\{[\mb{E}_\text{bfp}(\phi_{\text{pol}})\cdot\bsh{\phi}]\,\bsh{\phi} + [\mb{E}_\text{bfp}(\phi_{\text{pol}})\cdot\bsh{\rho}]\,\bsh{\theta}\right\}\sqrt{\cos\theta}, \label{eq:bfp2ff}
-\end{align}
-where \{$\theta$, $\phi$\} are spherical coordinates, \{$\bsh{\rho}$,
-$\bsh{\phi}$\} are cylindrical basis vectors, and \{$\bsh{\theta}$,
-$\bsh{\phi}$\} are spherical basis vectors defined in Figure 1(a) and related by
-\begin{align}
-  \bsh{\rho} &= \cos\phi\mh{x} + \sin\phi\mh{y},\label{eq:rho}\\
-  \bsh{\phi} &= -\sin\phi\mh{x} + \cos\phi\mh{y},\label{eq:phi}\\
-  \bsh{\theta} &= \cos\phi\cos\theta\mh{x} + \sin\phi\cos\theta\mh{y} - \sin\theta\mh{z}.\label{eq:theta}               
-\end{align}
-In Eq. \ref{eq:bfp2ff} the
-$[\mb{E}_\text{bfp}(\phi_{\text{pol}})\cdot\bsh{\phi}]\,\bsh{\phi}$ term models
-s-polarized fields, the
-$[\mb{E}_\text{bfp}(\phi_{\text{pol}})\cdot\bsh{\rho}]\,\bsh{\theta}$ term
-models the rotation of p-polarized fields, and the $\sqrt{\cos\theta}$ term
-models the apodization of an aplanatic lens. After plugging Eqs. \ref{eq:bfp0}, \ref{eq:rho}, \ref{eq:phi}, and \ref{eq:theta} into Eq. \ref{eq:bfp2ff} and applying the
-paraxial approximation, the electric field immediately after the lens is given
-by
-\begin{align}
-  \mb{E}_{\text{ff}}^{(p)}(\theta, \phi, \phi_{\text{pol}}) \propto \cos\phi_{\text{pol}}\mh{x} + \sin\phi_{\text{pol}}\mh{y} - \theta\cos(\phi - \phi_{\text{pol}})\mh{z}.\label{eq:eff}
+  \mb{E}_{\text{ff}}(\theta, \phi, \phi_{\text{pol}}) & \propto 
+  \begin{bmatrix}
+    1 & 0 &\theta \cos\phi\\
+    0 & 1 &\theta \sin\phi\\
+    -\theta\cos\phi&-\theta \sin(\phi)&1
+  \end{bmatrix}
+  \begin{bmatrix}
+    \cos\phi_{\text{pol}}\\
+    \sin\phi_{\text{pol}}\\
+    0
+  \end{bmatrix}\\
+  \mb{E}_{\text{ff}}(\theta, \phi, \phi_{\text{pol}}) &\propto \cos\phi_{\text{pol}}\mh{x} + \sin\phi_{\text{pol}}\mh{y} - \theta\cos(\phi - \phi_{\text{pol}})\mh{z}.\label{eq:eff}
 \end{align}
 The probability that a dipole oriented along $\so{}$ is excited by a ray with
-electric field $\mb{E}$ is given by $|\mb{E}\cdot\so{}|^2$. Evaluating this
-expression for each ray would be cumbersome if we used Eqs. \ref{eq:spherical}
-and \ref{eq:eff} because we would need to simplify a large number of
-trigonometric functions. Instead, we use Eqs. \ref{eq:sphharm} and \ref{eq:eff}
-and use the real Gaunt coefficients (see Appendix A) to evaluate the products of
-spherical harmonics. We find that
-% [theta**2*cos(phi - phip)**2/2 + 0.5*sin(phip)**2 + 0.5*cos(phip)**2, 0, 0, 0, sqrt(15)*sin(2*phip)/10, -sqrt(15)*theta*sin(phip)*cos(phi - phip)/5, sqrt(5)*theta**2*cos(phi - phip)**2/5 - sqrt(5)*sin(phip)**2/10 - sqrt(5)*cos(phip)**2/10, -sqrt(15)*theta*cos(phip)*cos(phi - phip)/5, -sqrt(15)*sin(phip)**2/10 + sqrt(15)*cos(phip)**2/10]
+electric field $\mb{E}$ is given by 
 \begin{align}
-  |\mb{E}_{\text{ff}}^{(p)}(\theta, \phi, \phi_{\text{pol}}) \cdot \so{}|^2 \propto\, &\left[1 + \theta^2\cos^2(\phi - \phi_{\text{pol}})\right]y_0^0(\so{}) + \frac{1}{\sqrt{5}}\left[ - 1 + 2\theta^2\cos^2(\phi - \phi_{\text{pol}})\right]y_2^{0}(\so{}) +\nonumber \\
-                                   &\frac{\sqrt{15}}{10}\theta\sin\phi_{\text{pol}}\cos(\phi - \phi_{\text{pol}})y_2^{-1}(\so{}) + \frac{\sqrt{15}}{10}\theta\cos\phi_{\text{pol}}\cos(\phi - \phi_{\text{pol}})y_2^{1}(\so{}) -\nonumber \\  
-                                   &\frac{\sqrt{15}}{20}\sin(2\phi_{\text{pol}})y_2^{-2}(\so{}) - \frac{\sqrt{15}}{20}\cos(2\phi_{\text{pol}})y_2^{2}(\so{}).\label{eq:integrand}
+  |\mb{E}_{\text{ff}}(\theta, \phi, \phi_{\text{pol}}) \cdot \so{}|^2 \propto s_x^2\cos^2\phi_{\text{pol}} + s_y^2\sin^2\phi_{\text{pol}} + s_z^2\theta^2\cos^2(\phi - \phi_{\text{pol}}). \label{eq:integrand}
 \end{align}
 To find the complete excitation kernel we need to integrate Eq.
 \ref{eq:integrand} over all polarization orientations and rays
 \begin{align}
-  h_{\text{exc}}(\so{}) \propto \int_0^{\alpha}\theta d\theta\int_0^{2\pi}d\phi\int_0^{2\pi}d\phi_{\text{pol}}\, |\mb{E}_{\text{ff}}^{(p)} \cdot \so{}|^2, \label{eq:integral}
+  h_{\text{exc}}(\so{}) \propto \int_0^{\alpha}\theta d\theta\int_0^{2\pi}d\phi\int_0^{2\pi}d\phi_{\text{pol}}\, |\mb{E}_{\text{ff}}(\theta, \phi, \phi_{\text{pol}}) \cdot \so{}|^2, \label{eq:integral}
 \end{align}
 where $\alpha$ is the maximum angle the illumination rays make with the optical
-axis ($\alpha$ is equivalent to the numerical aperture in the paraxial
-approximation).
-
-After plugging Eq. \ref{eq:integrand} into Eq. \ref{eq:integral} and evaluating
-the integrals, all but two terms disappear and the 
-excitation kernel is given by
+axis. Plugging Eq. \ref{eq:integrand} into Eq. \ref{eq:integral}, evaluating the
+integrals, and dropping constants gives
 \begin{align}
-  h_{\text{exc}}(\so{}) &\propto \left[1 + \frac{\alpha^2}{4}\right]y_0^0(\so{}) + \frac{1}{\sqrt{5}}\left[-1 + \frac{\alpha^2}{2}\right]y_2^0(\so{}). \label{eq:excitation}
+  h_{\text{exc}}(\vartheta) &\propto s_x^2 + s_y^2 + \frac{1}{2}\alpha^2s_z^2.
 \end{align}
-We note that the excitation kernel depends on the orientation of the molecule,
-but it does not depend on the position of the molecule in the focal plane. This
-is a direct consequence of our illumination geometry---we have placed incoherent
-light sources in the back focal plane of the objective so each point in the
-focal plane within the field of view is illuminated equally.
-
-Equation \ref{eq:excitation} only contains $m = 0$ spherical harmonics, so it
-can be written as a function of $\vartheta$ only. After plugging in the
-spherical harmonic functions and simplifying we see that 
+We can rewrite the excitation kernel in terms of a single variable with the
+substitutions $s_x^2 + s_y^2 = \sin^2\vartheta$ and $s_z^2 = \cos^2\vartheta$
 \begin{align}
-  h_{\text{exc}}(\vartheta) &\propto \sin^2\vartheta + \frac{1}{2}\alpha^2\cos^2\vartheta \label{eq:hexctheta}
+  h_{\text{exc}}(\vartheta) &\propto \sin^2\vartheta + \frac{1}{2}\alpha^2\cos^2\vartheta \label{eq:hexctheta}.
 \end{align}
 
-
-Equation \ref{eq:excitation} shows the probability of excitation as a function
-of dipole orientation and numerical aperture.
+Figure \ref{fig:excitation} shows the excitation kernel as a function of
+inclination angle $\vartheta$ and maximum excitation angle $\alpha$. The largest
+variation of the excitation kernel occurs when the maximum excitation angle is
+zero---plane-wave illumination. As $\alpha$ grows dipoles parallel to the optic
+axis are more likely to be excited and the variation of the excitation kernel
+decreases. Note that we have derived this simple model under the paraxial
+approximation, so it does not make quantitative predictions for high-NA
+illumination geometries.
 \begin{figure}[h]
- % \captionsetup{width=1.0\linewidth}
  \centering
    \centering
    \includegraphics[scale=0.95]{../figures/excitation/excitation.pdf}
-   \caption{Caption.}
-   \label{fig:microscope}
+   \caption{Dipole excitation kernel $h_{\text{exc}}(\vartheta)$ as a function of
+     inclination angle $\vartheta$ and maximum excitation angle $\alpha$.}
+   \label{fig:excitation}
  \end{figure}
 
+ \subsubsection{Dipole detection model}
+ In this section we will calculate the detection kernel of an epi-detection
+ microscope---the irradiance on the detector due to a single dipole with fixed
+ position and orientation. Our approach mimics existing work \cite{backer2014,
+   nov2006, agrawal2012}, but we restrict ourselves to the paraxial
+ approximation.
 
-\subsubsection{Dipole detection model}
-In this section we will calculate the detection kernel of an epi-detection
-microscope---the irradiance on the detector due to single molecule at a known
-position with known orientation. Our approach mimics existing work
-\cite{backer2014, nov2006, agrawal2012}, but we restrict ourselves to the
-paraxial approximation.
-
+\begin{figure}[h]
+ \centering
+   \centering
+   \includegraphics[scale=.9]{../figures/detection-coords/detection-coords.pdf}
+   \caption{Detection geometry and coordinates. We calculate the detection
+     kernel $h_{\text{det}}(\rd, \ro, \so)$ for a paraxial 4$f$ imaging
+     system.}
+   \label{fig:detection}
+ \end{figure}
+ 
 We consider a single dipole emitter at the origin with a fixed dipole emission
 moment oriented along $\so{}$. The electric field at a position $\mb{r}$ far
 from the dipole is given by
@@ -492,65 +596,409 @@ from the dipole is given by
   \mb{E}_{\text{ff}}(\mb{r}, \so{}) \propto \frac{\text{exp}[ik|\mh{r}|]}{|\mh{r}|}\mh{r} \times \so{} \times \mh{r}. \label{eq:ff}
 \end{align}
 We place the dipole in the focal plane of the same 4$f$ imaging system we
-considered in the monopole case---see Figure \ref{fig:monopole}. The dipole
-emits spherical wavefronts so we can reuse our argument for shift invariance in
-the monopole section and drop the phase dependence while keeping in mind that
-$h_{\text{det}}(\rd, \ro, \so) = h_{\text{det}}(\rd - \ro, \so)$.
+considered in the monopole case---see Figure \ref{fig:detection}. The dipole emits
+spherical wavefronts so we can reuse our argument for shift invariance and drop
+the phase dependence of the electric field
 \begin{align}
-  \mb{E}_{\text{ff}}(\mb{r}, \so{}) &\propto [\mb{I} - \mh{r}\mh{r}^{\dagger}]\so \\
+  \mb{E}_{\text{ff}}(\mb{r}, \so{}) \propto \mh{r} \times \so{} \times \mh{r} \label{eq:ff2}
 \end{align}
+We also note that we can rewrite a shift-invariant kernel as
 \begin{align}
-  \mh{r}(\theta,\phi) \approx \theta\cos\phi\mh{x} + \theta\sin\phi\mh{y} + \mh{z}
+h_{\text{det}}(\rd, \ro, \so) = h_{\text{det}}(\rd - \ro, \so), 
 \end{align}
+which will simplify our derivation---we only need to calculate the response for
+a dipole positioned along the optic axis. We can rewrite the cross products in terms
+of a matrix multiplication
 \begin{align}
-  \mb{E}_{\text{ff}}(\theta, \phi, \so{}) &\propto 
-  \begin{bmatrix}
-    1 & 0 &-\theta \cos\phi\\
-    0 & 1 &-\theta \sin\phi\\
-    -\theta\cos\phi&-\theta \sin(\phi)&0    
-  \end{bmatrix}\so
+  \mb{E}_{\text{ff}}(\mb{r}, \so{}) \propto [\mb{I} - \mh{r}\mh{r}^{\dagger}]\so,
 \end{align}
+where $\mb{I}$ is a $3\times 3$ identity matrix. If we place the molecule in the
+focal plane of an aplanatic and polarization-preserving objective lens with its
+optical axis aligned with the $\mh{z}$ axis (or reuse the illumination
+objective), then we can find the electric field in the back focal plane by
+multiplying the electric field with a position-dependent rotation matrix and
+truncating waves outside the detection collection angle $\alpha$
+\begin{align}
+  \mb{E}_{\text{bfp}}(\mb{r}, \so{}) \propto \mb{R}_{\text{obj}}(\mh{r})[\mb{I} - \mh{r}\mh{r}^{\dagger}]\so\Pi\left(\frac{\theta}{\alpha}\right).
+\end{align}
+After plugging in paraxial positions
+\begin{align}
+  \mh{r}(\theta,\phi) \approx \theta\cos\phi\mh{x} + \theta\sin\phi\mh{y} + \mh{z},
+\end{align}
+and the paraxial rotation matrix
 \begin{align}
   \mb{R}_{\text{obj}}(\theta, \phi) &=
   \begin{bmatrix}
     1 & 0 &-\theta \cos\phi\\
     0 & 1 &-\theta \sin\phi\\
-    -\theta\cos\phi&-\theta \sin(\phi)&1    
-  \end{bmatrix}
+    -\theta\cos\phi&-\theta \sin(\phi)&1
+  \end{bmatrix},
 \end{align}
-
-If we place the molecule in the focal plane of an aplanatic and
-polarization-preserving objective lens with its optical axis aligned with the
-$\mh{z}$ axis (or reuse the illumination objective), then the electric field in
-the back focal plane of the lens is given by
-\begin{align}
-  \mb{E}_{\text{bfp}}(\theta, \phi, \so) &\propto \mb{R}_{\text{obj}}(\theta,\phi)\mb{E}_{\text{ff}}(\theta, \phi, \so)
-\end{align}
-Finally, we change from spherical coordinates to cylindrical coordinates by
-substituting $(r_b, \phi_b)$ for $(\theta, \phi)$ and we get
+then dropping the $\theta^2$ $\mh{z}$ components and changing from spherical
+coordinates to cylindrical coordinates by substituting $(r_b, \phi_b)$ for
+$(\theta, \phi)$ we find that
 \begin{align}
   \mb{E}_{\text{bfp}}(r_b, \phi_b, \so{}) \propto \left\{\left[s_x - s_zr_b\cos\phi_b\right]\mh{x} + \left[s_y - s_z r_b\sin\phi_b\right]\mh{y}\right\}\Pi\left(\frac{r_b}{\alpha}\right). \label{eq:bfp2}
 \end{align}
+Equation \ref{eq:bfp2} is easier to work with if we introduce the radial vector
+field $\mh{\bs{\rho}} = \cos\phi_b\mh{x} + \sin\phi_b\mh{y}$ and rewrite as
 \begin{align}
-  \mb{E}_{\text{bfp}}(r_b, \phi_b, \so{}) \propto \left\{s_x\mh{x} + s_y\mh{y} + s_z r_b \mh{\bs{\rho}}\right\}\Pi\left(\frac{r_b}{\alpha}\right). \label{eq:bfp3}
+  \mb{E}_{\text{bfp}}(r_b, \phi_b, \so{}) \propto \left\{s_x\mh{x} + s_y\mh{y} - s_z r_b \mh{\bs{\rho}}\right\}\Pi\left(\frac{r_b}{\alpha}\right). \label{eq:bfp3}
 \end{align}
+Equation \ref{eq:bfp3} shows that the transverse components of the dipole
+($s_x, s_y$) create linear vector fields in the back focal plane
+($\mh{x}, \mh{y}$) while the axial component of the dipole $s_z$ creates a radial
+vector field in the back focal plane $\mh{z}$. 
 
-We note that Eq. \ref{eq:bfp2} is identical to previously derived models
-[Piestun, Backer] except here we have used the paraxial approximation and used
-spherical harmonic functions.
-
-Next we place a tube lens one focal length from the back focal plane and a
-detector (see Figure XX)). Under the paraxial approximation we can find the
-electric field in the detector plane by taking the Fourier transform of the
-field in the back focal plane [Goodman]
+We complete the 4$f$ system by placing a tube lens one focal length from the
+back focal plane and a planar detector---see Figure \ref{fig:detection}. Under
+the paraxial approximation we can find the electric field in the detector plane
+by taking the Fourier transform of the field in the back focal plane
+\cite{goodman1996}
 \begin{align}
-  \mb{E}_{\text{det}}^{(p)}(\rd{}, \so{}) &= \int_{\mbb{R}^2}d\rb{} \mb{E}_{\text{bfp}}^{(p)}(\rb{})\, \text{exp}\left[ik\,\rb{}\cdot\rd{}\right].\label{eq:det1}
+  \mb{E}_{\text{det}}(\rd{}, \so{}) &= \int_{\mbb{R}^2}d\rb{} \mb{E}_{\text{bfp}}(\rb{})\, \text{exp}\left[ik\,\rb{}\cdot\rd{}\right].\label{eq:det1}
+\end{align}
+We evaluate the integral in Appendix \ref{sec:ftvec} and show that 
+\begin{align}
+  \mb{E}_{\text{det}}(r_d, \so{}) \propto \frac{J_1(k\alpha r_d)}{k\alpha r_d}s_x\mh{x} + \frac{J_1(k\alpha r_d)}{k\alpha r_d}s_y\mh{y} - i\alpha\frac{J_2(k\alpha r_d)}{k\alpha r_d}s_z\mh{\bs{\rho}}.
+\end{align}
+Once again we find that the transverse component of the dipole creates a linear
+field and the axial component of the dipole creates a radial field, but on the
+detector the linear and radial fields are out of phase by $\pi/2$. This crucial
+phase factor is a direct consequence of the fact that the linear fields are real
+and even---the Fourier transform of a real and even function is real and
+even---and the radial fields are real and odd---the Fourier transform of a real
+and odd function is imaginary and odd.
+
+Our final step is to calculate the irradiance on the detector
+\begin{align}
+  h_{\text{det}}(r_d, \so{}) &\propto |\mb{E}_{\text{det}}(r_d, \so{})|^2.
+\end{align}
+The irradiance is the sum of the contributions from the linear and radial fields
+since their fields are out of phase, so
+\begin{align}
+  h_{\text{det}}(r_d, \vartheta) &\propto a_1(r_d)\sin^2\vartheta + \frac{1}{2}\alpha^2 a_2(r_d)\cos^2\vartheta, 
+\end{align}
+where we have defined
+\begin{align}
+  a_n(r_d) \equiv \frac{n}{\pi}\left[\frac{J_n(k\alpha r_d)}{k\alpha r_d}\right]^2. 
+\end{align}
+Notice that we retain the $\alpha^2$ irradiance term even though we dropped
+$\theta^2$ electric field terms since these terms would become $\theta^2$
+irradiance terms.
+
+Figures \ref{fig:hdet} and \ref{fig:microscope} summarize the most important
+features of the dipole detection model. When $\alpha$ is very small the
+detection kernel is the usual Airy pattern weighted by $\sin^2\vartheta$. Note
+that the monopole detection model ignores the $\sin^2\vartheta$ dependence---see
+Figure \ref{fig:microscope} a) and b). As $\alpha$ grows the relative
+contribution of the higher-order Airy pattern increases. The most important
+result is that the dipole detection model is not separable into the product of
+a spatial and angular kernel---even under the paraxial approximation. The detection
+model is only separable when $\alpha$ approaches zero which is almost never the
+case in real microscopes. We refer to the non-separability of the detection
+kernel as \textit{spatio-angular coupling} because the orientation of the dipole
+is coupled to the spatial pattern of irradiance on the detector.
+
+The paraxial detection kernel is rotationally symmetric---it depends on $r_d$ instead of
+$\rd$. This symmetry is a result of the $\pi/2$ phase shift between the linear
+and radial fields on the detector. If the phase shift between the linear and
+radial fields was not exactly $\pi/2$ then the fields would interfere on the
+detector, and we would lose rotational symmetry. Tracing back further, the
+rotational symmetry is due to the fact that the field in the back focal plane
+could be written as a sum of a linear and radial field which is only true under
+the paraxial approximation---the rotational symmetry of the detection kernel is
+only true to first order. Despite the approximation, we still feel that the
+rotational symmetry of the detection kernel is a valuable result since it helps
+build an intuition about the dominant effects outside the paraxial
+approximation. Later in this work we will exploit this approximate symmetry to
+improve the efficiency of simulating and inverting the imaging model. 
+
+Note that we have restricted our analysis to an imaging system with unit
+magnification. We will continue with this simplification and mention that an
+imaging system with an arbitrary magnification can be modeled using the model
+for a system with unit magnification and a change of variable (see
+\cite{barrett2004} section 7.2.7).
+
+\begin{figure}[h]
+ \centering
+   \centering
+   \includegraphics[scale=0.8]{../figures/detection/detection.pdf}
+   \caption{Normalized detection kernel as a function of the scaled radial
+     detection coordinate $k\alpha r_d$, the dipole inclination angle
+     $\vartheta$, and the collection angle $\alpha$. For small
+     collection angles (left) the detection kernel of axial dipoles
+     (\textcolor{red}{\textbf{red}}) is small compared to transverse dipoles
+     (\textbf{black}), but the relative contribution of axial dipoles increases
+     with the collection angle (see \textcolor{red}{\textbf{red}} lines from
+     left to right).}
+   \label{fig:hdet}
+ \end{figure}
+ 
+\begin{figure}[h]
+ % \captionsetup{width=1.0\linewidth}
+ \centering
+   \centering
+   \includegraphics[scale=0.8]{../figures/microscope/microscope.pdf}
+   \caption{Comparison of paraxial detection models for monopole radiators a)
+     and dipole radiators b)--d). a) Monopole radiators fill the back focal
+     plane with a uniform scalar field which gives rise to the familiar Airy
+     disk on the detector. b) A transverse dipole radiator also creates an Airy
+     disk, but the back focal plane is filled with a uniform vector field. c) An
+     axial dipole radiator creates a radial electric field pattern in the back
+     focal plane which creates a higher-order Airy disk on the detector. d)
+     Dipoles that are not transverse or axial still create radially symmetric
+     irradiance patterns under the paraxial approximation. Fields from
+     transverse dipoles are real and even while fields from axial dipoles are
+     real and odd which causes a relative $\pi/2$ phase shift for the fields on
+     the detector. This phase shift means that the fields from transverse and
+     axial components of the dipole do not interfere which causes radially
+     symmetric irradiance patterns.}
+   \label{fig:microscope}
+ \end{figure}
+
+ \subsubsection{Simplified dipole imaging model}
+ Combining the results of the previous two sections yields a simplified dipole
+ imaging model 
+ \begin{align}
+g(\rd{}) = \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^2}d\ro{}\, h(|\rd - \ro|, |\so\cdot \mh{z}|)f(\ro, \so).\label{eq:simplified}
+ \end{align}
+ where we have written the kernel in terms of $|\so\cdot\mh{z}| = \cos\vartheta$
+ to explicitly show the dependence on $\so$. In previous sections we showed that the
+ kernel is given by 
+ \begin{align}
+   h(r, \vartheta) &\propto h_{\text{exc}}(\vartheta)h_{\text{det}}(r,\vartheta).
+ \end{align}
+ Plugging in our results
+ \begin{align}
+   h(r, \vartheta) &\propto \left[\sin^2\vartheta + \frac{1}{2}\alpha^2 \cos^2\vartheta\right]\left[a_1(r)\sin^2\vartheta + \frac{1}{2}\alpha^2 a_2(r)\cos^2\vartheta\right]. \label{eq:sa-psf}
+ \end{align}
+
+ \subsubsection{Orientation-dependent optical transfer function}\label{sec:trans}
+  In Appendix \ref{sec:airy} we evaluate the 2D spatial Fourier transforms of
+  $a_1(r)$ and $a_2(r)$ to find that
+  \begin{align}
+    H(\nu, \vartheta) &\propto \left[\sin^2\vartheta + \frac{1}{2}\alpha^2 \cos^2\vartheta\right]\left[A_1(\nu)\sin^2\vartheta + \frac{1}{2}\alpha^2 A_2(\nu)\cos^2\vartheta\right].
+  \end{align}
+  where 
+\begin{align}
+  A_1(\nu) &= \frac{2}{\pi}\left\{\cos^{-1}\left(\frac{\nu}{2\nu_o}\right) - \frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right\}\Pi\left(\frac{\nu}{2\nu_o}\right), \\
+  A_2(\nu) &= \frac{2}{\pi}\Bigg\{\cos^{-1}\left(\frac{\nu}{2\nu_o}\right) - \left[3 - 2\left(\frac{\nu}{2\nu_o}\right)^2\right]\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\Bigg\}\Pi\left(\frac{\nu}{2\nu_o}\right).
+\end{align}
+The STF is shown in Figure \ref{fig:odotf}. The STF has the usual
+spatial-frequency cutoff at $\nu = 2\nu_o$ for all dipole orientations. 
+
+\begin{figure}[h]
+ % \captionsetup{width=1.0\linewidth}
+ \centering
+   \centering
+   \includegraphics[scale=0.8]{../figures/stf/stf.pdf}
+   \caption{STF as a function of the scaled spatial frequency, the dipole
+     inclination angle $\vartheta$, and the collection angle $\alpha$. For small
+     collection angles (left) the STF for axial dipoles
+     (\textcolor{red}{\textbf{red}}) is small compared to transverse dipoles
+     (\textbf{black}), but the relative contribution of axial dipoles increases
+     with the collection angle (see \textcolor{red}{\textbf{red}} lines from
+     left to right). The STF of axial dipoles is negative at high spatial
+     frequencies because the central minimum of the axial kernel corresponds to
+     the position of the dipole. Equivalently, a high-spatial-frequency pattern
+     of axial dipoles will generate an irradiance pattern where the minimum
+     irradiance corresponds to the peak of the axial dipole density.}
+   \label{fig:odotf}
+ \end{figure}
+
+\subsubsection{Angular transfer function (ATF)}
+
+To calculate the angular transfer function we plug the spatio-angular point
+spread function Eq. \ref{eq:sa-psf} into Eq. \ref{eq:atf-prep} and evaluate the
+integrals using a computer algebra package \cite{meurer2017} to find
+\begin{alignat}{6}
+  H_l^m(r) \propto \quad 7&\{\hphantom{-}32&&a_1(r)&& + 4\alpha^2[a_1(r) + a_2(r)]&&+ 3\alpha^4a_2(r)\}&&\delta_{\ell 0}\delta_{m0}+\nonumber\\
+  4\sqrt{5}&\{-16&&a_1(r)&& + \hphantom{1}\alpha^2[a_1(r) + a_2(r)] &&+ 3\alpha^4a_2(r)\}&&\delta_{\ell 2}\delta_{m0} + \nonumber\\
+  8&\{\hphantom{-1}4&&a_1(r)&& - 2\alpha^2[a_1(r) + a_2(r)] &&+ \hphantom{1}\alpha^4a_2(r)\}&&\delta_{\ell 4}\delta_{m0}.
+\end{alignat}
+The degree $\ell$ and order $m$ of the non-zero terms in the ATF follow directly
+from specific features of the kernel. First, our kernel is symmetric under
+inversion of the dipole moment which appears in the kernel as even-degreed
+trigonometric functions. This symmetry is maintained in the ATF since all of the
+non-zero terms have an even degree $\ell=0, 2$, and $4$. Second, we showed that
+under the paraxial approximation our kernel is rotationally symmetric which
+allows us to write the kernel as a function of $r$ instead of $\mb{r}$. This
+symmetry is maintained in the ATF since all of the non-zero terms have order
+$m=0$. Finally, both the excitation and detection kernels are a weighted sum of
+degree-2 trigonometric functions which implies that the maximum degree of the
+kernel is 4. This feature of the kernel appears in the ATF since only
+$\ell=0, 2$, and $4$ terms are non-zero. 
+
+\begin{figure}[h]
+ \centering
+   \centering
+   \includegraphics[scale=0.8]{../figures/atf/atf.pdf}
+   \caption{ATF as a function of the scaled radial detection coordinate
+     $k\alpha r$, the spherical harmonic degree $\ell$, and the collection angle
+     $\alpha$. 
+   }
+   \label{fig:atf}
+ \end{figure}
+
+
+ \subsubsection{Spatio-angular transfer function (SATF)}
+  \begin{alignat}{6}
+  H_l^m(\nu) \propto \quad 7&\{\hphantom{-}32&&A_1(\nu)&& + 4\alpha^2[A_1(\nu) + A_2(\nu)]&&+ 3\alpha^4A_2(\nu)\}&&\delta_{\ell 0}\delta_{m0}+\nonumber\\
+  4\sqrt{5}&\{-16&&A_1(\nu)&& + \hphantom{1}\alpha^2[A_1(\nu) + A_2(\nu)] &&+ 3\alpha^4A_2(\nu)\}&&\delta_{\ell 2}\delta_{m0} + \nonumber\\
+  8&\{\hphantom{-1}4&&A_1(\nu)&& - 2\alpha^2[A_1(\nu) + A_2(\nu)] &&+ \hphantom{1}\alpha^4A_2(\nu)\}&&\delta_{\ell 4}\delta_{m0}.
+\end{alignat}
+
+\begin{figure}[h]
+ \centering
+   \centering
+   \includegraphics[scale=0.8]{../figures/satf/satf.pdf}
+   \caption{SATF as a function of the scaled spatial frequency, the spherical
+     harmonic degree $\ell$, and the collection angle $\alpha$. }
+   \label{fig:atf}
+ \end{figure}
+ 
+\section{Results}
+\subsection{Phantom with spatio-angular sparsity (single molecules)}
+\subsection{Phantom with spatial sparsity (rotating single molecules)}
+\subsection{Phantom with angular sparsity (actin fibers)}
+\subsection{Phantom without sparsity (most general)} 
+
+\section{Discussion \tb{Very rough but open for discussion}}
+\subsection{Reconstructions}
+Since the ATF effectively contains three OTFs it is tempting to conclude that
+fluorescence microscopes pass three times as much information about the dipoles
+as monopoles. This is not true. The microscope still only measures a single
+member of $\mbb{L}_2(\mbb{R}^2)$ so at best we can recover the same amount of
+information about the object. In other words, we know immediately that the
+microscope is a rank-1 operator since it only measures one continuous function.
+
+We postpone a full discussion of SVD to find the object space singular functions
+that span the measurement space of the instrument.
+
+\subsection{Alternative transfer functions}
+Throughout this work we have used the spherical harmonic functions as a basis
+for functions on the sphere, but there are other basis functions that can be
+advantageous in some cases. Backer and others [CITE TODO] have used the second
+moments as basis functions for the sphere because they arise naturally when
+computing the spatio-angular point spread function. Mathematically, Backer and
+Lew use an alternative to the angular transfer function that uses the second
+moments as basis functions so their forward model is given by
+\begin{align}
+  g(\rd) = \sum_{j=1}^6 H_j(\rd - \ro)F_j(\ro)
+\end{align}
+where
+\begin{align}
+  H_j(\rd - \ro) &= \int_{\mbb{S}^2}d\so\, h(\rd - \ro, \so)Z_j(\so),\\
+  F_j(\ro) &= \int_{\mbb{S}^2}d\so\, f(\ro, \so)Z_j(\so),
+\end{align}
+and $Z_j(\mh{s}) = \{s_x^2, s_y^2, s_z^2, s_xs_y, s_ys_z, s_xs_z\}$ are the
+second moments. This formulation provides the main advantage of the ATF
+approach---efficient computation for spatially sparse and angularly dense
+samples---without requiring a cumbersome expansion of the spatio-angular point
+spread function onto spherical harmonics.
+
+The spherical harmonics provide several advantages over the second moments as
+well. First, the spherical harmonics form an orthonormal basis which often
+simplifies computation. For example, if we calculated the angular detection
+transfer function we would find that it contained two angular terms under the
+paraxial approximation. If we expanded onto second moments we would need all six
+angular basis functions and computing the forward model would be three times as
+expensive. Second, the spherical harmonics are complete which means they can
+represent arbitrary functions on the sphere while the second moments can only
+represent a small subset of all functions on the sphere. Extending the accuracy
+of the second moments using the fourth (or higher) moments is possible, but it
+requires a completely new basis. Indeed, the simple microscope we consider in
+this work requires an expansion onto fourth-order spherical harmonics, so an
+expansion onto second-order moments would not suffice. Finally, using the
+spherical harmonics provides access to a set of fast algorithms. The naive
+expansion of an arbitrary discretized $N$ point spherical function onto
+spherical harmonics (or second moments) requires a $\mc{O}(N^2)$ matrix
+multiplication while pioneering work by Driscoll and Healy [cite] showed that the
+forward discrete fast spherical harmonic transform can be computed with a
+$\mc{O}(N(\log N)^2)$ algorithm and its inverse can be computed with a
+$\mc{O}(N^{3/2})$ algorithm. To our knowledge no similarly fast algorithms exist
+for expansion onto the higher-order moments.
+
+The diffusion magnetic resonance imaging uses both sets of bases [cite Basser]
+[cite Tournier] for particular cases. 
+
+\subsection{What determines the angular frequency cutoff?}
+The spatial-frequency cutoff of a fluorescence microscope is well known to vary
+as NA$/\lambda$---we can increase spatial resolution by increasing the NA of the
+instrument or by choosing a fluorophore with a shorter emission wavelength.
+Analogously, the angular-frequency spectrum of a fluorescence microscope depends
+on both the instrument and the sample.
+
+The simple paraxial microscope considered in this work always has three terms in
+its angular-frequency spectrum, but we can increase the number of terms by
+modifying the instrument. We will postpone the proper treatment of these effects
+until future work, but we briefly mention that the number of terms in the
+angular-frequency spectrum increases for non-paraxial microscopes, microscopes
+with polarizers on the illumination or detection paths, and multiview
+microscopes. We also mention that there are two ways to extend the
+angular-frequency spectrum of a microscope---by increasing the degree $\ell$ and
+by increasing the order $m$. Extending the angular degree cutoff $\ell_0$ gives
+the microscope the ability to measure finer angular features, while extending
+the angular order cutoff $m_0$ give the microscope the ability to measure
+features of the object that are increasingly invariant to rotation. If the
+angular order cutoff matches the angular degree cutoff $\ell_0 = m_0$ then the
+microscope can be said to have $\textit{isotropic angular resolution}$. This
+condition is not met by a single-view paraxial microscope since $\ell_0 = 4$ and
+$m_0 = 0$, but we will model microscopes with this property in future work. 
+
+The number of terms in the angular frequency spectrum is also sample dependent.
+Monopoles emit light isotropically so they have a single term, dipoles have a
+three-term ATF, and higher-order excitation and detection moments will have even
+more terms---these objects have different angular band limits. We emphasize the
+similarity between the spatial and angular frequency cutoffs---both the sample
+and the instrument affect the maximum achievable resolution of the imaging
+system.
+
+Possibly implies that the spatio-angular transfer function can be factored. Cite
+3D vector transfer functions Arnison and Sheppard.  
+
+\subsection{Characterizing real spatio-angular microscopes}
+The theoretical model we present in this work is an extreme simplification of a
+real microscope. We have ignored the effects of thick samples, optical
+aberration, scattering, high-NA objectives, finite fluorescence lifetimes, and
+interactions between fluorophores, and we are sure that this list of limitations
+could be extended. Because of this long list of unknown effects, real
+experiments should make an attempt to characterize the specific imaging system.
+
+Typical fluorescence microscopy experiments start with the monopole
+approximation and attempt to characterize the microscope by imaging
+sub-diffraction beads. These images are assumed to be good approximations of the
+monopole point spread function and this data can be used to restore (deconvolve)
+the data taken in arbitrary experiments.
+
+Imaging sub-diffraction beads is not enough to completely characterize the
+response of a microscope to a an oriented sample. We need at least three samples
+with a known orientations to characterize the SATF, so isotropic beads are not
+enough. Small beads may not be isotropic [cite Lew]. 
+
+\section{Conclusion}
+Most models of fluorescence microscopes use a monopole model to describe the
+object and the imaging system. A more complete description of any fluorescence
+microscope requires a dipole model of the object and a model of the
+spatio-angular point spread function. We developed several transfer functions
+that simplify the mapping between the spatio-angular density and the irradiance
+pattern on the detector, and we demonstrated these transfer functions by
+efficiently simulating a paraxial widefield fluorescence microscope.
+
+
+
+\bibliography{paper}
+\appendix
+\section{Fourier transform of linear and radial vector fields}\label{sec:ftvec}
+  \begin{align}
+  \mb{E}_{\text{det}}(\rd{}, \so{}) &= \int_{\mbb{R}^2}d\rb{} \mb{E}_{\text{bfp}}(\rb{})\, \text{exp}\left[ik\,\rb{}\cdot\rd{}\right].\label{eq:det1}
 \end{align}
 To evaluate the integral we rewrite it in polar coordinates
 \begin{align}
-\mb{E}_{\text{det}}^{(p)}(\rd{}, \so{}) &= \int_{0}^{\alpha}r_bdr_b\int_0^{2\pi} d\phi_b\, \mb{E}_{\text{bfp}}^{(p)}(r_b, \phi_b)\, \text{exp}\left[ikr_b r_d\cos(\phi_b - \phi_d)\right],
+\mb{E}_{\text{det}}(\rd{}, \so{}) &= \int_{0}^{\alpha}r_bdr_b\int_0^{2\pi} d\phi_b\, \mb{E}_{\text{bfp}}(r_b, \phi_b)\, \text{exp}\left[ikr_b r_d\cos(\phi_b - \phi_d)\right],
 \end{align}
-substitute Eq. \ref{eq:bfp2}, and apply the following identities
+plug in Eq. \ref{eq:bfp2}, and apply the following identities
 \begin{align}
   \int_0^{2\pi}d\phi_b
   \left\{\substack{
@@ -568,242 +1016,75 @@ substitute Eq. \ref{eq:bfp2}, and apply the following identities
   \end{align}
 to find that 
 \begin{align}
-  \mb{E}_{\text{det}}^{(p)}(\rd{}, \so{}) \propto &\left[\frac{J_1(k\alpha r_d)}{k\alpha r_d}y_1^1(\so{}) - i\alpha \frac{J_2(k\alpha r_d)}{k\alpha r_d}\cos\phi_d y_1^0(\so{})\right]\mh{x}\, + \nonumber \\& \left[\frac{J_1(k\alpha r_d)}{k\alpha r_d}y_1^{-1}(\so{}) - i\alpha \frac{J_2(k\alpha r_d)}{k\alpha r_d}\sin\phi_d y_1^0(\so{})\right]\mh{y}.
+  \mb{E}_{\text{det}}(\rd{}, \so{}) \propto &\left[s_x\frac{J_1(k\alpha r_d)}{k\alpha r_d} - is_z\alpha \frac{J_2(k\alpha r_d)}{k\alpha r_d}\cos\phi_d\right]\mh{x}\, + \nonumber \\& \left[s_y\frac{J_1(k\alpha r_d)}{k\alpha r_d} - i s_z\alpha \frac{J_2(k\alpha r_d)}{k\alpha r_d}\sin\phi_d\right]\mh{y}.
 \end{align}
-We can find the irradiance on the detector by taking the modulus squared of the
-electric field
+Similar to the back focal plane, we rewrite in terms of linear and radial vector
+fields
 \begin{align}
-  h_{\text{det}}(\rd{}, \so{}) &\propto |\mb{E}_{\text{det}}^{(p)}(\rd{}, \so{})|^2.
-\end{align}
-We use the real Gaunt coefficients to find that
-\begin{align}
-h_{\text{det}}(\rd{}, \so{}) &\propto \left[a_1( r_d) + \frac{\alpha^2}{4} a_2( r_d)\right]y_0^0(\so{}) + \frac{1}{\sqrt{5}}\left[- a_1( r_d) + \frac{\alpha^2}{2} a_2( r_d)\right]y_2^0(\so{}), \label{eq:detection}
-\end{align}
-where we have defined
-\begin{align}
-  a_n(r_d) \equiv \frac{n}{\pi}\left[\frac{J_n(k\alpha r_d)}{k\alpha r_d}\right]^2. 
-\end{align}
-Similar to the excitation kernel, we can write the excitation kernel purely in terms of
-the inclination angle
-\begin{align}
-  h_{\text{det}}(r_d, \vartheta) &\propto a_1(r_d)\sin^2\vartheta + \frac{1}{2}\alpha^2a_2(r_d)\cos^2(\vartheta). 
+  \mb{E}_{\text{det}}(\rd{}, \so{}) \propto \frac{J_1(k\alpha r_d)}{k\alpha r_d}[s_x\mh{x} + s_y\mh{y}] - i\alpha\frac{J_2(k\alpha r_d)}{k\alpha r_d}s_z\mh{\bs{\rho}}.
 \end{align}
 
-In our analysis we have only considered a dipole radiator at the origin, but we
-can use the shift-invariance of 4$f$ imaging systems to model dipole radiators
-at arbitrary positions in the focal plane. If we shift the dipole radiator to an
-in-focus position $\ro{}$, then the irradiance pattern on the detector will be
-given by $h_{\text{det}}(\rd{} - \ro{})$. We have also restricted our analysis
-to an imaging system with unit magnification, but an imaging system with an
-arbitrary magnification can be modeled as a system with unit magnification using
-a change of variables (see \cite{barrett2004} section 7.2.7).
-
-Finally, we note the similarities between Eqs. \ref{eq:excitation} and
-\ref{eq:detection}. If we integrate the detection kernel over the detector and
-use the identity $\int_{\mbb{R}^2}d\mb{r}\, a_n(r) = 1$ for $n \in \mbb{N}$,
-then we find that the excitation and detection kernels are related by
-\begin{align}
-  h_{\text{exc}}(\so{}) = \int_{\mbb{R}^2}d\mb{r} h_{\text{det}}(\mb{r}, \so{}).
-\end{align}
-
-\begin{figure}[h]
- % \captionsetup{width=1.0\linewidth}
- \centering
-   \centering
-   \includegraphics[scale=0.8]{../figures/microscope/microscope.pdf}
-   \caption{Comparison of paraxial detection models for monopole radiators a)
-     and dipole radiators b)--d). Monopole radiators fill the back focal plane
-     with a uniform scalar field which gives rise to the familiar Airy disk on
-     the detector. A transverse dipole radiator also creates an Airy disk---the
-     back focal plane is filled with a uniform vector field. An axial dipole
-     radiator creates a radial electric field pattern in the back focal plane
-     which gives rise to a higher-order Airy disk. Back focal plane electric
-     fields from transverse dipoles are purely even while fields from axial
-     dipoles are purely odd which causes a relative $\pi/2$ phase shift for the
-     fields on the detector. The back focal plane fields from an
-     arbitrarily-oriented dipole can be decomposed into even and odd fields, so
-     the final intensity pattern is always radially symmetric.}
-   \label{fig:microscope}
- \end{figure}
-
-\begin{figure}[h]
- % \captionsetup{width=1.0\linewidth}
- \centering
-   \centering
-   \includegraphics[scale=0.8]{../figures/detection/detection.pdf}
-   \caption{Normalized detection kernel as a function of the scaled radial
-     detection coordinate $k\alpha r_d$, the dipole inclination angle
-     $\vartheta$, and the collection angle $\alpha$. For small collection angles
-     (left) the detection kernel of axial dipoles
-     (\textcolor{red}{\textbf{red}}) is small compared to transverse dipoles
-     (\textbf{black}), but the relative contribution of axial dipoles increases
-     with the collection angle (see \textcolor{red}{\textbf{red}} lines from left to right).}
-   \label{fig:microscope}
- \end{figure}
- 
-
-
- \subsection{Spatio-angular transfer function}\label{sec:trans}
- \begin{align}
-g(\rd{}) = \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^2}d\ro{}\, h(|\rd{} -\ro{}|, \so{})f(\ro, \so).
- \end{align}
-
- \begin{align}
-   g(\rd{}) = \mc{F}^{-1}_{\mbb{R}^2}\left\{\int_{\mbb{S}^2}d\so{}\, \mc{F}_{\mbb{R}^2}\left\{h(|\rd{} -\ro{}|, \so{})\right\}\mc{F}_{\mbb{R}^2}\left\{f(\ro, \so)\right\}\right\}.
- \end{align}
-\begin{align}
-  \ints{2}d\mh{s}{}\, f(\mh{s})g(\mh{s}) = \lmsum \mc{F}_{\mbb{S}^2}\left\{f(\mh{s})\right\}\mc{F}_{\mbb{S}^2}\left\{g(\mh{s})\right\}, \label{eq:plan}
-\end{align}
-where
-\begin{align}
-  \mc{F}_{\mbb{S}^2}\left\{f(\mh{s})\right\} \equiv \int_{\mbb{S}^2}f(\mh{s})y_l^m(\mh{s}).
-\end{align}
-Eq. \ref{eq:plan} is the generalized Plancharel theorem for spherical functions.
-It is a special case of the fact that scalar products are invariant under
-unitary transformations (see Barrett 3.78). Next, we plug Eq. \ref{eq:plan}
-into Eq. \ref{eq:filter1} to get
-\begin{align}
-  g(\rd) = \mc{F}^{-1}_{\mbb{R}^2}\left\{\lmsum H_{l}^m(\bv, \mh{p}) \mc{F}_{\mbb{R}^2\times\mbb{S}^2}\left\{f(\ro, \so)\right\}\right\} \label{eq:filter}
-\end{align}
-where
-\begin{align}
-  H_{l}^m(\bv) \equiv \mc{F}_{\mbb{R}^2\times\mbb{S}^2}\left\{h(|\rd - \ro|, \so)\right\} &\equiv \intr{3}d\ro\, \me^{i2\pi\ro\cdot\bv}\ints{2}d\so\, y_l^m(\so) h(\ro, \so).\label{eq:transfer}
-\end{align}
-Eq. \ref{eq:filter} is the main result of this section. Right now it is not
-obvious that Eq. \ref{eq:filter} is any more efficient than Eq.
-\ref{eq:filter1}, but when we calculate the transfer function we will see that
-the sum over spherical harmonics contains a small number of terms.
-
-
- 
-As written Eq. \ref{eq:fwd} is an extremely expensive integral to compute---to
-find the irradiance at a single point on the detector we need to evaluate the
-spatio-angular density and the kernel at every point in
-$\mbb{S}^2\times \mbb{R}^2$. To simplify the integral, we expand the object and
-the kernel onto complex exponentials and spherical harmonics using
-\begin{align}
-  F_l^m(\bs{\nu}) &\equiv \int_{\mbb{S}^2}d\so{}y_l^m(\so{})\int_{\mbb{R}^2}d\ro{}\,\text{exp}\left[i2\pi \ro{}\cdot\bs{\nu}\right]f(\ro{}, \so{}),\\
-  H_l^m(\bs{\nu}) &\equiv \int_{\mbb{S}^2}d\so{}y_l^m(\so{})\int_{\mbb{R}^2}d\ro{}\,\text{exp}\left[i2\pi \ro{}\cdot\bs{\nu}\right]h(\ro{}, \so{}).
-\end{align}
-We also expand the detector irradiance onto spatial harmonics using the Fourier
-transform
-\begin{align}
-  G(\bs{\nu}) \equiv \int_{\mbb{R}^2}d\rd{}\,\text{exp}\left[i2\pi \rd{}\cdot\bs{\nu}\right]g(\rd{}).
-\end{align}
-Given these definitions, we can rewrite Eq. \ref{eq:fwd} in the frequency domain as 
-\begin{align}
-G(\bs{\nu}) = \sum_{l=0}^{\infty}\sum_{m=-l}^{l}H_l^m(\bs{\nu})F_l^m(\bs{\nu}). 
-\end{align}
-
-In Appendix A we calculate the spatio-angular transfer function as
-\begin{align}
-  H_l^m(\bs{\nu}) = \frac{1}{C}\Bigg\{&\left[\left(1 + \frac{\alpha^2}{8}\right)A_1(\nu) + \left(\frac{\alpha^2}{8} + \frac{3\alpha^4}{32}\right)A_2(\nu)\right]\delta_{l0}\delta_{m0}+\nonumber\\&\frac{2\sqrt{5}}{7}\left[\left(-1 + \frac{\alpha^2}{16}\right)A_1(\nu) + \left(\frac{\alpha^2}{16} + \frac{3\alpha^4}{16}\right)A_2(\nu)\right]\delta_{l2}\delta_{m0}\nonumber\\&\frac{1}{7}\left[\left(1 - \frac{\alpha^2}{2}\right)A_1(\nu) + \left(-\frac{\alpha^2}{2} + \frac{\alpha^4}{4}\right)A_2(\nu)\right]\delta_{l4}\delta_{m0}\Bigg\}, 
-\end{align}
-where
-\begin{align}
-  A_1(\nu) &= \frac{2}{\pi}\left\{\cos^{-1}\left(\frac{\nu}{2\nu_o}\right) - \frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\right\}\Pi\left(\frac{\nu}{2\nu_o}\right), \\
-  A_2(\nu) &= \frac{2}{\pi}\Bigg\{\cos^{-1}\left(\frac{\nu}{2\nu_o}\right) - \left[3 - 2\left(\frac{\nu}{2\nu_o}\right)^2\right]\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\Bigg\}\Pi\left(\frac{\nu}{2\nu_o}\right), 
-\end{align}
-and $C = 1 + \frac{\alpha^2}{4} + \frac{3\alpha^4}{32}$ is a normalization
-constant.
-
-\section{Results}
-
-\section{Discussion and conclusion}
-Do microscopes transmit more information than Abbe thought?
-
-Using an experimentally determined model is an effective way to find an accurate
-model without understanding all of the physical details of the imaging system,
-but these approaches require a known input that can completely characterize the
-imaging system. Sub-diffraction beads are commonly used as a known input for
-measuring the response of a microscope, but we argue that sub-diffraction beads
-are not enough to completely characterize the response of a microscope to all
-fluorescent samples. Beads can only characterize the response of the microscope
-to an angularly uniform distribution of fluorophores, and we will show that all
-microscopes have an orientation-dependent response. A complete characterization
-requires a test sample with at least three known orientation distributions.
-
-Can experimentally measured psfs account for this?
-
-\bibliography{paper}
-\appendix
 \section{Spherical harmonics}\label{sec:sph}
-The spherical harmonics are a basis for representing functions on the sphere. In
-this appendix we will define the basis and review several important properties
-of this set of functions. 
-
-The complex-valued spherical harmonics are given by
+% The spherical harmonics are an orthonormal set of basis functions on the sphere.
+% In this appendix we will define the basis and review several important
+% properties of this set of functions.
+The spherical harmonic function of degree $\ell$ and order $-\ell \leq m \leq m$
+is defined as \cite{schaeffer2013}
 \begin{align}
-Y_l^m(\vartheta, \varphi) = \sqrt{\frac{(2l+1)(l-m)!}{4\pi(l+m)!}}\exp(i m \varphi)P_l^m\left(\cos\theta\right)
+Y_\ell^m(\vartheta, \varphi) = P_\ell^m\left(\cos\vartheta\right)\exp(i m \varphi)
 \end{align}
-where $P_l^m(\cos\theta)$ are the associated Legendre polynomials that include
-the Condon-Shortley phase. In this work we only use the spherical harmonics to
-represent real-valued functions so we use the real spherical harmonics given by
+where $P_\ell^m(\cos\theta)$ are the associated Legendre polynomials normalized for the
+spherical harmonics 
 \begin{align}
-  y_l^m(\vartheta, \varphi)
-  \begin{cases}
-    \frac{Y_l^m(\vartheta, \varphi) + (-1)^m Y_l^{-m}(\vartheta, \varphi)}{\sqrt{2}} &\quad m > 0, \\
-    Y_l^m(\vartheta, \varphi) &\quad m = 0, \\
-    \frac{Y_l^m(\vartheta, \varphi) - (-1)^m Y_l^{-m}(\vartheta, \varphi)}{i \sqrt{2}} &\quad m < 0.\\
-        \end{cases}
+  P_\ell^m(x) = (-1)^m\sqrt{\frac{2\ell+1}{4\pi}}\sqrt{\frac{(\ell-|m|)!}{(\ell+|m|)!}}(1-x^2)^{|m|/2}\frac{d^{|m|}}{dx^{|m|}}P_\ell(x)
 \end{align}
-
-The $l=0, 1, 2$ spherical harmonics are given by
+where $P_\ell(x)$ are the Legendre polynomials defined by the following recurrence
 \begin{align}
-  y_0^0(\vartheta, \varphi) &= \sqrt{\frac{1}{4\pi}}, \nonumber \\ 
-  y_1^{-1}(\vartheta, \varphi) &= \sqrt{\frac{3}{4\pi}}\sin\varphi\sin\vartheta, \nonumber\\
-  y_1^0(\vartheta, \varphi) &= \sqrt{\frac{3}{4\pi}}\cos\vartheta, \nonumber \\
-  y_1^1(\vartheta, \varphi) &= \sqrt{\frac{3}{4\pi}}\cos\varphi\sin\vartheta, \nonumber \\
-  y_2^{-2}(\vartheta, \varphi) &= \sqrt{\frac{15}{4\pi}}\sin\varphi\cos\varphi\sin^2\vartheta, \nonumber\\
-  y_2^{-1}(\vartheta, \varphi) &= \sqrt{\frac{15}{4\pi}}\sin\varphi\sin\vartheta\cos\vartheta,\nonumber \\
-  y_2^0(\vartheta, \varphi) &= \sqrt{\frac{5}{16\pi}}(3\cos^2\vartheta - 1), \nonumber \\ 
-  y_2^{1}(\vartheta, \varphi) &= \sqrt{\frac{15}{4\pi}}\cos\varphi\sin\vartheta\cos\vartheta, \nonumber \\
-  y_2^{2}(\vartheta, \varphi) &= \sqrt{\frac{15}{16\pi}}(\cos^2\varphi - \sin^2\varphi)\sin^2\vartheta. \label{eq:harmonics}
+  P_0(x) &= 1,\\
+  P_1(x) &= x,\\
+  \ell P_\ell(x) &= (2\ell-1)xP_{\ell-1}(x) - (\ell-1)P_{\ell-2}(x). 
 \end{align}
 
-Real Gaunt coefficients
+The spherical harmonics are orthonormal which means that
+\begin{align}
+  \int_{\mbb{S}^2}d\mh{s}\, Y_\ell^m(\mh{s})\bar{Y}_{\ell'}^{m'}(\mh{s}) = \delta_{\ell\ell'}\delta_{mm'},
+\end{align}
+where $\delta_{\ell\ell'}$ denotes the Kronecker delta. The spherical harmonics form a
+complete basis so an arbitrary function on the sphere $f(\mh{s})$ can be
+expanded into a sum of weighted spherical harmonic functions
+\begin{align}
+  f(\mh{s}) = \sum_{\ell=0}^{\infty}\sum_{m=-\ell}^{l}F_\ell^mY_\ell^m(\mh{s}).
+\end{align}
+We can find the spherical harmonic coefficients $F_\ell^m$ for a given function by
+using Fourier's trick---multiply both sides by $\bar{Y}_\ell^m(\mh{s})$, integrate
+over the sphere, and exploit orthogonality to find that
+\begin{align}
+  F_\ell^m = \int_{\mbb{S}^2}d\mh{s}\, f(\mh{s})\bar{Y}_\ell^m(\mh{s}).
+\end{align}
+The coefficients $F_\ell^m$ are usually called the \textit{spherical Fourier
+  transform} of a spherical function.
 
-\section{Evaluating the spatio-angular transfer function}
-In this appendix we will evaluate 
+We briefly show how two properties of spherical functions propagate to the
+spherical Fourier transform. First, the spherical harmonic coefficients of
+spherical functions that can be written entirely as a function of the
+inclination angle $\vartheta$ are zero when $m\neq0$ because
 \begin{align}
-    H_l^m(\bs{\nu}) &\propto \int_{\mbb{S}^2}d\so{}y_l^m(\so{})\int_{\mbb{R}^2}d\ro{}\,\text{exp}\left[i2\pi \ro{}\cdot\bs{\nu}\right]h(\ro{}, \so{}),\label{eq:whole}
+  \int_{\mbb{S}^2}d\mh{s}\, f(\vartheta)\bar{Y}_\ell^m(\mh{s}) &= \int_0^{2\pi}d\phi\, \text{exp}[-im\varphi]\int_0^{\pi}d\vartheta\, \sin\vartheta f(\vartheta)P_\ell^m(\cos\vartheta),\\ &= \delta_{m0}\int_0^{\pi}d\vartheta\, \sin\vartheta f(\vartheta)P_\ell^m(\cos\vartheta).
 \end{align}
-where
+Second, the spherical harmonic coefficients of spherical functions that are
+symmetric under inversion $f(\mh{s}) = f(-\mh{s})$ are zero when $\ell$ is odd
+because $Y_\ell^m(-\so) = (-1)^\ell Y_\ell^m(\mh{s})$, so if $\ell$ is odd then
 \begin{align}
-  h(\rd{} - \ro{}, \so{}) &\propto h_{\text{exc}}(\so{})h_{\text{det}}(\rd{} - \ro{}, \so{}),\label{eq:split}\\ 
-  h_{\text{exc}}(\so{}) &\propto \left[1 + \frac{\alpha^2}{4}\right]y_0^0(\so{}) + \frac{1}{\sqrt{5}}\left[-1 + \frac{\alpha^2}{2}\right]y_2^0(\so{}),\\  
-  h_{\text{det}}(\rd{}, \so{}) &\propto \left[a_1( r_d) + \frac{\alpha^2}{4} a_2( r_d)\right]y_0^0(\so{}) + \frac{1}{\sqrt{5}}\left[- a_1( r_d) + \frac{\alpha^2}{2} a_2( r_d)\right]y_2^0(\so{}),
+  \int_{\mbb{S}^2}d\mh{s}\, f(\mh{s})\bar{Y}_{2n+1}^m(\mh{s}) &= \int_{\mbb{S}^2/2}d\mh{s}\, f(+\mh{s})\bar{Y}_{2n+1}^m(+\mh{s}) + \int_{\mbb{S}^2/2}d\mh{s}\, f(-\mh{s})\bar{Y}_{2n+1}^m(-\mh{s}),\\
+&=\int_{\mbb{S}^2/2}d\mh{s}\, f(\mh{s})\bar{Y}_{2n+1}^m(+\mh{s}) - \int_{\mbb{S}^2/2}d\mh{s}\, f(\mh{s})\bar{Y}_{2n+1}^m(\mh{s}) = 0.                                                                
 \end{align}
-and
+\section{Fourier transform of first and second order Airy patterns} \label{sec:airy}
 \begin{align}
     a_n(r_d) \equiv \frac{n}{\pi}\left[\frac{J_n(k\alpha r_d)}{k\alpha r_d}\right]^2. 
 \end{align}
-First we plug Eq. \ref{eq:split} into Eq. \ref{eq:whole} and move the excitation
-kernel out of the spatial integral
-\begin{align}
-    H_l^m(\bs{\nu}) &\propto \int_{\mbb{S}^2}d\so{}y_l^m(\so{})h_{\text{exc}}(\so{})\int_{\mbb{R}^2}d\ro{}\,\text{exp}\left[i2\pi \ro{}\cdot\bs{\nu}\right]h_{\text{det}}(\rd{}, \so{}). \label{eq:satf}
-\end{align}
-The spatial integral requires us to evaluate the two-dimensional Fourier
-transform of $a_1(r_o)$ and $a_2(r_o)$. We will define
 \begin{align}
   A_n(\nu) \equiv \mathcal{F}_2\{a_n(r_o)\} =  \int_{\mbb{R}^2}d\ro{}\,\text{exp}\left[i2\pi \ro{}\cdot\bs{\nu}\right] a_n(r_d), \label{eq:ftA}
 \end{align}
-and evaluate $A_1(\nu)$ and $A_2(\nu)$ later. After substituting \ref{eq:ftA}
-into Eq. \ref{eq:satf} we find 
-\begin{align}
-  H_l^m(\bs{\nu}) \propto \int_{\mbb{S}^2}d\so{}y_l^m(\so{})&\left\{\left[1 + \frac{\alpha^2}{4}\right]y_0^0(\so{}) + \frac{1}{\sqrt{5}}\left[-1 + \frac{\alpha^2}{2}\right]y_2^0(\so{})\right\} + \nonumber\\&\left\{\left[A_1(\nu) + \frac{\alpha^2}{4} A_2(\nu)\right]y_0^0(\so{}) + \frac{1}{\sqrt{5}}\left[- A_1(\nu) + \frac{\alpha^2}{2} A_2(\nu)\right]y_2^0(\so{})\right\}. 
-\end{align}
-After expanding the products of spherical harmonics
-\begin{align}
-  H_l^m(\bs{\nu}) \propto \int_{\mbb{S}^2}d\so{}y_l^m(\so{})&\Bigg\{\left[\frac{3}{5}A_1(\nu) + \frac{3\alpha^2}{40}[A_1(\nu) + A_2(\nu)] + \frac{9\alpha^4}{160}A_2(\nu)\right]y_0^0(\so{})+\nonumber\\&\frac{3\sqrt{5}}{280}\left[-16A_1(\nu) + \alpha^2[A_1(\nu) + A_2(\nu)] + 3\alpha^4 A_2(\nu)\right]y_2^0(\so{})\nonumber\\&\frac{3}{35}\left[\left(1 - \frac{\alpha^2}{2}\right)A_1(\nu) + \left(-\frac{\alpha^2}{2} + \frac{\alpha^4}{4}\right)A_2(\nu)\right]y_4^0(\so{})\Bigg\},\\
-  H_l^m(\bs{\nu}) \propto \int_{\mbb{S}^2}d\so{}y_l^m(\so{})&\Bigg\{\left[\left(1 + \frac{\alpha^2}{8}\right)A_1(\nu) + \left(\frac{\alpha^2}{8} + \frac{3\alpha^4}{32}\right)A_2(\nu)\right]y_0^0(\so{}) + \nonumber\\&\frac{\sqrt{5}}{56}\left[(-16 + \alpha^2)A_1(\nu) + (\alpha^2 + 3\alpha^4)A_2(\nu)\right]y_2^0(\so{})\nonumber\\&\frac{1}{7}\left[\left(1 - \frac{\alpha^2}{2}\right)A_1(\nu) + \left(-\frac{\alpha^2}{2} + \frac{\alpha^4}{4}\right)A_2(\nu)\right]y_4^0(\so{})\Bigg\}.
-\end{align}
-Next, we use the orthogonality of spherical harmonics to evaluate the angular integral
-\begin{align}
-  H_l^m(\bs{\nu}) = \frac{1}{C}\Bigg\{&\left[\left(1 + \frac{\alpha^2}{8}\right)A_1(\nu) + \left(\frac{\alpha^2}{8} + \frac{3\alpha^4}{32}\right)A_2(\nu)\right]\delta_{l0}\delta_{m0}+\nonumber\\&\frac{2\sqrt{5}}{7}\left[\left(-1 + \frac{\alpha^2}{16}\right)A_1(\nu) + \left(\frac{\alpha^2}{16} + \frac{3\alpha^4}{16}\right)A_2(\nu)\right]\delta_{l2}\delta_{m0}\nonumber\\&\frac{1}{7}\left[\left(1 - \frac{\alpha^2}{2}\right)A_1(\nu) + \left(-\frac{\alpha^2}{2} + \frac{\alpha^4}{4}\right)A_2(\nu)\right]\delta_{l4}\delta_{m0}\Bigg\}, 
-\end{align}
-where $C = 1 + \frac{\alpha^2}{4} + \frac{3\alpha^4}{32}$ is a normalization
-constant.
 
 Our final task is to calculate $A_1(\nu)$ and $A_2(\nu)$. $A_1(\nu)$ is a
 well-known result \cite{goodman1996, mertz2009}, but we review the calculation
@@ -927,5 +1208,84 @@ Taking the sum of Eqs. \ref{eq:auto1} and \ref{eq:auto2} gives the final result
 \begin{align}
   A_2(\nu) = \frac{2}{\pi}\Bigg\{\cos^{-1}\left(\frac{\nu}{2\nu_o}\right) - \left[3 - 2\left(\frac{\nu}{2\nu_o}\right)^2\right]\frac{\nu}{2\nu_o}\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}\Bigg\}\Pi\left(\frac{\nu}{2\nu_o}\right). 
 \end{align}
+% \section{Evaluating the angular transfer function}
+% Our goal in this Appendix is to calculate the angular transfer function by
+% taking the spherical Fourier transform of
+% \begin{align}
+%   h(r, \vartheta) = h_{\text{exc}}(\vartheta)h_{\text{det}}(r, \vartheta) &\propto \left[\sin^2\vartheta + \frac{1}{2}\alpha^2 \cos^2\vartheta\right]\left[a_1(r)\sin^2\vartheta + \frac{1}{2}\alpha^2 a_2(r)\cos^2\vartheta.\right] \label{eq:kernel}
+% \end{align}
+% We need to evaluate the integrals
+% \begin{align}
+%   F_l^m(r) \propto \int_{\mbb{S}^2} d\so h_{\text{exc}}(\vartheta)h_{\text{det}}(r, \vartheta)Y_\ell^m(\vartheta, \varphi). \label{eq:atf}
+% \end{align}
+% We could evaluate the integrals in Eq.
+% \ref{eq:kernel} using a computer algebra system, but here we evaluate by hand to
+% demonstrate a useful trick for taking the spherical harmonic transform of the
+% product of two spherical functions. First, we expand both the excitation and
+% detection kernels in a sum of spherical harmonic functions
+% \begin{align}
+%   F_l^m(r) \propto \int_{\mbb{S}^2} d\so \left[\sum_{{\ell'} m'}H_{{\ell'},\text{exc}}^{m'} Y_{\ell'}^{m'}(\vartheta, \varphi)\right]\left[\sum_{{\ell''} m''}H_{{\ell''},\text{det}}^{m''}(r) Y_{\ell''}^{m''}(\vartheta, \varphi)\right]Y_\ell^m(\vartheta, \varphi). 
+% \end{align}
+% Next, we exchange the order of the sums and integrals
+% \begin{align}
+%   F_l^m(r) \propto \sum_{\ell' m'}\sum_{\ell'' m''}H_{\ell',\text{exc}}^{m'}H_{\ell'',\text{det}}^{m''}(r) \int_{\mbb{S}^2} d\so Y_\ell^m(\vartheta, \varphi) Y_{\ell'}^{m'}(\vartheta, \varphi) Y_{\ell''}^{m''}(\vartheta, \varphi). 
+% \end{align}
+% Finally, if we make the definition
+% \begin{align}
+%   G_{\ell\ell'\ell''}^{mm'm''} = \int_{\mbb{S}^2}d\so\, Y_\ell^m(\vartheta, \varphi) Y_{\ell'}^{m'}(\vartheta, \varphi) Y_{\ell''}^{m''}(\vartheta, \varphi)
+% \end{align}
+% and write the angular transfer function as
+% \begin{align}
+%   F_l^m(r) \propto \sum_{\ell' m'}\sum_{\ell'' m''}H_{\ell',\text{exc}}^{m'}H_{\ell'',\text{det}}^{m''}(r) G_{\ell\ell'\ell''}^{mm'm''}. 
+% \end{align}
+% This is a valuable result because it allows us to compute the spherical harmonic
+% transform of the detection and excitation kernels individually then combine the
+% results into the final angular transfer function. The constants
+% $G_{\ell\ell'\ell''}^{mm'm''}$ are called the \textit{Gaunt coefficients} and
+% can be precomputed or found in tables.
+
+% Next, we compute the spherical Fourier transform of the excitation kernel. 
+% \begin{align}
+%   H_{\ell',\text{exc}}^{m'} \propto \int_{\mbb{S}^2}d\so\, h_{\text{exc}}(\vartheta)Y_{\ell}^m(\vartheta, \varphi). 
+% \end{align}
+% From Appendix \ref{sec:sph} we know that the integral will be zero except when
+% $m=0$ and when $\ell$ is even. Starting with $\ell = 0$ and $m=0$
+% \begin{align}
+%   H_{0,\text{exc}}^{0} \propto \int_{\mbb{S}^2}d\so\, \left[\sin^2\vartheta + \frac{1}{2}\alpha^2\cos^2\vartheta\right]\left[\frac{1}{\sqrt{4\pi}}\right] = \frac{4\sqrt{\pi}}{3}\left[1 + \frac{\alpha^2}{4}\right].
+% \end{align}
+% Next we evaluate $\ell = 2$ and $m=0$
+% \begin{align}
+%   H_{2,\text{exc}}^{0} \propto \int_{\mbb{S}^2}d\so\, \left[\sin^2\vartheta + \frac{1}{2}\alpha^2\cos^2\vartheta\right]\left[\sqrt{\frac{5}{16\pi}}(3\cos^2\vartheta - 1)\right] = \frac{4\sqrt{\pi}}{3}\frac{1}{\sqrt{5}}\left[-1 + \frac{\alpha^2}{2}\right].
+% \end{align}
+% Finally, we notice can verify that the excitation kernel can be written as just
+% two spherical harmonics using the equality
+% \begin{align}
+%  h_{\text{exc}}(r, \vartheta) &= H_{0,\text{exc}}^0Y_0^0(\vartheta, \varphi) + H_{2,\text{exc}}^0Y_2^0(\vartheta, \varphi),\\
+%   \sin^2\vartheta + \frac{1}{2}\alpha^2\cos^2\vartheta &= \frac{4\sqrt{\pi}}{3}\left[1 + \frac{\alpha^2}{4}\right]\left[\frac{1}{\sqrt{4\pi}}\right] + \frac{4\sqrt{\pi}}{3}\frac{1}{\sqrt{5}}\left[-1 + \frac{\alpha^2}{2}\right]\left[\sqrt{\frac{5}{16\pi}}(3\cos^2\vartheta - 1)\right].
+% \end{align}
+
+% \begin{align}
+%   H_{\ell',\text{exc}}^{m'} \propto \left[1 + \frac{\alpha^2}{4}\right]\delta_{\ell'0}\delta_{m0} + \frac{1}{\sqrt{5}}\left[-1 + \frac{\alpha^2}{4}\right]\delta_{\ell'0}\delta_{m0}.
+% \end{align}
+% Similarly, the spherical Fourier transform of the detection kernel is given by
+% \begin{align}
+%   H_{\ell'',\text{det}}^{m''} \propto \left[a_1(r) + \frac{\alpha^2}{4}a_2(r)\right]\delta_{\ell''0}\delta_{m0} + \frac{1}{\sqrt{5}}\left[-a_1(r) + \frac{\alpha^2}{4}a_2(r)\right]\delta_{\ell''0}\delta_{m0}.
+% \end{align}
+% Finally, we use the Gaunt coefficients to calculate the angular transfer function
+% \begin{align}
+%   F_l^m(r) \propto \sum_{\ell' m'}\sum_{\ell'' m''}H_{\ell',\text{exc}}^{m'}H_{\ell'',\text{det}}^{m''}(r) G_{\ell\ell'\ell''}^{mm'm''}.   
+% \end{align}
+% \begin{alignat}{6}
+%   F_l^m(r) \propto \quad 7&\{\hphantom{-}32&&a_1(r)&& + 4\alpha^2[a_1(r) + a_2(r)]&&+ 3\alpha^4a_2(r)\}&&\delta_{\ell 0}\delta_{m0}+\nonumber\\
+%   4\sqrt{5}&\{-16&&a_1(r)&& + \hphantom{1}\alpha^2[a_1(r) + a_2(r)] &&+ 3\alpha^4a_2(r)\}&&\delta_{\ell 2}\delta_{m0} + \nonumber\\
+%   8&\{\hphantom{-1}4&&a_1(r)&& - 2\alpha^2[a_1(r) + a_2(r)] &&+ \hphantom{1}\alpha^4a_2(r)\}&&\delta_{\ell 4}\delta_{m0}.
+% \end{alignat}
+% H0
+% 28*A1*a**2 + 224*A1 + 21*A2*a**4 + 28*A2*a**2
+% (Pdb) H2
+% 4*sqrt(5)*(A1*a**2 - 16*A1 + 3*A2*a**4 + A2*a**2)
+% (Pdb) H4
+% -16*A1*a**2 + 32*A1 + 8*A2*a**4 - 16*A2*a**2
+
 
 \end{document}
