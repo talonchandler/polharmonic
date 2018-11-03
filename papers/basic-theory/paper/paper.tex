@@ -22,7 +22,7 @@
 
 % Talon's custom libraries
 \usepackage{empheq}
-% \usepackage{bm}
+\usepackage{bm}
 
 % Talon's custom commands
 \DeclareMathAlphabet{\mathcal}{OMS}{cmsy}{m}{n}
@@ -50,9 +50,9 @@
 \providecommand{\intr}[1]{\int_{\mbb{R}^{#1}}}
 \providecommand{\ints}[1]{\int_{\mbb{S}^{#1}}}
 \providecommand{\tb}[1]{\textcolor{blue}{#1}}
-\DeclareFontFamily{OT1}{pzc}{}
-\DeclareFontShape{OT1}{pzc}{m}{it}{<-> s * [1.10] pzcmi7t}{}
-\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
+% \DeclareFontFamily{OT1}{pzc}{}
+% \DeclareFontShape{OT1}{pzc}{m}{it}{<-> s * [1.10] pzcmi7t}{}
+% \DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
 \newcommand{\eqname}[1]{\tag*{#1}}
 \newcommand*\widefbox[1]{\fbox{\hspace{1em}#1\hspace{1em}}}
 
@@ -81,7 +81,7 @@
   express the operator in terms of four different sets of object-space basis
   functions. We show that the operator takes a particularly convenient form when
   expressed in a basis of spatial and spherical harmonics---a form we call the
-  spatio-angular transfer function (SATF). We demonstrate our formalism by
+  spatio-angular dipole transfer function. We demonstrate our formalism by
   analyzing a single-view paraxial epi-fluorescence microscope without using the
   monopole or scalar approximations. We show that this microscope has an angular
   band limit, and we demonstrate the value of the transfer function approach by
@@ -167,12 +167,12 @@ to ensembles of oriented fluorophores.
 We begin in Section \ref{sec:theory} by formulating the imaging problem
 mathematically. We start with an abstract description of fluorescence imaging
 systems and extend the usual monopole imaging model to dipoles. Along the way we
-introduce transfer functions that will allow us to efficiently simplify our
-analysis of spatio-angular microscopes. In Section \ref{sec:results} we use the
-mathematical tools we developed in Section \ref{sec:theory} to analyze and
-simulate a single-view paraxial epi-fluorescence microscope, and we demonstrate
-our model with four simple phantoms. Finally, in Section \ref{sec:discussion} we
-discuss the results and their broader implications.
+introduce transfer functions that will allow us to efficiently analyze
+spatio-angular microscopes. In Section \ref{sec:results} we use the mathematical
+tools we developed in Section \ref{sec:theory} to analyze and simulate a
+single-view paraxial epi-fluorescence microscope, and we demonstrate our model
+with four simple phantoms. Finally, in Section \ref{sec:discussion} we discuss
+the results and their broader implications.
 
 \section{Theory}\label{sec:theory}
 We begin our analysis with the abstract Hilbert space formalism of Barrett and
@@ -197,11 +197,10 @@ can start to investigate the same mapping in different bases.
 The above discussion is quite abstract, but it is a powerful point of view that
 will enable us to draw new conclusions about all fluorescence microscopes. In
 Section \ref{sec:monopole} we will demonstrate the formalism by examining a
-familiar monopole imaging model, and we will show that the point spread
-function and the optical transfer function are mappings between object and data
-space expressed in two different bases. In Section \ref{sec:dipole} we will
+familiar monopole imaging model, and we will demonstrate the mapping in between
+object and data in two different bases. In Section \ref{sec:dipole} we will
 extend the monopole imaging model to dipoles and examine the mapping in four
-different bases. 
+different bases.
 
 \subsection{Monopole imaging in different bases}\label{sec:monopole}
 We start by considering a microscope that images a field of in-focus monopoles
@@ -217,9 +216,9 @@ set $\mbb{V} = \mbb{L}_2(\mbb{R}^2)$.
 
 Next, we name the representations of our object and data in a specific basis. In
 a delta function basis the object can be represented by a function $f(\ro)$
-called the \textit{spatial monopole density}---the number of monopoles per unit
-area at the two-dimensional position $\ro$. Similarly, in a delta function basis
-the data can be represented by a function $g'(\rd')$ called the
+called the \textit{monopole density}---the number of monopoles per unit area at
+the two-dimensional position $\ro$. Similarly, in a delta function basis the
+data can be represented by a function $g'(\rd')$ called the
 \textit{irradiance}---the power received by a surface per unit area at position
 $\rd'$. It may seem pedantic to emphasize that these representations are in a
 delta function basis, but we highlight this point to make it clear that the
@@ -268,8 +267,8 @@ We have chosen to normalize the point spread function so that
 \begin{align}
   \int_{\mbb{R}^2}d\mb{r}\, h(\mb{r}) = 1. \label{eq:norm}
 \end{align}
-The point spread function corresponds to a measurable irradiance, so it is
-always real-valued and positive.
+The monopole point spread function corresponds to a measurable irradiance, so it
+is always real-valued and positive.
 
 \begin{figure}
   \centering
@@ -291,7 +290,7 @@ where we define the \textit{scaled irradiance spectrum} as
 \begin{align}
   G(\bs{\nu}) = \int_{\mbb{R}^2}d\mb{r}\, g(\mb{r})\, \text{exp}(-2\pi i\mb{r}\cdot\bs{\nu}),
 \end{align}
-the \textit{optical transfer function} as
+the \textit{monopole transfer function} as
 \begin{align}
   H(\bs{\nu}) = \int_{\mbb{R}^2}d\mb{r}\, h(\mb{r})\, \text{exp}(-2\pi i\mb{r}\cdot\bs{\nu}),\label{eq:otf}
 \end{align}
@@ -299,16 +298,73 @@ and the \textit{monopole spectrum} as
 \begin{align}
     F(\bs{\nu}) = \int_{\mbb{R}^2}d\mb{r}\, f(\mb{r})\, \text{exp}(-2\pi i\mb{r}\cdot\bs{\nu}).
 \end{align}
-The point spread function is normalized and real-valued, so we know that the
-optical transfer function is normalized $H(0) = 1$ and conjugate-symmetric
-$H(-\bs{\nu}) = H^*(\bs{\nu})$.
+The monopole point spread function is normalized and real-valued, so we know
+that the monopole transfer function is normalized $H(0) = 1$ and
+conjugate-symmetric $H(-\bs{\nu}) = H^*(\bs{\nu})$.
 
 Notice that Eqs. \ref{eq:lsi} and \ref{eq:freq} are expressions of the same
 mapping between object and data space in different bases. Figure
 \ref{fig:monopole-block} summarizes the relationship between object and data
 space in both bases.
 
+We have used the term \textit{monopole transfer function} instead of the more
+common \textit{optical transfer function}. We define the optical transfer
+function as the mapping between an input irradiance spectrum and an output
+irradiance spectrum in an optical system. With this definition the optical
+transfer function is not necessarily the same as the monopole transfer function.
+For example, consider a light sheet illumination scheme where a sheet of the
+sample is illuminated and an orthogonal detection arm collects the emitted
+fluorescence. Both the excitation path and the detection path can be described
+by optical transfer functions, and the monopole transfer function is given by
+the convolution of the two optical transfer functions. We will see that this is
+a valuable distinction when we consider dipole transfer functions.
+
 \subsubsection{Monopole coherent transfer functions}
+Although the Fourier transform can be used to calculate the monopole transfer
+function directly from the monopole point spread function, there is a well-known
+alternative that exploits coherent transfer functions. The key idea is that the
+monopole point spread function can always be written as the absolute square of a
+scalar-valued \textit{monopole coherent spread function} defined as
+\begin{align}
+  h(\mb{r}) = |c(\mb{r})|^2. \label{eq:absquarescalar}
+\end{align}
+Physically, the monopole coherent spread function is the scalar-valued field on
+the detector with appropriate scaling.
+
+Since the monopole transfer function is given by the two-dimensional Fourier
+transform of the monopole point spread function
+\begin{align}
+  H(\bs{\nu}) = \int_{\mbb{R}^2}d\mb{r}\,h(\mb{r})\,\text{exp}[-2\pi i\mb{r}\cdot\bs{\nu}],
+\end{align}
+we can plug in Eq. \ref{eq:absquarescalar} and use the autocorrelation theorem to
+rewrite the monopole transfer function as
+\begin{align}
+  H(\bs{\nu}) = \int_{\mbb{R}^2}d\bs{\tau}\, C(\bs{\tau})C^*(\bs{\tau} - \bs{\nu}), 
+\end{align}
+where $z^*$ denotes the complex conjugate of $z$, and we have introduced the
+\textit{monopole coherent transfer function} as the two-dimensional Fourier
+transform of the orientation-dependent coherent spread function
+\begin{align}
+  C(\bs{\tau}) = \int_{\mbb{R}^2}d\mb{r}\, c(\mb{r})\,\text{exp}[-2\pi i\mb{r}\cdot\bs{\tau}].
+\end{align}
+Physically, the monopole coherent transfer function is the scalar-valued field
+in a Fourier plane of the detector (often called the pupil or aperture plane)
+with appropriate scaling. This provides a valuable shortcut for analyzing
+arbitrary microscopes since it is usually straightforward to calculate the field
+in the pupil. A typical approach for calculating the transfer functions is to
+(1) calculate the field in the pupil, (2) scale the field to find the coherent
+monopole transfer function, then (3) use the relationships in Figure
+\ref{fig:monopole-transfer-functions} to calculate the other transfer functions.
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=1.0]{../figures/monopole-transfer-functions/monopole-transfer-functions.pdf}
+  \caption{The incoherent monopole transfer functions are related by a
+    two-dimensional Fourier transform (right column). The coherent monopole
+    transfer functions (left column) can be used to simplify the calculation of
+    the remaining transfer functions.}
+   \label{fig:monopole-transfer-functions}
+ \end{figure}
 
 \subsection{Dipole imaging in different bases}\label{sec:dipole}
 Now we consider a microscope imaging a field of in-focus dipoles by recording
@@ -320,10 +376,10 @@ where $\mbb{S}^2$ is the two-dimensional sphere (the usual sphere embedded in
 $\mbb{R}^3$).
 
 In a delta function basis the object can be represented by a function
-$f(\ro, \so)$ called the \textit{spatio-angular dipole density}---the number of
-dipoles at position $\ro{}$ per unit area oriented along $\so{}$ per unit solid
-angle. Similar to the monopole case, we model the mapping between the object and
-the irradiance in a delta function basis as an integral transform
+$f(\ro, \so)$ called the \textit{dipole density}---the number of dipoles at
+position $\ro{}$ per unit area oriented along $\so{}$ per unit solid angle.
+Similar to the monopole case, we model the mapping between the object and the
+irradiance in a delta function basis as an integral transform
 \begin{align}
   g'(\rd') = \int_{\mbb{S}^2}d\so\int_{\mbb{R}^2}d\ro\, h'(\rd', \ro, \so)f(\ro, \so). 
 \end{align}
@@ -338,44 +394,46 @@ We define the same demagnified detector coordinate $\rd = \rd'/m$ and a new
 normalization factor that corresponds to the total power incident on the
 detector due to a spatial point source with an angularly uniform distribution of
 dipoles
-$P_\text{dip} = \int_{\mbb{S}^2}d\mb{s}\int_{\mbb{R}^2}d\mb{r}\, h'(m\mb{r},
-\mb{s})$. We use these scaling factors to define the
-\textit{orientation-dependent point spread function} as
+$P_\text{dip} = \int_{\mbb{S}^2}d\mh{s}\int_{\mbb{R}^2}d\mb{r}\, h'(m\mb{r},
+\mh{s})$. We use these scaling factors to define the
+\textit{dipole point spread function} as
 \begin{align}
-  h(\rd - \ro, \mb{s}) = \frac{h'(m[\rd - \ro], \mb{s})}{P_\text{dip}}, 
+  h(\rd - \ro, \so) = \frac{h'(m[\rd - \ro], \so)}{P_\text{dip}}, 
 \end{align}
 and the \textit{scaled irradiance} as 
 \begin{align}
   g(\rd) = \frac{g'(m\rd)}{P_\text{dip}}. 
 \end{align}
 With these definitions we can express the mapping between the object and the
-data as an integral over the sphere with a spatial convolution at each point
+data as
 \begin{align}
 g(\rd{}) = \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^2}d\ro{}\, h(\rd{} -\ro{}, \so{})f(\ro, \so). \label{eq:odpsf}
 \end{align}
-Similar to the monopole case, we have chosen to normalize the orientation-dependent point spread function so that
+
+Similar to the monopole case, we have chosen to normalize the dipole point
+spread function so that
 \begin{align}
   \int_{\mbb{S}^2}d\mh{s}\int_{\mbb{R}^2}d\mb{r}\, h(\mb{r}, \mh{s}) = 1. 
 \end{align}
-The orientation-dependent point spread function is a measurable quantity, so it
-is real-valued and positive.
+The dipole point spread function is a measurable quantity, so it is real-valued
+and positive.
 
-\subsubsection{Orientation-dependent optical transfer function}
+\subsubsection{Spatial dipole transfer function}
 We can make our first change of basis by applying the Fourier-convolution
 theorem to Eq. \ref{eq:odpsf} which yields
 \begin{align}
 G(\bs{\nu}) = \int_{\mbb{S}^2}d\mh{s}\, H(\bs{\nu}, \mh{s})F(\bs{\nu}, \mh{s}) \label{eq:odotf},
 \end{align}
-where we define the \textit{orientation-dependent optical transfer function} as
+where we define the \textit{spatial dipole transfer function} as
   \begin{align}
   H(\bs{\nu}, \mh{s}) &= \int_{\mbb{R}^2}d\mb{r}\, h(\mb{r}, \mh{s})\, \text{exp}(-2\pi i\mb{r}\cdot\bs{\nu}),
   \end{align}
-and the \textit{spatial dipole spectrum} as
+  and the \textit{spatial dipole spectrum} as
   \begin{align}
   F(\bs{\nu}, \mh{s}) &= \int_{\mbb{R}^2}d\mb{r}\, f(\mb{r}, \mh{s})\, \text{exp}(-2\pi i\mb{r}\cdot\bs{\nu}). 
   \end{align}
-  Since the orientation-dependent point spread function is normalized and real,
-  we know that the orientation-dependent optical transfer function is normalized
+  Since the dipole point spread function is normalized and real, we know that
+  the spatial dipole transfer function is normalized
   $\int_{\mbb{S}^2}d\mh{s}\, H(0, \mh{s}) = 1$ and conjugate-symmetric
   $H(-\bs{\nu}, \mh{s}) = H^*(\bs{\nu}, \mh{s})$.
   
@@ -395,29 +453,29 @@ and the \textit{spatial dipole spectrum} as
    \label{fig:dipole-block}      
     \end{figure}
 
-\subsubsection{Angular transfer function}
+\subsubsection{Angular dipole transfer function}
 The spherical harmonics are another set of convenient basis functions. We can
 change basis from spherical delta functions to spherical harmonics by applying
 the generalized Plancharel theorem for spherical functions
 \begin{align}
   \ints{2}d\mh{s}{}\, p(\mh{s})q(\mh{s}) = \lmsum P_\ell^m Q_\ell^m, \label{eq:plan}
 \end{align}
-where $p(\mh{s})$ and $q(\mh{s})$ are arbitrary functions on the sphere and
+where $p(\mh{s})$ and $q(\mh{s})$ are arbitrary functions on the sphere, $P_\ell^m$ and $Q_\ell^m$ are their spherical Fourier transforms defined by
 \begin{align}
-  P_\ell^m = \int_{\mbb{S}^2}d\mh{s}\, p(\mh{s})Y_\ell^{m*}(\mh{s}), 
+  P_\ell^m = \int_{\mbb{S}^2}d\mh{s}\, p(\mh{s})Y_\ell^{m*}(\mh{s}),
 \end{align}
-is the spherical Fourier transform of $p(\mh{s})$ and $Y_{\ell}^m(\mh{s})$ are
-the spherical harmonic functions defined in Appendix \ref{sec:sph}. Eq.
-\ref{eq:plan} expresses the fact that scalar products are invariant under a
-change of basis (see Eq. 3.78 of \cite{barrett2004}). The left-hand side of Eq.
-\ref{eq:plan} is the scalar product of $\mbb{L}_2(\mbb{S}^2)$ functions in a
-delta function basis and the right hand side is the scalar product of
-$\mbb{L}_2(\mbb{S}^2)$ functions in a spherical harmonic function basis.
-Applying Eq. \ref{eq:plan} to Eq. \ref{eq:odpsf} yields
+and $Y_{\ell}^m(\mh{s})$ are the spherical harmonic functions defined in
+Appendix \ref{sec:sph}. Eq. \ref{eq:plan} expresses the fact that scalar
+products are invariant under a change of basis (see Eq. 3.78 of
+\cite{barrett2004}). The left-hand side of Eq. \ref{eq:plan} is the scalar
+product of $\mbb{L}_2(\mbb{S}^2)$ functions in a delta function basis and the
+right hand side is the scalar product of $\mbb{L}_2(\mbb{S}^2)$ functions in a
+spherical harmonic function basis. Applying Eq. \ref{eq:plan} to Eq.
+\ref{eq:odpsf} yields
 \begin{align}
   g(\rd) = \lmsum H_\ell^m(\rd - \ro)F_\ell^m(\ro) \label{eq:atf-form}
 \end{align}
-where we have defined the \textit{angular transfer function} as
+where we have defined the \textit{angular dipole transfer function} as
 \begin{align}
   H_\ell^m(\mb{r}) = \int_{\mbb{S}^2}d\mh{s}\, h(\mb{r}, \mh{s})Y_{\ell}^{m*}(\mh{s}),\label{eq:atf-prep} 
 \end{align}
@@ -425,15 +483,15 @@ and the \textit{angular dipole spectrum} as
 \begin{align}
   F_\ell^m(\mb{r}) = \int_{\mbb{S}^2}d\mh{s}\, f(\mb{r}, \mh{s})Y_{\ell}^{m*}(\mh{s}).
 \end{align}
-Since the orientation-dependent point spread function is normalized and
-real-valued, we know that the angular transfer function is normalized
+Since the dipole point spread function is normalized and real-valued, we know
+that the angular dipole transfer function is normalized
 $\int_{\mbb{R}^2}d\mb{r}\, H_0^0(\mb{r}) = 1$ and conjugate symmetric
 $H_\ell^{-m}(\mb{r}) = (-1)^mH_\ell^{m*}(\mb{r})$.
 
 This basis is well suited for simulating and analyzing objects that are
 spatially sparse and angularly dense.
 
-\subsubsection{Spatio-angular transfer function}
+\subsubsection{Spatio-angular dipole transfer function}
 We can arrive at our final basis in two ways: by applying the generalized
 Plancharel theorem for spherical functions to Eq. \ref{eq:odotf} or by applying
 the Fourier convolution theorem to Eq. \ref{eq:atf-form}. We follow the
@@ -441,7 +499,7 @@ second path and find that
 \begin{align}
 G(\bs{\nu}) = \lmsum \msf{H}_\ell^m(\bs{\nu})\msf{F}_\ell^m(\bs{\nu}) \label{eq:saft},
 \end{align}
-where we have defined the \textit{spatio-angular transfer function} as
+where we have defined the \textit{spatio-angular dipole transfer function} as
   \begin{align}
   \msf{H}_\ell^m(\bs{\nu}) &= \int_{\mbb{S}^2}d\mh{s}\, H(\bs{\nu}, \mh{s})Y_\ell^{m*}(\mh{s}),
   \end{align}
@@ -449,55 +507,59 @@ where we have defined the \textit{spatio-angular transfer function} as
   \begin{align}
   \msf{F}_\ell^m(\bs{\nu}) &= \int_{\mbb{S}^2}d\mh{s}\, F(\bs{\nu}, \mh{s})Y_\ell^{m*}(\mh{s}).
   \end{align}
-  Since the orientation-dependent point spread function is normalized and
-  real-valued, we know that the spatio-angular transfer function is normalized
+  Since the dipole point spread function is normalized and real-valued, we know
+  that the spatio-angular dipole transfer function is normalized
   $\msf{H}_0^0(0) = 1$ and conjugate symmetric
   $\msf{H}_\ell^{-m}(-\bs{\nu}) = (-1)^m\msf{H}_\ell^{m*}(\bs{\nu})$.
   
   This basis is well suited for simulating and analyzing arbitrary samples
   because it exploits the sparsity of the imaging system. We will see this
   advantage explicitly in Section XXX when we calculate a specific
-  spatio-angular transfer function and see that it has an angular band limit.
+  spatio-angular dipole transfer function and see that it has an angular band
+  limit.
 
   Figure \ref{fig:dipole-block} summarizes the relationship between the four
   bases that we can use to compute the image of a field of dipoles. We reiterate
   that all four bases may be useful depending on the sparsity of the sample.
     
 \subsubsection{Dipole coherent transfer functions}
-Two-dimensional Fourier transforms and spherical Fourier transforms are the only
-operations required to change between the transfer functions. However, there is
-a well-known alternative for calculating optical transfer functions in terms of
-coherent transfer functions. The key idea is that the orientation-dependent
-point spread function can always be written as the absolute square of a
-vector-valued function called the \textit{orientation-dependent coherent spread
-  function}
+Similar to the monopole case, there is efficient way to calculate the transfer
+functions using coherent transfer functions. The dipole point spread function
+can always be written as the absolute square of a vector-valued function called
+the \textit{dipole coherent spread function}
 \begin{align}
-  h(\mb{r}, \mh{s}) = |\mb{c}(\mb{r}, \mh{s})|^2. \label{eq:absquare}
+  h(\mb{r}, \mh{s}) = |\mb{c}(\mb{r}, \mh{s})|^2. \label{eq:absquare2}
 \end{align}
-Physically, this decomposition corresponds to the fact that the irradiance is
-always the absolute square of a vector-valued electric field.
+Physically, the dipole coherent spread function is an appropriately scaled
+vector-valued electric field on the detector. We need a vector-valued coherent
+transfer function since the polarization of the field plays a significant role
+in dipole imaging.
 
-Since the orientation-dependent transfer function is given by the
-two-dimensional Fourier transform of the orientation-dependent point spread
-function
+Since the spatial dipole transfer function is given by the two-dimensional
+Fourier transform of the dipole point spread function
 \begin{align}
   H(\bs{\nu}) = \int_{\mbb{R}^2}d\mb{r}\,h(\mb{r}, \mh{s})\,\text{exp}[-2\pi i\mb{r}\cdot\bs{\nu}],
 \end{align}
-we can plug in Eq. \ref{eq:absquare} and use the autocorrelation theorem to
-rewrite as
+we can plug in Eq. \ref{eq:absquare2} and use the autocorrelation theorem to
+rewrite the spatial dipole transfer function as 
 \begin{align}
   H(\bs{\nu}) = \int_{\mbb{R}^2}d\bs{\tau}\,\mb{C}(\bs{\tau}, \mh{s})\mb{C}^\dagger(\bs{\tau} - \bs{\nu}, \mh{s}), 
 \end{align}
-where the \textit{orientation-dependent coherent transfer function}
-$\mb{C}(\bs{\tau}, \mh{s})$ is the two-dimensional Fourier transform of the
-orientation-dependent coherent spread function
+where we have introduced the \textit{dipole coherent transfer function}
+$\mb{C}(\bs{\tau}, \mh{s})$ as the two-dimensional Fourier transform of the
+dipole coherent spread function
 \begin{align}
   \mb{C}(\bs{\tau}, \mh{s}) = \int_{\mbb{R}^2}d\mb{r}\, \mb{c}(\mb{r}, \mh{s})\,\text{exp}[-2\pi i\mb{r}\cdot\bs{\tau}].
 \end{align}
-The relationships between all six transfer function are shown in Figure
-\ref{fig:transfer-functions}. Note that we could define coherent equivalents for
-all four incoherent transfer functions, but we restrict ourselves to these two
-since they are the useful for our calculations.
+Physically, the dipole coherent transfer function corresponds to the
+vector-valued electric field created by a dipole with oriented along $\mh{s}$ in
+a Fourier plane of the detector with appropriate scaling. As with the monopole
+case we can calculate the dipole-orientation-dependent fields in the pupil
+plane, scale them appropriately to find the dipole coherent transfer function,
+the use the relationships in Figure \ref{fig:transfer-functions} to calculate
+the other transfer functions. Note that we could define coherent equivalents
+for all four incoherent transfer functions, but we restrict ourselves to these
+two since they are the most useful for our calculations.
 
 \begin{figure}
   \hspace{-2em}
@@ -506,8 +568,7 @@ since they are the useful for our calculations.
     object-space basis functions, and these transfer functions are related by
     two-dimensional and spherical Fourier transforms---see center and right
     columns. There are an additional pair of coherent transfer functions that
-    are useful for calculating the point spread function and optical transfer
-    function---see left column.}
+    are useful for calculating the incoherent transfer functions---see left column.}
    \label{fig:transfer-functions}
  \end{figure}
     
