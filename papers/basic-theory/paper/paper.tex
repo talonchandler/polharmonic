@@ -36,7 +36,7 @@
 \providecommand{\mc}[1]{\mathcal{#1}}
 \providecommand{\ro}{\mathbf{\mathbf{r}}_o}
 \providecommand{\so}{\mathbf{\hat{s}}_o}
-\providecommand{\rb}{\mathbf{r}_b}
+\providecommand{\rp}{\mathbf{r}_p}
 \providecommand{\rbm}[1]{r_b^{\text{m}}}
 \providecommand{\rd}{\mathbf{r}_d}
 \providecommand{\rdf}{\mathpzc{r}_d}
@@ -44,6 +44,7 @@
 \providecommand{\mbb}[1]{\mathbb{#1}}
 \providecommand{\bs}[1]{\boldsymbol{#1}}
 \providecommand{\bv}{\bs{\nu}}
+\providecommand{\bvp}{\bs{\nu}_p}
 \providecommand{\bsh}[1]{\hat{\boldsymbol{#1}}}
 \providecommand{\nan}{\left(\frac{\text{NA}}{n_o}\right)}
 \providecommand{\lmsum}{\sum_{\ell=0}^\infty\sum_{m=-\ell}^{\ell}}
@@ -236,16 +237,23 @@ g'(\rd') = \int_{\mbb{R}^2}d\ro\, h'(\rd',\ro)f(\ro), \label{eq:fwdmono}
 where $h'(\rd{}', \ro{})$ is the irradiance at position $\rd'$ created by a
 point source at $\ro$.
 
-The irradiance pattern measured by many fluorescence microscopes can be modeled
+Next, we assume that the optical system is \textit{aplanatic}---Abbe's sine
+condition is satisfied and on-axis points are imaged without aberration. Abbe's
+sine condition guarantees that off-axis points are imaged without spherical
+aberration or coma \cite{mansuripur2009}, so the imaging system can be modeled
 (at least approximately) as a magnifier with shift-invariant blur
 \begin{align}
-  g'(\rd') = \int_{\mbb{R}^2}d\ro\, h'(\rd' - m\ro)f(\ro), 
+  g'(\rd') = \int_{\mbb{R}^2}d\ro\, h'(\rd' - m\ro)f(\ro), \label{eq:nonconv}
 \end{align}
-where $m$ is a magnification factor. To simplify our analysis we define a
-demagnified detector coordinate $\rd = \rd'/m$ and a normalization factor that
-corresponds to the total power incident on the detector plane due to a point
-source $P_{\text{mono}} = \int_{\mbb{R}^2}d\mb{r}\,h'(m\mb{r})$. We use these scaling
-factors to define the \textit{point spread function} as
+where $m$ is a magnification factor. 
+
+We can simplify our analysis by changing coordinates and writing Eq.
+\ref{eq:nonconv} as a convolution \cite{barrett2004}. We define a demagnified
+detector coordinate $\rd = \rd'/m$ and a normalization factor that corresponds
+to the total power incident on the detector plane due to a point source
+$P_{\text{mono}} = \int_{\mbb{R}^2}d\mb{r}\,h'(m\mb{r})$ where
+$\mb{r} = \rd - \ro$. We use these scaling factors to define the
+\textit{monopole point spread function} as
 \begin{align}
   h(\rd - \ro) = \frac{h'(m[\rd - \ro])}{P_{\text{mono}}},
 \end{align}
@@ -256,19 +264,17 @@ and the \textit{scaled irradiance} as
 With these definitions we can express the mapping between the object and the
 data as a familiar convolution
 \begin{align}
-  g(\rd) = \int_{\mbb{R}^2}d\ro\, h(\rd - \ro)f(\ro),  \label{eq:lsi}
+  g(\rd) = \int_{\mbb{R}^2}d\ro\, h(\rd - \ro)f(\ro).  \label{eq:lsi}
 \end{align}
-which will allow us to analyze this class of microscopes without carrying
-magnification or normalization factors. We will mostly be using scaled
-coordinates, so we have adopted a slightly unusual convention of using primes to
-denote unscaled coordinates.
+We will mostly be using scaled coordinates, so we have adopted a slightly
+unusual convention of using primes to denote unscaled coordinates.
 
-We have chosen to normalize the point spread function so that
+We have chosen to normalize the monopole point spread function so that
 \begin{align}
   \int_{\mbb{R}^2}d\mb{r}\, h(\mb{r}) = 1. \label{eq:norm}
 \end{align}
-The monopole point spread function corresponds to a measurable irradiance, so it
-is always real-valued and positive.
+The monopole point spread function corresponds to a
+measurable irradiance, so it is always real-valued and positive.
 
 \begin{figure}
   \centering
@@ -284,23 +290,23 @@ The mapping between the object and the data in linear shift-invariant
 microscopes takes a particularly simple form in a spatial harmonic basis. If we
 apply the Fourier convolution theorem to Eq. \ref{eq:lsi} we find that
 \begin{align}
-  G(\bs{\nu}) = H(\bs{\nu})F(\bs{\nu}),\label{eq:freq}
+  G(\bv) = H(\bv)F(\bv),\label{eq:freq}
 \end{align}
 where we define the \textit{scaled irradiance spectrum} as
 \begin{align}
-  G(\bs{\nu}) = \int_{\mbb{R}^2}d\mb{r}\, g(\mb{r})\, \text{exp}(-2\pi i\mb{r}\cdot\bs{\nu}),
+  G(\bv) = \int_{\mbb{R}^2}d\mb{r}\, g(\mb{r})\, \text{exp}(-2\pi i\mb{r}\cdot\bv),
 \end{align}
 the \textit{monopole transfer function} as
 \begin{align}
-  H(\bs{\nu}) = \int_{\mbb{R}^2}d\mb{r}\, h(\mb{r})\, \text{exp}(-2\pi i\mb{r}\cdot\bs{\nu}),\label{eq:otf}
+  H(\bv) = \int_{\mbb{R}^2}d\mb{r}\, h(\mb{r})\, \text{exp}(-2\pi i\mb{r}\cdot\bv),\label{eq:otf}
 \end{align}
 and the \textit{monopole spectrum} as
 \begin{align}
-    F(\bs{\nu}) = \int_{\mbb{R}^2}d\mb{r}\, f(\mb{r})\, \text{exp}(-2\pi i\mb{r}\cdot\bs{\nu}).
+    F(\bv) = \int_{\mbb{R}^2}d\mb{r}\, f(\mb{r})\, \text{exp}(-2\pi i\mb{r}\cdot\bv).
 \end{align}
 The monopole point spread function is normalized and real-valued, so we know
 that the monopole transfer function is normalized $H(0) = 1$ and
-conjugate-symmetric $H(-\bs{\nu}) = H^*(\bs{\nu})$.
+conjugate-symmetric $H(-\bv) = H^*(\bv)$.
 
 Notice that Eqs. \ref{eq:lsi} and \ref{eq:freq} are expressions of the same
 mapping between object and data space in different bases. Figure
@@ -326,34 +332,38 @@ alternative that exploits coherent transfer functions. The key idea is that the
 monopole point spread function can always be written as the absolute square of a
 scalar-valued \textit{monopole coherent spread function} defined as
 \begin{align}
-  h(\mb{r}) = |c(\mb{r})|^2. \label{eq:absquarescalar}
+  |c(\rd - \ro)|^2 = h(\rd - \ro). \label{eq:absquarescalar}
 \end{align}
-Physically, the monopole coherent spread function is the scalar-valued field on
-the detector with appropriate scaling.
+Physically, the monopole coherent spread function corresponds to the
+scalar-valued field on the detector with appropriate scaling.
 
 Since the monopole transfer function is given by the two-dimensional Fourier
 transform of the monopole point spread function
 \begin{align}
-  H(\bs{\nu}) = \int_{\mbb{R}^2}d\mb{r}\,h(\mb{r})\,\text{exp}[-2\pi i\mb{r}\cdot\bs{\nu}],
+  H(\bv) = \int_{\mbb{R}^2}d\mb{r}\,h(\mb{r})\,\text{exp}[-2\pi i\mb{r}\cdot\bv],
 \end{align}
 we can plug in Eq. \ref{eq:absquarescalar} and use the autocorrelation theorem to
 rewrite the monopole transfer function as
 \begin{align}
-  H(\bs{\nu}) = \int_{\mbb{R}^2}d\bs{\tau}\, C(\bs{\tau})C^*(\bs{\tau} - \bs{\nu}), 
+  H(\bv) = \int_{\mbb{R}^2}d\bvp\, C(\bvp)C^*(\bvp - \bv), 
 \end{align}
 where $z^*$ denotes the complex conjugate of $z$, and we have introduced the
 \textit{monopole coherent transfer function} as the two-dimensional Fourier
-transform of the orientation-dependent coherent spread function
+transform of the monopole coherent spread function
 \begin{align}
-  C(\bs{\tau}) = \int_{\mbb{R}^2}d\mb{r}\, c(\mb{r})\,\text{exp}[-2\pi i\mb{r}\cdot\bs{\tau}].
+  C(\bvp) = \int_{\mbb{R}^2}d\mb{r}\, c(\mb{r})\,\text{exp}[-2\pi i\mb{r}\cdot\bvp].
 \end{align}
-Physically, the monopole coherent transfer function is the scalar-valued field
-in a Fourier plane of the detector (often called the pupil or aperture plane)
-with appropriate scaling. This provides a valuable shortcut for analyzing
-arbitrary microscopes since it is usually straightforward to calculate the field
-in the pupil. A typical approach for calculating the transfer functions is to
-(1) calculate the field in the pupil, (2) scale the field to find the coherent
-monopole transfer function, then (3) use the relationships in Figure
+Physically, the monopole coherent transfer function corresponds to the
+scalar-valued field in a Fourier plane of the detector with appropriate scaling.
+We have chosen the symbol $\bvp$ as the coordinate for the coherent
+transfer function because the Fourier plane of the detector is often called the
+\textit{pupil plane}.
+
+The coherent transfer function provides a valuable shortcut for analyzing
+microscopes since it is usually straightforward to calculate the field in the
+aperture plane. A typical approach for calculating the transfer functions is to
+(1) calculate the field in the aperture plane, (2) scale the field to find the
+coherent monopole transfer function, then (3) use the relationships in Figure
 \ref{fig:monopole-transfer-functions} to calculate the other transfer functions.
 
 \begin{figure}
@@ -384,8 +394,8 @@ irradiance in a delta function basis as an integral transform
   g'(\rd') = \int_{\mbb{S}^2}d\so\int_{\mbb{R}^2}d\ro\, h'(\rd', \ro, \so)f(\ro, \so). 
 \end{align}
 where $h'(\rd', \ro, \so)$ is the irradiance at position $\rd'$ created by a
-point source at $\ro$ with orientation $\so$. Once again, many fluorescence
-microscopes can be modeled as magnifiers with shift-invariant blur
+point source at $\ro$ with orientation $\so$. If the imaging system is
+linear and aplanatic we can write the integral transform as
 \begin{align}
   g'(\rd') = \int_{\mbb{S}^2}d\so\int_{\mbb{R}^2}d\ro\, h'(\rd' - m\ro, \so)f(\ro, \so). 
 \end{align}
@@ -395,7 +405,7 @@ normalization factor that corresponds to the total power incident on the
 detector due to a spatial point source with an angularly uniform distribution of
 dipoles
 $P_\text{dip} = \int_{\mbb{S}^2}d\mh{s}\int_{\mbb{R}^2}d\mb{r}\, h'(m\mb{r},
-\mh{s})$. We use these scaling factors to define the
+\so)$. We use these scaling factors to define the
 \textit{dipole point spread function} as
 \begin{align}
   h(\rd - \ro, \so) = \frac{h'(m[\rd - \ro], \so)}{P_\text{dip}}, 
@@ -413,7 +423,7 @@ g(\rd{}) = \int_{\mbb{S}^2}d\so{}\int_{\mbb{R}^2}d\ro{}\, h(\rd{} -\ro{}, \so{})
 Similar to the monopole case, we have chosen to normalize the dipole point
 spread function so that
 \begin{align}
-  \int_{\mbb{S}^2}d\mh{s}\int_{\mbb{R}^2}d\mb{r}\, h(\mb{r}, \mh{s}) = 1. 
+  \int_{\mbb{S}^2}d\so\int_{\mbb{R}^2}d\mb{r}\, h(\mb{r}, \so) = 1. 
 \end{align}
 The dipole point spread function is a measurable quantity, so it is real-valued
 and positive.
@@ -422,20 +432,20 @@ and positive.
 We can make our first change of basis by applying the Fourier-convolution
 theorem to Eq. \ref{eq:odpsf} which yields
 \begin{align}
-G(\bs{\nu}) = \int_{\mbb{S}^2}d\mh{s}\, H(\bs{\nu}, \mh{s})F(\bs{\nu}, \mh{s}) \label{eq:odotf},
+G(\bv) = \int_{\mbb{S}^2}d\so\, H(\bv, \so)F(\bv, \so) \label{eq:odotf},
 \end{align}
 where we define the \textit{spatial dipole transfer function} as
   \begin{align}
-  H(\bs{\nu}, \mh{s}) &= \int_{\mbb{R}^2}d\mb{r}\, h(\mb{r}, \mh{s})\, \text{exp}(-2\pi i\mb{r}\cdot\bs{\nu}),
+  H(\bv, \so) &= \int_{\mbb{R}^2}d\mb{r}\, h(\mb{r}, \so)\, \text{exp}(-2\pi i\mb{r}\cdot\bv),
   \end{align}
   and the \textit{spatial dipole spectrum} as
   \begin{align}
-  F(\bs{\nu}, \mh{s}) &= \int_{\mbb{R}^2}d\mb{r}\, f(\mb{r}, \mh{s})\, \text{exp}(-2\pi i\mb{r}\cdot\bs{\nu}). 
+  F(\bv, \so) &= \int_{\mbb{R}^2}d\mb{r}\, f(\mb{r}, \so)\, \text{exp}(-2\pi i\mb{r}\cdot\bv). 
   \end{align}
   Since the dipole point spread function is normalized and real, we know that
   the spatial dipole transfer function is normalized
-  $\int_{\mbb{S}^2}d\mh{s}\, H(0, \mh{s}) = 1$ and conjugate-symmetric
-  $H(-\bs{\nu}, \mh{s}) = H^*(\bs{\nu}, \mh{s})$.
+  $\int_{\mbb{S}^2}d\mh{s}\, H(0, \so) = 1$ and conjugate-symmetric
+  $H(-\bv, \so) = H^*(\bv, \so)$.
   
   This choice of basis is well suited for simulating and analyzing objects that
   are angularly sparse and spatially dense.
@@ -458,7 +468,7 @@ The spherical harmonics are another set of convenient basis functions. We can
 change basis from spherical delta functions to spherical harmonics by applying
 the generalized Plancharel theorem for spherical functions
 \begin{align}
-  \ints{2}d\mh{s}{}\, p(\mh{s})q(\mh{s}) = \lmsum P_\ell^m Q_\ell^m, \label{eq:plan}
+  \ints{2}d\mh{s}\, p(\mh{s})q(\mh{s}) = \lmsum P_\ell^m Q_\ell^m, \label{eq:plan}
 \end{align}
 where $p(\mh{s})$ and $q(\mh{s})$ are arbitrary functions on the sphere, $P_\ell^m$ and $Q_\ell^m$ are their spherical Fourier transforms defined by
 \begin{align}
@@ -469,7 +479,7 @@ Appendix \ref{sec:sph}. Eq. \ref{eq:plan} expresses the fact that scalar
 products are invariant under a change of basis (see Eq. 3.78 of
 \cite{barrett2004}). The left-hand side of Eq. \ref{eq:plan} is the scalar
 product of $\mbb{L}_2(\mbb{S}^2)$ functions in a delta function basis and the
-right hand side is the scalar product of $\mbb{L}_2(\mbb{S}^2)$ functions in a
+right-hand side is the scalar product of $\mbb{L}_2(\mbb{S}^2)$ functions in a
 spherical harmonic function basis. Applying Eq. \ref{eq:plan} to Eq.
 \ref{eq:odpsf} yields
 \begin{align}
@@ -477,11 +487,11 @@ spherical harmonic function basis. Applying Eq. \ref{eq:plan} to Eq.
 \end{align}
 where we have defined the \textit{angular dipole transfer function} as
 \begin{align}
-  H_\ell^m(\mb{r}) = \int_{\mbb{S}^2}d\mh{s}\, h(\mb{r}, \mh{s})Y_{\ell}^{m*}(\mh{s}),\label{eq:atf-prep} 
+  H_\ell^m(\rd - \ro) = \int_{\mbb{S}^2}d\so\, h(\rd - \ro, \so)Y_{\ell}^{m*}(\so),\label{eq:atf-prep} 
 \end{align}
 and the \textit{angular dipole spectrum} as
 \begin{align}
-  F_\ell^m(\mb{r}) = \int_{\mbb{S}^2}d\mh{s}\, f(\mb{r}, \mh{s})Y_{\ell}^{m*}(\mh{s}).
+  F_\ell^m(\ro) = \int_{\mbb{S}^2}d\so\, f(\ro, \so)Y_{\ell}^{m*}(\so).
 \end{align}
 Since the dipole point spread function is normalized and real-valued, we know
 that the angular dipole transfer function is normalized
@@ -497,20 +507,20 @@ Plancharel theorem for spherical functions to Eq. \ref{eq:odotf} or by applying
 the Fourier convolution theorem to Eq. \ref{eq:atf-form}. We follow the
 second path and find that
 \begin{align}
-G(\bs{\nu}) = \lmsum \msf{H}_\ell^m(\bs{\nu})\msf{F}_\ell^m(\bs{\nu}) \label{eq:saft},
+G(\bv) = \lmsum \msf{H}_\ell^m(\bv)\msf{F}_\ell^m(\bv) \label{eq:saft},
 \end{align}
 where we have defined the \textit{spatio-angular dipole transfer function} as
   \begin{align}
-  \msf{H}_\ell^m(\bs{\nu}) &= \int_{\mbb{S}^2}d\mh{s}\, H(\bs{\nu}, \mh{s})Y_\ell^{m*}(\mh{s}),
+  \msf{H}_\ell^m(\bv) &= \int_{\mbb{S}^2}d\so\, H(\bv, \so)Y_\ell^{m*}(\so),
   \end{align}
   and the \textit{spatio-angular dipole spectrum} as
   \begin{align}
-  \msf{F}_\ell^m(\bs{\nu}) &= \int_{\mbb{S}^2}d\mh{s}\, F(\bs{\nu}, \mh{s})Y_\ell^{m*}(\mh{s}).
+  \msf{F}_\ell^m(\bv) &= \int_{\mbb{S}^2}d\so\, F(\bv, \so)Y_\ell^{m*}(\so).
   \end{align}
   Since the dipole point spread function is normalized and real-valued, we know
   that the spatio-angular dipole transfer function is normalized
   $\msf{H}_0^0(0) = 1$ and conjugate symmetric
-  $\msf{H}_\ell^{-m}(-\bs{\nu}) = (-1)^m\msf{H}_\ell^{m*}(\bs{\nu})$.
+  $\msf{H}_\ell^{-m}(-\bv) = (-1)^m\msf{H}_\ell^{m*}(\bv)$.
   
   This basis is well suited for simulating and analyzing arbitrary samples
   because it exploits the sparsity of the imaging system. We will see this
@@ -528,38 +538,39 @@ functions using coherent transfer functions. The dipole point spread function
 can always be written as the absolute square of a vector-valued function called
 the \textit{dipole coherent spread function}
 \begin{align}
-  h(\mb{r}, \mh{s}) = |\mb{c}(\mb{r}, \mh{s})|^2. \label{eq:absquare2}
+  |\mb{c}(\rd - \ro, \so)|^2 = h(\rd - \ro, \so). \label{eq:absquare2}
 \end{align}
-Physically, the dipole coherent spread function is an appropriately scaled
-vector-valued electric field on the detector. We need a vector-valued coherent
-transfer function since the polarization of the field plays a significant role
-in dipole imaging.
+Physically, the dipole coherent spread function corresponds to the vector-valued
+electric field on the detector with appropriate scaling. We need a vector-valued
+coherent transfer function since the polarization of the field plays a
+significant role in dipole imaging, so the point spread function cannot be
+written as an absolute square of a scalar-valued function.
 
 Since the spatial dipole transfer function is given by the two-dimensional
 Fourier transform of the dipole point spread function
 \begin{align}
-  H(\bs{\nu}) = \int_{\mbb{R}^2}d\mb{r}\,h(\mb{r}, \mh{s})\,\text{exp}[-2\pi i\mb{r}\cdot\bs{\nu}],
+  H(\bv) = \int_{\mbb{R}^2}d\mb{r}\,h(\mb{r}, \so)\,\text{exp}[-2\pi i\mb{r}\cdot\bv],
 \end{align}
 we can plug in Eq. \ref{eq:absquare2} and use the autocorrelation theorem to
 rewrite the spatial dipole transfer function as 
 \begin{align}
-  H(\bs{\nu}) = \int_{\mbb{R}^2}d\bs{\tau}\,\mb{C}(\bs{\tau}, \mh{s})\mb{C}^\dagger(\bs{\tau} - \bs{\nu}, \mh{s}), 
+  H(\bv) = \int_{\mbb{R}^2}d\bvp\,\mb{C}(\bvp, \so)\mb{C}^\dagger(\bvp - \bv, \so), 
 \end{align}
 where we have introduced the \textit{dipole coherent transfer function}
-$\mb{C}(\bs{\tau}, \mh{s})$ as the two-dimensional Fourier transform of the
-dipole coherent spread function
+$\mb{C}(\bvp, \so)$ as the two-dimensional Fourier transform of the dipole
+coherent spread function
 \begin{align}
-  \mb{C}(\bs{\tau}, \mh{s}) = \int_{\mbb{R}^2}d\mb{r}\, \mb{c}(\mb{r}, \mh{s})\,\text{exp}[-2\pi i\mb{r}\cdot\bs{\tau}].
+  \mb{C}(\bvp, \so) = \int_{\mbb{R}^2}d\mb{r}\, \mb{c}(\mb{r}, \so)\,\text{exp}[-2\pi i\mb{r}\cdot\bvp].
 \end{align}
 Physically, the dipole coherent transfer function corresponds to the
-vector-valued electric field created by a dipole with oriented along $\mh{s}$ in
-a Fourier plane of the detector with appropriate scaling. As with the monopole
-case we can calculate the dipole-orientation-dependent fields in the pupil
-plane, scale them appropriately to find the dipole coherent transfer function,
-the use the relationships in Figure \ref{fig:transfer-functions} to calculate
-the other transfer functions. Note that we could define coherent equivalents
-for all four incoherent transfer functions, but we restrict ourselves to these
-two since they are the most useful for our calculations.
+vector-valued electric field created by a dipole oriented along $\so$ in a
+Fourier plane of the detector with appropriate scaling. Similar to the monopole
+case, we can calculate the orientation-dependent fields in the aperture plane,
+scale appropriately to find the dipole coherent transfer function, then use the
+relationships in Figure \ref{fig:transfer-functions} to calculate the other
+transfer functions. Note that we could define coherent equivalents for all four
+incoherent transfer functions, but we restrict ourselves to these two since they
+are the most useful for our calculations.
 
 \begin{figure}
   \hspace{-2em}
@@ -573,7 +584,7 @@ two since they are the most useful for our calculations.
  \end{figure}
     
     
-\section{Results}\label{sec:results}
+ \section{Results}\label{sec:results}
 In this section we apply the tools we developed in the previous sections to
 analyze a paraxial epi-fluorescence microscope. We start by reviewing the
 derivation of the monopole point spread function in preparation for the
@@ -587,7 +598,7 @@ monopole Where are excitation and detection dipoles parallel.
 \subsection{Monopole point spread function of a paraxial epi-fluorescence microscope}
 In this section we derive the form of the monopole point spread function
 $h(\rd - \ro)$. First, we place a monopole emitter at the focal point of an
-objective lens and calculate the field $U_{\text{bfp}}(\rb)$ created in the back
+objective lens and calculate the field $U_{\text{bfp}}(\rp)$ created in the back
 focal plane. We can model a paraxial thin lens as a quadratic phase element, so
 it converts an incident spherical wave to a plane wave in the back focal plane
 with a sharp cutoff at the exit pupil of the lens
@@ -598,7 +609,7 @@ with a sharp cutoff at the exit pupil of the lens
     0\quad \text{else},
   \end{cases}
 \end{align}
-where $\rb$ is the two-dimensional coordinate in the back focal plane and
+where $\rp$ is the two-dimensional coordinate in the back focal plane and
 $\alpha$ is the collection half angle---see Figure XXX. 
 
 A central result of Fourier optics is that the fields one focal distance from
@@ -838,7 +849,7 @@ the paraxial approximation we can find the electric field in the detector plane
 by taking the Fourier transform of the field in the back focal plane
 \cite{goodman1996}
 \begin{align}
-  \mb{E}_{\text{det}}(\rd{}, \so{}) &= \int_{\mbb{R}^2}d\rb{} \mb{E}_{\text{bfp}}(\rb{})\, \text{exp}\left[ik\,\rb{}\cdot\rd{}\right].\label{eq:det1}
+  \mb{E}_{\text{det}}(\rd{}, \so{}) &= \int_{\mbb{R}^2}d\rp{} \mb{E}_{\text{bfp}}(\rp{})\, \text{exp}\left[ik\,\rp{}\cdot\rd{}\right].\label{eq:det1}
 \end{align}
 We evaluate the integral in Appendix \ref{sec:ftvec} and show that 
 \begin{align}
@@ -1225,7 +1236,7 @@ In this appendix we evaluate the two-dimensional Fourier transform of the
 electric field in the back focal plane of paraxial epi-fluorescence microscope
 given by
   \begin{align}
-  \mb{E}_{\text{det}}(\rd{}, \so{}) &= \int_{\mbb{R}^2}d\rb{} \mb{E}_{\text{bfp}}(\rb{})\, \text{exp}\left[ik\,\rb{}\cdot\rd{}\right],\label{eq:det2}
+  \mb{E}_{\text{det}}(\rd{}, \so{}) &= \int_{\mbb{R}^2}d\rp{} \mb{E}_{\text{bfp}}(\rp{})\, \text{exp}\left[ik\,\rp{}\cdot\rd{}\right],\label{eq:det2}
   \end{align}
 where
 \begin{align}
@@ -1316,7 +1327,7 @@ because $Y_\ell^m(-\so) = (-1)^\ell Y_\ell^m(\mh{s})$, so if $\ell$ is odd then
 In this appendix we will evaluate the two-dimensional Fourier transform of the
 higher-order Airy patterns given by
 \begin{align}
-  A_n(\bs{\nu}) = \int_{\mbb{R}^2}d\mb{r}\, a_n(\mb{r})\, \text{exp}\left[-2\pi i\mb{r}\cdot\bs{\nu}\right],  \label{eq:ftA}
+  A_n(\bv) = \int_{\mbb{R}^2}d\mb{r}\, a_n(\mb{r})\, \text{exp}\left[-2\pi i\mb{r}\cdot\bv\right],  \label{eq:ftA}
 \end{align}
 where 
 \begin{align}
@@ -1327,7 +1338,7 @@ The crucial step is to rewrite the function $a_n(\mb{r})$ in terms of the absolu
 square of a simpler function with a known Fourier transform. In this case we
 rewrite as
 \begin{align}
-  A_n(\bs{\nu}) = \frac{n}{\pi}\int_{\mbb{R}^2}d\mb{r}\, |t(\mb{r})|^2\, \text{exp}\left[-2\pi i\mb{r}\cdot\bs{\nu}\right],  \label{eq:ftA}
+  A_n(\bv) = \frac{n}{\pi}\int_{\mbb{R}^2}d\mb{r}\, |t(\mb{r})|^2\, \text{exp}\left[-2\pi i\mb{r}\cdot\bv\right],  \label{eq:ftA}
 \end{align}
 where 
 \begin{align}
@@ -1340,7 +1351,7 @@ $t_n(\mb{r})$ because we know that we can find its Fourier transform.
 % review the calculation to establish the tools we'll need to evaluate $A_2(\nu)$.
 Now we can apply the autocorrelation theorem to rewrite the Fourier transform as
 \begin{align}
-  A_n(\bs{\nu}) = \frac{n}{\pi}\int_{\mbb{R}^2}d\bs{\tau}\, T_n(\bs{\tau})\bar{T}_n(\bs{\tau} - \bs{\nu}), \label{eq:autocorr}
+  A_n(\bv) = \frac{n}{\pi}\int_{\mbb{R}^2}d\bs{\tau}\, T_n(\bs{\tau})\bar{T}_n(\bs{\tau} - \bv), \label{eq:autocorr}
 \end{align}
 where
 \begin{align}
