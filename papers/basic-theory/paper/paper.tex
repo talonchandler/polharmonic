@@ -59,9 +59,9 @@
 
 \begin{document}
 
-\title{Spatio-angular fluorescence microscopy I. Basic theory}
+\title{Spatio-angular fluorescence microscopy I. Basic theory (Draft: \today)}
 
-\author{Talon Chandler,\authormark{1,*} Author order TBD,\authormark{2,*} and Patrick La Rivi\`ere \authormark{1}}
+\author{Talon Chandler,\authormark{1,*} Authors TBD,\authormark{2,*}Rudolf Oldenbourg\authormark{2,*}, and Patrick La Rivi\`ere \authormark{1}}
 
 \address{\authormark{1}University of Chicago, Department of Radiology, Chicago, Illinois 60637, USA\\
 \authormark{2}Publications Department, The Optical Society, 2010 Massachusetts Avenue NW, Washington, DC 20036, USA\\
@@ -76,21 +76,22 @@
 
 \begin{abstract*}
   We introduce the basic elements of a spatio-angular theory of fluorescence
-  microscopy. We start by modeling a microscope imaging an ensemble of in-focus
-  fluorescent dipoles as a linear Hilbert-space operator with domain
+  microscopy. We start by modeling an aplanatic microscope imaging an ensemble
+  of in-focus fluorescent dipoles as a linear Hilbert-space operator with domain
   $\mbb{L}_2(\mbb{R}^2\times\mbb{S}^2)$ and range $\mbb{L}_2(\mbb{R}^2)$, and we
   express the operator in terms of four different sets of object-space basis
   functions. We show that the operator takes a particularly convenient form when
   expressed in a basis of spatial and spherical harmonics---a form we call the
   spatio-angular dipole transfer function. We demonstrate our formalism by
-  analyzing a single-view paraxial epi-fluorescence microscope without using the
-  monopole or scalar approximations. We show that this microscope has an angular
-  band limit, and we demonstrate the value of the transfer function approach by
-  efficiently simulating the imaging process with simple phantoms. Notably, we
-  show that information about the out-of-plane orientation of ensembles of
-  in-focus fluorophores is recorded by paraxial epi-fluorescence microscopes. We
-  discuss the implications of our analysis for all quantitative fluorescence
-  microscopy studies and lay out a path towards a complete theory.
+  analyzing a single-view fluorescence microscope without using the monopole or
+  scalar approximations. We show that this microscope has an angular band limit,
+  and we demonstrate the value of the transfer function approach by efficiently
+  simulating the imaging process with simple phantoms. Notably, we show that
+  information about the out-of-plane orientation of ensembles of in-focus
+  fluorophores is recorded by fluorescence microscopes, and we show that these
+  effects persist in the paraxial limit. We discuss the implications of our
+  analysis for all quantitative fluorescence microscopy studies and lay out a
+  path towards a complete theory.
 \end{abstract*}
 
 \section{Introduction}
@@ -135,45 +136,58 @@ fields, so we need to use an electromagnetic model of light propagation to
 accurately model a microscope imaging dipoles.
 
 This work lies at the intersection of three classes of fluorescence microscopy:
-(1) single molecule localization microscopy (SMLM), (2) spatial ensemble
-fluorescence microscopy including widefield, confocal, and light-sheet
-techniques, and (3) polarized fluorescence microscopy. We briefly review these
-three classes and focus on their use of the monopole and scalar approximations.
+(1) ensemble imaging techniques where many fluorophores are imaged in parallel
+and the goal is to find their concentration throughout the sample, (2) single
+molecule localization microscopy (SMLM) techniques where fluorophores are sparse
+in the sample and the goal is to find the position of each fluorophore, and (3)
+polarized fluorescence techniques where many fluorophores are imaged in parallel
+and the goal is to find their concentration and orientation. We briefly review
+these three classes and focus on their use of the monopole and scalar
+approximations.
 
-The SMLM community has pioneered the use of rigorous electromagnetic models of
-fluorescence microscopes \cite{backer2014, lieb2004} [cite Novotny]. When a
-single molecule is fluorescing in the sample, the measured intensity pattern is
-strongly dependent on the orientation of the emitting molecule. Backlund [cite]
-and Lew [cite] \cite{backlund2014} have shown that ignoring the orientation of
-fluorophores can bias position estimates, so the most accurate SMLM experiments
-must jointly estimate the position and orientation of each molecule.
+The large majority of fluorescence microscopes are used to image ensembles of
+fluorophores, and many widely used restoration techniques make either or both of
+the monopole and scalar approximations. The Gibson-Lanni model \cite{gibson89}
+and the Born and Wolf model \cite{born1980} are two examples of scalar models
+that are widely used to restore data collected by fluorescence microscopes, and
+the Richards and Wolf model \cite{richards} is another widely-used model that
+accounts for vectorial diffraction. All three of these models describe how
+optical fields propagate through an optical system, but they are agnostic to the
+object that is being imaged. In other words, these models are \textit{optical}
+models, and when they are used to model fluorescent objects they implicitly make
+the monopole approximation.
 
-Meanwhile, most fluorescence microscopists image ensembles of fluorophores and
-restore their images without considering the role that the monopole and scalar
-approximations play in the restoration process. A typical fluorescence
-microscopist is only interested in the spatial distribution of fluorophores, so
-they reason that they can ignore the orientation of the emitters.
+The SMLM community has pioneered the use of rigorous electromagnetic models for
+dipole imaging systems that do not adopt the scalar or monopole approximations
+\cite{backer2014, lieb2004, nov2006}. When a single molecule fluoresces, its
+irradiance pattern on the detector is strongly dependent on the orientation of
+the emitting molecule. Backlund et al. \cite{backlund2014} have shown have shown
+that ignoring the orientation of fluorophores can bias position estimates, so
+the most accurate SMLM experiments must jointly estimate the position and
+orientation of each molecule. Some SMLM experiments use polarizers to estimate
+the orientation of single molecules more accurately [Backer DNA paper, other
+Moerner papers], and these works do not adopt the scalar or monopole
+approximations.
 
 A smaller community of microscopists is interested in measuring the orientation
-of ensembles of fluorophores \cite{mehta2016} [Forkey, Goldman, Moerner,
-Oldenbourg]. These techniques typically use polarized illumination or polarized
-detection to make multiple measurements of the same object. Current angular
-restoration techniques use a model of the dipole excitation and emission
+and position of ensembles of fluorophores \cite{mehta2016} [Forkey, Goldman,
+Moerner, Oldenbourg]. These techniques typically use polarized illumination or
+polarized detection to make multiple measurements of the same object. Current
+angular restoration techniques use a model of the dipole excitation and emission
 processes [Fourkas] to recover the orientation of fluorophores using pixel-wise
 arithmetic, but these techniques do not perform any spatial restoration so they
-do not use all of the available information. To our knowledge no work has been
-done to model the complete spatio-angular response of fluorescence microscopes
-to ensembles of oriented fluorophores.
+do not use all of the available information. 
 
+In this work we place these three communities on a common theoretical footing.
 We begin in Section \ref{sec:theory} by formulating the imaging problem
 mathematically. We start with an abstract description of fluorescence imaging
 systems and extend the usual monopole imaging model to dipoles. Along the way we
 introduce transfer functions that will allow us to efficiently analyze
 spatio-angular microscopes. In Section \ref{sec:results} we use the mathematical
 tools we developed in Section \ref{sec:theory} to analyze and simulate a
-single-view paraxial epi-fluorescence microscope, and we demonstrate our model
-with four simple phantoms. Finally, in Section \ref{sec:discussion} we discuss
-the results and their broader implications.
+single-view epi-fluorescence microscope, and we demonstrate our model with four
+simple phantoms. Finally, in Section \ref{sec:discussion} we discuss the results
+and their broader implications.
 
 \section{Theory}\label{sec:theory}
 We begin our analysis with the abstract Hilbert space formalism of Barrett and
@@ -198,10 +212,10 @@ can start to investigate the same mapping in different bases.
 The above discussion is quite abstract, but it is a powerful point of view that
 will enable us to draw new conclusions about all fluorescence microscopes. In
 Section \ref{sec:monopole} we will demonstrate the formalism by examining a
-familiar monopole imaging model, and we will demonstrate the mapping in between
-object and data in two different bases. In Section \ref{sec:dipole} we will
-extend the monopole imaging model to dipoles and examine the mapping in four
-different bases.
+familiar monopole imaging model, and we will demonstrate the mapping between
+object and data space in two different bases. In Section \ref{sec:dipole} we
+will extend the monopole imaging model to dipoles and examine the mapping in
+four different bases.
 
 \subsection{Monopole imaging in different bases}\label{sec:monopole}
 We start by considering a microscope that images a field of in-focus monopoles
@@ -211,9 +225,10 @@ be necessary when we extend to the dipole case.
 
 We can represent the object as a function that assigns a real number to each
 point on a plane, so we identify object space as
-$\mbb{U} = \mbb{L}_2(\mbb{R}^2)$. Similarly, we have a two-dimensional detector
-that measures a real number at every point on a plane, so data space is the same
-set $\mbb{V} = \mbb{L}_2(\mbb{R}^2)$.
+$\mbb{U} = \mbb{L}_2(\mbb{R}^2)$---the set of square-integrable functions on the
+two-dimensional plane. Similarly, we have a two-dimensional detector that
+measures a real number at every point on a plane, so data space is the same set
+$\mbb{V} = \mbb{L}_2(\mbb{R}^2)$.
 
 Next, we name the representations of our object and data in a specific basis. In
 a delta function basis the object can be represented by a function $f(\ro)$
@@ -241,11 +256,16 @@ Next, we assume that the optical system is \textit{aplanatic}---Abbe's sine
 condition is satisfied and on-axis points are imaged without aberration. Abbe's
 sine condition guarantees that off-axis points are imaged without spherical
 aberration or coma \cite{mansuripur2009}, so the imaging system can be modeled
-(at least approximately) as a magnifier with shift-invariant blur
+within the field-of-view of the optical system as a magnifier with
+shift-invariant blur
 \begin{align}
   g'(\rd') = \int_{\mbb{R}^2}d\ro\, h'(\rd' - m\ro)f(\ro), \label{eq:nonconv}
 \end{align}
-where $m$ is a magnification factor. 
+where $m$ is a magnification factor. Note that we have modeled the object and
+data as continuous two-dimensional functions that extend to infinity. All real
+objects must be restricted to a finite field-of-view and the data must be
+discretely sampled, but we continue with continuous function with infinite
+extent for convenience.
 
 We can simplify our analysis by changing coordinates and writing Eq.
 \ref{eq:nonconv} as a convolution \cite{barrett2004}. We define a demagnified
@@ -306,24 +326,23 @@ and the \textit{monopole spectrum} as
 \end{align}
 The monopole point spread function is normalized and real-valued, so we know
 that the monopole transfer function is normalized $H(0) = 1$ and
-conjugate-symmetric $H(-\bv) = H^*(\bv)$.
+conjugate-symmetric $H(-\bv) = H^*(\bv)$ where $z^*$ denotes the complex
+conjugate of $z$.
 
 Notice that Eqs. \ref{eq:lsi} and \ref{eq:freq} are expressions of the same
 mapping between object and data space in different bases. Figure
 \ref{fig:monopole-block} summarizes the relationship between object and data
 space in both bases.
 
-We have used the term \textit{monopole transfer function} instead of the more
-common \textit{optical transfer function}. We define the optical transfer
-function as the mapping between an input irradiance spectrum and an output
-irradiance spectrum in an optical system. With this definition the optical
-transfer function is not necessarily the same as the monopole transfer function.
-For example, consider a light sheet illumination scheme where a sheet of the
-sample is illuminated and an orthogonal detection arm collects the emitted
-fluorescence. Both the excitation path and the detection path can be described
-by optical transfer functions, and the monopole transfer function is given by
-the convolution of the two optical transfer functions. We will see that this is
-a valuable distinction when we consider dipole transfer functions.
+Note that we have used the term \textit{monopole transfer function} instead of
+the commonly-used term \textit{optical transfer function}. We reserve the term
+\textit{optical transfer function} for optical systems---the optical transfer
+function maps between an input irradiance spectrum and an output irradiance
+spectrum in an optical system. We can use optical transfer functions to model
+the optical fields in a microscope, but ultimately we are always interested in
+measuring an object. Although the monopole transfer function can be identical to
+the optical transfer function, we will find the distinction to be valuable when
+we consider dipole transfer functions.
 
 \subsubsection{Monopole coherent transfer functions}
 Although the Fourier transform can be used to calculate the monopole transfer
@@ -347,7 +366,7 @@ rewrite the monopole transfer function as
 \begin{align}
   H(\bv) = \int_{\mbb{R}^2}d\bvp\, C(\bvp)C^*(\bvp - \bv), 
 \end{align}
-where $z^*$ denotes the complex conjugate of $z$, and we have introduced the
+where we have introduced the
 \textit{monopole coherent transfer function} as the two-dimensional Fourier
 transform of the monopole coherent spread function
 \begin{align}
@@ -361,8 +380,8 @@ transfer function because the Fourier plane of the detector is often called the
 
 The coherent transfer function provides a valuable shortcut for analyzing
 microscopes since it is usually straightforward to calculate the field in the
-aperture plane. A typical approach for calculating the transfer functions is to
-(1) calculate the field in the aperture plane, (2) scale the field to find the
+pupil plane. A typical approach for calculating the transfer functions is to (1)
+calculate the field in the pupil plane, (2) scale the field to find the
 coherent monopole transfer function, then (3) use the relationships in Figure
 \ref{fig:monopole-transfer-functions} to calculate the other transfer functions.
 
@@ -394,8 +413,8 @@ irradiance in a delta function basis as an integral transform
   g'(\rd') = \int_{\mbb{S}^2}d\so\int_{\mbb{R}^2}d\ro\, h'(\rd', \ro, \so)f(\ro, \so). 
 \end{align}
 where $h'(\rd', \ro, \so)$ is the irradiance at position $\rd'$ created by a
-point source at $\ro$ with orientation $\so$. If the imaging system is
-linear and aplanatic we can write the integral transform as
+point source at $\ro$ with orientation $\so$. If the optical system is aplanatic
+we can write the integral transform as
 \begin{align}
   g'(\rd') = \int_{\mbb{S}^2}d\so\int_{\mbb{R}^2}d\ro\, h'(\rd' - m\ro, \so)f(\ro, \so). 
 \end{align}
@@ -483,7 +502,7 @@ right-hand side is the scalar product of $\mbb{L}_2(\mbb{S}^2)$ functions in a
 spherical harmonic function basis. Applying Eq. \ref{eq:plan} to Eq.
 \ref{eq:odpsf} yields
 \begin{align}
-  g(\rd) = \lmsum H_\ell^m(\rd - \ro)F_\ell^m(\ro) \label{eq:atf-form}
+  g(\rd) = \lmsum H_\ell^m(\rd - \ro)F_\ell^m(\ro), \label{eq:atf-form}
 \end{align}
 where we have defined the \textit{angular dipole transfer function} as
 \begin{align}
@@ -584,24 +603,136 @@ are the most useful for our calculations.
  \end{figure}
     
     
- \section{Results}\label{sec:results}
-In this section we apply the tools we developed in the previous sections to
-analyze a paraxial epi-fluorescence microscope. We start by reviewing the
-derivation of the monopole point spread function in preparation for the
-derivation of the orientation-dependent point spread function. We conclude the
-section by analyzing the dipole imaging map in the four bases we described
-earlier.
+\section{Results}\label{sec:results}
+In this section we begin to apply the tools we developed in the previous section
+to analyze more specific fluorescence microscopes. During our initial discussion
+we only required the optical system to be aplanatic so that we could model it as
+a shift-invariant magnifier. Now we will be more specific and consider an
+aplanatic optical system in a \textit{$4f$ configuration} with an arbitrary
+first lens (the objective) and a \textit{paraxial second lens} (the tube lens).
+A lens can be considered paraxial if the angle $\alpha$ between the optical axis
+of the lens and the marginal ray is small enough that
+$\sin\alpha \approx \alpha$. As a rule of thumb, paraxial effects become
+significant when the numerical aperture of a lens exceeds 0.7 \cite{gu2000}, but
+this is only a rough guideline.
 
-TODO: Define and discuss paraxial. 4f, illumination uniformity and ignoring in
-monopole Where are excitation and detection dipoles parallel.
+We start by defining \textit{pupil functions} for both monopole and dipole
+imaging systems, and we explicitly relate the pupil function to the previously
+defined coherent transfer function. Next, we calculate the transfer functions
+for monopole and dipole imaging systems with high-NA objectives. We resort to
+numerics as necessary, but we can calculate several transfer function in closed
+form. We compare these results with paraxial results which are completely in
+closed form.
 
-\subsection{Monopole point spread function of a paraxial epi-fluorescence microscope}
-In this section we derive the form of the monopole point spread function
-$h(\rd - \ro)$. First, we place a monopole emitter at the focal point of an
-objective lens and calculate the field $U_{\text{bfp}}(\rp)$ created in the back
-focal plane. We can model a paraxial thin lens as a quadratic phase element, so
-it converts an incident spherical wave to a plane wave in the back focal plane
-with a sharp cutoff at the exit pupil of the lens
+\subsection{Monpole pupil functions}
+We define the \textit{monopole pupil function} $p(\rp)$ of the imaging system as
+the field immediately following the aperture plane created by an on-axis
+monopole where $\rp$ is an unscaled two-dimensional coordinate in the pupil
+plane. In this section we will relate the monopole pupil function to the
+transfer function we defined in Section \ref{sec:theory} by following a near
+variant of the path in Barrett and Myers Section 9.7 \cite{barrett2004}.
+
+Since monopoles emit scalar fields, the monpole pupil function is a
+scalar-valued function. The optical system is aplanatic, so we can write the
+field created at a point in the aperture $\rp$ by a monopole at position $\ro$
+as
+\begin{align}
+   U_p(\rp, \ro) \propto p(\rp)\,\text{exp}\left[-2\pi i \frac{n_0}{\lambda f_0} \rp\cdot\ro \right]. \label{eq:pupil}
+\end{align}
+Eq. \ref{eq:pupil} is a restatement of the aplanatic condition for a $4f$
+optical system---the field in the aperture plane can be written as the pupil
+function multiplied by a linear phase factor that encodes the position of the
+object.
+
+Since the second lens is paraxial, we can model with relationship between the
+field in the aperture plane and the field on the detector with a scaled Fourier
+transform \cite{goodman1996}
+\begin{align}
+   U_d(\rd', \ro) \propto \int_{\mbb{R}^2}d\rp\, p(\rp)\,\text{exp}\left[-2\pi i \frac{n_0}{\lambda f_0} \rp\cdot\ro \right]\text{exp}\left[-2\pi i \frac{n_1}{\lambda f_1} \rp\cdot\rd' \right]. \label{eq:detectorfourier}
+\end{align}
+If we define $P(\bvp)$ as the two-dimensional Fourier transform of the pupil function
+then we can rewrite Eq. \ref{eq:detectorfourier} as
+\begin{align}
+  U_d(\rd', \ro) \propto P\left(\frac{n_0}{\lambda f_0}\ro + \frac{n_1}{\lambda f_1}\rd'\right),
+\end{align}
+which we can simplify further in terms of $m = -\frac{f_1n_0}{f_0n_1}$
+\begin{align}
+  U_d(\rd' - m\ro) \propto P\left(\frac{n_1}{\lambda f_1}[\rd' - m\ro]\right),
+\end{align}
+The irradiance on the detector is given by the absolute square of the field so
+\begin{align}
+  h'(\rd' - m\ro) \propto \left|P\left(\frac{n_1}{\lambda f_1}[\rd' - m\ro]\right)\right|^2.
+\end{align}
+If we demagnify the coordinates $\rd = \rd'/m$ and the irradiance
+$h(\rd - \ro) \propto h'(m[\rd - \ro])$ we find that the monopole point spread function
+is related to the Fourier transform of the monopole pupil function by
+\begin{align}
+  h(\rd - \ro) \propto \left|P\left(-\frac{n_o}{\lambda f_o}[\rd - \ro]\right)\right|^2.
+\end{align}
+The monopole coherent spread function is the absolute square of the monopole point spread function so
+\begin{align}
+  c(\rd - \ro) \propto P\left(-\frac{n_o}{\lambda f_o}[\rd - \ro]\right).
+\end{align}
+The monopole coherent transfer function is the Fourier transform of the monopole coherent spread function so
+\begin{align}
+  C(\bvp) \propto p\left(\frac{\lambda f_o}{n_o}\bvp\right). \label{eq:monopupil}
+\end{align}
+Equation \ref{eq:monopupil} is the key result of this section---the monopole
+coherent transfer function is a scaled monopole pupil function.
+
+\subsection{Dipole pupil function} 
+We define the \textit{dipole pupil function} $\mb{p}(\rp, \so)$ of the imaging
+system as the electric field immediately following the aperture plane created by
+a dipole oriented along $\so$. Since dipoles emit vector-valued electric fields,
+the dipole pupil function is a vector-valued function. Almost all of the
+arguments in the previous section carry over to the dipole case. Briefly, we can
+write the electric field created at a point in the aperture $\rp$ by a dipole at
+$\ro$ oriented along $\so$ as
+ \begin{align}
+   \mb{E}(\rp, \ro, \so) = \mb{p}(\rp, \so)\,\text{exp}\left[-2\pi i \frac{n_0}{\lambda f_0} \rp\cdot\ro \right]. \label{eq:pupil2}
+ \end{align}
+ The second lens is paraxial, so we can find the field on the detector with a
+ Fourier transform
+ \begin{align}
+   \mb{E}_d(\rd', \ro, \so) \propto \int_{\mbb{R}^2}d\rp\, \mb{p}(\rp, \so)\,\text{exp}\left[-2\pi i \frac{n_0}{\lambda f_0} \rp\cdot\ro \right]\text{exp}\left[-2\pi i \frac{n_1}{\lambda f_1} \rp\cdot\rd' \right]. \label{eq:detectorfourier2}
+\end{align}
+Note that the Fourier transform of a vector field is the Fourier transform of
+its scalar-valued orthogonal components, so Eq. \ref{eq:detectorfourier2}
+specifies two two-dimensional Fourier transforms. We follow the same
+manipulations as the previous section and find that the dipole coherent transfer
+function is a scaled dipole pupil function
+\begin{align}
+  \mb{C}(\bvp, \so) \propto \mb{p}\left(\frac{\lambda f_o}{n_o}\bvp, \so\right). \label{eq:monopupil}
+\end{align}
+
+\subsection{Monopole transfer functions}
+Several works \cite{petrov2017, backlund2018} have modeled an aplanatic
+fluorescence microscope imaging isotropic emitters with the scalar pupil
+function
+\begin{align}
+  p(\rp) \propto (1 - r_p^2)^{-1/4}\Pi\left(\frac{r_p}{2f_o\sin\alpha}\right), 
+\end{align}
+where $\Pi(\cdot)$ is a rectangle function defined by
+\begin{align}
+  \Pi(x) = 
+  \begin{cases}
+    1\quad \text{if}\quad |x| < \frac{1}{2},\\
+    0\quad \text{else},
+  \end{cases}
+\end{align}
+which models the aperture stop of the objective, and $(1 - r_p^2)^{-1/4}$
+conserves power before and after the objective. Applying Eq. XXX we see that the
+coherent transfer function for this system is given by
+\begin{align}
+  C(\bvp)
+\end{align}
+
+In this section we calculate the form of the monopole point spread function
+$h(\rd - \ro)$ when both lenses of the optical system are paraxial. First, we
+place a monopole emitter at the focal point of the objective lens. We can model
+a paraxial thin lens as a quadratic phase element, so it converts an incident
+spherical wave to a plane wave in the back focal plane with a sharp cutoff at
+the exit pupil of the lens
 \begin{align}
   U_{\text{bfp}}(\mb{r}_b) \propto \Pi\left(\frac{|\mb{r}_b|}{2\alpha}\right) \equiv
   \begin{cases}
@@ -1120,8 +1251,9 @@ member of $\mbb{L}_2(\mbb{R}^2)$, so at best we can recover the same amount of
 information about the object. In other words, we know immediately that the
 microscope is a rank-1 operator since it only measures one continuous function.
 
-TODO Expand. Make clear that later paper. We postpone a full discussion of SVD to find the object space singular functions
-that span the measurement space of the instrument.
+TODO Expand. Make clear that a later paper will include a full discussion of SVD
+to find the object space singular functions that span the measurement space of
+the instrument.
 
 \subsection{Alternative transfer functions}
 Throughout this work we have used the spherical harmonic functions as a basis
@@ -1167,9 +1299,11 @@ computed with a $\mc{O}(N(\log N)^2)$ algorithm and its inverse can be computed
 with a $\mc{O}(N^{3/2})$ algorithm. To our knowledge no similarly fast
 algorithms exist for expansion onto the higher-order moments.
 
+TODO: Cite Tournier/Descoteux change of basis from SH to SM basis. 
+
 \subsection{What determines the angular frequency cutoff?}
-The spatial-frequency cutoff of a fluorescence microscope is well known to vary
-as NA$/\lambda$---we can increase spatial resolution by increasing the NA of the
+The spatial-frequency cutoff of a fluorescence microscope is well known to be
+2NA$/\lambda$---we can increase spatial resolution by increasing the NA of the
 instrument or by choosing a fluorophore with a shorter emission wavelength.
 Analogously, the angular-frequency spectrum of a fluorescence microscope depends
 on both the instrument and the sample.
@@ -1199,24 +1333,42 @@ similarity between the spatial and angular frequency cutoffs---both the sample
 and the instrument affect the maximum achievable resolution of the imaging
 system.
 
-\subsection{Characterizing real spatio-angular microscopes}
+\subsection{Towards more realistic models}
 The theoretical model we present in this work is an extreme simplification of a
-real microscope. We have ignored the effects of thick samples, optical
-aberration, scattering, high-NA objectives, finite fluorescence lifetimes, and
-interactions between fluorophores, among other. Because of this long list of
-unknown effects, real experiments should make an attempt to characterize the
-specific imaging system.
+real microscope. We have ignored the effects of thick samples, refractive-index
+mismatch, aberration, scattering, rotation of fluorophores, finite fluorescence
+lifetimes, and interactions between fluorophores among others. Because of this
+long list of unknown effects, real experiments will likely require extensions of
+the models developed here.
 
-Typical fluorescence microscopy experiments start with the monopole
-approximation and attempt to characterize the microscope by imaging
-sub-diffraction beads. These images are assumed to be good approximations of the
-monopole point spread function and this data can be used to restore (deconvolve)
-the data taken in arbitrary experiments.
+TODO: Discuss/plan future papers. SVD?
+Defocus/3D imaging:
+$\mc{H}: \mbb{L}_2(\mbb{R}^3\times\mbb{S}^2) \rightarrow \mbb{L}_2(\mbb{R}^3)$.
+Polarized illumination/detection imaging:
+$\mc{H}: \mbb{L}_2(\mbb{R}^3\times\mbb{S}^2) \rightarrow \mbb{L}_2(\mbb{R}^3\times\mbb{S}^1)$.
+Multiview polarized illumination imaging:
+$\mc{H}: \mbb{L}_2(\mbb{R}^3\times\mbb{S}^2) \rightarrow \mbb{L}_2(\mbb{R}^3\times\mbb{S}^1)^V$.
 
-Imaging sub-diffraction beads is not enough to completely characterize the
-response of a microscope to an oriented sample. We need at least three samples
-with a known orientations to characterize the SATF, so isotropic beads are not
-enough. Small beads may not be isotropic [cite Lew].
+
+TODO: Mention and cite rotating dipoles like Lew (model start point, rotation, end point):
+$\mc{H}: \mbb{L}_2(\mbb{R}^3\times\mbb{S}^2\times\mbb{SO}^3\times\mbb{S}^2) \rightarrow \mbb{V}$. 
+
+
+TODO: Cite connection between dipole pupil and Jones pupil. We can use the
+Jones/dipole pupil as a way to extend our model in a straightforward way. Add
+phase aberration (like the Gibson-Lanni model), polarization aberrations,
+amplitude masks, phase masks, etc. Also cite Piestun Green's tensor engineering.
+
+% Typical fluorescence microscopy experiments start with the monopole
+% approximation and attempt to characterize the microscope by imaging
+% sub-diffraction beads. These images are assumed to be good approximations of the
+% monopole point spread function and this data can be used to restore (deconvolve)
+% the data taken in arbitrary experiments.
+
+% Imaging sub-diffraction beads is not enough to completely characterize the
+% response of a microscope to an oriented sample. We need at least three samples
+% with a known orientations to characterize the SATF, so isotropic beads are not
+% enough. Small beads may not be isotropic [cite Lew].
 
 \section{Conclusion}
 Most models of fluorescence microscopes use a monopole model to describe the
@@ -1226,8 +1378,6 @@ spatio-angular point spread function. We developed several transfer functions
 that simplify the mapping between the spatio-angular density and the irradiance
 pattern on the detector, and we demonstrated these transfer functions by
 efficiently simulating a paraxial widefield fluorescence microscope.
-
-
 
 \bibliography{paper}
 \appendix
