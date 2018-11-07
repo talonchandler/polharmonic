@@ -1,0 +1,57 @@
+\documentclass[crop,tikz]{standalone}% 'crop' is the default for v1.0, before it was 'preview'
+% \usetikzlibrary{...}% tikz package already loaded by 'tikz' option
+\usepackage{tikz}
+\usepackage{amsmath, amsthm, amssymb, amsfonts}
+\usetikzlibrary{shapes,arrows.meta}
+\usepackage{newtxtext,newtxmath,courier}
+\DeclareMathAlphabet{\mathcal}{OMS}{cmsy}{m}{n}
+
+% Talon's custom commands
+\newcommand{\argmin}{\arg\!\min}
+\newcommand{\me}{\mathrm{e}}
+\providecommand{\e}[1]{\ensuremath{\times 10^{#1}}} 
+\providecommand{\mb}[1]{\mathbf{#1}}
+\providecommand{\mf}[1]{\mathfrak{#1}}
+\providecommand{\mc}[1]{\mathcal{#1}}
+\providecommand{\ro}{\mathbf{\mathbf{r}}_o}
+\providecommand{\so}{\mathbf{\hat{s}}_o}
+\providecommand{\rp}{\mathbf{r}_p}
+\providecommand{\rbm}[1]{r_b^{\text{m}}}
+\providecommand{\rd}{\mathbf{r}_d}
+\providecommand{\rdf}{\mathpzc{r}_d}
+\providecommand{\mh}[1]{\mathbf{\hat{#1}}}
+\providecommand{\mbb}[1]{\mathbb{#1}}
+\providecommand{\bs}[1]{\boldsymbol{#1}}
+\providecommand{\bv}{\bs{\nu}}
+\providecommand{\bvp}{\bs{\nu}_p}
+\providecommand{\bsh}[1]{\hat{\boldsymbol{#1}}}
+\providecommand{\nan}{\left(\frac{\text{NA}}{n_o}\right)}
+\providecommand{\lmsum}{\sum_{l=0}^\infty\sum_{m=-l}^{l}}
+\providecommand{\intr}[1]{\int_{\mbb{R}^{#1}}}
+\providecommand{\ints}[1]{\int_{\mbb{S}^{#1}}}
+\DeclareFontFamily{OT1}{pzc}{}
+\DeclareFontShape{OT1}{pzc}{m}{it}{<-> s * [1.10] pzcmi7t}{}
+\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
+\newcommand{\eqname}[1]{\tag*{#1}}
+\newcommand*\widefbox[1]{\fbox{\hspace{1em}#1\hspace{1em}}}
+
+\tikzstyle{block} = [draw, fill=white, rectangle, minimum height=4em, minimum width=10em, align=center]
+\begin{document}
+  \begin{tikzpicture}[auto, node distance=2.5cm,>={Latex[length=2mm]}]
+    \tikzset{font={\fontsize{9pt}{12}\selectfont}}
+    \node [block, align=center] (sad) {$h(\rd - \ro)$\\ Monopole point\\ spread function};
+    % \node [block,  right of=sad, node distance=5.5cm] (ads) {$H_\ell^m(\mb{r})$\\ Angular dipole\\ transfer function};
+    \node [block,  left of=sad, node distance=5.5cm] (e) {$c(\rd - \ro)$\\ Coherent monpole \\ spread function};
+      % \node [block, below of=ads, node distance=2.5cm] (sas) {$\mathsf{H}_\ell^m(\bs{\nu})$\\ Spatio-angular\\ dipole transfer function};
+      \node [block, below of=sad, node distance=2.5cm] (sds) {$H(\bs{\nu})$\\ Monopole\\ transfer function};
+        \node [block,  left of=sds, node distance=5.5cm] (e2) {$C(\bvp)$\\ Coherent monopole \\transfer function};
+      % \draw [->] (sad) -- node[shift={(0,0)}] {$\mathcal{F}_{\mathbb{S}^2}$} (ads);
+      \draw [->] (e) -- node[shift={(0,.75)}] {$|c(\rd - \ro)|^2$} (sad);
+      % \draw [->] (e2) -- node[] {$\int_{\mbb{R}^2}d\rb \mb{E}_{\text{bfp}}(\rb, \mh{s})\mb{E}_{\text{bfp}}^\dagger(\rb - \bs{\nu}, \mh{s})$} (sds);
+            \draw [->] (e2) -- node[below, shift={(0,-0.75)}] {$\int_{\mbb{R}^2}d\bvp\, C(\bvp)C^*(\bvp - \bs{\nu})$} (sds);        
+      % \draw [->] (ads) -- node[left, shift={(0,0)}] {$\mathcal{F}_{\mathbb{R}^2}$} (sas);
+          \draw [->] (e) -- node[left] {$\mathcal{F}_{\mathbb{R}^2}$} (e2);
+    % \draw [->] (sds) -- node[below, shift={(0,0)}] {$\mathcal{F}_{\mathbb{S}^2}$} (sas);
+    \draw [->] (sad) -- node[left] {$\mathcal{F}_{\mathbb{R}^2}$} (sds);
+      \end{tikzpicture}
+\end{document}

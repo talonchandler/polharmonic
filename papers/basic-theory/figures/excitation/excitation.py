@@ -46,7 +46,7 @@ for col in range(cols):
     ax.set_xticklabels(['0','$\pi/8$','$\pi/4$','$3\pi/8$','$\pi/2$'])
 
     ax.text(0.5, -0.25, 'Inclination angle $\\vartheta$', ha='center', va='center', transform=ax.transAxes)
-    ax.text(-0.3, 0.5, 'Excitation kernel $h_{\\textrm{exc}}(\\vartheta)$', ha='center', va='center', rotation=90, transform=ax.transAxes)
+    ax.text(-0.3, 0.5, 'Excitation response $h_{\\textrm{exc}}(\\vartheta)$', ha='center', va='center', rotation=90, transform=ax.transAxes)
     
 
 f.savefig('excitation.pdf', dpi=500, bbox_inches='tight')

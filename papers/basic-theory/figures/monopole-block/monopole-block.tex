@@ -1,13 +1,14 @@
-\documentclass[crop,tikz]{standalone}% 'crop' is the default for v1.0, before it was 'preview'
+\documentclass[osa-article,crop,tikz]{standalone}% 'crop' is the default for v1.0, before it was 'preview'
 % \usetikzlibrary{...}% tikz package already loaded by 'tikz' option
 \usepackage{tikz}
-\usepackage{amsmath, amsthm, amssymb, amsfonts, bm}
+\usepackage{amsmath, amsthm, amssymb, amsfonts}
 \usetikzlibrary{shapes,arrows.meta}
-\usepackage{mathptmx}
+\usepackage{newtxtext,newtxmath,courier}
 \DeclareMathAlphabet{\mathcal}{OMS}{cmsy}{m}{n}
-% \DeclareMathAlphabet{\boldsymbol}{OMS}{cmsy}{m}{n}
 
 % Talon's custom commands
+\usepackage{xcolor}
+\newcommand{\gray}[1]{\colorbox{black!10!white}{$\displaystyle #1\hspace{-0.2em}$}\,}
 \newcommand{\argmin}{\arg\!\min}
 \newcommand{\me}{\mathrm{e}}
 \providecommand{\e}[1]{\ensuremath{\times 10^{#1}}} 
@@ -35,23 +36,23 @@
 \newcommand{\eqname}[1]{\tag*{#1}}
 \newcommand*\widefbox[1]{\fbox{\hspace{1em}#1\hspace{1em}}}
 
-\tikzstyle{block} = [draw, fill=white, rectangle, minimum height=4em, minimum width=7em, align=center]
+
+\tikzstyle{block} = [draw, fill=white, rectangle, minimum height=5em, minimum width=7em, align=center]
 
 \begin{document}
   \begin{tikzpicture}[auto, node distance=2cm,>={Latex[length=2mm]}]
     \tikzset{font={\fontsize{9pt}{12}\selectfont}}
     \node [block, align=center] (den) {$f(\ro{})$\\ Monopole\\ density};
     \node [block, below of=den, node distance=2.5cm] (ds) {$F(\bs{\nu})$\\ Monopole\\ spectrum};
-    \node [block,  right of=den, node distance=7cm] (irr) {$g(\rd)$\\ Irradiance};
-    \node [block,  right of=ds, node distance=7cm] (is) {$G(\bs{\nu})$\\ Irradiance\\ spectrum};
+    \node [block,  right of=den, node distance=7cm] (irr) {$g(\rd)$\\ Scaled\\ irradiance};
+    \node [block,  right of=ds, node distance=7cm] (is) {$G(\bs{\nu})$\\ Scaled\\ irradiance\\ spectrum};
     \draw [->] (den) -- node[] {$\mathcal{F}_{\mathbb{R}^2}$} (ds);
     \draw [->] (is) -- node[left] {$\mathcal{F}^{-1}_{\mathbb{R}^2}$} (irr);
-    
-    \draw [->] (den) -- node[text width=4cm, align=center] (cap1) {Point spread\\ function\\ $\int_{\mbb{R}^2}d\ro\, h(\rd - \ro)f(\ro)$} (irr);
-    \draw [->] (ds) -- node[text width=4cm, align=center] (cap1) {Optical transfer\\ function\\ $H(\bs{\nu})F(\bs{\nu})$} (is);
+    \draw [->] (den) -- node[text width=4cm, align=center] (cap1) {Monopole point\\ spread function\\ $\int_{\mbb{R}^2}d\ro\, \gray{h(\rd - \ro)} f(\ro)$} (irr);
+    \draw [->] (ds) -- node[text width=4cm, align=center] (cap1) {Monopole transfer\\ function\\ $\gray{H(\bs{\nu})}F(\bs{\nu})$} (is);
     
     % Dashed box
-    \draw [dashed] (den.north west) ++(-0.5cm,1.6cm) -- node[below, align=center] {Object space\\ $\mbb{U} = \mbb{L}_2(\mbb{R}^2)$} ++(3.4cm,0) -- ++(0,-6cm) -- ++(-3.4cm,0) -- ++(0, 6cm);
-    \draw [dashed] (irr.north west) ++(-0.5cm,1.6cm) -- node[below, align=center] {Data space\\ $\mbb{V} = \mbb{L}_2(\mbb{R}^2)$} ++(3.4cm,0) -- ++(0,-6cm) -- ++(-3.4cm,0) -- ++(0, 6cm);
+    \draw [dashed] (den.north west) ++(-0.5cm,1.6cm) -- node[below, align=center] {Object space\\ $\mbb{U} = \mbb{L}_2(\mbb{R}^2)$} ++(3.4cm,0) -- ++(0,-6.5cm) -- ++(-3.4cm,0) -- ++(0, 6.5cm);
+    \draw [dashed] (irr.north west) ++(-0.5cm,1.6cm) -- node[below, align=center] {Data space\\ $\mbb{V} = \mbb{L}_2(\mbb{R}^2)$} ++(3.4cm,0) -- ++(0,-6.5cm) -- ++(-3.4cm,0) -- ++(0, 6.5cm);
       \end{tikzpicture}
 \end{document}
