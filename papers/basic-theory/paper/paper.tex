@@ -84,14 +84,14 @@
   expressed in a basis of spatial and spherical harmonics---a form we call the
   spatio-angular dipole transfer function. We demonstrate our formalism by
   analyzing a single-view fluorescence microscope without using the monopole or
-  scalar approximations. We show that this microscope has an angular band limit,
-  and we demonstrate the value of the transfer function approach by efficiently
-  simulating the imaging process with simple phantoms. Notably, we show that
-  information about the out-of-plane orientation of ensembles of in-focus
-  fluorophores is recorded by fluorescence microscopes, and we show that these
-  effects persist in the paraxial limit. We discuss the implications of our
-  analysis for all quantitative fluorescence microscopy studies and lay out a
-  path towards a complete theory.
+  scalar approximations. We show that this imaging system has an angular band
+  limit, and we demonstrate the value of the transfer function approach by
+  efficiently simulating the imaging process with simple phantoms. Notably, we
+  show that information about the out-of-plane orientation of ensembles of
+  in-focus fluorophores is recorded by fluorescence microscopes, and we show
+  that these effects persist in the paraxial limit. We discuss the implications
+  of our analysis for all quantitative fluorescence microscopy studies and lay
+  out a path towards a complete theory.
 \end{abstract*}
 
 \section{Introduction}
@@ -617,8 +617,8 @@ significant when the numerical aperture of a lens exceeds 0.7 \cite{gu2000}, but
 this is only a rough guideline.
 
 We start by defining \textit{pupil functions} for both monopole and dipole
-imaging systems, and we explicitly relate the pupil function to the previously
-defined coherent transfer function. Next, we calculate the transfer functions
+imaging systems, and we explicitly relate the pupil functions to the previously
+defined coherent transfer functions. Next, we calculate the transfer functions
 for monopole and dipole imaging systems with high-NA objectives. We resort to
 numerics as necessary, but we can calculate several transfer function in closed
 form. We compare these results with paraxial results which are completely in
@@ -675,19 +675,19 @@ The monopole coherent spread function is the absolute square of the monopole poi
 \end{align}
 The monopole coherent transfer function is the Fourier transform of the monopole coherent spread function so
 \begin{align}
-  C(\bvp) \propto p\left(\frac{\lambda f_o}{n_o}\bvp\right). \label{eq:monopupil}
+  C(\bvp) \propto p\left(\frac{\lambda f_o}{n_o}\bvp\right). \label{eq:monopupil0}
 \end{align}
-Equation \ref{eq:monopupil} is the key result of this section---the monopole
+Equation \ref{eq:monopupil0} is the key result of this section---the monopole
 coherent transfer function is a scaled monopole pupil function.
 
 \subsection{Dipole pupil function} 
 We define the \textit{dipole pupil function} $\mb{p}(\rp, \so)$ of the imaging
 system as the electric field immediately following the aperture plane created by
-a dipole oriented along $\so$. Since dipoles emit vector-valued electric fields,
-the dipole pupil function is a vector-valued function. Almost all of the
-arguments in the previous section carry over to the dipole case. Briefly, we can
-write the electric field created at a point in the aperture $\rp$ by a dipole at
-$\ro$ oriented along $\so$ as
+an on-axis dipole oriented along $\so$. Since dipoles emit vector-valued
+electric fields, the dipole pupil function is a vector-valued function. Almost
+all of the arguments in the previous section carry over to the dipole case.
+Briefly, we can write the electric field created at a point in the aperture
+$\rp$ by a dipole at $\ro$ oriented along $\so$ as
  \begin{align}
    \mb{E}(\rp, \ro, \so) = \mb{p}(\rp, \so)\,\text{exp}\left[-2\pi i \frac{n_0}{\lambda f_0} \rp\cdot\ro \right]. \label{eq:pupil2}
  \end{align}
