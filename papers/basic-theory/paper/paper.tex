@@ -66,10 +66,13 @@
 
 \title{Spatio-angular fluorescence microscopy I. Basic theory (Draft: \today)}
 
-\author{Talon Chandler,\authormark{1,*}, Rudolf Oldenbourg,\authormark{2} and\\ Patrick La Rivi\`ere\authormark{1,2}}
+\author{Talon Chandler,\authormark{1,*} Hari Shroff,\authormark{2,3} Rudolf Oldenbourg,\authormark{2} and Patrick La Rivi\`ere\authormark{1,2}}
 
 \address{\authormark{1}University of Chicago, Department of Radiology, Chicago, Illinois 60637, USA\\
-  \authormark{2}Marine Biological Laboratory, Bell Center, Woods Hole, Massachusetts 02543, USA
+  \authormark{2}Section on High Resolution Optical Imaging, National Institute
+  of Biomedical Imaging and Bioengineering, National Institutes of Health,
+  Bethesda, Maryland 20892, USA\\
+  \authormark{3}Marine Biological Laboratory, Bell Center, Woods Hole, Massachusetts 02543, USA
 }
 
 \email{\authormark{*}talonchandler@talonchandler.com} %% email address is required
@@ -1083,7 +1086,7 @@ $\vartheta = \pi/2$---see Novotny and Hecht for a similar observation
    \label{fig:ph1}
  \end{figure}
 
-\subsection{Paraxial dipole spatial transfer function}\label{sec:trans}
+\subsubsection{Paraxial dipole spatial transfer function}\label{sec:trans}
 The dipole spatial transfer function is the spatial Fourier transform of
 the dipole point spread function (or the complex autocorrelation of the dipole
 coherent transfer function). Applying the Fourier transform to Eq.
@@ -1267,7 +1270,7 @@ $Y_2^0$ spherical harmonic.
  spherical Fourier transform of the dipole spatial transfer function) to find
  that
  \begin{align}
-H_{\ell}^m(\mb{r}) \stackrel{(p)}{=} &\frac{N}{3\nu_c^2}\left[2\text{chat}_0\left(\frac{\nu}{\nu_c}\right) + \left(\frac{\text{NA}}{n_o}\right)^2\text{chat}_1\left(\frac{\nu}{\nu_c}\right)\right]\Lambda_0\delta_{\ell0}\delta_{m0}+\nonumber\\ &\frac{N}{3\nu_c^2}\left[-2\text{chat}_0\left(\frac{\nu}{\nu_c}\right) + 2\left(\frac{\text{NA}}{n_o}\right)^2\text{chat}_1\left(\frac{\nu}{\nu_c}\right)\right]\Lambda_2\delta_{\ell2}\delta_{m0}.
+H_{\ell}^m(\bv) \stackrel{(p)}{=} &\frac{N}{3\nu_c^2}\left[2\text{chat}_0\left(\frac{\nu}{\nu_c}\right) + \left(\frac{\text{NA}}{n_o}\right)^2\text{chat}_1\left(\frac{\nu}{\nu_c}\right)\right]\Lambda_0\delta_{\ell0}\delta_{m0}+\nonumber\\ &\frac{N}{3\nu_c^2}\left[-2\text{chat}_0\left(\frac{\nu}{\nu_c}\right) + 2\left(\frac{\text{NA}}{n_o}\right)^2\text{chat}_1\left(\frac{\nu}{\nu_c}\right)\right]\Lambda_2\delta_{\ell2}\delta_{m0}.
  \end{align}
 
  In Fig. \ref{fig:dsatf} we plot the dipole spatio-angular transfer function for
@@ -1506,13 +1509,14 @@ National Institute of Health (NIH) (R01GM114274, R01EB017293).
 
 \section*{Acknowledgments}
 We thank Kyle Myers, Harrison Barrett, Scott Carney, Luke Pfister, Jerome Mertz,
-Mikael Backlund, Matthew Lew, Hari Shroff, Min Guo, Yicong Wu, Shalin Mehta,
-Abhishek Kumar, Peter Basser, Gordon Wetzstein, Hayato Ikoma, Laura Waller, Ren
-Ng, Xiaochuan Pan, Emil Sidky, Chien-Min Kao, Phillip Vargas, Dimple Modgil,
-Sean Rose, Corey Smith, Scott Trinkle, and Jianhua Gong for valuable discussions
-during the development of this work. TC was supported by a University of Chicago
-Biological Sciences Division Graduate Fellowship, and PL was supported by a
-Marine Biological Laboratory Whitman Center Fellowship.
+Sjoerd Stallinga, Mikael Backlund, Matthew Lew, Min Guo, Yicong Wu, Shalin
+Mehta, Abhishek Kumar, Peter Basser, Marc Levoy, Michael Broxton, Gordon
+Wetzstein, Hayato Ikoma, Laura Waller, Ren Ng, Tomomi Tani, Michael Shribak, Mai
+Tran, Amitabh Verma, Xiaochuan Pan, Emil Sidky, Chien-Min Kao, Phillip Vargas,
+Dimple Modgil, Sean Rose, Corey Smith, Scott Trinkle, and Jianhua Gong for
+valuable discussions during the development of this work. TC was supported by a
+University of Chicago Biological Sciences Division Graduate Fellowship, and PL
+was supported by a Marine Biological Laboratory Whitman Center Fellowship.
 
 \section*{Disclosures}
 The authors declare that there are no conflicts of interest related to this article.
