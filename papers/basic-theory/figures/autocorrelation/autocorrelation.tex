@@ -31,7 +31,7 @@
   \draw[outline] \firstcircle node {};
   \draw[outline] \secondcircle node (b) {};
   \draw [|-|] (0,-1.7cm) -- node[below] {$\nu$} (2.0cm,-1.7cm);
-  \draw [|-|] (0,+1.7cm) -- node[above] {$\nu_o$} (1.5cm,+1.7cm);          
+  \draw [|-|] (0,+1.7cm) -- node[above] {$1/2$} (1.5cm,+1.7cm);          
   \node[right=1.5cm of b] (equal) {=$\, \, 4 \, \, \times$};
 
   % 1/4
@@ -44,10 +44,10 @@
 
   % sector
   \begin{scope}[xshift=6.5cm, yshift=-0.5cm]
-    \draw[outline] (1.5, 0) -- node[below] {$\cos^{-1}\left(\frac{\nu}{2\nu_o}\right)$} (0,0) -- (1, 1.12);
+    \draw[outline] (1.5, 0) -- node[below] {$\cos^{-1}(\nu)$} (0,0) -- (1, 1.12);
     \draw [-] (0.15,-0.25cm) -- node[above left] {} (.15,.1cm);
     \draw[outline](1.5,0) arc (0:48.19:1.5); \draw[outline] (0.25,0) arc (0:48.19:0.25);
-    \draw [|-|] (-0.1,0.1cm) -- node[above left] {$\nu_o$} (.9,1.22cm);
+    \draw [|-|] (-0.1,0.1cm) -- node[shift={(-.2,.3)}] {$1/2$} (.9,1.22cm);
   \end{scope}
 
   \node[right=6.1cm of b] (equal2) {$-$};
@@ -55,12 +55,12 @@
   % triangle
   \begin{scope}[xshift=9.0cm, yshift=-0.5cm]
     \draw[outline] (1, 0) -- (0,0) -- (1, 1.12) -- (1, 0);
-    \draw [|-|] (-0.1,0.1cm) -- node[above left] {$\nu_o$} (.9,1.22cm);
+    \draw [|-|] (-0.1,0.1cm) -- node[shift={(-.2,.3)}] {$1/2$} (.9,1.22cm);
     \draw [|-|] (0,-0.15cm) -- node[below] {$\nu/2$} (1,-.15cm);
-    \draw [|-|] (1.15,0cm) -- node[right] {$\nu_o\sqrt{1 - \left(\frac{\nu}{2\nu_o}\right)^2}$} (1.15,1.12cm);
+    \draw [|-|] (1.15,0cm) -- node[right] {$\frac{1}{2}\sqrt{1 - \nu^2}$} (1.15,1.12cm);
   \end{scope}
 
-  \node[right=10.5cm of b] (equal2) {$\Bigg\}$};
+  \node[right=9.5cm of b] (equal2) {$\Bigg\}$};
 
 \end{tikzpicture}
 \end{document}

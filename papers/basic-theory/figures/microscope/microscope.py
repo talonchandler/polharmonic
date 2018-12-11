@@ -8,6 +8,8 @@ outer_gridspec = gridspec.GridSpec
 inner_gridspec = gridspec.GridSpecFromSubplotSpec
 plt.rcParams["font.family"] = "serif"
 plt.rcParams["font.serif"] = "Times"
+plt.rc('path',simplify_threshold=.0001)
+
 
 # Physical parameters
 lamb = 0.3
@@ -25,7 +27,7 @@ wspace = 0.1
 wspace_inner = 0.2
 hspace = 0
 f = plt.figure(figsize=(inches*(np.sum(widths) + widths[0]*(wspace)*(outer_cols - 1) + 0.5*widths[0]*wspace_inner*outer_cols),
-                        inches*(np.sum(heights)) + heights[0]*hspace*(outer_rows - 1)))
+                        inches*(np.sum(heights)) + heights[0]*hspace*(outer_rows - 1)), dpi=500)
                                 
 outer_grid = outer_gridspec(ncols=outer_cols, nrows=outer_rows,
                             width_ratios=widths, height_ratios=heights,
@@ -70,7 +72,7 @@ for outer_row in range(outer_rows):
                 if outer_col == 0 and inner_col == 0:
                     row_labels = ['Detector\n irradiance',
                                   'Tube\n lens',
-                                  'Back focal\n plane\n electric field',
+                                  'Pupil plane\n field',
                                   'Objective\n lens',
                                   'Far-field\n radiation\n pattern']
                     ax.text(-0.3,0.5,row_labels[inner_row], ha='right', va='center', transform=ax.transAxes)
@@ -124,7 +126,11 @@ for outer_row in range(outer_rows):
                     if outer_col == 2:
                         z = (special.jn(2,a*r)/(a*r))**2
                     if inner_col == 0:
+                        # ax.plot(x, z[:,N//2]/np.max(z), 'k-', lw=0.5, zorder=10)
+                        # ax.set_xlim((-1,1))
+                        # ax.set_xlim((-1,1))                        
                         l1 = lines.Line2D(x, z[:,N//2]/np.max(z), c='k', lw=1, transform=ax.transData, zorder=0)
+                        # l1.set_marker('.')
                         f.lines.extend([l1])
                     if inner_col == 1:
                         ax.imshow(z/np.max(z), vmin=0, vmax=1, cmap='gray', interpolation='bicubic', origin='lower', extent=[-1,1,-1,1])
@@ -217,4 +223,4 @@ for outer_row in range(outer_rows):
                     ax.imshow(z, vmin=-np.max(z), vmax=np.max(z), cmap='bwr', extent=[-1,1,-1,1], interpolation='bicubic', origin='lower')
                     
                     
-f.savefig('microscope.pdf', dpi=500, bbox_inches='tight')
+f.savefig('microscope.pdf', bbox_inches='tight', dpi=500)

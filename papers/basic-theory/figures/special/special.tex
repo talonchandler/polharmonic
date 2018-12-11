@@ -35,23 +35,17 @@
 \newcommand{\eqname}[1]{\tag*{#1}}
 \newcommand*\widefbox[1]{\fbox{\hspace{1em}#1\hspace{1em}}}
 
-\tikzstyle{block} = [draw, fill=white, rectangle, minimum height=4em, minimum width=10em, align=center]
+\tikzstyle{block} = [draw, fill=white, rectangle, minimum height=3em, minimum width=5em, align=center]
 \begin{document}
   \begin{tikzpicture}[auto, node distance=2.5cm,>={Latex[length=2mm]}]
     \tikzset{font={\fontsize{9pt}{12}\selectfont}}
-    \node [block, align=center] (sad) {$h(\rd - \ro)$\\ Monopole point\\ spread function};
-    % \node [block,  right of=sad, node distance=5.5cm] (ads) {$H_\ell^m(\mb{r})$\\ Angular dipole\\ transfer function};
-    \node [block,  left of=sad, node distance=5.5cm] (e) {$c(\rd - \ro)$\\ Monopole coherent \\ spread function};
-      % \node [block, below of=ads, node distance=2.5cm] (sas) {$\mathsf{H}_\ell^m(\bs{\nu})$\\ Spatio-angular\\ dipole transfer function};
-      \node [block, below of=sad, node distance=2.5cm] (sds) {$H(\bs{\nu})$\\ Monopole\\ transfer function};
-        \node [block,  left of=sds, node distance=5.5cm] (e2) {$C(\bvp)$\\ Monopole coherent \\transfer function};
-      % \draw [->] (sad) -- node[shift={(0,0)}] {$\mathcal{F}_{\mathbb{S}^2}$} (ads);
-      \draw [->] (e) -- node[shift={(0,.75)}] {$|c(\rd - \ro)|^2$} (sad);
-      % \draw [->] (e2) -- node[] {$\int_{\mbb{R}^2}d\rb \mb{E}_{\text{bfp}}(\rb, \mh{s})\mb{E}_{\text{bfp}}^\dagger(\rb - \bs{\nu}, \mh{s})$} (sds);
-            \draw [->] (e2) -- node[below, shift={(0,-0.75)}] {$\int_{\mbb{R}^2}d\bvp\, C(\bvp)C^*(\bvp - \bs{\nu})$} (sds);        
-      % \draw [->] (ads) -- node[left, shift={(0,0)}] {$\mathcal{F}_{\mathbb{R}^2}$} (sas);
+    \node [align=center] (sad) {$\text{jinc}_{n}^2(r)$};
+    \node [left of=sad, node distance=3.5cm] (e) {$i^n\text{exp}[in\phi_r]\text{jinc}_{n}(r)$};
+      \node [below of=sad, node distance=2.cm] (sds) {$\text{chat}_{n}(\nu)$};
+        \node [left of=sds, node distance=3.5cm] (e2) {$(2\tau)^n\text{exp}[in\phi_\tau]\Pi(\tau)$};
+      \draw [->] (e) -- node[shift={(0,0.1)}] {$|\cdot|^2$} (sad);
+            \draw [->] (e2) -- node[below, shift={(0,-0.1)}] {$\star_2$} (sds);        
           \draw [->] (e) -- node[left] {$\mathcal{F}_{\mathbb{R}^2}$} (e2);
-    % \draw [->] (sds) -- node[below, shift={(0,0)}] {$\mathcal{F}_{\mathbb{S}^2}$} (sas);
-    \draw [->] (sad) -- node[left] {$\mathcal{F}_{\mathbb{R}^2}$} (sds);
+    \draw [->] (sad) -- node[right] {$\mathcal{F}_{\mathbb{R}^2}$} (sds);
       \end{tikzpicture}
 \end{document}

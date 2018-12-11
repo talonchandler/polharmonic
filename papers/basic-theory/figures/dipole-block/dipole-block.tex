@@ -42,21 +42,21 @@
   \begin{tikzpicture}[auto, node distance=2cm,>={Latex[length=2mm]}]
     \tikzset{font={\fontsize{9pt}{12}\selectfont}}
     \node [block, align=center] (sad) {$f(\ro{}, \so)$\\ Dipole\\ density};
-    \node [block,  right of=sad, node distance=4cm] (ads) {$F_\ell^m(\ro)$\\ Angular\\ dipole\\ spectrum};
+    \node [block,  right of=sad, node distance=4cm] (ads) {$F_\ell^m(\ro)$\\ Dipole\\ angular\\ spectrum};
     \node [block,  right of=ads, node distance=9cm] (irr) {$g(\rd)$\\ Scaled\\ irradiance};
-    \node [block, below of=ads, node distance=2.5cm] (sas) {$\mathsf{F}_\ell^m(\bs{\nu})$\\ Spatio-angular\\ dipole\\ spectrum};
+    \node [block, below of=ads, node distance=2.5cm] (sas) {$\mathsf{F}_\ell^m(\bs{\nu})$\\ Dipole\\ spatio-angular\\ spectrum};
     \node [block,  right of=sas, node distance=9cm] (is) {$G(\bs{\nu})$\\ Scaled\\ irradiance\\ spectrum};
-    \node [block, below of=sad, node distance=2.5cm] (sds) {$F(\bs{\nu}, \so)$\\ Spatial\\ dipole\\ spectrum};
+    \node [block, below of=sad, node distance=2.5cm] (sds) {$F(\bs{\nu}, \so)$\\ Dipole\\ spatial\\ spectrum};
     \draw [->] (sad) -- node[] {$\mathcal{F}_{\mathbb{S}^2}$} (ads);        
     \draw [->] (ads) -- node[left] {$\mathcal{F}_{\mathbb{R}^2}$} (sas);
     \draw [->] (sds) -- node[] {$\mathcal{F}_{\mathbb{S}^2}$} (sas);
     \draw [->] (sad) -- node[left] {$\mathcal{F}_{\mathbb{R}^2}$} (sds);
     \draw [->] (is) -- node[left] {$\mathcal{F}^{-1}_{\mathbb{R}^2}$} (irr);
     
-    \draw [->] (ads) -- node[text width=4cm, align=center] (cap1) {Angular dipole\\ transfer function\\ $\sum_{\ell m}\gray{H_\ell^m(\rd - \ro)}F_\ell^m(\ro)$} (irr);
+    \draw [->] (ads) -- node[text width=4cm, align=center] (cap1) {Dipole angular\\ transfer function\\ $\sum_{\ell m}\int_{\mbb{R}^2}d\ro \gray{H_\ell^m(\rd - \ro)}F_\ell^m(\ro)$} (irr);
     \draw [->] (sad.north) -- ++(0,1.0cm) -- node[right=2.cm, above, align=center] {Dipole point\\ spread function\\ $\int_{\mbb{S}^2}d\so\, \int_{\mbb{R}^2} d\ro\, \gray{h(\rd - \ro, \so)}f(\ro, \so)$} ++(13cm,0) --  (irr.north);
-    \draw [->] (sds.south) -- ++(0,-1.0cm) -- node[right=1.95cm, above, align=center] {Spatial dipole\\ transfer function\\ $\int_{\mbb{S}^2}d\so\, \gray{H(\bs{\nu}, \so)}F(\bs{\nu}, \so)$} ++(13cm,0) -- (is.south);
-    \draw [->] (sas) -- node[text width=4cm, align=center] {Spatio-angular dipole\\ transfer function\\ $\sum_{\ell m}\gray{\mathsf{H}_\ell^m(\bs{\nu})}\mathsf{F}_\ell^m(\bs{\nu})$} (is);    
+    \draw [->] (sds.south) -- ++(0,-1.0cm) -- node[right=1.95cm, above, align=center] {Dipole spatial\\ transfer function\\ $\int_{\mbb{S}^2}d\so\, \gray{H(\bs{\nu}, \so)}F(\bs{\nu}, \so)$} ++(13cm,0) -- (is.south);
+    \draw [->] (sas) -- node[text width=4cm, align=center] {Dipole spatio-angular\\ transfer function\\ $\sum_{\ell m}\gray{\mathsf{H}_\ell^m(\bs{\nu})}\mathsf{F}_\ell^m(\bs{\nu})$} (is);    
 
     % Dashed box
     \draw [dashed] (sad.north west) ++(-0.5cm,3cm) -- node[below, align=center] {Object space\\ $\mbb{U} = \mbb{L}_2(\mbb{R}^2\times\mbb{S}^2)$} ++(7.5cm,0) -- ++(0,-9cm) -- ++(-7.5cm,0) -- ++(0, 9cm);

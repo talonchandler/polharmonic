@@ -25,7 +25,7 @@
 \usepackage{bm}
 
 % Talon's custom commands
-\setlength\arraycolsep{2.25pt}
+\setlength\arraycolsep{1.5pt}
 \let\originalleft\left
 \let\originalright\right
 \renewcommand{\left}{\mathopen{}\mathclose\bgroup\originalleft}
@@ -66,7 +66,7 @@
 
 \title{Spatio-angular fluorescence microscopy I. Basic theory (Draft: \today)}
 
-\author{Talon Chandler,\authormark{1,*} Hari Shroff,\authormark{2,3} Rudolf Oldenbourg,\authormark{2} and Patrick La Rivi\`ere\authormark{1,2}}
+\author{Talon Chandler,\authormark{1,*} Hari Shroff,\authormark{2,3} Rudolf Oldenbourg,\authormark{3} and Patrick La Rivi\`ere\authormark{1,3}}
 
 \address{\authormark{1}University of Chicago, Department of Radiology, Chicago, Illinois 60637, USA\\
   \authormark{2}Section on High Resolution Optical Imaging, National Institute
@@ -87,11 +87,11 @@
   microscopy. We start by modeling an aplanatic microscope imaging an ensemble
   of in-focus fluorescent dipoles as a linear Hilbert-space operator, and we
   show that the operator takes a particularly convenient form when expressed in
-  a basis of spatial and spherical harmonics---a form we call the dipole
-  spatio-angular transfer function. We demonstrate our formalism by analyzing a
-  single-view fluorescence microscope without using the monopole or scalar
-  approximations. We show that this imaging system has a spatio-angular band
-  limit, and we exploit the band limit to perform efficient simulations.
+  a basis of complex exponentials and spherical harmonics---a form we call the
+  dipole spatio-angular transfer function. We demonstrate our formalism by
+  analyzing a single-view fluorescence microscope without using the monopole or
+  scalar approximations. We show that this imaging system has a spatio-angular
+  band limit, and we exploit the band limit to perform efficient simulations.
   Notably, we show that information about the out-of-plane orientation of
   ensembles of in-focus fluorophores is recorded by paraxial fluorescence
   microscopes.
@@ -99,47 +99,57 @@
 
 \section{Introduction}
 Fluorescence microscopes are widely used in the biological sciences for
-measuring the spatial and angular distribution of ensembles of fluorophores.
-While most fluorescence microscopy experiments are designed to measure only the
-spatial distribution of fluorophores, a growing number of experiments use
-polarizers to measure both the spatial and angular distributions of fluorophores
-\cite{vrabioiu2006, mattheyses2010, mehta2016, mcquilken2017, zhanghao2017}.
+measuring ensembles of fluorescent molecules. While most fluorescence microscopy
+experiments are designed to measure only the spatial distribution of
+fluorophores, a growing number of experiments seek to measure both the spatial
+and angular distributions of fluorophores by the use of polarizers
+\cite{vrabioiu2006, mattheyses2010, mehta2016, mcquilken2017, zhanghao2017} or
+point spread function engineering \cite{agrawal2012, zhang2018}.
 
 Meanwhile, single-molecule localization microscopy (SMLM) experiments use
 spatially sparse fluorescent samples to localize single molecules with precision
-that surpasses the diffraction limit. Real SMLM experiments are limited by noise
-\cite{foreman2011, chao2016} and model mismatch, and several studies have shown
-that model mismatch (e.g. ignoring the effects of vector optics, dipole
-orientation \cite{backlund2014}, and dipole rotation \cite{lew2013}) can
-introduce localization bias into SMLM experiments. Therefore, the most precise
-SMLM experiments must use an appropriate model and jointly estimate both the
-position and orientation of each fluorophore. Several studies have successfully
-used vector optics and dipole models to estimate the position and orientation of
+that surpasses the diffraction limit. Noise limits the precision of this
+localization \cite{foreman2011, chao2016}, and several studies have shown that
+model mismatch (e.g. ignoring the effects of vector optics, dipole orientation
+\cite{backlund2014}, and dipole rotation \cite{lew2013}) can introduce
+localization bias as well. Therefore, the most precise and accurate SMLM
+experiments must use an appropriate model and jointly estimate both the position
+and orientation of each fluorophore. Several studies have successfully used
+vector optics and dipole models to estimate the position and orientation of
 single molecules \cite{bohmer2003, lieb2004, toprak2006, aguet2009}, and there
 is growing interest in designing optical systems for measuring the position,
 orientation, and rotational dynamics of single molecules \cite{agrawal2012,
-  backer2014, zhang2018, zhang2018-2}.
+  backer2014, stallinga2015, zhang2018, zhang2018-2}.
 
 While many studies have focused on improving imaging models for spatially sparse
 fluorescent samples, we consider the more general case and aim to improve
-imaging models for arbitrary samples. In particular, we examine the effects of
-two widely used approximations in fluorescence microscopy---the \textit{monopole
-  approximation} and the \textit{scalar approximation}.
+imaging models for arbitrary samples including those containing ensembles of
+fluorophores within a resolvable volume. In particular, we examine the effects
+of two widely used approximations in fluorescence microscopy---the
+\textit{monopole approximation} and the \textit{scalar approximation}.
 
 We use the term \textit{monopole} to refer to a model of a fluorophore that
 treats it as an isotropic absorber/emitter. Although the term \textit{monopole
-  approximation} is not in widespread use, we think that it is an accurate label
-for the way many models of fluorescence microscopes treat fluorophores, and we
-use the term to distinguish the monopole model from more realistic dipole and
+  approximation} is not in widespread use, we think it accurately describes the
+way many models of fluorescence microscopes treat fluorophores, and we use the
+term to distinguish the monopole model from more realistic dipole and
 higher-order models. Despite their use in models, monopole absorber/emitters do
-not exist in nature, and the monopole approximation must be justified. Although
-many works implicitly apply the monopole approximation, we have encountered two
-explicit justifications: (1) the sample contains many randomly oriented
-fluorophores within a resolvable volume or (2) the sample contains unconstrained
-rotating fluorophores. While both of these situations yield monopole-like
-samples, neither yields a sample that is perfectly described by the monopole
-model. In this work we investigate the dipole model of fluorophores in detail
-and find the conditions under which the monopole approximation is justified.
+not exist in nature. All physical fluorophores absorb and emit radiation with
+dipole or higher-order transitions, and these transitions are always oriented in
+space. For a classical mental model of fluorophores we imagine each dipole as a
+small oriented antenna (with incoherent absorption and emission moments) where
+electrons are constrained to move along a single direction. With this model we
+can argue classically that monopole radiators do not exist because they would
+violate the conservation of charge.
+
+Although many works implicitly apply the monopole approximation, we have
+encountered two explicit justifications: (1) the sample contains many randomly
+oriented fluorophores within a resolvable volume or (2) the sample contains
+unconstrained rotating fluorophores. While both of these situations yield
+monopole-like samples, neither yields a sample that is perfectly described by
+the monopole model. In this work we investigate the dipole model of fluorophores
+in detail and find the conditions under which the monopole approximation is
+justified.
 
 All fluorescence microscopy techniques that use an \textit{optical point spread
   function} or an \textit{optical transfer function} to model the mapping
@@ -150,17 +160,19 @@ the response due to an anisotropic dipole radiator. In this work we define
 \textit{monopole and dipole transfer functions} that describe the mapping
 between fluorophores and the measured irradiance. Although optical systems are
 an essential part of microscopes, fluorescence microscopists are interested in
-measuring fluorophores (not optics), so the monopole and dipole transfer
-functions are more valuable than the optical transfer function.
+measuring the properties of fluorophores (not optics), so the monopole and
+dipole transfer functions are more directly useful than the optical transfer
+function for the problems that fluorescence microscopists are interested in
+solving.
 
 While the monopole approximation applies to the fluorescent object, the
 \textit{scalar approximation} applies to the fields that propagate through the
 microscope. Modeling the electric fields in a region requires a
 three-dimensional vector field, but if the electric fields are random or
-parallel a scalar field is sufficient. Replacing the vector-valued electric
-field, $\mb{E}$, with a scalar-valued field, $U$, is the scalar approximation,
-and this approximation is only justified if the fields are randomly or uniformly
-polarized.
+parallel a scalar field is sufficient, and we can replace the vector-valued electric
+field, $\mb{E}$, with a scalar-valued field, $U$.%  is the scalar approximation,
+% and this approximation is only justified if the fields are randomly or uniformly
+% polarized.
 
 The scalar approximation is often made together with the monopole approximation.
 For example, the Born-Wolf model \cite{born1980} and the Gibson-Lanni model
@@ -169,20 +181,19 @@ fluorescence microscopes. However, some models make the monopole approximation
 but not the scalar approximation. For example, the Richards-Wolf model
 \cite{richards} considers the role of vector-valued fields in the optical
 system, but it is an optical model so when it is applied to fluorescence
-microscopes the monopole approximation is required. As previously mentioned,
-several works in the SMLM community have modeled and applied dipole point spread
-functions that do not make the monopole or scalar approximations, but to our
-knowledge no works have considered dipole transfer functions.
+microscopes the monopole approximation is assumed. % As previously mentioned,
+% several works in the SMLM community have modeled and applied dipole point spread
+% functions that do not make the monopole or scalar approximations, but to our
+% knowledge no works have considered dipole transfer functions. 
 
 This work lies at the intersection of three fluorescence microscopy communities:
 (1) the spatial ensemble imaging community where many fluorophores are imaged in
 parallel and the goal is to find their concentration throughout the sample, (2)
 the spatio-angular ensemble community where many fluorophores are imaged in
 parallel and the goal is to find their concentration and orientation, and (3)
-the single molecule localization microscopy (SMLM) community where fluorophores
-are sparse in the sample and the goal is to find the position of each
-fluorophore. We briefly review how these three communities use the monopole and
-scalar approximations.
+the SMLM community where fluorophores are sparse in the sample and the goal is
+to find the position of each fluorophore. We briefly review how these three
+communities use the monopole and scalar approximations.
 
 The large majority of fluorescence microscopes are used to image ensembles of
 fluorophores, and all existing restoration techniques make either or both of the
@@ -206,7 +217,7 @@ approximations for the angular part of the problem, they adopt both
 approximations when they consider the spatial part of the problem. Existing
 works either ignore the spatial reconstruction problem \cite{vrabioiu2006,
   mattheyses2010, mehta2016, mcquilken2017} or assume that the spatial and
-angular reconstruction problems can be performed sequentially
+angular reconstruction problems can be solved sequentially
 \cite{zhanghao2017}.
 
 The most precise experiments in the SMLM community do not adopt the scalar or
@@ -343,15 +354,16 @@ is always real and positive.
   \includegraphics[scale=1.0]{../figures/monopole-block/monopole-block.pdf}
   \caption{The mapping between the object and data space of a monopole
     fluorescence microscope can be computed in two different bases---a delta
-    function basis and a spatial harmonic basis. The change of basis can be
+    function basis and a complex exponential basis. The change of basis can be
     computed with a two-dimensional Fourier transform denoted
     $\mathcal{F}_{\mbb{R}^2}$.}
      \label{fig:monopole-block}      
 \end{figure}
 
 The mapping between the object and the data in a linear shift-invariant imaging
-system takes a particularly simple form in a spatial harmonic (i.e. Fourier) basis. If we apply
-the Fourier convolution theorem to Eq. \eqref{eq:lsi} we find that
+system takes a particularly simple form in a complex exponential (i.e. Fourier)
+basis. If we apply the Fourier convolution theorem to Eq. \eqref{eq:lsi} we find
+that
 \begin{align}
   G(\bv) = H(\bv)F(\bv),\label{eq:freq}
 \end{align}
@@ -392,7 +404,8 @@ Although the Fourier transform can be used to calculate the monopole transfer
 function directly from the monopole point spread function, there is a well-known
 alternative that exploits coherent transfer functions. The key idea is that the
 monopole point spread function can always be written as the absolute square of a
-scalar-valued \textit{monopole coherent spread function} defined as
+scalar-valued \textit{monopole coherent spread function}, $c(\rd - \ro)$,
+defined by
 \begin{align}
   |c(\rd - \ro)|^2 = h(\rd - \ro). \label{eq:absquarescalar}
 \end{align}
@@ -406,7 +419,7 @@ autocorrelation theorem to rewrite the monopole transfer function as
 \end{align}
 where we have introduced the
 \textit{monopole coherent transfer function} as the two-dimensional Fourier
-transform of the monopole coherent spread function
+transform of the monopole coherent spread function:
 \begin{align}
   C(\taup) = \int_{\mbb{R}^2}d\mb{r}\, c(\mb{r})\,\text{exp}[-2\pi i\mb{r}\cdot\taup].
 \end{align}
@@ -455,8 +468,17 @@ and the irradiance in a delta function basis as an integral transform
   g'(\rd') = \int_{\mbb{S}^2}d\so\int_{\mbb{R}^2}d\ro\, h'(\rd', \ro, \so)f(\ro, \so),
 \end{align}
 where $h'(\rd', \ro, \so)$ is the irradiance at position $\rd'$ created by a
-point source at $\ro$ with orientation $\so$. If the optical system is
-aplanatic, we can write the integral transform as
+point source at $\ro$ with orientation $\so$. Notice that we have considered all
+possible orientations $\so$ and integrated over the sphere $\mbb{S}^2$. The
+dipole density is always symmetric under angular inversion,
+$f(\ro, \so) = f(\ro,-\so)$, so we could have chosen to integrate over a
+hemisphere and adjusted the definition the dipole density by a factor of two.
+For convenience we will continue to integrate over the complete sphere. We note
+that all functions in this work with $\so$ as an independent variable are
+symmetric under angular inversion, $\so \rightarrow -\so$.
+
+If the optical system is aplanatic, we can write the
+integral transform as
 \begin{align}
   g'(\rd') = \int_{\mbb{S}^2}d\so\int_{\mbb{R}^2}d\ro\, h'(\rd' - m\ro, \so)f(\ro, \so). 
 \end{align}
@@ -465,7 +487,7 @@ We define the same demagnified detector coordinate $\rd = \rd'/m$ and a new
 normalization factor that corresponds to the total power incident on the
 detector due to a spatial point source with an angularly uniform distribution of
 dipoles
-$P_\text{dip} = \int_{\mbb{S}^2}d\mh{s}\int_{\mbb{R}^2}d\mb{r}\, h'(m\mb{r},
+$P_\text{dip} = \int_{\mbb{S}^2}d\so\int_{\mbb{R}^2}d\mb{r}\, h'(m\mb{r},
 \so)$. We use these scaling factors to define the
 \textit{dipole point spread function} as
 \begin{align}
@@ -523,10 +545,11 @@ where we define the \textit{dipole spatial transfer function} as
   \begin{figure}
   \hspace{-5em}
   \includegraphics[scale=1.0]{../figures/dipole-block/dipole-block.pdf}
-  \caption{The mapping between the object and data space of a dipole imaging
-    system can be computed in four different bases---a delta function basis, a
-    spatial-harmonic/angular-delta basis, a spatial-delta/spherical-harmonic
-    basis, and a spatio-angular harmonic basis. The changes of basis can be
+  \caption{The mapping between the object space and data space of a dipole
+    imaging system can be computed in four different bases---a delta function
+    basis, a complex-exponential/angular-delta basis, a
+    spatial-delta/spherical-harmonic basis, and a
+    complex-exponential/spherical-harmonic basis. The changes of basis can be
     computed with the two-dimensional Fourier transform denoted
     $\mathcal{F}_{\mbb{R}^2}$, and the spherical Fourier transform denoted
     $\mathcal{F}_{\mbb{S}^2}$.}
@@ -600,7 +623,7 @@ where we have defined the \textit{dipole spatio-angular transfer function} as
   because it exploits the band limit of the imaging system. We will see the
   advantage explicitly in Section \ref{sec:results} when we calculate a specific
   dipole spatio-angular transfer function and see that it has spatial and
-  angular band limits. We note that most single molecules imaging experiments
+  angular band limits. We note that most single molecule imaging experiments
   are best described in this basis because of the effects of spatial and
   rotational diffusion.
 
@@ -609,10 +632,11 @@ where we have defined the \textit{dipole spatio-angular transfer function} as
   that all four bases may be useful depending on the sample.
     
 \subsubsection{Dipole coherent transfer functions}
-Similar to the monopole case, there is efficient way to calculate the transfer
-functions using coherent transfer functions. The dipole point spread function
-can always be written as the absolute square of a vector-valued function called
-the \textit{dipole coherent spread function}
+Similar to the monopole case, there is an efficient way to calculate the
+transfer functions using coherent transfer functions. The dipole point spread
+function can always be written as the absolute square of a vector-valued
+function, $\mb{c}(\rd - \ro, \so)$, called the \textit{dipole coherent spread
+  function}:
 \begin{align}
   |\mb{c}(\rd - \ro, \so)|^2 = h(\rd - \ro, \so). \label{eq:absquare2}
 \end{align}
@@ -640,17 +664,21 @@ autocorrelation theorem to rewrite the dipole spatial transfer function as
 \end{align}
 where we have introduced the \textit{dipole coherent transfer function}
 $\mb{C}(\taup, \so)$ as the two-dimensional Fourier transform of the dipole
-coherent spread function
+coherent spread function:
 \begin{align}
   \mb{C}(\taup, \so) = \int_{\mbb{R}^2}d\mb{r}\, \mb{c}(\mb{r}, \so)\,\text{exp}[-2\pi i\mb{r}\cdot\taup].
 \end{align}
 Physically, the dipole coherent transfer function corresponds to the
 vector-valued electric field created by a dipole oriented along $\so$ in a
 Fourier plane of the detector with appropriate scaling. Similar to the monopole
-case, we can calculate the dipole-orientation-dependent fields in a Fourier plane of
-the detector, scale appropriately to find the dipole coherent transfer function,
-then use the relationships in Fig. \ref{fig:transfer-functions} to calculate
-the other transfer functions. 
+case, we can calculate the dipole-orientation-dependent fields in a Fourier
+plane of the detector, scale appropriately to find the dipole coherent transfer
+function, then use the relationships in Fig. \ref{fig:transfer-functions} to
+calculate the other transfer functions. Finally, we note that the dipole
+coherent transfer function is identical to what Agrawal et. al. call the
+\textit{Green's tensor} \cite{agrawal2012} and Novotny and Hecht's
+\textit{dyadic point spread function} multiplied by the dipole moment vector
+\cite{nov2006}.
 
 \section{Results}\label{sec:results}
 In this section we begin to apply the tools we developed in the previous section
@@ -677,10 +705,20 @@ demonstrate our approach by simulating simple phantoms.
 \begin{figure}[h]
  \centering
    \centering
-   \includegraphics[width = 0.9\textwidth]{../figures/abstract-micro/abstract-micro.pdf}
+   \includegraphics[width = 1.0\textwidth]{../figures/coordinates/detection-coords.pdf}
    \caption{Schematic of an aplanatic imaging system in a $4f$ geometry with a
      paraxial tube lens. We are considering an aplanatic optical system, so we
-     only need to consider the image created by on-axis objects.}
+     only need to consider the image created by on-axis objects. The fluorescent
+     object consists of ensembles of dipoles embedded in a medium with index of
+     refraction $n_0$. An objective with focal length $f_0$ and numerical
+     aperture $\text{NA} = n_o\sin\alpha$ is trained on the object. A paraxial
+     tube lens with focal length $f_1$ and a detector complete the $4f$
+     geometry, and all components except the object are embedded in a medium
+     with index of refraction $n_1$. The object, pupil, and detector planes are
+     parameterized by vectors $\ro$, $\rp$, and $\rd$ with polar coordinates
+     ($r_o, \phi_o$), ($r_b, \phi_b$), and ($r_d, \phi_d$), respectively. At
+     each position $\ro$ in the object there is a sphere parameterized by a unit
+     vector $\so$ with spherical coordinates ($\vartheta, \varphi$). }
    \label{fig:schematic}
  \end{figure}
 
@@ -694,8 +732,8 @@ Myers \cite[ch.~9.7]{barrett2004}.
 
 Since monopoles emit scalar fields, the monopole pupil function is a
 scalar-valued function. The optical system is aplanatic, so we can write the
-field created at a point in the pupil plane $\rp$ by a monopole at position
-$\ro$ as
+field, $U_p(\rp, \ro)$, created at a point in the pupil plane $\rp$ by a
+monopole at position $\ro$ as
 \begin{align}
    U_p(\rp, \ro) \propto p(\rp)\,\text{exp}\left[-2\pi i \frac{n_0}{\lambda f_0} \rp\cdot\ro \right]. \label{eq:pupil}
 \end{align}
@@ -754,7 +792,7 @@ all of the arguments in the previous section carry over to the dipole case.
 Briefly, we can write the electric field created at a point in the pupil
 $\rp$ by a dipole at $\ro$ oriented along $\so$ as
  \begin{align}
-   \mb{E}(\rp, \ro, \so) = \mb{p}(\rp, \so)\,\text{exp}\left[-2\pi i \frac{n_0}{\lambda f_0} \rp\cdot\ro \right]. \label{eq:pupil2}
+   \mb{E}(\rp, \ro, \so) \propto \mb{p}(\rp, \so)\,\text{exp}\left[-2\pi i \frac{n_0}{\lambda f_0} \rp\cdot\ro \right]. \label{eq:pupil2}
  \end{align}
  The second lens is paraxial, so we can find the field on the detector with a
  Fourier transform
@@ -903,9 +941,9 @@ of the coherent transfer function) and find that
  $\{s_x, s_y, s_z\}$ are the Cartesian components of $\so$ when $\mh{z}$ is
  aligned with the optical axis, and
  \begin{alignat}{4}
-   \tilde{C}_0(x) &= \frac{1}{2}(\sqrt{1 - x^2} + 1)(1 - x^2)^{-1/4} &&= 1 + \frac{x^4}{32} + \frac{x^6}{32} + \cdots,\\
+   \tilde{C}_0(x) &= \frac{1}{2}\left(\sqrt{1 - x^2} + 1\right)(1 - x^2)^{-1/4} &&= 1 + \frac{x^4}{32} + \frac{x^6}{32} + \cdots,\\
    \tilde{C}_1(x) &= x(1 - x^2)^{-1/4} &&= x + \frac{x^3}{4} + \frac{5x^5}{32} + \cdots,\\
-   \tilde{C}_2(x) &= \frac{1}{2}(\sqrt{1 - x^2} - 1)(1 - x^2)^{-1/4} &&= -\frac{x^2}{4} - \frac{x^4}{8} - \frac{11x^6}{128} - \cdots.
+   \tilde{C}_2(x) &= \frac{1}{2}\left(\sqrt{1 - x^2} - 1\right)(1 - x^2)^{-1/4} &&= -\frac{x^2}{4} - \frac{x^4}{8} - \frac{11x^6}{128} - \cdots.
  \end{alignat}
  Similar to the monopole case, the dipole pupil function conserves power and has
  a cutoff at the objective aperture, but the dipole pupil function is
@@ -917,25 +955,20 @@ of the coherent transfer function) and find that
 
  Scaling the dipole pupil function using Eq. \eqref{eq:monopupildip} yields the
  dipole coherent transfer function
- \begin{align}
-   \mb{C}(\taup, \so) \propto
+ \begin{equation}
+   \mb{C}(\taup, \so)\hspace{-0.2em}\propto\hspace{-0.2em}
    \begin{bmatrix}
-     \tilde{C}_0\left(\frac{\text{2NA}}{n_o}\frac{\tau}{\nu_c}\right) + \tilde{C}_2\left(\frac{\text{2NA}}{n_o}\frac{\tau}{\nu_c}\right)c(2\phi_{\tau})&\tilde{C}_2\left(\frac{\text{2NA}}{n_o}\frac{\tau}{\nu_c}\right)s(2\phi_{\tau})&\tilde{C}_1\left(\frac{\text{2NA}}{n_o}\frac{\tau}{\nu_c}\right)c(\phi_{\tau})\\
-     \tilde{C}_2\left(\frac{\text{2NA}}{n_o}\frac{\tau}{\nu_c}\right)s(2\phi_{\tau})&\tilde{C}_0\left(\frac{\text{2NA}}{n_o}\frac{\tau}{\nu_c}\right) - \tilde{C}_2\left(\frac{\text{2NA}}{n_o}\frac{\tau}{\nu_c}\right)c(2\phi_{\tau})&\tilde{C}_1\left(\frac{\text{2NA}}{n_o}\frac{\tau}{\nu_c}\right)s(\phi_{\tau})\\     
+     \tilde{C}_0\left(\frac{\lambda r_p\tau}{n_0}\right)\!+\!\tilde{C}_2\left(\frac{\lambda r_p\tau}{n_0}\right)c(2\phi_{\tau})&\tilde{C}_2\left(\frac{\lambda r_p\tau}{n_0}\right)s(2\phi_{\tau})&\tilde{C}_1\left(\frac{\lambda r_p\tau}{n_0}\right)c(\phi_{\tau})\\
+     \tilde{C}_2\left(\frac{\lambda r_p\tau}{n_0}\right)s(2\phi_{\tau})&\tilde{C}_0\left(\frac{\lambda r_p\tau}{n_0}\right)\!-\!\tilde{C}_2\left(\frac{\lambda r_p\tau}{n_0}\right)c(2\phi_{\tau})&\tilde{C}_1\left(\frac{\lambda r_p\tau}{n_0}\right)s(\phi_{\tau})\\     
      0&0&0\\     
    \end{bmatrix}
-   % \begin{bmatrix}
-   %   \tilde{C}_0\left(\frac{\text{2NA}}{n_o}\frac{\tau}{\nu_c}\right) + \tilde{C}_2\left(\frac{\text{2NA}}{n_o}\frac{\tau}{\nu_c}\right)\cos(2\phi_{\tau})&\tilde{C}_2\left(\frac{\text{2NA}}{n_o}\frac{\tau}{\nu_c}\right)\sin(2\phi_{\tau})&\tilde{C}_1\left(\frac{\text{2NA}}{n_o}\frac{\tau}{\nu_c}\right)\cos\phi_{\tau}\\
-   %   \tilde{C}_2\left(\frac{\text{2NA}}{n_o}\frac{\tau}{\nu_c}\right)\sin(2\phi_{\tau})&\tilde{C}_0\left(\frac{\text{2NA}}{n_o}\frac{\tau}{\nu_c}\right) - \tilde{C}_2\left(\frac{\text{2NA}}{n_o}\frac{\tau}{\nu_c}\right)\cos(2\phi_{\tau})&\tilde{C}_1\left(\frac{\text{2NA}}{n_o}\frac{\tau}{\nu_c}\right)\sin\phi_{\tau}\\     
-   %   0&0&0\\     
-   % \end{bmatrix}
    \begin{bmatrix}
      s_x\\
      s_y\\
      s_z
    \end{bmatrix}
    \Pi\left(\frac{\tau}{\nu_c}\right). 
- \end{align}
+ \end{equation}
  We restrict our analysis to the paraxial regime by dropping second- and
  higher-order radial terms to find that
  \begin{align}
@@ -957,7 +990,7 @@ of the coherent transfer function) and find that
  component of the dipole \{$s_z$\} creates purely radial fields in the pupil
  plane. The paraxial approximation may seem crude compared to Backer and
  Moerner's numerical results, but the approximation will allow us to calculate
- the transfer functions in closed form so that we can gain an intuition for the
+ the transfer functions in closed form so that we can build an intuition for the
  limits of the microscope. We also note that many existing works in ensemble
  polarized fluorescence microscopy make stronger approximations than ours. For
  example, Fourkas only considers the total irradiance in the pupil plane while
@@ -994,7 +1027,8 @@ Plugging in the paraxial dipole coherent spread function and normalizing yields
 \begin{align}
   h(\mb{r}, \so) \stackrel{(p)}{=} N\left[\text{jinc}_0^2(\nu_c r)\sin^2\vartheta + \left(\frac{\text{NA}}{n_o}\right)^2\text{jinc}_1^2(\nu_c r)\cos^2\vartheta\right],\label{eq:paradpsf}
 \end{align}
-where $\sin^2\vartheta = s_x^2 + s_y^2$, $\cos^2\vartheta = s_z^2$, and the normalization factor is
+where $\sin^2\vartheta = s_x^2 + s_y^2$, $\cos^2\vartheta = s_z^2$, and the normalization
+factor is
 \begin{align}
   N = 6\nu_c^2\pi^{-3/2}\left[2 + \left(\frac{\text{NA}}{n_o}\right)^2\right]^{-1}.
 \end{align}
@@ -1005,7 +1039,7 @@ transverse and radial components. In Fig. \ref{fig:hdet} we plot the dipole
 point spread function for several dipole orientations and numerical apertures,
 and in Fig. \ref{fig:microscopefig} we compare the monopole point spread
 function to the dipole point spread function. The paraxial monopole and dipole
-models are only equivalent when the sample consists of transverse dipoles which
+models are only equivalent when the sample consists of transverse dipoles, which
 is clear if we notice that Eq. \eqref{eq:paradpsf} reduces to an Airy disk when
 $\vartheta = \pi/2$---see Novotny and Hecht for a similar observation
 \cite[ch.~4]{nov2006}.
@@ -1023,7 +1057,8 @@ $\vartheta = \pi/2$---see Novotny and Hecht for a similar observation
      \textcolor{red}{\textbf{red}} lines from left to right). Additionally, we
      plot the monopole point spread function (\textcolor{green}{\textbf{green}})
      and observe that the paraxial monopole and dipole models are identical for
-     transverse dipoles.}
+     transverse dipoles (the \textcolor{green}{\textbf{green}} and
+     \textbf{black} lines are coincident).}
    \label{fig:hdet}
  \end{figure}
  
@@ -1121,7 +1156,9 @@ position of the dipole.
      pattern where the minimum irradiance corresponds to the peak of the axial
      dipole density. Additionally, we plot the monopole transfer function
      (\textcolor{green}{\textbf{green}}) and observe that the paraxial monopole
-     and dipole models are identical for transverse dipoles.}
+     and dipole models are identical for transverse dipoles (the
+     \textcolor{green}{\textbf{green}} and \textbf{black} lines are
+     coincident).}
    \label{fig:odotf}
  \end{figure}
 
@@ -1215,7 +1252,7 @@ $Y_2^0$ spherical harmonic.
  \end{align}
  where
  \begin{align}
-   f_{\text{(cone)}}(\so; \so', \Delta) = f_{\text{(cone)}}(\vartheta, \varphi; \vartheta', \varphi', \Delta) = \frac{1}{4\pi(1 - \cos\Delta)}\Pi\left(\frac{\mh{s}\cdot\mh{s}'}{\cos\Delta}\right)
+   f_{\text{(cone)}}(\so; \so', \Delta) = f_{\text{(cone)}}(\vartheta, \varphi; \vartheta', \varphi', \Delta) = \frac{1}{4\pi(1 - \cos\Delta)}\Pi\left(\frac{\mh{s}\cdot\mh{s}'}{2\cos\Delta}\right)
  \end{align}
  is an angular double cone distribution with central direction $\mh{s}'$ and
  cone half-angle $\Delta$; $\vartheta_j = j\frac{\pi}{6}$; and
@@ -1322,7 +1359,7 @@ H_{\ell}^m(\bv) \stackrel{(p)}{=} &\frac{N}{3\nu_c^2}\left[2\text{chat}_0\left(\
   In Fig. \ref{fig:ph4} we plot the phantom and scaled irradiance with the
   same imaging parameters as the previous sections. Small cone angles and small
   disks create relatively unique irradiance patterns, while increasing the cone
-  angle or disk size creates increasingly irradiance patterns. 
+  angle or disk size creates increasingly similar irradiance patterns. 
   
   \begin{figure}[h]
  % \captionsetup{width=1.0\linewidth}
@@ -1342,7 +1379,7 @@ H_{\ell}^m(\bv) \stackrel{(p)}{=} &\frac{N}{3\nu_c^2}\left[2\text{chat}_0\left(\
 \section{Discussion}\label{sec:discussion}
 \subsection{When are dipole transfer functions necessary?}
 Model mismatch can lead to biased estimates of the position and orientation of
-fluorophores, so the most precise fluorescence microscopy experiments will
+fluorophores, so the most accurate fluorescence microscopy experiments will
 always use dipole transfer functions over monopole transfer functions. The only
 case when the dipole and monopole transfer functions match exactly is when the
 dipoles are completely constrained to the transverse plane of a paraxial imaging
@@ -1352,7 +1389,7 @@ However, in many practical situations noise will mask the effects of vector
 optics and dipoles. If the fluorophores are rotationally unconstrained or there
 are many randomly oriented fluorophores in a resolvable volume---common
 situations in biological applications---then the effects of vector optics and
-dipoles will be masked by noise in all but the highest SNR regimes.
+dipoles will be masked by noise in all but the highest-SNR regimes.
 
 The dipole transfer functions are most broadly useful when the sample contains
 fluorophores that are rotationally constrained. As rotational constraints
@@ -1386,22 +1423,23 @@ However, the spherical harmonics provide several advantages over the second
 moments. First, the spherical harmonics form a complete basis for functions on
 the sphere, while the second moments span a much smaller function space. The
 usual approach to extending the span of the second moments is to use the fourth
-(or higher) moments, but these are completely new basis functions. Second, the
-spherical harmonics are orthonormal which will allow us to deploy invaluable
-tools from linear algebra---linear subspaces, rank, decompositions, etc.--- to
-analyze and compare microscope designs. Finally, using the spherical harmonics
-provides access to a set of fast algorithms. The naive expansion of an arbitrary
-discretized $N$ point spherical function onto spherical harmonics (or second
-moments) requires a $\mc{O}(N^2)$ matrix multiplication, while pioneering work
-by Driscoll and Healy \cite{driscoll1994} showed that the forward discrete fast
-spherical harmonic transform can be computed with a $\mc{O}(N(\log N)^2)$
-algorithm and its inverse can be computed with a $\mc{O}(N^{3/2})$ algorithm. To
-our knowledge no similarly fast algorithms exist for expansion onto the
-higher-order moments.
+(or higher) moments, but this extension requires a completely new set of basis
+functions while the spherical harmonics can be extended by simply adding higher order
+terms. Second, the spherical harmonics are orthonormal, which will allow us to
+deploy invaluable tools from linear algebra---linear subspaces, rank,
+decompositions, etc.--- to analyze and compare microscope designs. Finally,
+using the spherical harmonics provides access to a set of fast algorithms. The
+naive expansion of an arbitrary discretized $N$ point spherical function onto
+spherical harmonics (or second moments) requires a $\mc{O}(N^2)$ matrix
+multiplication, while pioneering work by Driscoll and Healy \cite{driscoll1994}
+showed that the forward discrete fast spherical harmonic transform can be
+computed with a $\mc{O}(N(\log N)^2)$ algorithm and its inverse can be computed
+with a $\mc{O}(N^{3/2})$ algorithm. To our knowledge no similarly fast
+algorithms exist for expansion onto the higher-order moments.
 
 Zhenghao et. al. \cite{zhanghao2017} have used the circular harmonics to model
 the orientation of dipoles. The circular harmonics are complete and orthogonal,
-but they artificially restrict the angular reconstruction to the transverse
+but they artificially restrict the reconstructed dipoles to the transverse
 plane of the microscope---a rare situation in real experiments.
 
 The diffusion magnetic resonance imaging community uses both the second moments
@@ -1491,18 +1529,18 @@ the inverse problem becomes much more challenging. In future work we will use
 the singular value decomposition to find inverse filters, and we will consider
 using polarizers and multiple views to increase the size of data space. 
 
-\section{Conclusion}
+\section{Conclusions}
 Many models of fluorescence microscopes use the monopole and scalar
-approximations, and complete models need to consider dipole and vector optics
+approximations, but complete models need to consider dipole and vector optics
 effects. We have introduced several transfer functions that simplify the mapping
 between the dipole density and the irradiance pattern on the detector, and we
-demonstrated these transfer functions by efficiently simulating a paraxial
+have demonstrated these transfer functions by efficiently simulating a paraxial
 fluorescence microscope. We found that the monopole and scalar approximations
 are good approximations when the sample consists of unconstrained rotating
 fluorophores or many randomly oriented fluorophores within a resolvable volume.
 We also found that dipole and vector optics effects become larger as rotational
-order increases, and in these cases the dipole transfer functions become valuable
-tools.
+order increases, and in these cases the dipole transfer functions become
+valuable tools.
 
 \section*{Funding}
 National Institute of Health (NIH) (R01GM114274, R01EB017293).
@@ -1517,6 +1555,8 @@ Dimple Modgil, Sean Rose, Corey Smith, Scott Trinkle, and Jianhua Gong for
 valuable discussions during the development of this work. TC was supported by a
 University of Chicago Biological Sciences Division Graduate Fellowship, and PL
 was supported by a Marine Biological Laboratory Whitman Center Fellowship.
+Support for this work was provided by the Intramural Research Programs of the
+National Institute of Biomedical Imaging and Bioengineering.
 
 \section*{Disclosures}
 The authors declare that there are no conflicts of interest related to this article.
@@ -1702,41 +1742,73 @@ In this appendix we evaluate the spherical Fourier transform of a
 normalized double-cone angular distribution with central direction $\mh{s}'$ and
 cone half-angle $\Delta$
 \begin{align}
-  f_{\text{(cone)}}(\mh{s}; \mh{s}', \Delta) = \frac{1}{4\pi(1 - \cos\Delta)}\Pi\left(\frac{\mh{s}\cdot\mh{s}'}{\cos\Delta}\right). 
+  f_{\text{(cone)}}(\mh{s}; \mh{s}', \Delta) = \frac{1}{4\pi(1 - \cos\Delta)}\Pi\left(\frac{\mh{s}\cdot\mh{s}'}{2\cos\Delta}\right). \label{eq:doublecone}
 \end{align}
 The spherical Fourier transform is
 \begin{align}
   F_{\ell\text{(cone)}}^m(\mh{s}', \Delta) = \int_{\mbb{S}^2}d\mh{s}\, f_{\text{(cone)}}(\mh{s}; \mh{s}', \Delta)Y_\ell^{m*}(\mh{s}).
 \end{align}
+% This integral will be difficult to evaluate unless we change coordinates to
+% exploit the axis of symmetry $\mh{s}'$. The key idea is that
+% $f_{\text{(cone)}}(\mh{s}; \mh{s}', \Delta)$ is a function of
+% $\mh{s}\cdot\mh{s}'$ so it is a one dimensional function on the domain [-1,1]
+% that can be expanded in terms of Legendre polynomials (a Fourier-Legendre
+% series)
+% \begin{align}
+%   f_{\text{(cone)}}(\mh{s}\cdot\mh{s}', \Delta) = \sum_{\ell = 0}^{\infty}F_{\ell\text{(cone)}}(\mh{s}\cdot\mh{s}', \Delta)P_{\ell}(\mh{s}\cdot\mh{s}').
+% \end{align}
+% We can find the coefficients $F_{\ell\text{(cone)}}(\mh{s}\cdot\mh{s}', \Delta)$
+% using Fourier's trick---multiply both sides by $P_{\ell}(\mh{s}\cdot\mh{s}')$,
+% integrate over [-1,1], and exploit orthogonality
+% $\int_{-1}^{1}dx\,P_{\ell}(x)P_{\ell'}(x) = \frac{2}{2\ell +
+%   1}\delta_{\ell\ell'}$ to find that
+% \begin{align}
+%   F_{\ell\text{(cone)}}(x, \Delta) = \frac{2\ell + 1}{2}\int_{-1}^{1}dx\, f_{\text{(cone)}}(x, \Delta)P_\ell(x). \label{eq:legendre}
+% \end{align}
+% Plugging Eq. \eqref{eq:doublecone} into Eq. \eqref{eq:legendre} yields
+% \begin{align}
+%   F_{\ell\text{(cone)}}(x, \Delta) = \frac{2\ell + 1}{4\pi(1-\cos\Delta)}\int^{1}_{\cos\Delta}dx\, P_\ell(x). 
+% \end{align}
+% The integral evaluates to \cite[ch.~7.111]{gradshteyn2007}
+% \begin{align}
+%   \int_{\cos\Delta}^1 d\vartheta\, P_\ell(u) =
+% \begin{cases}
+%   1 - \cos\Delta\,, &\ell = 0\,,\\
+%   \sin\Delta\, P_l^{-1}(\cos\Delta)\,, &\text{else},
+% \end{cases}
+% \end{align}
+% where $P_l^{-1}(\cos\Delta)$ is the associated Legendre polynomial with order
+% $m=-1$, not an inverse Legendre polynomial.
+
+
 The limits of integration will be difficult to find unless we change coordinates
 to exploit the axis of symmetry $\mh{s}'$. Since the spherical function is
 rotationally symmetric about $\mh{s}'$ we can rotate the function so that the axis of
-symmetry is aligned with $\mh{z}$ and multiply by $\sqrt{\frac{4\pi}{2l+1}}Y_\ell^m(\mh{s}')$ to account for the rotation \cite{ramamoorthi2005}
+symmetry is aligned with $\mh{z}$ and multiply by $\sqrt{\frac{4\pi}{2l+1}}Y_\ell^{m*}(\mh{s}')$ to account for the rotation \cite{ramamoorthi2005}
 \begin{align}
-    F_{\ell\text{(cone)}}^m(\mh{s}', \Delta) = \sqrt{\frac{4\pi}{2l+1}}Y_\ell^m(\mh{s}')\int_{\mbb{S}^2}d\mh{s}\, f_{\text{(cone)}}(\vartheta; \mh{z}, \Delta)Y_\ell^0(\mh{s}). 
+    F_{\ell\text{(cone)}}^m(\mh{s}', \Delta) = \sqrt{\frac{4\pi}{2l+1}}Y_\ell^{m*}(\mh{s}')\int_{\mbb{S}^2}d\mh{s}\, f_{\text{(cone)}}(\vartheta; \mh{z}, \Delta)Y_\ell^0(\mh{s}). 
 \end{align}
 In this coordinate system the double cone is independent of the azimuthal angle,
 so we can evaluate the azimuthal integral and express the function in terms of an
-integral over
-$\vartheta$
+integral over $\vartheta$:
 \begin{align}
-    F_{\ell\text{(cone)}}^m(\mh{s}', \Delta) = 2\pi Y_\ell^m(\mh{s}')\int_{0}^\pi d\vartheta\, \sin\vartheta f_{\text{(cone)}}(\vartheta; \mh{z}, \Delta)P_\ell(\cos\vartheta). 
+    F_{\ell\text{(cone)}}^m(\mh{s}', \Delta) = 2\pi Y_\ell^{m*}(\mh{s}')\int_{0}^\pi d\vartheta\, \sin\vartheta f_{\text{(cone)}}(\vartheta; \mh{z}, \Delta)P_\ell(\cos\vartheta). 
 \end{align}
 The function $f_{\text{(cone)}}(\vartheta; \mh{z}, \Delta)$ is only non-zero on
 the intervals $\vartheta \in [0, \Delta]$ and
 $\vartheta \in [\pi - \Delta, \pi]$ so
 \begin{align}
-    F_{\ell\text{(cone)}}^m(\mh{s}', \Delta) = \frac{Y_\ell^m(\mh{s}')}{2(1 - \cos\Delta)}\left[\int_{0}^\Delta d\vartheta\, \sin\vartheta P_\ell(\cos\vartheta) + \int_{\pi - \Delta}^\pi d\vartheta\, \sin\vartheta P_\ell(\cos\vartheta)\right]. 
+    F_{\ell\text{(cone)}}^m(\mh{s}', \Delta) = \frac{Y_\ell^{m*}(\mh{s}')}{2(1 - \cos\Delta)}\left[\int_{0}^\Delta d\vartheta\, \sin\vartheta P_\ell(\cos\vartheta) + \int_{\pi - \Delta}^\pi d\vartheta\, \sin\vartheta P_\ell(\cos\vartheta)\right]. 
 \end{align}
 Applying a change of coordinates with $u = \cos\vartheta$ yields
 \begin{align}
-    F_{\ell\text{(cone)}}^m(\mh{s}', \Delta) = \frac{Y_\ell^m(\mh{s}')}{2(1 - \cos\Delta)}\left[\int_{\cos\Delta}^1 d\vartheta\, P_\ell(u) + \int_{-1}^{-\cos\Delta} d\vartheta\, P_\ell(u)\right]. 
+    F_{\ell\text{(cone)}}^m(\mh{s}', \Delta) = \frac{Y_\ell^{m*}(\mh{s}')}{2(1 - \cos\Delta)}\left[\int_{\cos\Delta}^1 d\vartheta\, P_\ell(u) + \int_{-1}^{-\cos\Delta} d\vartheta\, P_\ell(u)\right]. 
 \end{align}
 The Legendre polynomials $P_\ell(u)$ are even (odd) on the interval [-1, 1] when
 $\ell$ is even (odd), so the pair of integrals will be identical when $\ell$ is
-even and cancel when $\ell$ is odd. For even $\ell$
+even and cancel when $\ell$ is odd. For even $\ell$,
 \begin{align}
-  F_{\ell\text{(cone)}}^m(\mh{s}', \Delta) = \frac{Y_\ell^m(\mh{s}')}{1 - \cos\Delta}\int_{\cos\Delta}^1 d\vartheta\, P_\ell(u).
+  F_{\ell\text{(cone)}}^m(\mh{s}', \Delta) = \frac{Y_\ell^{m*}(\mh{s}')}{1 - \cos\Delta}\int_{\cos\Delta}^1 d\vartheta\, P_\ell(u).
 \end{align}
 The integral evaluates to \cite[ch.~7.111]{gradshteyn2007}
 \begin{align}
@@ -1748,13 +1820,12 @@ The integral evaluates to \cite[ch.~7.111]{gradshteyn2007}
 \end{align}
 where $P_l^{-1}(\cos\Delta)$ is the associated Legendre polynomial with order
 $m=-1$, not an inverse Legendre polynomial. Bringing everything together
-
 \begin{align}
   F_{\ell\text{(cone)}}^m(\mh{s}', \Delta) =
   \begin{cases}
     \sqrt{1/(4\pi)}, & \ell = 0,\\
     0, & \ell\, \text{odd},\\
-    Y_\ell^m(\mh{s}')\cot\left(\frac{\Delta}{2}\right)P_l^{-1}(\cos\Delta), & \ell > 0\,\, \text{even}.
+    Y_\ell^{m*}(\mh{s}')\cot\left(\frac{\Delta}{2}\right)P_l^{-1}(\cos\Delta), & \ell > 0\,\, \text{even}.
   \end{cases}
 \end{align}
 

@@ -23,7 +23,7 @@
 \providecommand{\mbb}[1]{\mathbb{#1}}
 \providecommand{\bs}[1]{\boldsymbol{#1}}
 \providecommand{\bv}{\bs{\nu}}
-\providecommand{\bvp}{\bs{\nu}_p}
+\providecommand{\bvp}{\bs{\tau}}
 \providecommand{\bsh}[1]{\hat{\boldsymbol{#1}}}
 \providecommand{\nan}{\left(\frac{\text{NA}}{n_o}\right)}
 \providecommand{\lmsum}{\sum_{l=0}^\infty\sum_{m=-l}^{l}}
@@ -40,11 +40,11 @@
   \begin{tikzpicture}[auto, node distance=2.5cm,>={Latex[length=2mm]}]
     \tikzset{font={\fontsize{9pt}{12}\selectfont}}
     \node [block, align=center] (sad) {$h(\rd - \ro, \so)$\\ Dipole point\\ spread function};
-    \node [block,  right of=sad, node distance=5.5cm] (ads) {$H_\ell^m(\rd - \ro)$\\ Angular dipole\\ transfer function};
-    \node [block,  left of=sad, node distance=5.5cm] (e) {$\mb{c}(\rd - \ro, \so)$\\ Coherent dipole \\ spread function};
-      \node [block, below of=ads, node distance=2.5cm] (sas) {$\mathsf{H}_\ell^m(\bs{\nu})$\\ Spatio-angular\\ dipole transfer function};
-      \node [block, below of=sad, node distance=2.5cm] (sds) {$H(\bs{\nu}, \so)$\\ Dipole\\ transfer function};
-        \node [block,  left of=sds, node distance=5.5cm] (e2) {$\mb{C}(\bvp,\so)$\\ Coherent dipole \\transfer function};
+    \node [block,  right of=sad, node distance=5.5cm] (ads) {$H_\ell^m(\rd - \ro)$\\ Dipole angular\\ transfer function};
+    \node [block,  left of=sad, node distance=5.5cm] (e) {$\mb{c}(\rd - \ro, \so)$\\ Dipole coherent \\ spread function};
+      \node [block, below of=ads, node distance=2.5cm] (sas) {$\mathsf{H}_\ell^m(\bs{\nu})$\\ Dipole spatio-angular\\ transfer function};
+      \node [block, below of=sad, node distance=2.5cm] (sds) {$H(\bs{\nu}, \so)$\\ Dipole spatial\\ transfer function};
+        \node [block,  left of=sds, node distance=5.5cm] (e2) {$\mb{C}(\bvp,\so)$\\ Dipole coherent \\transfer function};
       \draw [->] (sad) -- node[shift={(0,0)}] {$\mathcal{F}_{\mathbb{S}^2}$} (ads);
       \draw [->] (e) -- node[shift={(0,.75)}] {$|\mb{c}(\rd - \ro, \so)|^2$} (sad);
       % \draw [->] (e2) -- node[] {$\int_{\mbb{R}^2}d\rb \mb{E}_{\text{bfp}}(\rb, \so)\mb{E}_{\text{bfp}}^\dagger(\rb - \bs{\nu}, \so)$} (sds);
