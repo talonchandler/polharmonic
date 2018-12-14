@@ -99,12 +99,13 @@
 
 \section{Introduction}
 Fluorescence microscopes are widely used in the biological sciences for
-measuring ensembles of fluorescent molecules. While most fluorescence microscopy
-experiments are designed to measure only the spatial distribution of
-fluorophores, a growing number of experiments seek to measure both the spatial
-and angular distributions of fluorophores by the use of polarizers
-\cite{vrabioiu2006, mattheyses2010, mehta2016, mcquilken2017, zhanghao2017} or
-point spread function engineering \cite{agrawal2012, zhang2018}.
+measuring ensembles of fluorescent molecules that label specific proteins and
+biologically important molecules. While most fluorescence microscopy experiments
+are designed to measure only the spatial distribution of fluorophores, a growing
+number of experiments seek to measure both the spatial and angular distributions
+of fluorophores by the use of polarizers \cite{vrabioiu2006, mattheyses2010,
+  mehta2016, mcquilken2017, zhanghao2017} or point spread function engineering
+\cite{agrawal2012, zhang2018}.
 
 Meanwhile, single-molecule localization microscopy (SMLM) experiments use
 spatially sparse fluorescent samples to localize single molecules with precision
@@ -133,14 +134,14 @@ treats it as an isotropic absorber/emitter. Although the term \textit{monopole
   approximation} is not in widespread use, we think it accurately describes the
 way many models of fluorescence microscopes treat fluorophores, and we use the
 term to distinguish the monopole model from more realistic dipole and
-higher-order models. Despite their use in models, monopole absorber/emitters do
-not exist in nature. All physical fluorophores absorb and emit radiation with
-dipole or higher-order transitions, and these transitions are always oriented in
-space. For a classical mental model of fluorophores we imagine each dipole as a
-small oriented antenna (with incoherent absorption and emission moments) where
-electrons are constrained to move along a single direction. With this model we
-can argue classically that monopole radiators do not exist because they would
-violate the conservation of charge.
+higher-order models. Despite their use in models, electromagnetic monopole
+absorber/emitters do not exist in nature. All physical fluorophores absorb and
+emit radiation with dipole or higher-order moments, and these moments are always
+oriented in space. For a classical mental model of fluorophores we imagine each
+dipole as a small oriented antenna (with incoherent absorption and emission
+moments) where electrons are constrained to move along a single direction. With
+this model we can argue classically that monopole radiators do not exist because
+they would violate the conservation of charge.
 
 Although many works implicitly apply the monopole approximation, we have
 encountered two explicit justifications: (1) the sample contains many randomly
@@ -151,8 +152,8 @@ the monopole model. In this work we investigate the dipole model of fluorophores
 in detail and find the conditions under which the monopole approximation is
 justified.
 
-All fluorescence microscopy techniques that use an \textit{optical point spread
-  function} or an \textit{optical transfer function} to model the mapping
+All fluorescence microscopy models that use an \textit{optical point spread
+  function} or an \textit{optical transfer function} to describe the mapping
 between the fluorophores and the irradiance on the detector implicitly make the
 monopole approximation. The optical point spread function is the irradiance
 response of an optical system to an isotropic point source, so it cannot model
@@ -186,20 +187,21 @@ microscopes the monopole approximation is assumed. % As previously mentioned,
 % functions that do not make the monopole or scalar approximations, but to our
 % knowledge no works have considered dipole transfer functions. 
 
-This work lies at the intersection of three fluorescence microscopy communities:
-(1) the spatial ensemble imaging community where many fluorophores are imaged in
-parallel and the goal is to find their concentration throughout the sample, (2)
-the spatio-angular ensemble community where many fluorophores are imaged in
-parallel and the goal is to find their concentration and orientation, and (3)
-the SMLM community where fluorophores are sparse in the sample and the goal is
-to find the position of each fluorophore. We briefly review how these three
-communities use the monopole and scalar approximations.
+This work lies at the intersection of three subfields of fluorescence
+microscopy: (1) spatial ensemble imaging where fluorophores are imaged as
+ensembles and the goal is to find their concentration as a function of position
+in the sample, (2) the spatio-angular ensemble imaging where fluorophores are
+imaged as ensembles and the goal is to find their concentration and orientation
+as a function of position in the sample, and (3) SMLM imaging where fluorophores
+are sparse in the sample and the goal is to find the position and orientation of
+each fluorophore. We briefly review how these three subfields use the monopole
+and scalar approximations.
 
 The large majority of fluorescence microscopes are used to image ensembles of
 fluorophores, and all existing restoration techniques make either or both of the
 monopole and scalar approximations. As discussed above, the Gibson-Lanni model,
 the Born-Wolf model, and the Richards-Wolf model are approximate when applied to
-fluorescence microscopes because they only model monopole emitters.
+fluorescence microscopy data because they only model monopole emitters.
 Deconvolution algorithms that use these models may make biased estimates of
 fluorophore concentrations since they ignore the dipole excitation and emission
 of fluorophores, but we will see that these effects are small when the sample
@@ -220,16 +222,16 @@ works either ignore the spatial reconstruction problem \cite{vrabioiu2006,
 angular reconstruction problems can be solved sequentially
 \cite{zhanghao2017}.
 
-The most precise experiments in the SMLM community do not adopt the scalar or
-monopole approximations. Although many works have applied dipole models with
-vector optics, fewer have considered the effects of rotational or spatial
-diffusion, and to our knowledge no works have considered both rotational and
-spatial diffusion together. We will see that the dipole transfer functions are
-useful tools for incorporating angular and spatial diffusion into SMLM
-simulations and reconstructions.
+The most precise experiments in SMLM imaging do not adopt the scalar or monopole
+approximations. Although many works have applied dipole models with vector
+optics, fewer have considered the effects of rotational or spatial diffusion,
+and to our knowledge no works have considered both rotational and spatial
+diffusion together. We will see that the dipole transfer functions are useful
+tools for incorporating angular and spatial diffusion into SMLM simulations and
+reconstructions.
 
-In this work we place these three communities on a common theoretical footing.
-We begin in section \ref{sec:theory} by formulating the imaging problem
+In this work we place these three subfields on a common theoretical footing. We
+begin in section \ref{sec:theory} by formulating the imaging problem
 mathematically. We start with an abstract description of fluorescence imaging
 systems and extend the usual monopole imaging model to dipoles. Along the way we
 introduce transfer functions that will allow us to efficiently analyze
@@ -264,7 +266,7 @@ then express the mapping as an integral transform. After finding this mapping we
 can start to investigate the same mapping in different bases.
 
 The above discussion is quite abstract, but it is a powerful point of view that
-will enable us to unify the analysis of spatio-angular fluorescence microscopes.
+will enable us to unify the analysis of spatio-angular fluorescence imaging.
 In section \ref{sec:monopole} we will demonstrate the formalism by examining a
 familiar monopole imaging model, and we will demonstrate the mapping between
 object and data space in two different bases. In section \ref{sec:dipole} we
@@ -440,7 +442,7 @@ the other transfer functions.
 \begin{figure}
   \centering
   \includegraphics[scale=1.0]{../figures/monopole-transfer-functions/monopole-transfer-functions.pdf}
-  \caption{The incoherent monopole transfer functions are related by a
+  \caption{The monopole transfer functions are related by a
     two-dimensional Fourier transform (right column). The coherent monopole
     transfer functions (left column) can be used to simplify the calculation of
     the remaining transfer functions.}
@@ -649,11 +651,11 @@ be written as an absolute square of a scalar-valued function.
 \begin{figure}
   \hspace{-2em}
   \includegraphics[scale=1.0]{../figures/transfer-functions/transfer-functions.pdf}
-  \caption{There is one incoherent transfer function for each set of
-    object-space basis functions, and these transfer functions are related by
-    two-dimensional and spherical Fourier transforms---see center and right
-    columns. There is an additional pair of coherent transfer functions that
-    are useful for calculating the incoherent transfer functions---see left column.}
+  \caption{There is one transfer function for each set of object-space basis
+    functions, and these transfer functions are related by two-dimensional and
+    spherical Fourier transforms---see center and right columns. There is an
+    additional pair of coherent transfer functions that are useful for
+    calculating the transfer functions---see left column.}
    \label{fig:transfer-functions}
  \end{figure}
     
@@ -1569,7 +1571,7 @@ is defined as \cite{schaeffer2013}
 \begin{align}
 Y_\ell^m(\vartheta, \varphi) = \sqrt{\frac{2\ell+1}{4\pi}}\sqrt{\frac{(\ell-|m|)!}{(\ell+|m|)!}}P_\ell^m\left(\cos\vartheta\right)\exp(i m \varphi),
 \end{align}
-where $P_\ell^m(\cos\theta)$ are the associated Legendre polynomials with the
+where $P_\ell^m(\cos\vartheta)$ are the associated Legendre polynomials with the
 Condon-Shortley phase
 \begin{align}
   P_\ell^m(x) = (-1)^m(1-x^2)^{|m|/2}\frac{d^{|m|}}{dx^{|m|}}P_\ell(x),
@@ -1733,7 +1735,7 @@ For $n=0$:
   \text{chat}_0(\nu) &= 4\left[\int_0^{1/2}\tau d\tau\int_0^{\cos^{-1}\nu}d\phi_{\tau} - \int_{0}^{\nu/2}d\tau_x\int_0^{\frac{\tau_x}{\nu}\sqrt{1 - \nu^2}}d\tau_y\right]\Pi\left(\frac{\nu}{2}\right),\\
   \text{chat}_0(\nu) &= \frac{1}{2}\left[\cos^{-1}|\nu| - |\nu|\sqrt{1 - \nu^2}\right]\Pi\left(\frac{\nu}{2}\right),
 \intertext{which is a well-known result \cite{goodman1996, mertz2009, bracewell2004}. For $n=1$:}
-  \text{chat}_1(\nu) &= 16\Bigg[\int_0^{1/2}\tau d\tau\int_0^{\cos^{-1}\nu}d\phi_{\tau}(\tau^2 - \nu\tau\cos\phi_{\tau}) - \\ &\qquad\quad\int_{0}^{\nu/2}d\tau_x\int_0^{\frac{\tau_x}{\nu}\sqrt{1 - \nu^2}}d\tau_y\, (\tau_x^2 + \tau_y^2 - \nu\tau_x)\Bigg]\Pi\left(\frac{\nu}{2}\right),\\
+  \text{chat}_1(\nu) &= 16\Bigg[\int_0^{1/2}\tau d\tau\int_0^{\cos^{-1}\nu}d\phi_{\tau}(\tau^2 - \nu\tau\cos\phi_{\tau}) - \nonumber\\ &\qquad\quad\int_{0}^{\nu/2}d\tau_x\int_0^{\frac{\tau_x}{\nu}\sqrt{1 - \nu^2}}d\tau_y\, (\tau_x^2 + \tau_y^2 - \nu\tau_x)\Bigg]\Pi\left(\frac{\nu}{2}\right),\\
   \text{chat}_1(\nu) &= \frac{1}{2}\left[\cos^{-1}|\nu| - |\nu| (3 - 2\nu^2)\sqrt{1 - \nu^2}\right]\Pi\left(\frac{\nu}{2}\right). 
 \end{align}
 
