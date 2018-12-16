@@ -64,7 +64,7 @@
 
 \begin{document}
 
-\title{Spatio-angular fluorescence microscopy I. Basic theory (Draft: \today)}
+\title{Spatio-angular fluorescence microscopy\\ I. Basic theory (Draft: \today)}
 
 \author{Talon Chandler,\authormark{1,*} Hari Shroff,\authormark{2,3} Rudolf Oldenbourg,\authormark{3} and Patrick La Rivi\`ere\authormark{1,3}}
 
@@ -98,12 +98,12 @@
 \end{abstract*}
 
 \section{Introduction}
-Fluorescence microscopes are widely used in the biological sciences for
-measuring ensembles of fluorescent molecules that label specific proteins and
-biologically important molecules. While most fluorescence microscopy experiments
-are designed to measure only the spatial distribution of fluorophores, a growing
-number of experiments seek to measure both the spatial and angular distributions
-of fluorophores by the use of polarizers \cite{vrabioiu2006, mattheyses2010,
+Fluorescence microscopes are widely used in the biological sciences for imaging
+fluorescent molecules that label specific proteins and biologically important
+molecules. While most fluorescence microscopy experiments are designed to
+measure only the spatial distribution of fluorophores, a growing number of
+experiments seek to measure both the spatial and angular distributions of
+fluorophores by the use of polarizers \cite{vrabioiu2006, mattheyses2010,
   mehta2016, mcquilken2017, zhanghao2017} or point spread function engineering
 \cite{agrawal2012, zhang2018}.
 
@@ -132,22 +132,22 @@ of two widely used approximations in fluorescence microscopy---the
 We use the term \textit{monopole} to refer to a model of a fluorophore that
 treats it as an isotropic absorber/emitter. Although the term \textit{monopole
   approximation} is not in widespread use, we think it accurately describes the
-way many models of fluorescence microscopes treat fluorophores, and we use the
+way many models of fluorescence microscopy treat fluorophores, and we use the
 term to distinguish the monopole model from more realistic dipole and
 higher-order models. Despite their use in models, electromagnetic monopole
 absorber/emitters do not exist in nature. All physical fluorophores absorb and
 emit radiation with dipole or higher-order moments, and these moments are always
 oriented in space. For a classical mental model of fluorophores we imagine each
 dipole as a small oriented antenna (with incoherent absorption and emission
-moments) where electrons are constrained to move along a single direction. With
-this model we can argue classically that monopole radiators do not exist because
-they would violate the conservation of charge.
+moments) where electrons are constrained to move along a single direction. % With
+% this model we can argue classically that monopole radiators do not exist because
+% they would violate the conservation of charge.
 
 Although many works implicitly apply the monopole approximation, we have
 encountered two explicit justifications: (1) the sample contains many randomly
 oriented fluorophores within a resolvable volume or (2) the sample contains
 unconstrained rotating fluorophores. While both of these situations yield
-monopole-like samples, neither yields a sample that is perfectly described by
+monopole-like emitters, neither yields emitters that are perfectly described by
 the monopole model. In this work we investigate the dipole model of fluorophores
 in detail and find the conditions under which the monopole approximation is
 justified.
@@ -170,10 +170,8 @@ While the monopole approximation applies to the fluorescent object, the
 \textit{scalar approximation} applies to the fields that propagate through the
 microscope. Modeling the electric fields in a region requires a
 three-dimensional vector field, but if the electric fields are random or
-parallel a scalar field is sufficient, and we can replace the vector-valued electric
-field, $\mb{E}$, with a scalar-valued field, $U$.%  is the scalar approximation,
-% and this approximation is only justified if the fields are randomly or uniformly
-% polarized.
+completely parallel, a scalar field is sufficient, and we can replace the
+vector-valued electric field, $\mb{E}$, with a scalar-valued field, $U$.
 
 The scalar approximation is often made together with the monopole approximation.
 For example, the Born-Wolf model \cite{born1980} and the Gibson-Lanni model
@@ -182,44 +180,41 @@ fluorescence microscopes. However, some models make the monopole approximation
 but not the scalar approximation. For example, the Richards-Wolf model
 \cite{richards} considers the role of vector-valued fields in the optical
 system, but it is an optical model so when it is applied to fluorescence
-microscopes the monopole approximation is assumed. % As previously mentioned,
-% several works in the SMLM community have modeled and applied dipole point spread
-% functions that do not make the monopole or scalar approximations, but to our
-% knowledge no works have considered dipole transfer functions. 
+microscopes the monopole approximation is assumed. 
 
 This work lies at the intersection of three subfields of fluorescence
-microscopy: (1) spatial ensemble imaging where fluorophores are imaged as
-ensembles and the goal is to find their concentration as a function of position
-in the sample, (2) the spatio-angular ensemble imaging where fluorophores are
-imaged as ensembles and the goal is to find their concentration and orientation
-as a function of position in the sample, and (3) SMLM imaging where fluorophores
-are sparse in the sample and the goal is to find the position and orientation of
-each fluorophore. We briefly review how these three subfields use the monopole
-and scalar approximations.
+microscopy: (1) spatial ensemble imaging where each resolvable volume contains
+many fluorophores and the goal is to find the concentration of fluorophores as a
+function of position in the sample, (2) spatio-angular ensemble imaging where
+each resolvable volume contains many fluorophores and the goal is to find the
+concentration and orientation of fluorophores as a function of position in the
+sample, and (3) SMLM imaging where fluorophores are sparse in the sample and the
+goal is to find the position and orientation of each fluorophore. We briefly
+review how these three subfields use the monopole and scalar approximations.
 
 The large majority of fluorescence microscopes are used to image ensembles of
-fluorophores, and all existing restoration techniques make either or both of the
-monopole and scalar approximations. As discussed above, the Gibson-Lanni model,
-the Born-Wolf model, and the Richards-Wolf model are approximate when applied to
-fluorescence microscopy data because they only model monopole emitters.
-Deconvolution algorithms that use these models may make biased estimates of
-fluorophore concentrations since they ignore the dipole excitation and emission
-of fluorophores, but we will see that these effects are small when the sample
-contains many randomly oriented fluorophores within a resolvable volume or
-unconstrained rotating fluorophores.
+fluorophores, and most existing modeling techniques make use of the monopole
+approximation, the scalar approximation, or both. As discussed above, the
+Gibson-Lanni model, the Born-Wolf model, and the Richards-Wolf model are
+approximate when applied to fluorescence microscopy data because they only model
+monopole emitters. Deconvolution algorithms that use these models may make
+biased estimates of fluorophore concentrations since they ignore the dipole
+excitation and emission of fluorophores, but we will see that these effects are
+small when the sample contains many randomly oriented fluorophores within a
+resolvable volume or unconstrained rotating fluorophores.
 
 A small but growing group of microscopists is interested in measuring the
-orientation and position of ensembles of fluorophores \cite{vrabioiu2006,
-  mattheyses2010, mehta2016, mcquilken2017, zhanghao2017}. These techniques
-typically use polarizers to make multiple measurements of the same object, then
-they use a model of the dipole excitation and emission processes
-\cite{fourkas2001} to recover the orientation of fluorophores using pixel-wise
-arithmetic. Although these studies do not adopt the scalar or monopole
-approximations for the angular part of the problem, they adopt both
-approximations when they consider the spatial part of the problem. Existing
-works either ignore the spatial reconstruction problem \cite{vrabioiu2006,
-  mattheyses2010, mehta2016, mcquilken2017} or assume that the spatial and
-angular reconstruction problems can be solved sequentially
+prevailing orientation and position of ensembles of fluorophores
+\cite{vrabioiu2006, mattheyses2010, mehta2016, mcquilken2017, zhanghao2017}.
+These techniques typically use polarizers to make multiple measurements of the
+same object with different polarizer orientations, then they use a model of the
+dipole excitation and emission processes \cite{fourkas2001} to recover the
+orientation of fluorophores using pixel-wise arithmetic. Although these studies
+do not adopt the scalar or monopole approximations for the angular part of the
+problem, they adopt both approximations when they consider the spatial part of
+the problem. Existing works either ignore the spatial reconstruction problem
+\cite{vrabioiu2006, mattheyses2010, mehta2016, mcquilken2017} or assume that the
+spatial and angular reconstruction problems can be solved sequentially
 \cite{zhanghao2017}.
 
 The most precise experiments in SMLM imaging do not adopt the scalar or monopole
@@ -230,17 +225,24 @@ diffusion together. We will see that the dipole transfer functions are useful
 tools for incorporating angular and spatial diffusion into SMLM simulations and
 reconstructions.
 
-In this work we place these three subfields on a common theoretical footing. We
-begin in section \ref{sec:theory} by formulating the imaging problem
-mathematically. We start with an abstract description of fluorescence imaging
-systems and extend the usual monopole imaging model to dipoles. Along the way we
-introduce transfer functions that will allow us to efficiently analyze
-spatio-angular microscopes. In section \ref{sec:results} we use the mathematical
-tools we developed in section \ref{sec:theory} to analyze and simulate a
-single-view fluorescence microscope, and we demonstrate our techniques with four
-simple phantoms. Finally, in section \ref{sec:discussion} we discuss the results
-and their broader implications.
+In the present work we begin to place these three subfields on a common
+theoretical footing. First, in section \ref{sec:theory}, we assemble the
+mathematical tools for formulating the imaging problem. We start with an
+abstract description of fluorescence imaging systems and extend the usual
+monopole imaging model to dipoles. Along the way we introduce transfer functions
+that will allow us to efficiently analyze spatio-angular microscopes. In section
+\ref{sec:results} we analyze and simulate a single-view fluorescence microscope,
+and we demonstrate our techniques with four simple phantoms. Finally, in section
+\ref{sec:discussion} we discuss the results and their broader implications.
 
+In this paper we focus on modeling an extremely simple optical system---a
+single-view fluorescence microscope without polarizers. In future papers of this
+series we will extend our models to include polarizers and multi-view
+microscopes. Additionally, we have restricted this paper to the forward
+problem---the mapping between a known object and the data. In future papers we
+will consider the inverse problem, and the singular value decomposition (SVD)
+will play a central role.
+ 
 \section{Theory}\label{sec:theory}
 We begin our analysis with the abstract Hilbert space formalism of Barrett and
 Myers \cite[ch.~1.3]{barrett2004}. Our first task is to formulate
@@ -427,9 +429,6 @@ transform of the monopole coherent spread function:
 \end{align}
 Physically, the monopole coherent transfer function corresponds to the
 scalar-valued field in a Fourier plane of the detector with appropriate scaling.
-% We have chosen the symbol $\taup$ as the coordinate for the coherent
-% transfer function because the Fourier plane of the detector is often called the
-% \textit{pupil plane}.
 
 The coherent transfer function provides a valuable shortcut for analyzing
 microscopes since it is often straightforward to calculate the field in a
@@ -922,11 +921,6 @@ of the coherent transfer function) and find that
  for a high-NA objective as
  \begin{align}
    \mb{p}(\rp, \so) \propto
-   % \begin{bmatrix}
-   %   \tilde{C}_0\left(\frac{r_p}{f_o}\right) + \tilde{C}_2\left(\frac{r_p}{f_o}\right)\cos(2\phi_p)&\tilde{C}_2\left(\frac{r_p}{f_o}\right)\sin(2\phi_p)&\tilde{C}_1\left(\frac{r_p}{f_0}\right)\cos\phi_p\\
-   %   \tilde{C}_2\left(\frac{r_p}{f_o}\right)\sin(2\phi_p)&\tilde{C}_0\left(\frac{r_p}{f_o}\right) - \tilde{C}_2\left(\frac{r_p}{f_o}\right)\cos(2\phi_p)&\tilde{C}_1\left(\frac{r_p}{f_0}\right)\sin\phi_p\\     
-   %   0&0&0\\     
-   % \end{bmatrix}
    \begin{bmatrix}
      \tilde{C}_0\left(\frac{r_p}{f_o}\right) + \tilde{C}_2\left(\frac{r_p}{f_o}\right)c(2\phi_p)&\tilde{C}_2\left(\frac{r_p}{f_o}\right)s(2\phi_p)&\tilde{C}_1\left(\frac{r_p}{f_0}\right)c(\phi_p)\\
      \tilde{C}_2\left(\frac{r_p}{f_o}\right)s(2\phi_p)&\tilde{C}_0\left(\frac{r_p}{f_o}\right) - \tilde{C}_2\left(\frac{r_p}{f_o}\right)c(2\phi_p)&\tilde{C}_1\left(\frac{r_p}{f_0}\right)s(\phi_p)\\     
@@ -1065,7 +1059,6 @@ $\vartheta = \pi/2$---see Novotny and Hecht for a similar observation
  \end{figure}
  
 \begin{figure}[h]
- % \captionsetup{width=1.0\linewidth}
  \centering
    \centering
    \includegraphics[scale=0.8]{../figures/microscope/microscope.pdf}
@@ -1107,7 +1100,6 @@ $\vartheta = \pi/2$---see Novotny and Hecht for a similar observation
  inclination, but not its azimuth.
 
  \begin{figure}[h]
- % \captionsetup{width=1.0\linewidth}
  \centering
    \centering
    \includegraphics[scale=0.8]{../figures/paratfs/ph1.pdf}
@@ -1286,7 +1278,6 @@ $Y_2^0$ spherical harmonic.
  hide the angular information about the distributions.
 
   \begin{figure}[h]
- % \captionsetup{width=1.0\linewidth}
  \centering
    \centering
    \includegraphics[scale=0.8]{../figures/paratfs/ph3.pdf}
@@ -1364,7 +1355,6 @@ H_{\ell}^m(\bv) \stackrel{(p)}{=} &\frac{N}{3\nu_c^2}\left[2\text{chat}_0\left(\
   angle or disk size creates increasingly similar irradiance patterns. 
   
   \begin{figure}[h]
- % \captionsetup{width=1.0\linewidth}
  \centering
    \centering
    \includegraphics[scale=0.8]{../figures/paratfs/ph4.pdf}
@@ -1426,18 +1416,18 @@ moments. First, the spherical harmonics form a complete basis for functions on
 the sphere, while the second moments span a much smaller function space. The
 usual approach to extending the span of the second moments is to use the fourth
 (or higher) moments, but this extension requires a completely new set of basis
-functions while the spherical harmonics can be extended by simply adding higher order
-terms. Second, the spherical harmonics are orthonormal, which will allow us to
-deploy invaluable tools from linear algebra---linear subspaces, rank,
-decompositions, etc.--- to analyze and compare microscope designs. Finally,
-using the spherical harmonics provides access to a set of fast algorithms. The
-naive expansion of an arbitrary discretized $N$ point spherical function onto
-spherical harmonics (or second moments) requires a $\mc{O}(N^2)$ matrix
-multiplication, while pioneering work by Driscoll and Healy \cite{driscoll1994}
-showed that the forward discrete fast spherical harmonic transform can be
-computed with a $\mc{O}(N(\log N)^2)$ algorithm and its inverse can be computed
-with a $\mc{O}(N^{3/2})$ algorithm. To our knowledge no similarly fast
-algorithms exist for expansion onto the higher-order moments.
+functions while the spherical harmonics can be extended by simply adding higher
+order terms. Second, the spherical harmonics are orthonormal, which will allow
+us to deploy invaluable tools from linear algebra---linear subspaces, rank, SVD,
+etc.--- to analyze and compare microscope designs. Finally, using the spherical
+harmonics provides access to a set of fast algorithms. The naive expansion of an
+arbitrary discretized $N$ point spherical function onto spherical harmonics (or
+second moments) requires a $\mc{O}(N^2)$ matrix multiplication, while pioneering
+work by Driscoll and Healy \cite{driscoll1994} showed that the forward discrete
+fast spherical harmonic transform can be computed with a $\mc{O}(N(\log N)^2)$
+algorithm and its inverse can be computed with a $\mc{O}(N^{3/2})$ algorithm. To
+our knowledge no similarly fast algorithms exist for expansion onto the
+higher-order moments.
 
 Zhenghao et. al. \cite{zhanghao2017} have used the circular harmonics to model
 the orientation of dipoles. The circular harmonics are complete and orthogonal,
@@ -1453,16 +1443,16 @@ an explicit transformation matrix to convert between these basis functions
 
 \subsection{What determines the angular bandwidth?}
 Spatial imaging systems have a spatial bandwidth that characterizes the highest
-spatial frequency that the system can image. Similarly, angular imaging systems
-have an angular bandwidth that characterizes the highest angular frequency that
-the system can image, but in the angular case there are two different types of
-angular bandwidths that we call the $\ell$- and $m$-bandwidth. The $\ell$-bandwidth
-can be interpreted in a similar way to the spatial bandwidth---it characterizes
-the smallest angular features that the imaging system can measure. The
-$m$-bandwidth does not have a direct analog in the spatial domain---it
-characterizes the angular uniformity of the imaging system. If the $\ell$- and
-$m$-bandwidths are equal then the imaging system can be said to have an 
-$\textit{isotropic angular bandwidth}$.
+spatial frequency that the system can transfer between object and data space.
+Similarly, angular imaging systems have an angular bandwidth that characterizes
+the highest angular frequency that the system can transfer, but in the angular case
+there are two different types of angular bandwidths that we call the $\ell$- and
+$m$-bandwidth. The $\ell$-bandwidth can be interpreted in a similar way to the
+spatial bandwidth---it characterizes the smallest angular features that the
+imaging system can measure. The $m$-bandwidth does not have a direct analog in
+the spatial domain---it characterizes the angular uniformity of the imaging
+system. If the $\ell$- and $m$-bandwidths are equal then the imaging system can
+be said to have an $\textit{isotropic angular bandwidth}$.
 
 The spatial bandwidth of a fluorescence microscope is well known to be
 $\nu_c = \frac{2\text{NA}}{\lambda}$. In other words, we can increase the
@@ -1471,13 +1461,13 @@ instrument or by choosing a fluorophore with a shorter emission wavelength.
 Similarly, the angular bandwidth of a fluorescence microscope depends on both
 the instrument and the sample.
 
-The microscope we considered in this work has an $\ell$-bandwidth of $\ell_c = 2$
-and an $m$-bandwidth of $m_c = 0$, so it does not have an isotropic angular
-bandwidth. In future work we will consider several approaches to improving the
-angular bandwidths in detail, but we briefly mention that non-paraxial
-microscopes, microscopes with polarizers on the illumination or detection paths,
-and multiview microscopes all have higher angular bandwidths than the microscope
-considered here.
+The microscope we considered in this work has an $\ell$-bandwidth of
+$\ell_c = 2$ and an $m$-bandwidth of $m_c = 0$, so it does not have an isotropic
+angular bandwidth. In future work we will consider several approaches to
+improving the angular bandwidths in detail, but we briefly mention that
+non-paraxial microscopes, microscopes with polarizers in the illumination or
+detection paths, and multiview microscopes all have higher angular bandwidths
+than the microscope considered here.
 
 The angular bandwidth is also sample dependent. Monopoles emit light
 isotropically so they have an $\ell$-bandwidth of $\ell_c = 0$, while dipoles
@@ -1491,8 +1481,8 @@ The theoretical model we presented in this work is an extreme simplification of
 a real microscope. We have ignored the effects of thick samples,
 refractive-index mismatch, aberration, scattering, finite fluorescence
 lifetimes, and interactions between fluorophores among others. Because of this
-long list of unknown effects, real experiments will likely require extensions of
-the models developed here.
+long list of unconsidered effects, real experiments will likely require
+extensions of the models developed here.
 
 The dipole pupil function provides the simplest way to create more realistic
 models from the simple model in this paper. Phase aberrations can be added to
@@ -1601,20 +1591,6 @@ integrate over the sphere, and exploit orthogonality to find that
 The coefficients $F_\ell^m$ are called the \textit{spherical Fourier transform}
 of a spherical function.
 
-% We briefly show how two properties of spherical functions propagate to the
-% spherical Fourier transform. First, the spherical harmonic coefficients of
-% spherical functions that can be written entirely as a function of the
-% inclination angle $\vartheta$ are zero when $m\neq0$ because
-% \begin{align}
-%   \int_{\mbb{S}^2}d\mh{s}\, f(\vartheta)Y_\ell^{m*}(\mh{s}) &= \int_0^{2\pi}d\phi\, \text{exp}[-im\varphi]\int_0^{\pi}d\vartheta\, \sin\vartheta f(\vartheta)P_\ell^m(\cos\vartheta),\\ &= \delta_{m0}\int_0^{\pi}d\vartheta\, \sin\vartheta f(\vartheta)P_\ell^m(\cos\vartheta).
-% \end{align}
-% Second, the spherical harmonic coefficients of spherical functions that are
-% symmetric under inversion $f(\mh{s}) = f(-\mh{s})$ are zero when $\ell$ is odd
-% because $Y_\ell^m(-\so) = (-1)^\ell Y_\ell^m(\mh{s})$, so if $\ell$ is odd then
-% \begin{align}
-%   \int_{\mbb{S}^2}d\mh{s}\, f(\mh{s})Y_{2n+1}^{m*}(\mh{s}) &= \int_{\mbb{S}^2/2}d\mh{s}\, f(+\mh{s})Y_{2n+1}^{m*}(+\mh{s}) + \int_{\mbb{S}^2/2}d\mh{s}\, f(-\mh{s})Y_{2n+1}^{m*}(-\mh{s}),\\
-% &=\int_{\mbb{S}^2/2}d\mh{s}\, f(\mh{s})Y_{2n+1}^{m*}(+\mh{s}) - \int_{\mbb{S}^2/2}d\mh{s}\, f(\mh{s})Y_{2n+1}^{m*}(\mh{s}) = 0.                                                                
-% \end{align}
 \section{Relationships between special functions} \label{sec:special}
 Our first task is to show that 
 \begin{align}
@@ -1750,38 +1726,6 @@ The spherical Fourier transform is
 \begin{align}
   F_{\ell\text{(cone)}}^m(\mh{s}', \Delta) = \int_{\mbb{S}^2}d\mh{s}\, f_{\text{(cone)}}(\mh{s}; \mh{s}', \Delta)Y_\ell^{m*}(\mh{s}).
 \end{align}
-% This integral will be difficult to evaluate unless we change coordinates to
-% exploit the axis of symmetry $\mh{s}'$. The key idea is that
-% $f_{\text{(cone)}}(\mh{s}; \mh{s}', \Delta)$ is a function of
-% $\mh{s}\cdot\mh{s}'$ so it is a one dimensional function on the domain [-1,1]
-% that can be expanded in terms of Legendre polynomials (a Fourier-Legendre
-% series)
-% \begin{align}
-%   f_{\text{(cone)}}(\mh{s}\cdot\mh{s}', \Delta) = \sum_{\ell = 0}^{\infty}F_{\ell\text{(cone)}}(\mh{s}\cdot\mh{s}', \Delta)P_{\ell}(\mh{s}\cdot\mh{s}').
-% \end{align}
-% We can find the coefficients $F_{\ell\text{(cone)}}(\mh{s}\cdot\mh{s}', \Delta)$
-% using Fourier's trick---multiply both sides by $P_{\ell}(\mh{s}\cdot\mh{s}')$,
-% integrate over [-1,1], and exploit orthogonality
-% $\int_{-1}^{1}dx\,P_{\ell}(x)P_{\ell'}(x) = \frac{2}{2\ell +
-%   1}\delta_{\ell\ell'}$ to find that
-% \begin{align}
-%   F_{\ell\text{(cone)}}(x, \Delta) = \frac{2\ell + 1}{2}\int_{-1}^{1}dx\, f_{\text{(cone)}}(x, \Delta)P_\ell(x). \label{eq:legendre}
-% \end{align}
-% Plugging Eq. \eqref{eq:doublecone} into Eq. \eqref{eq:legendre} yields
-% \begin{align}
-%   F_{\ell\text{(cone)}}(x, \Delta) = \frac{2\ell + 1}{4\pi(1-\cos\Delta)}\int^{1}_{\cos\Delta}dx\, P_\ell(x). 
-% \end{align}
-% The integral evaluates to \cite[ch.~7.111]{gradshteyn2007}
-% \begin{align}
-%   \int_{\cos\Delta}^1 d\vartheta\, P_\ell(u) =
-% \begin{cases}
-%   1 - \cos\Delta\,, &\ell = 0\,,\\
-%   \sin\Delta\, P_l^{-1}(\cos\Delta)\,, &\text{else},
-% \end{cases}
-% \end{align}
-% where $P_l^{-1}(\cos\Delta)$ is the associated Legendre polynomial with order
-% $m=-1$, not an inverse Legendre polynomial.
-
 
 The limits of integration will be difficult to find unless we change coordinates
 to exploit the axis of symmetry $\mh{s}'$. Since the spherical function is
