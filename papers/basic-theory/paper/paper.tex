@@ -64,7 +64,7 @@
 
 \begin{document}
 
-\title{Spatio-angular fluorescence microscopy\\ I. Basic theory (Draft: \today)}
+\title{Spatio-angular fluorescence microscopy\\ I. Basic theory}
 
 \author{Talon Chandler,\authormark{1,*} Hari Shroff,\authormark{2,3} Rudolf Oldenbourg,\authormark{3} and Patrick La Rivi\`ere\authormark{1,3}}
 
@@ -204,15 +204,15 @@ small when the sample contains many randomly oriented fluorophores within a
 resolvable volume or unconstrained rotating fluorophores.
 
 A small but growing group of microscopists is interested in measuring the
-prevailing orientation and position of ensembles of fluorophores
-\cite{vrabioiu2006, mattheyses2010, mehta2016, mcquilken2017, zhanghao2017}.
-These techniques typically use polarizers to make multiple measurements of the
-same object with different polarizer orientations, then they use a model of the
-dipole excitation and emission processes \cite{fourkas2001} to recover the
-orientation of fluorophores using pixel-wise arithmetic. Although these studies
-do not adopt the scalar or monopole approximations for the angular part of the
-problem, they adopt both approximations when they consider the spatial part of
-the problem. Existing works either ignore the spatial reconstruction problem
+orientation and position of ensembles of fluorophores \cite{vrabioiu2006,
+  mattheyses2010, mehta2016, mcquilken2017, zhanghao2017}. These techniques
+typically use polarizers to make multiple measurements of the same object with
+different polarizer orientations, then they use a model of the dipole excitation
+and emission processes \cite{fourkas2001} to recover the orientation of
+fluorophores using pixel-wise arithmetic. Although these studies do not adopt
+the scalar or monopole approximations for the angular part of the problem, they
+adopt both approximations when they consider the spatial part of the problem.
+Existing works either ignore the spatial reconstruction problem
 \cite{vrabioiu2006, mattheyses2010, mehta2016, mcquilken2017} or assume that the
 spatial and angular reconstruction problems can be solved sequentially
 \cite{zhanghao2017}.
@@ -235,13 +235,12 @@ that will allow us to efficiently analyze spatio-angular microscopes. In section
 and we demonstrate our techniques with four simple phantoms. Finally, in section
 \ref{sec:discussion} we discuss the results and their broader implications.
 
-In this paper we focus on modeling an extremely simple optical system---a
-single-view fluorescence microscope without polarizers. In future papers of this
-series we will extend our models to include polarizers and multi-view
-microscopes. Additionally, we have restricted this paper to the forward
-problem---the mapping between a known object and the data. In future papers we
-will consider the inverse problem, and the singular value decomposition (SVD)
-will play a central role.
+In this paper we focus on modeling a single-view fluorescence microscope without
+polarizers. In future papers of this series we will extend our models to include
+polarizers and multi-view microscopes. Additionally, we have restricted this
+paper to the forward problem---the mapping between a known object and the data.
+In future papers we will consider the inverse problem, and the singular value
+decomposition (SVD) will play a central role.
  
 \section{Theory}\label{sec:theory}
 We begin our analysis with the abstract Hilbert space formalism of Barrett and
@@ -1459,7 +1458,7 @@ $\nu_c = \frac{2\text{NA}}{\lambda}$. In other words, we can increase the
 spatial resolution of a fluorescence microscope by increasing the NA of the
 instrument or by choosing a fluorophore with a shorter emission wavelength.
 Similarly, the angular bandwidth of a fluorescence microscope depends on both
-the instrument and the sample.
+the instrument and the choice of fluorophore.
 
 The microscope we considered in this work has an $\ell$-bandwidth of
 $\ell_c = 2$ and an $m$-bandwidth of $m_c = 0$, so it does not have an isotropic
@@ -1469,7 +1468,7 @@ non-paraxial microscopes, microscopes with polarizers in the illumination or
 detection paths, and multiview microscopes all have higher angular bandwidths
 than the microscope considered here.
 
-The angular bandwidth is also sample dependent. Monopoles emit light
+The angular bandwidth is also fluorophore dependent. Monopoles emit light
 isotropically so they have an $\ell$-bandwidth of $\ell_c = 0$, while dipoles
 have an $\ell$-bandwidth of $\ell_c = 2$, and higher-order excitation and
 detection moments will have even higher bandwidths. Multi-photon excitation and
