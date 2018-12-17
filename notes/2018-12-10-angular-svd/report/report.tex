@@ -1,0 +1,621 @@
+\documentclass[11pt]{article}
+
+%%%%%%%%%%%%
+% Packages %
+%%%%%%%%%%%%
+\usepackage[dvipsnames]{xcolor}
+\hyphenpenalty=10000
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+
+\usepackage{tocloft}
+\usepackage[linesnumbered,ruled]{algorithm2e}
+\renewcommand\cftsecleader{\cftdotfill{\cftdotsep}}
+\def\undertilde#1{\mathord{\vtop{\ialign{##\crcr
+$\hfil\displaystyle{#1}\hfil$\crcr\noalign{\kern1.5pt\nointerlineskip}
+$\hfil\tilde{}\hfil$\crcr\noalign{\kern1.5pt}}}}}
+\usepackage{bold-extra}
+\usepackage{bm}
+\usepackage{cleveref}
+\usepackage{xcolor}
+\usepackage[colorlinks = true,
+            linkcolor = black,
+            urlcolor  = blue,
+            citecolor = black,
+            anchorcolor = black]{hyperref}
+\usepackage{epstopdf}
+\usepackage{braket}
+\usepackage{upgreek}
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{subcaption}
+\usepackage{amssymb,latexsym,amsmath,gensymb}
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{pdflscape}
+\usepackage{url}
+\usepackage{array}
+\newcolumntype{C}{>{$\displaystyle} c <{$}}
+\usepackage{tikz, calc}
+\usetikzlibrary{shapes.geometric, arrows, calc}
+\tikzstyle{norm} = [rectangle, rounded corners, minimum width=2cm, minimum height=1cm,text centered, draw=black]
+\tikzstyle{arrow} = [thick, ->, >=stealth]
+
+\newcommand{\argmin}{\arg\!\min}
+\newcommand{\argmax}{\arg\!\max}
+\newcommand{\me}{\mathrm{e}}
+\providecommand{\e}[1]{\ensuremath{\times 10^{#1}}}
+\providecommand{\mb}[1]{\mathbf{#1}}
+\providecommand{\mc}[1]{\mathcal{#1}}
+\providecommand{\ro}{\mathbf{\mathfrak{r}}_o}
+\providecommand{\so}{\mathbf{\hat{s}}_o}
+\providecommand{\sd}{\mathbf{\hat{s}}_d}
+\providecommand{\pp}{\mathbf{\hat{p}}}
+\providecommand{\rb}{\mathbf{r}_b}
+\providecommand{\rbm}{r_b^{\text{m}}}
+\providecommand{\rd}{\mathbf{\mathfrak{r}}_d}
+\providecommand{\mh}[1]{\mathbf{\hat{#1}}}
+\providecommand{\mf}[1]{\mathfrak{#1}}
+\providecommand{\ms}[1]{\mathsf{#1}}
+\providecommand{\mbb}[1]{\mathbb{#1}}
+\providecommand{\bs}[1]{\boldsymbol{#1}}
+\providecommand{\tv}{\texttt{v}}
+\providecommand{\tx}[1]{\text{#1}}
+\providecommand{\tb}[1]{\textbf{#1}}
+\providecommand{\ttt}[1]{\texttt{#1}}
+\providecommand{\bv}{\bs{\nu}}
+\providecommand{\bp}{\bs{\rho}}
+\providecommand{\p}{\mh{p}}
+\providecommand{\lmsum}{\sum_{l=0}^\infty\sum_{m=-l}^{l}}
+\providecommand{\intr}[1]{\int_{\mbb{R}^{#1}}}
+\providecommand{\ints}[1]{\int_{\mbb{S}^{#1}}}
+\providecommand{\intinf}{\int_{-\infty}^{\infty}}
+\let\originalleft\left
+\let\originalright\right
+\renewcommand{\left}{\mathopen{}\mathclose\bgroup\originalleft}
+\renewcommand{\right}{\aftergroup\egroup\originalright}
+
+
+\providecommand{\fig}[4]{
+  % filename, width, caption, label
+\begin{figure}[H]
+ \captionsetup{width=1.0\linewidth}
+ \centering
+ \includegraphics[width = #2\textwidth]{#1}
+ \caption{#3}
+ \label{fig:#4}
+\end{figure}
+}
+
+\makeatletter
+\renewcommand*\env@matrix[1][*\c@MaxMatrixCols c]{%
+  \hskip -\arraycolsep
+  \let\@ifnextchar\new@ifnextchar
+  \array{#1}}
+\makeatother
+
+\newcommand{\tensor}[1]{\overset{\text{\tiny$\leftrightarrow$}}{\mb{#1}}}
+\newcommand{\tunderbrace}[2]{\underbrace{#1}_{\textstyle#2}}
+\providecommand{\figs}[7]{
+  % filename1, filename2, caption1, caption2, label1, label2, shift
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{.45\textwidth}
+  \centering
+  \includegraphics[width=1.0\linewidth]{#1}
+  \captionsetup{justification=justified, singlelinecheck=true}
+  \caption{#3}
+  \label{fig:#5}
+\end{minipage}
+\hspace{2em}
+\begin{minipage}[b]{.45\textwidth}
+  \centering
+  \includegraphics[width=1.0\linewidth]{#2}
+  \vspace{#7em}
+  \captionsetup{justification=justified}
+  \caption{#4}
+  \label{fig:#6}
+\end{minipage}
+\end{figure}
+}
+\makeatletter
+
+\providecommand{\code}[1]{
+\begin{center}
+\lstinputlisting{#1}
+\end{center}
+}
+
+\newcommand{\crefrangeconjunction}{--}
+%%%%%%%%%%%
+% Spacing %
+%%%%%%%%%%%
+% Margins
+\usepackage[
+top    = 1.5cm,
+bottom = 1.5cm,
+left   = 1.5cm,
+right  = 1.5cm]{geometry}
+
+% Indents, paragraph space
+%\usepackage{parskip}
+\setlength{\parskip}{1.5ex}
+
+% Section spacing
+\usepackage{titlesec}
+\titlespacing*{\title}
+{0pt}{0ex}{0ex}
+\titlespacing*{\section}
+{0pt}{0ex}{0ex}
+\titlespacing*{\subsection}
+{0pt}{0ex}{0ex}
+\titlespacing*{\subsubsection}
+{0pt}{0ex}{0ex}
+
+% Line spacing
+\linespread{1.1}
+
+%%%%%%%%%%%%
+% Document %
+%%%%%%%%%%%%
+\begin{document}
+\title{\vspace{-2.5em} Measuring the angular dipole spectrum with arbitrary\\
+  polarized illumination microscopes\vspace{-1em}} % \author{Talon Chandler, Min Guo, Hari
+  % Shroff, Rudolf Oldenbourg, Patrick La Rivi\`ere}
+\date{\vspace{-3em}\today\vspace{-1em}}
+\maketitle
+\section{Forward model in a delta function basis}
+We develop and analyze a simplified model of polarized excitation fluorescence
+microscopes with arbitrary angular designs. We simplify the complete problem by
+considering large objects and ignoring the irradiance pattern on the detector
+(we effectively integrate over a few pixels). These simplifications are
+equivalent to the implicit assumptions made by the majority of polarized
+fluorescence microscopists. Our main goal is to improve our intuition for the
+angular band limit of arbitrary microscopes and to incorporate light-sheet
+tilting into our model.
+
+With these simplifications we can model a continuous-to-continuous polarized
+excitation fluorescence microscope system as
+\begin{align}
+  g(\sd, \pp) = \ints{2}d\so\, h(\sd,\pp;\so)f(\so),\label{eq:fwd}
+\end{align}
+where $\so$ is an orientation in the object, $f(\so)$ is the angular dipole
+density (with units of sr${}^{-1}$), $\pp$ is the orientation of an excitation
+polarizer, $\sd$ is the orientation of the detection optical axis, $g(\sd, \pp)$
+is the measured irradiance with detection optical axis $\sd$ and excitation
+polarization $\pp$. Equation \eqref{eq:fwd} assumes that object space is
+$\mbb{U} = \mbb{L}_2(\mbb{S}^2)$---functions on the sphere---and data space is
+$\mbb{V} = \mbb{L}_2(\mbb{S}^2 \times \mbb{S}^1)$---functions on the product
+space of a sphere and a circle (a doughnut made of Timbits!).
+
+Our next task is to find the form of the kernel $h(\sd,\pp;\so)$. We know that
+the kernel is separable into excitation and detection parts so
+\begin{align}
+  h(\sd, \pp;\so) = h^{\text{exc}}(\pp;\so)h^{\text{det}}(\sd;\so). \label{eq:kern}
+\end{align}
+We restrict ourselves to low-NA excitation (like light-sheet excitation), which
+gives the following excitation kernel
+\begin{align}
+  h^{\text{exc}}(\pp\cdot\so) \propto (\pp\cdot\so)^2. \label{eq:exckern}
+\end{align}
+In other words, the probability of exciting a fluorophore oriented along $\so$
+with light polarized along $\pp$ is proportional to $(\pp\cdot\so)^2$---a
+familiar $\cos^2\theta$ dependence where $\theta$ is the angle between $\pp$ and
+$\so$. Notice that the excitation kernel is rotationally symmetric, so we can
+write it as a function of $\pp\cdot\so$.
+
+The detection kernel is given by
+\begin{align}
+  h^{\text{det}}(\sd,\so) = \ints{2}d\mh{s}\,\Pi\left(\frac{\mh{s}\cdot\sd}{\cos\alpha}\right)(\mh{s}\cdot\sd)^{-1/2}[1 - (\mh{s}\cdot\so)^2], \label{eq:detkern}
+\end{align}
+where the $[1 - (\mh{s}\cdot\so)^2]$ term models the familiar $\sin^2\vartheta$
+dependence of dipole radiation where $\vartheta$ is the angle between $\sd$ and
+$\so$, the $(\mh{s}\cdot\sd)^{-1/2}$ term models the apodization of an aplanatic
+objective, and the integral over
+$\Pi\left(\frac{\mh{s}\cdot\sd}{\cos\alpha}\right)$ models the finite aperture
+of the objective with $\text{NA} = n_o\sin\alpha$. In Appendix
+\ref{sec:spherical} we evaluate this integral in closed form to find that
+\begin{align}
+  h^{\text{det}}(\sd\cdot\so) \propto (1 - \sqrt{\cos\alpha})P_0(\sd\cdot\so) + \frac{1}{5}\left[\frac{1}{4}\sqrt{\cos\alpha}(7-3\cos(2\alpha)) - 1\right]P_2(\sd\cdot\so).
+\end{align}
+The detection kernel is rotationally symmetric, so it can be written as a
+function of $\sd\cdot\so$. For very low NA the detection kernel reduces to
+$[1 - (\mh{s}\cdot\so)^2]$ as we would expect.
+
+\section{Forward model in a spherical harmonic basis} \label{sec:shsec}We can rewrite the right-hand side of Eq. \eqref{eq:fwd} in a spherical harmonic
+basis by applying the generalized Plancherel theorem for spherical functions
+\begin{align}
+  g(\sd, \pp) = \sum_{\ell m}H_\ell^m(\sd, \pp)F_\ell^m,\label{eq:fwdsh}
+\end{align}
+where we have defined the \textit{dipole angular transfer function} as
+\begin{align}
+  H_\ell^m(\sd, \pp) = \ints{2}d\so\, h(\sd,\pp;\so)Y_\ell^{m*}(\so),
+\end{align}
+and the \textit{dipole angular spectrum} as
+\begin{align}
+  F_\ell^m = \ints{2}d\so\, f(\so)Y_\ell^{m*}(\so).
+\end{align}
+
+Our remaining task is to calculate the dipole angular transfer function. We can
+start by expanding the kernel into excitation and detection parts
+\begin{align}
+  H_\ell^m(\sd, \pp) = \ints{2}d\so\, h^{\text{exc}}(\pp\cdot\so)h^{\text{det}}(\sd\cdot\so)Y_\ell^{m*}(\so). 
+\end{align}
+We can expand both the excitation and detection kernels into a sum of spherical harmonics (a Laplace series)
+\begin{align}
+    H_\ell^m(\sd, \pp) = \ints{2}d\so\, \left[\sum_{\ell' m'}H_{\ell'}^{m',\text{exc}}(\pp\cdot\so)Y_{\ell'}^{m'}(\so)\right]\left[\sum_{\ell'' m''}H_{\ell''}^{m'',\text{det}}(\sd\cdot\so)Y_{\ell''}^{m''}(\so)\right]Y_\ell^{m*}(\so),\label{eq:triple}
+\end{align}
+where $H_{\ell'}^{m',\text{exc}}(\pp\cdot\so)$ and $H_{\ell''}^{m'',\text{det}}(\sd\cdot\so)$ are the spherical harmonic transforms of the excitation and detection kernels
+\begin{align}
+  H_{\ell'}^{m',\text{exc}}(\pp) &= \ints{2}d\so\, h^{\text{exc}}(\pp\cdot\so)Y_{\ell'}^{m'*}(\so),\label{eq:sh1}\\
+  H_{\ell''}^{m'',\text{det}}(\sd) &= \ints{2}d\so\, h^{\text{det}}(\sd\cdot\so)Y_{\ell''}^{m''*}(\so)\label{eq:sh2}.
+\end{align}
+In Appendix B we evaluate these spherical Fourier transforms as
+\begin{align}
+    H_{\ell'}^{m',\text{exc}}(\pp) &\propto Y_{\ell'}^{m'*}(\pp)\left[\delta_{0\ell'} + \frac{2}{5}\delta_{2,\ell'}\right],\label{eq:dipexc}\\
+    H_{\ell''}^{m'',\text{det}}(\sd) &\propto Y_{\ell''}^{m''*}(\sd)\left[(1 - \sqrt{\cos\alpha})\delta_{0,\ell''} + \left(\frac{1}{4}\sqrt{\cos\alpha}(7-3\cos(2\alpha)) - 1\right)\delta_{2,\ell''}\right].\label{eq:dipdet}
+\end{align}
+
+We continue simplifying Eq. \eqref{eq:triple} by rewriting it as
+\begin{align}
+    H_\ell^m(\sd, \pp) = \sum_{\ell' m'}\sum_{\ell'' m''}H_{\ell'}^{m',\text{exc}}(\pp)H_{\ell''}^{m'',\text{det}}(\sd)\ints{2}d\so\, Y_\ell^{m*}(\so)Y_{\ell'}^{m'}(\so)Y_{\ell''}^{m''}(\so).\label{eq:triple2}
+\end{align}
+We can simplify this equation further as
+\begin{align}
+    H_\ell^m(\sd, \pp) = \sum_{\ell' m'}\sum_{\ell'' m''}(-1)^m G_{\ell,\ell',\ell''}^{-m,m',m''}H_{\ell'}^{m',\text{exc}}(\pp)H_{\ell''}^{m'',\text{det}}(\sd),\label{eq:triple3}
+\end{align}
+where $G_{\ell,\ell',\ell''}^{m,m',m''}$ are the Gaunt coefficients (sometimes
+called the tripling coefficients or triple integrals of the spherical harmonics)
+defined by
+\begin{align}
+  G_{\ell,\ell',\ell''}^{m,m',m''} = \ints{2}d\so\, Y_\ell^{m}(\so)Y_{\ell'}^{m'}(\so)Y_{\ell''}^{m''}(\so).
+\end{align}
+Equation \eqref{eq:triple3} is a key result because it allows us to calculate
+the dipole angular transfer function from the excitation and detection angular
+transfer functions.
+
+We can draw some general conclusions about the band limits of this type of
+imaging system by examining the properties of the Gaunt coefficients. First, the
+Gaunt coefficient can only be non-zero when the coefficients $\ell$, $\ell'$,
+and $\ell''$ satisfy the \textit{triangle condition}---each of the three
+coefficients is between the sum and difference of the other two. The most
+relevant condition for us is 
+\begin{align}
+  |\ell' - \ell''| \leq \ell \leq \ell' + \ell'', \label{eq:cond1}
+\end{align}
+which means that we can only have non-zero coefficients for $0\leq \ell \leq 4$
+since $0\leq \ell' \leq 2$ and $0\leq \ell'' \leq 2$. Also, the Gaunt
+coefficients can only be non-zero when the $\ell, \ell'$, and $\ell''$ form an
+even sum
+\begin{align}
+  \ell + \ell' + \ell'' = 2n, \quad \text{for}\, n \in \mbb{N}, \label{eq:cond2}
+\end{align}
+which ensures inversion symmetry. Finally, the Gaunt coefficients can only be
+non-zero when each $\ell$ is less than the absolute value of the corresponding
+$m$
+\begin{align}
+  \ell \leq |m|,\quad\ell' \leq |m'|,\quad\ell'' \leq |m''|.\label{eq:cond3}
+\end{align}
+These conditions are obvious if you consider that the spherical harmonics are
+zero (or undefined) when these conditions are not satisfied.
+
+Given that $0\leq \ell' \leq 2$ and $0 \leq \ell'' \leq 2$ for our measurements, the
+conditions in Eqs. \eqref{eq:cond1}--\eqref{eq:cond3} imply that the dipole
+angular transfer function has at most 15 terms---1 for the $\ell=0$ band, 5 for
+the $\ell=2$ band, and 9 for the $\ell=4$ band.
+
+Note that a single choice for a measurement $\sd$ and $\pp$ can have 15 non-zero
+terms in the dipole angular transfer function if both $\sd$ and $\pp$ do not lie
+on a node (zero) of any of the $\ell = 2$ spherical harmonics. I mention this to
+emphasize that the number of terms in the dipole angular transfer function has
+little to no bearing on how much we can measure about the object---the choice of
+coordinate system changes the nodes of the spherical harmonics and our results
+should never depend on a choice of coordinates. The object space singular
+vectors are the functions that we care about when we ask: what can this instrument 
+measure about the object?
+
+Notice that all of our results so far are completely coordinate-free---we have
+used unit vectors everywhere instead of Cartesian or spherical coordinates. 
+
+\section{Continuous-to-discrete model}
+So far we have modeled the continuous data space
+$\mbb{V} = \mbb{L}_2(\mbb{S}^2 \times \mbb{S}^1)$. Now we consider discrete
+samples of this data space with the following forward model
+\begin{align}
+  g_i = \int_{\mbb{S}^2}d\sd\int_{\mbb{S}^1}d\pp\, w_i(\sd, \pp)\ints{2}d\so\,h(\sd,\pp;\so)f(\so),\label{eq:discrete}
+\end{align}
+where $g_i$ is a discrete set of $M$ measurements and $w_i(\sd, \pp)$ is the
+``sampling aperture'' that indicates which part of data space $(\sd, \pp)$ we
+sample during the $i$th measurement. For example, if we have a detector along
+the $\mh{z}$ axis and we illuminate with $\mh{x}$ polarized light for the first
+measurement and $\mh{y}$ polarized light for the second measurement, then the
+sampling aperture is
+\begin{align}
+  w_i^{(0)}(\sd,\pp) = \delta(\sd - \mh{z})[\delta(\pp - \mh{x})\delta_{i,0} + \delta(\pp - \mh{y})\delta_{i,1}].
+\end{align}
+It is more convenient to rewrite Eq. \eqref{eq:discrete} as
+\begin{align}
+  g_i = \ints{2}d\so\,h_i(\so)f(\so),
+\end{align}
+where
+\begin{align}
+h_i(\so) = \int_{\mbb{S}^2}d\sd\int_{\mbb{S}^1}d\pp\, w_i(\sd, \pp) h(\sd,\pp;\so).
+\end{align}
+In our example, the continuous-to-discrete kernel is given by 
+\begin{align}
+  h_i^{(0)}(\so) = h(\mh{z},\mh{x};\so)\delta_{i,0} + h(\mh{z},\mh{y};\so)\delta_{i,1}.
+\end{align}
+\section{Singular value decomposition}
+Our continuous-to-discrete forward model can be written in any of the following
+equivalent forms
+\begin{align}
+  \mb{g} &= \mc{H}\mb{f},\label{eq:f1}\\
+  g_i &= \ints{2}d\so\,h_i(\so)f(\so),\label{eq:f2}\\
+  g_i &= \sum_{\ell,m}H_{i,\ell}^m F_{\ell}^m,\label{eq:f3}\\
+  g_i &= \sum_{j}H_{i,j}F_j.\label{eq:f4}
+\end{align}
+where Eq. \eqref{eq:f1} is the Hilbert-space form, Eq. \eqref{eq:f2} is the
+delta-function basis form, Eq. \eqref{eq:f3} is the spherical harmonic basis
+form, and Eq. \eqref{eq:f3} is the spherical harmonic basis form with a
+collapsed index $j(\ell,m) = [\ell(\ell+1)]/2 + m$ (don't confuse the spherical
+Fourier transform with collapsed coefficients, $F_j$, with the Fourier-Legendre
+transform, $F_\ell$---I'll consider alternative notations but it should be clear
+from the context). Notice that the last two forms blur the line between a CD
+operator and a DD operator---we are still considering a continuous object space
+and discrete data space, but we have found a basis that allows us to express
+this mapping in a completely discrete way.
+
+Similarly, we can write the discrete-to-continuous adjoint operator as
+\begin{align}
+  \mb{f} &= \mc{H}^{\dagger}\mb{g},\label{eq:a1}\\
+  f(\so) &= \sum_i h_i(\so)g_i,\label{eq:a2}\\
+  F_{\ell}^m &= \sum_{i} H_{i,\ell}^m g_i,\label{eq:a3}\\
+  F_j &= \sum_i H_{i,j}g_i,\label{eq:a4}
+\end{align}
+where the forms of Eqs. \eqref{eq:a1}--\eqref{eq:a4} match with the forms of Eqs. \eqref{eq:f1}--\eqref{eq:f4}.
+
+To find the object space singular functions we need to solve the eigenvalue
+problem in one of its forms
+\begin{align}
+  \mc{H}^\dagger\mc{H}\mb{u}_n &= \mu_n\mb{u}_n,\label{eq:s1}\\
+  \sum_i h_i(\so)\ints{2} d\so'\, h_i(\so')u_n(\so') &= \mu_n u_n(\so),\label{eq:s2}\\
+  \sum_i H_{i,\ell}^m \sum_{\ell' m'}, H_{i,\ell'}^{m'} U_{n,\ell'}^{m'} &= \mu_n U_{n,\ell}^m,\label{eq:s3}\\
+  \sum_i H_{i,j} \sum_{j'}, H_{i,j'} U_{n,j'} &= \mu_n U_{n,j},\label{eq:s4}
+\intertext{where $n$ indexes the singular values and singular functions, and the letter
+``u'' is used with varying type and arguments to denote the object space
+singular functions. We can tighten up the notation by introducing kernels of the
+operators and denoting them with the letter ``k'' with varying type and
+arguments:}
+  \mc{K}\mb{u}_n &= \mu_n\mb{u}_n,\label{eq:k1}\\
+  \ints{2} d\so'\, k(\so, \so')u_n(\so') &= \mu_n u_n(\so),\label{eq:k2}\\
+  \sum_{\ell' m'} K_{\ell,\ell'}^{m,m'} U_{n,\ell'}^{m'} &= \mu_n U_{n,\ell}^m,\label{eq:k3}\\
+  \sum_{j'} K_{j,j'} U_{n,j'} &= \mu_n U_{n,j},\label{eq:k4}
+\intertext{where}
+  \mc{K} &= \mc{H}\mc{H}^\dagger,\\
+  k(\so,\so') &= \sum_i h_i(\so)h_i(\so'),\\
+  K_{\ell,\ell'}^{m,m'} &= \sum_i H_{i,\ell}^m H_{i,\ell'}^{m'},\\
+  K_{j,j'} &= \sum_i H_{i,j}H_{i,j'}. \label{eq:kk4}
+\end{align}
+
+Now we are in position to solve for the object space singular functions and the
+singular values. The first step is to calculate the matrix $K_{j,j'}$ using Eq.
+\eqref{eq:kk4} and the closed form expressions for the dipole angular transfer
+function, $H_{i,j}$, that we calculated in Sec. \ref{sec:shsec}. As we discussed
+previously, $H_{i,j}$ is a $M\times15$ matrix so $K_{j,j'}$ is $15\times15$ and
+it is computationally trivial (though impossible analytically) to calculate its
+eigenvalues $\mu_n$ and eigenvectors $U_{n,j}$. With $U_{n,j}$ in hand we can
+calculate the object-space singular vectors in a delta function basis using an
+inverse spherical harmonics transform
+\begin{align}
+  u_n(\so) = \sum_{j}U_{n,j}Y_j(\so).
+\end{align}
+
+Before examining specific designs, we briefly examine and interpret the object
+space singular vectors and singular values. The object space singular vectors
+span the space of measurable objects---they are orthogonal (and can be chosen to
+be orthonormal) because the operator $\mc{H}^\dagger\mc{H}$ is Hermitian. The
+singular values tell us ``how efficiently'' each object space singular vector is
+transferred through the system---the singular values (the eigenvalues of
+$\mc{H}^\dagger\mc{H}$) are real (because $\mc{H}^\dagger\mc{H}$ is Hermitian)
+and positive (because of the form of $\mc{H}^\dagger\mc{H}$ see Barrett 1.4.4).
+In other words, $\mc{H}^\dagger\mc{H}$ is positive-semidefinite because the
+eigenvalues are greater than or equal to zero.
+
+One desirable condition for the operator $\mc{H}^\dagger\mc{H}$ is that it has
+the maximum possible rank---$R=15$ in our case which is limited by the
+excitation and detection physics. Achieving $R=15$ will always require at least
+15 distinct measurements which is far more than we would like, so we search for
+designs with fewer measurements.
+
+Another desirable condition is that the object space singular vectors span
+subspaces of $\mbb{L}_2(\mbb{S}^2)$ that are invariant under rotation. The
+spherical harmonic bands are exactly the subspaces we're looking for: the
+$\ell$th band spans a $(2\ell + 1)$-dimension space that is invariant under
+rotation---equivalently, the $\ell$th band forms a ($2\ell +1$)-dimensional
+representation for the rotation group. Furthermore, we know that the $\ell$th
+band is an \textit{irreducible} representation of the rotation group, which
+means that we cannot decompose the $\ell$th band of spherical harmonics to find
+smaller representations of the rotation group. Therefore, if we would like our
+object space singular vectors to span a rotationally-invariant subspace then we
+need to take at least 1, 6, or 15 measurements.
+
+% We would like to find the minimum number of measurements required for the object
+% space singular vectors to span the $\ell=0$ and $\ell=2$ rotationally invariant
+% subspaces. We always measure a linear combination of spherical harmonic
+% coefficients from the $\ell=0,2,4$ bands, so we need to make more than 6
+% measurements because we are always measuring at least one dimension from the
+% $\ell=4$ band. A minimal measurement scheme will only have singular vectors that
+% span a single dimension in the 9-dimensional $\ell=4$ subspace, so the minimum
+% number of measurements for $\ell=0$ and $\ell=2$ rotationally invariant singular
+% vectors is 7.
+
+% How do we choose measurements with singular vectors that span a single dimension
+% of the $\ell=4$ band? Surprisingly, the only requirement is that we fix $\pp$ or
+% $\sd$. To demonstrate this we'll fix $\sd$ and choose a coordinate system so
+% that $\mh{z} = \sd$. In this case the dipole excitation and dipole detection transfer
+% functions (see Eqs. \eqref{eq:dipexc} and \eqref{eq:dipdet}) are
+%   \begin{align}
+%     H_{\ell'}^{m',\text{exc}}(\pp) &\propto Y_{\ell'}^{m'*}(\pp)\left[\delta_{0\ell'} + \frac{2}{5}\delta_{2,\ell'}\right],\label{eq:dipexc2}\\
+%     H_{\ell''}^{m'',\text{det}}(\mh{z}) &\propto \delta_{m'',0}\left[(1 - \sqrt{\cos\alpha})\delta_{0,\ell''} + \left(\frac{1}{4}\sqrt{\cos\alpha}(7-3\cos(2\alpha)) - 1\right)\delta_{2,\ell''}\right].\label{eq:dipdet2}
+% \end{align}
+% Notice that the detection transfer function is only non-zero for $m'' = 0$
+% because of our choice of coordinate system. To find the complete dipole angular transfer function we can use the equation
+% \begin{align}
+%     H_\ell^m(\mh{z}, \pp) = \sum_{\ell' m'}\sum_{\ell'' m''}(-1)^m G_{\ell,\ell',\ell''}^{-m,m',m''}H_{\ell'}^{m',\text{exc}}(\pp)H_{\ell''}^{m'',\text{det}}(\mh{z}).
+% \end{align}
+% We care about the Gaunt coefficients that put terms in the $\ell=4$ band
+% $G_{4,2,2}^{m,m',m''}$. We've chosen a coordinate system so that $m''=0$ and
+% from a quick computation of the Gaunt coefficients we know that 
+% \begin{align}
+%   G_{4,2,2}^{m,m',0} = \frac{3}{7\sqrt{pi}}\delta_{m,0}\delta{m',0}
+% \end{align}
+
+
+\section{Specific designs (in progress)}
+one-view epi,
+one-view lightsheet,
+two-view lightsheet,
+two-view lightsheet two-tilt one-side,
+two-view lightsheet two-tilt two-side,
+two-view lightsheet three-tilt one-side two-tilt one-side.
+
+\appendix
+\section{Spherical integral of the product of two rotationally symmetric
+  functions} \label{sec:spherical}
+
+Consider two rotationally symmetric functions on the sphere
+$f(\mh{s}\cdot\mh{s}')$ and $g(\mh{s}\cdot\mh{s}'')$. In this appendix we will
+reduce integrals of the form
+\begin{align}
+  g(\mh{s}', \mh{s}'') = \ints{2}d\mh{s}\,h(\mh{s}\cdot\mh{s}')f(\mh{s}\cdot\mh{s}'')\label{eq:integral}
+\end{align}
+to two one-dimensional integrals. The key step is to expand both $f$ and $g$
+into a Fourier-Legendre series
+\begin{align}
+  f(x) = \sum_{\ell=0}^{\infty}F_{\ell}P_{\ell}(x), \label{eq:flseries}
+\end{align}
+where $P_{\ell}(x)$ are the Legendre polynomials. We can find
+the coefficients $F_{\ell}$ using Fourier's trick---multiply both sides of Eq.
+\eqref{eq:flseries} by $P_{\ell}(x)$ (the Legendre polynomials
+are real so we can ignore complex conjugates) then integrate over the interval
+$[-1,1]$ and apply the orthogonality relation
+\begin{align}
+  \int_{-1}^1dx\,P_\ell(x)P_{\ell'}(x) = \frac{2}{2\ell+1}\delta_{\ell\ell'},
+\end{align}
+which implies that the Legendre polynomials are orthogonal but not orthonormal.
+After applying these steps to Eq. \eqref{eq:flseries} we find that
+\begin{align}
+  F_{\ell} = \frac{2\ell+1}{2}\int_{-1}^1dx\,f(x)P_{\ell}(x).
+\end{align}
+The coefficients $F_{\ell}$ are often referred to as the
+\textit{Fourier-Legendre transform} of $f(x)$. Now we can expand $f$ and $g$ in
+Eq. \eqref{eq:integral} into two Fourier-Legendre series
+\begin{align}
+  g(\mh{s}', \mh{s}'') &= \ints{2}d\mh{s}\,\left[\sum_{\ell} H_\ell P_\ell (\mh{s}\cdot\mh{s}')\right]\left[\sum_{\ell'}F_{\ell'}P_{\ell'}(\mh{s}\cdot\mh{s}'')\right],\\
+  &=\sum_{\ell}\sum_{\ell'} \ints{2}d\mh{s}\,H_\ell F_{\ell'} P_\ell (\mh{s}\cdot\mh{s}')P_{\ell'}(\mh{s}\cdot\mh{s}'').\label{eq:double}
+\end{align}
+The next step is to expand the Legendre polynomials in terms of spherical harmonics using the \textit{spherical harmonic addition theorem}
+\begin{align}
+  P_\ell(\mh{s}\cdot\mh{s}') = \frac{4\pi}{2\ell + 1}\sum_{m=-\ell}^{\ell}Y_\ell^m(\mh{s})Y_\ell^{m*}(\mh{s}'). \label{eq:shaddition}
+\end{align}
+Applying Eq. \eqref{eq:shaddition} to Eq. \eqref{eq:double} yields
+\begin{align}
+  g(\mh{s}',\mh{s}'') &= \sum_{\ell}\sum_{\ell'} \ints{2}d\mh{s}\,H_\ell F_{\ell'} \left[\frac{4\pi}{2\ell + 1}\sum_{m=-\ell}^{\ell}Y_\ell^m(\mh{s})Y_\ell^{m*}(\mh{s}')\right]\left[\frac{4\pi}{2\ell' + 1}\sum_{m=-\ell'}^{\ell'}Y_{\ell'}^{m'}(\mh{s}'')Y_{\ell'}^{m'*}(\mh{s})\right],\label{eq:one}\\ 
+                      &= \sum_{\ell m}\sum_{\ell' m'} H_\ell F_{\ell'} \left[\frac{4\pi}{2\ell + 1}Y_\ell^{m*}(\mh{s}')\right]\left[\frac{4\pi}{2\ell' + 1}Y_{\ell'}^{m'}(\mh{s}'')\right]\ints{2}d\mh{s}Y_\ell^m(\mh{s})Y_{\ell'}^{m'*}(\mh{s}),\label{eq:two}\\
+                      &= \sum_{\ell m}\sum_{\ell' m'} H_\ell F_{\ell'} \left[\frac{4\pi}{2\ell + 1}Y_\ell^{m*}(\mh{s}')\right]\left[\frac{4\pi}{2\ell' + 1}Y_{\ell'}^m(\mh{s}'')\right]\delta_{\ell\ell'}\delta_{m m'},\label{eq:three}\\
+                      &= \sum_{\ell m}H_\ell F_{\ell} \left(\frac{4\pi}{2\ell + 1}\right)^2 Y_\ell^{m*}(\mh{s}')Y_{\ell'}^m(\mh{s}''),\label{eq:four}\\
+  g(\mh{s}'\cdot\mh{s}'') &= \sum_{\ell}\frac{4\pi}{2\ell + 1}H_\ell F_{\ell} P_\ell(\mh{s}'\cdot\mh{s}'').\label{eq:five}
+\end{align}
+where we have (\ref{eq:one}-\ref{eq:two}) rearranged the equation,
+(\ref{eq:two}-\ref{eq:three}) used the orthogonality of spherical harmonics,
+(\ref{eq:three}-\ref{eq:four}) used the discrete sifting theorem then,
+(\ref{eq:four}-\ref{eq:five}) applied the spherical harmonic addition theorem.
+
+Eq. \eqref{eq:five} is a key result. In words, we can compute the spherical
+integral of the product of two rotationally symmetric functions by taking their
+Fourier-Legendre transforms then summing over $\ell$ with appropriate weights.
+Perhaps surprisingly, the result only depends on $\mh{s}'\cdot\mh{s}''$ so it is
+a rotationally symmetric function, too.  
+
+We can use this result to evaluate the detection kernel
+\begin{align}
+  h^{\text{det}}(\sd,\so) = \ints{2}d\mh{s}\,\Pi\left(\frac{\mh{s}\cdot\sd}{\cos\alpha}\right)(\mh{s}\cdot\sd)^{-1/2}[1 - (\mh{s}\cdot\so)^2]. \label{eq:kern}
+\end{align}
+Comparing Eq. \eqref{eq:kern} to Eq. \eqref{eq:integral} means that
+\begin{align}
+  f(\mh{s}\cdot\sd) &= 1 - (\mh{s}\cdot\so)^2,  \\
+  h(\mh{s}\cdot\sd) &= \Pi\left(\frac{\mh{s}\cdot\sd}{\cos\alpha}\right)(\mh{s}\cdot\sd)^{-1/2}.
+\end{align}
+Evaluating the Fourier-Legendre transform of these functions gives
+\begin{align}
+  F_\ell &= \frac{2\ell + 1}{2}\int_{-1}^1dx\,(1 - x^{2})P_\ell(x) = \frac{2}{3}(\delta_{\ell,0} + \delta_{\ell,2}),\label{eq:fl}\\
+  H_\ell &= \frac{2\ell + 1}{2}\int_{\cos\alpha}^1dx\,x^{-1/2}P_\ell(x) = (1 - \sqrt{\cos\alpha})\delta_{\ell,0} + \left[\frac{1}{4}\sqrt{\cos\alpha}(7-3\cos(2\alpha)) - 1\right]\delta_{\ell,2}+ \cdots,\label{eq:hl}
+\end{align}
+Notice that we only need to evaluate the first two terms of $H_\ell$ since
+only two terms of $F_\ell$ are non-zero. As we've noted before, the physical
+dipole emission process is the band limiting step here---not the detection
+process.
+
+Plugging Eqs. \eqref{eq:fl} and \eqref{eq:hl} into Eq. \eqref{eq:five} gives the
+closed form result for the detection kernel
+\begin{align}
+  h^{\text{det}}(\sd\cdot\so) \propto (1 - \sqrt{\cos\alpha})P_0(\sd\cdot\so) + \frac{1}{5}\left[\frac{1}{4}\sqrt{\cos\alpha}(7-3\cos(2\alpha)) - 1\right]P_2(\sd\cdot\so).
+\end{align}
+
+\section{Spherical Fourier transform of a rotationally symmetric function}
+Consider a rotationally symmetric function on the sphere
+$f(\mh{s}\cdot\mh{s}')$. In this appendix we will reduce the spherical Fourier
+transform
+\begin{align}
+  F_\ell^m = \ints{2}d\mh{s}f(\mh{s}\cdot\mh{s}')Y_\ell^{m*}(\mh{s})
+\end{align}
+to a single one-dimensional integral. Similar to Appendix A, we expand $f$ in a Fourier-Legendre series and proceed step by step
+\begin{align}
+  F_\ell^m &= \ints{2}d\mh{s}\left[\sum_{\ell'}F_{\ell'} P_{\ell'}(\mh{s}\cdot\mh{s}')\right]Y_\ell^{m*}(\mh{s}),\label{eq:one1}\\
+  F_\ell^m &= \sum_{\ell'}F_{\ell'}\ints{2}d\mh{s}\,P_{\ell'}(\mh{s}\cdot\mh{s}')Y_\ell^{m*}(\mh{s}),\label{eq:two1}\\
+  F_\ell^m &= \sum_{\ell'm'}\frac{4\pi}{2\ell' + 1}F_{\ell'}Y_{\ell'}^{m'*}(\mh{s}')\ints{2}d\mh{s}\,Y_{\ell'}^{m'}(\mh{s})Y_\ell^{m*}(\mh{s}),\label{eq:three1}\\
+  F_\ell^m &= \sum_{\ell'm'}\frac{4\pi}{2\ell' + 1}F_{\ell'}Y_{\ell'}^{m'*}(\mh{s}')\delta_{\ell\ell'}\delta_{mm'},\label{eq:four1}\\
+  F_\ell^m &= \frac{4\pi}{2\ell + 1}Y_{\ell}^{m*}(\mh{s}')F_{\ell}\label{eq:five1},
+\end{align}
+where we have (\ref{eq:one1}-\ref{eq:two1}) rearranged the equation,
+(\ref{eq:two1}-\ref{eq:three1}) applied the spherical harmonic addition theorem,
+(\ref{eq:three1}-\ref{eq:four1}) used the orthogonality of spherical harmonics
+then, (\ref{eq:four1}-\ref{eq:five1}) used the discrete sifting theorem. Eq.
+\eqref{eq:five1} is the result we were seeking---we can find the spherical
+Fourier transform of a rotationally symmetric function by finding the
+Fourier-Bessel transform $F_\ell$ then multiplying by
+$\frac{4\pi}{2\ell + 1}Y_{\ell}^{m*}(\mh{s}')$.
+
+We can use this result to evaluate the excitation and detection angular transfer
+functions
+\begin{align}
+  H_{\ell'}^{m',\text{exc}}(\pp\cdot\so) &= \ints{2}d\so\, h^{\text{exc}}(\pp\cdot\so)Y_{\ell'}^{m'*}(\so),\\
+  H_{\ell''}^{m'',\text{det}}(\sd\cdot\so) &= \ints{2}d\so\, h^{\text{det}}(\sd\cdot\so)Y_{\ell''}^{m''*}(\so).
+\end{align}
+where
+\begin{align}
+  h^{\text{exc}}(\pp\cdot\so) &\propto (\pp\cdot\so)^2, \\
+  h^{\text{det}}(\sd\cdot\so) &\propto (1 - \sqrt{\cos\alpha})P_0(\sd\cdot\so) + \frac{1}{5}\left[\frac{1}{4}\sqrt{\cos\alpha}(7-3\cos(2\alpha)) - 1\right]P_2(\sd\cdot\so).
+\end{align}
+Starting with the excitation kernel
+\begin{align}
+  H_{\ell'}^{m',\text{exc}}(\pp) &= \frac{4\pi}{2\ell + 1}Y_{\ell'}^{m'*}(\pp)\left[\frac{2\ell' + 1}{2}\int_{-1}^1dx\, x^2P_{\ell'}(x)\right],\\
+  H_{\ell'}^{m',\text{exc}}(\pp) &=\frac{4\pi}{2\ell + 1}Y_{\ell'}^{m'*}(\pp)\left[\frac{1}{3}\delta_{0\ell'} + \frac{2}{3}\delta_{2,\ell'}\right],\\
+  H_{\ell'}^{m',\text{exc}}(\pp) &\propto Y_{\ell'}^{m'*}(\pp)\left[\delta_{0\ell'} + \frac{2}{5}\delta_{2,\ell'}\right].
+\end{align}
+Notice that the polarizer orientation $\pp$ only affects the $m$ components of
+the angular transfer function while the relative contribution to the two $\ell$ bands is fixed.
+
+Finally, the detection kernel is
+\begin{align}
+  H_{\ell''}^{m'',\text{det}}(\sd) &= \frac{4\pi}{2\ell'' + 1}Y_{\ell''}^{m''*}(\sd)\left[\frac{2\ell'' + 1}{2}\int_{-1}^1dx\, h^{\text{det}}(x)P_{\ell''}(x)\right],\\
+  H_{\ell''}^{m'',\text{det}}(\sd) &= \frac{4\pi}{2\ell'' + 1}Y_{\ell''}^{m''*}(\sd)\left[(1 - \sqrt{\cos\alpha})\delta_{0,\ell''} + \frac{1}{5}\left(\frac{1}{4}\sqrt{\cos\alpha}(7-3\cos(2\alpha)) - 1\right)\delta_{2,\ell''}\right],\\
+  H_{\ell''}^{m'',\text{det}}(\sd) &\propto Y_{\ell''}^{m''*}(\sd)\left[(1 - \sqrt{\cos\alpha})\delta_{0,\ell''} + \left(\frac{1}{4}\sqrt{\cos\alpha}(7-3\cos(2\alpha)) - 1\right)\delta_{2,\ell''}\right].
+\end{align}
+Notice that the detection axis $\sd$ only affects the $m$ components of the
+detection axis and the detection NA affects the relative contribution to the two $\ell$ bands. 
+
+\end{document}
+
