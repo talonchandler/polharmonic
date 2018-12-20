@@ -1,0 +1,134 @@
+\begin{thebibliography}{10}
+\newcommand{\enquote}[1]{``#1''}
+
+\bibitem{chandler2018}
+T.~Chandler, H.~Shroff, R.~Oldenbourg, and P.~J. La~Rivi\`{e}re,
+  \enquote{Spatio-angular fluorescence microscopy {I}. basic theory,}
+  {\protect\JournalTitle{https://arxiv.org/abs/1812.07093}}  (2018).
+
+\bibitem{gu2000}
+M.~Gu, \emph{Advanced Optical Imaging Theory}, Springer Series in Optical
+  Sciences (Springer, 2000).
+
+\bibitem{barrett2004}
+H.~Barrett and K.~Myers, \emph{Foundations of Image Science}
+  (Wiley-Interscience, 2004).
+
+\bibitem{goodman1996}
+J.~Goodman, \emph{Introduction to Fourier Optics} (McGraw-Hill, 1996).
+
+\bibitem{axelrod2012}
+D.~Axelrod, \enquote{Fluorescence excitation and imaging of single molecules
+  near dielectric-coated and bare surfaces: a theoretical study.}
+  {\protect\JournalTitle{Journal of Microscopy}} \textbf{247 2}, 147--60
+  (2012).
+
+\bibitem{backer2014}
+A.~S. Backer and W.~E. Moerner, \enquote{Extending single-molecule microscopy
+  using optical {F}ourier processing,} {\protect\JournalTitle{J. Phys. Chem.
+  B}} \textbf{118}, 8313--8329 (2014).
+
+\bibitem{sheppard1994}
+C.~J.~R. Sheppard, M.~Gu, Y.~Kawata, and S.~Kawata, \enquote{Three-dimensional
+  transfer functions for high-aperture systems,} {\protect\JournalTitle{J. Opt.
+  Soc. Am. A}} \textbf{11}, 593--598 (1994).
+
+\bibitem{arnison2002}
+M.~R. Arnison and C.~J. Sheppard, \enquote{A 3{D} vectorial optical transfer
+  function suitable for arbitrary pupil functions,}
+  {\protect\JournalTitle{Optics Communications}} \textbf{211}, 53--63 (2002).
+
+\bibitem{foreman2011-2}
+M.~R. Foreman and P.~T\"{o}r\"{o}k, \enquote{Computational methods in vectorial
+  imaging,} {\protect\JournalTitle{Journal of Modern Optics}} \textbf{58},
+  339--364 (2011).
+
+\bibitem{bracewell2004}
+R.~Bracewell, \emph{Fourier Analysis and Imaging} (Springer US, 2004).
+
+\bibitem{petrov2017}
+P.~N. Petrov, Y.~Shechtman, and W.~E. Moerner, \enquote{Measurement-based
+  estimation of global pupil functions in 3{D} localization microscopy,}
+  {\protect\JournalTitle{Opt. Express}} \textbf{25}, 7945--7959 (2017).
+
+\bibitem{backlund2018}
+M.~P. Backlund, Y.~Shechtman, and R.~L. Walsworth, \enquote{Fundamental
+  precision bounds for three-dimensional optical localization microscopy with
+  {P}oisson statistics,} {\protect\JournalTitle{Phys. Rev. Lett.}}
+  \textbf{121}, 023904 (2018).
+
+\bibitem{fourkas2001}
+J.~T. Fourkas, \enquote{Rapid determination of the three-dimensional
+  orientation of single molecules,} {\protect\JournalTitle{Opt. Lett.}}
+  \textbf{26}, 211--213 (2001).
+
+\bibitem{nov2006}
+L.~Novotny and B.~Hecht, \emph{Principles of Nano-Optics} (Cambridge University
+  Press, 2006).
+
+\bibitem{brasselet2011}
+S.~Brasselet, \enquote{Polarization-resolved nonlinear microscopy: application
+  to structural molecular and biological imaging,} {\protect\JournalTitle{Adv.
+  Opt. Photon.}} \textbf{3}, 205 (2011).
+
+\bibitem{gibson89}
+S.~F. Gibson and F.~Lanni, \enquote{Diffraction by a circular aperture as a
+  model for three-dimensional optical microscopy,} {\protect\JournalTitle{J.
+  Opt. Soc. Am. A}} \textbf{6}, 1357--1367 (1989).
+
+\bibitem{zhao2007}
+C.~Zhao and J.~H. Burge, \enquote{Orthonormal vector polynomials in a unit
+  circle, part {I}: basis set derived from gradients of {Z}ernike polynomials,}
+  {\protect\JournalTitle{Opt. Express}} \textbf{15}, 18014--18024 (2007).
+
+\bibitem{xu2015}
+X.~Xu, W.~Huang, and M.~Xu, \enquote{Orthogonal polynomials describing
+  polarization aberration for rotationally symmetric optical systems,}
+  {\protect\JournalTitle{Opt. Express}} \textbf{23}, 27911--27919 (2015).
+
+\bibitem{chipman1989}
+R.~A. Chipman, \enquote{Polarization analysis of optical systems,}
+  {\protect\JournalTitle{Optical Engineering}} \textbf{28}, 28 -- 28 -- 10
+  (1989).
+
+\bibitem{agrawal2012}
+A.~Agrawal, S.~Quirin, G.~Grover, and R.~Piestun, \enquote{Limits of 3{D}
+  dipole localization and orientation estimation for single-molecule imaging:
+  towards {G}reen's tensor engineering,} {\protect\JournalTitle{Opt. Express}}
+  \textbf{20}, 26667--26680 (2012).
+
+\bibitem{zhanghao2017}
+K.~Zhanghao, X.~Chen, W.~Liu, M.~Li, C.~Shan, X.~Wang, K.~Zhao, A.~Lai, H.~Xie,
+  Q.~Dai, and P.~Xi, \enquote{Structured illumination in spatial-orientational
+  hyperspace,} {\protect\JournalTitle{https://arxiv.org/abs/1712.05092}} .
+
+\bibitem{lew2013}
+M.~D. Lew, M.~P. Backlund, and W.~E. Moerner, \enquote{Rotational mobility of
+  single molecules affects localization accuracy in super-resolution
+  fluorescence microscopy,} {\protect\JournalTitle{Nano Letters}} \textbf{13},
+  3967--3972 (2013).
+
+\bibitem{zhang2018}
+O.~Zhang, J.~Lu, T.~Ding, and M.~D. Lew, \enquote{Imaging the three-dimensional
+  orientation and rotational mobility of fluorescent emitters using the
+  tri-spot point spread function,} {\protect\JournalTitle{Applied Physics
+  Letters}} \textbf{113}, 031103 (2018).
+
+\bibitem{zhang2018-2}
+O.~Zhang and M.~D. Lew, \enquote{Fundamental limits on measuring the rotational
+  constraint of single molecules using fluorescence microscopy,}
+  {\protect\JournalTitle{https://arxiv.org/abs/1811.09017}} .
+
+\bibitem{gradshteyn2007}
+I.~S. Gradshteyn and I.~M. Ryzhik, \emph{Table of Integrals, Series, and
+  Products} (Elsevier/Academic Press, Amsterdam, 2007).
+
+\bibitem{mertz2009}
+J.~Mertz, \emph{Introduction to Optical Microscopy} (W. H. Freeman, 2009).
+
+\bibitem{ramamoorthi2005}
+R.~Ramamoorthi, \enquote{Modeling illumination variation with spherical
+  harmonics,} in \emph{Face Processing: Advanced Modeling and Methods,}
+  (Academic Press, 2005).
+
+\end{thebibliography}
