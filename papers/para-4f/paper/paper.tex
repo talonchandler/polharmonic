@@ -24,6 +24,7 @@
 \usepackage{empheq}
 \usepackage{bm}
 \usepackage[normalem]{ulem}
+\usepackage{booktabs}
 
 % Talon's custom commands
 \setlength\arraycolsep{1.5pt}
@@ -87,16 +88,16 @@
 %% [use \begin{abstract*}...\end{abstract*} if exempt from copyright]
 
 \begin{abstract*}
-  We analyze a single-view fluorescence microscope in a $4f$ geometry
-    without using the monopole or scalar approximations. We show that this
-    imaging system has a spatio-angular band limit, and we exploit the band
-    limit to perform efficient simulations. Notably, we show that information
-    about the out-of-plane orientation of ensembles of in-focus fluorophores is
-    recorded by paraxial fluorescence microscopes. Additionally, we show that
-    deconvolution algorithms that use the monopole approximation may make biased
-    estimates of fluorophore concentrations, but these biases are small when the
-    sample contains either many randomly oriented fluorophores in each
-    resolvable volume or unconstrained rotating fluorophores.
+  We investigate the properties of a single-view fluorescence microscope
+  in a $4f$ geometry when imaging fluorescent dipoles without using the
+  monopole or scalar approximations. We show that this imaging system has a
+  spatio-angular band limit, and we exploit the band limit to perform efficient
+  simulations. Notably, we show that information about the out-of-plane
+  orientation of ensembles of in-focus fluorophores is recorded by paraxial
+  fluorescence microscopes. Additionally, we show that the monopole
+    approximation may cause biased estimates of fluorophore concentrations, but
+  these biases are small when the sample contains either many randomly oriented
+  fluorophores in each resolvable volume or unconstrained rotating fluorophores.
 \end{abstract*}
 
 \section{Introduction}
@@ -117,15 +118,15 @@ investigate the dipole model of fluorophores in detail and find the conditions
 under which the monopole approximation is justified.
 
 We begin in section \ref{sec:theory} by specifying the imaging geometry and
-  defining \textit{pupil functions} for both monopole and dipole imaging
-  systems. We explicitly relate the pupil functions to the coherent transfer
-  functions to establish a connection between physical calculations and the
-  transfer functions. Next, in section \ref{sec:results} we calculate the
-  monopole and dipole transfer functions in closed form, and we use these
-  transfer functions to perform efficient simulations with four numerical
-  phantoms. Finally, in section \ref{sec:discussion} we discuss the results and
-  expand on how the pupil functions can be used to develop improved models for
-  spatio-angular microscopes.
+defining \textit{pupil functions} for imaging systems with and without the
+monopole approximation. We explicitly relate the pupil functions to the coherent
+transfer functions to establish a connection between physical calculations and
+the transfer functions. Next, in section \ref{sec:results} we calculate the
+monopole and dipole transfer functions in closed form, and we use these transfer
+functions to perform efficient simulations with four numerical phantoms.
+Finally, in section \ref{sec:discussion} we discuss the results and expand on
+how the pupil functions can be used to develop improved models for
+spatio-angular microscopes.
 
 \section{Theory}\label{sec:theory}
 During our initial modeling \cite{chandler2018} we considered an
@@ -144,10 +145,69 @@ where $h(\rd - \ro)$ is the monopole point spread function. For dipoles the
 \begin{align}
   g(\rd) = \int_{\mbb{S}^2}d\so\int_{\mbb{R}^2}d\ro\,h(\rd - \ro,\so)f(\ro,\so),\label{eq:dip}
 \end{align}
-where $h(\rd - \ro, \so)$ is the dipole point spread function. Note that we
-  have written Eqs. \eqref{eq:mono} and \eqref{eq:dip} in their
-  demagnified forms. We will use primes to denote the unscaled detector
-  coordinate, $\rd'$, and unscaled point spread functions, $h'$.
+where $h(\rd - \ro, \so)$ is the dipole point spread function. Note that we have
+written Eqs. \eqref{eq:mono} and \eqref{eq:dip} in their demagnified forms. We
+will use primes to denote the unscaled detector coordinate, $\rd'$, and unscaled
+point spread functions, $h'$.
+
+After expressing the operators in a delta function basis we explored the
+  form of the operators with several other choices of basis functions. Tables 1
+  and 2 summarize our results.
+
+  \begin{table}[t]
+    \centering
+  \begin{tabular}{lll}
+    \toprule
+    Quantity&Symbol&Relationships\\
+    \midrule
+    Monopole density&$f(\ro)$&---\\
+    Monopole spectrum&$F(\bv)$&$=\mc{F}_{\mbb{R}^2}\left\{f(\ro)\right\}$\\
+    \midrule
+    Monopole coherent spread function&$c(\rd - \ro)$&---\\
+    Monopole coherent transfer function&$C(\taup)$&$=\mc{F}_{\mbb{R}^2}\left\{c(\rd - \ro)\right\}$\\
+    Monopole point spread function&$h(\rd - \ro)$&$=|c(\rd - \ro)|^2$\\
+    Monopole transfer function&$H(\bv)$&$=\mc{F}_{\mbb{R}^2}\left\{h(\rd-\ro)\right\}$\\
+    &&$= \int_{\mbb{R}^2}d\taup\,C(\taup)C^{*}(\taup - \bv)$\\
+    \midrule
+    Scaled irradiance&$g(\rd)$&$=\int_{\mbb{R}^2}d\ro\, h(\rd - \ro)f(\ro)$\\
+    Scaled irradiance spectrum&$G(\bv)$&$=\mc{F}_{\mbb{R}^2}\left\{g(\rd)\right\}=H(\bv)F(\bv)$\\
+    \bottomrule
+\end{tabular}
+\caption{Summary of relevant quantities in fluorescence microscopy under the
+  monopole approximation---see \cite{chandler2018} for derivations.
+  $\mc{F}_{\mbb{R}^2}$ denotes a two-dimensional Fourier transform.}
+\end{table}
+
+  \begin{table}[t]
+    \hspace{-1.5em}
+  \begin{tabular}{lll}
+    \toprule
+    Quantity&Symbol&Relationships\\
+    \midrule
+    Dipole density&$f(\ro,\so)$&---\\
+    Dipole spatial spectrum&$F(\bv,\so)$&$=\mc{F}_{\mbb{R}^2}\left\{f(\ro,\so)\right\}$\\
+    Dipole angular spectrum&$F_{\ell}^m(\ro)$&$=\mc{F}_{\mbb{S}^2}\left\{f(\ro,\so)\right\}$\\
+    Dipole spatio-angular spectrum&$\msf{F}_{\ell}^m(\bv)$&$=\mc{F}_{\mbb{R}^2}\left\{F_{\ell}^m(\ro)\right\} = \mc{F}_{\mbb{S}^2}\left\{F(\bv, \so)\right\}$\\
+    \midrule
+    Dipole coherent spread function&$\mb{c}(\rd - \ro, \so)$&---\\
+    Dipole coherent transfer function&$\mb{C}(\taup,\so)$&$=\mc{F}_{\mbb{R}^2}\left\{\mb{c}(\rd - \ro, \so)\right\}$\\
+    Dipole point spread function&$h(\rd - \ro,\so)$&$=|\mb{c}(\rd - \ro, \so)|^2$\\
+    Dipole spatial transfer function&$H(\bv,\so)$&$=\mc{F}_{\mbb{R}^2}\left\{h(\rd-\ro,\so)\right\}$\\
+    &&$= \int_{\mbb{R}^2}d\taup\,\mb{C}(\taup,\so)\mb{C}^{\dagger}(\taup - \bv,\so)$\\
+    Dipole angular transfer function&$H_{\ell}^m(\rd - \ro)$&$=\mc{F}_{\mbb{S}^2}\left\{h(\rd-\ro,\so)\right\}$\\
+    Dipole spatio-angular transfer function&$\msf{H}_{\ell}^m(\bv)$&$=\mc{F}_{\mbb{R}^2}\left\{H_{\ell}^m(\rd - \ro)\right\} = \mc{F}_{\mbb{S}^2}\left\{H(\bv, \so)\right\}$\\
+    \midrule
+    Scaled irradiance&$g(\rd)$&$=\int_{\mbb{S}^2}d\so\int_{\mbb{R}^2}d\ro\, h(\rd - \ro, \so)f(\ro,\so)$\\
+    &&$= \sum_{\ell m}\int_{\mbb{R}^2}d\ro\,H_{\ell}^m(\rd - \ro)F_{\ell}^m(\ro)$\\
+    Scaled irradiance spectrum&$G(\bv)$&$=\mc{F}_{\mbb{R}^2}\left\{g(\rd)\right\}$\\
+            &&$=\int_{\mbb{S}^2}d\so\, H(\bv,\so)F(\bv, \so)$\\
+            &&$=\sum_{\ell m} \msf{H}_{\ell}^m(\bv) \msf{F}_{\ell}^m(\bv)$\\
+    \bottomrule
+\end{tabular}
+  \caption{Summary of relevant quantities in spatio-angular dipole imaging---see \cite{chandler2018} for derivations. $\mc{F}_{\mbb{R}^2}$ denotes a two-dimensional Fourier transform, and $\mc{F}_{\mbb{S}^2}$ denotes a spherical Fourier transform.}
+\end{table}
+
+
 
 % \add{Once we have found the mapping in a delta function basis, we can change basis to
 % simplify the integral transform. For example, in a basis of complex exponentials
@@ -850,14 +910,21 @@ $Y_2^0$ spherical harmonic.
  
  \section{Discussion}\label{sec:discussion}
  \subsection{Comparing monopole and dipole models}
- The only case when the dipole and monopole transfer functions match
-   exactly is when the sample consists of dipoles that are completely
-   constrained to the transverse plane of a paraxial imaging system. Applying
-   the monopole approximation in any other situation can lead to biased
-   estimates of the fluorophore concentrations.
+ The only case when the dipole and monopole transfer functions match exactly is
+ when the sample consists of dipoles that are completely constrained to the
+ transverse plane of a paraxial imaging system. Applying the monopole
+ approximation in any other situation can lead to biased estimates of the
+ fluorophore concentrations. To see how these biases manifest, consider the
+   irradiance pattern created by an ensemble of dipoles oriented along the optic
+   axis---see Figs. \ref{fig:ph1}, \ref{fig:ph2}, \ref{fig:ph3}, or \ref{fig:ph4}.
+   Any reconstruction scheme that uses the monopole approximation would
+   attribute the irradiance doughnut to a doughnut of monopoles instead of
+   axially oriented dipoles, which is a clear example of a biased estimate caused
+   by model mismatch.
 
- However, the common justifications for the monopole approximation---the
-   fluorophores are rotationally unconstrained or there are many randomly
+   However, the common justifications for the monopole approximation---that the
+   fluorophores are rotationally unconstrained or that
+   there are many randomly
    oriented fluorophores in a resolvable volume---are good justifications in all
    but the highest SNR regimes. The effects of the dipole model become apparent
    in lower SNR regimes as the rotational constraints on the dipoles increase
