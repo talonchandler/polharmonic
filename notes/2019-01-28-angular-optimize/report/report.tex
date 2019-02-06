@@ -1,0 +1,436 @@
+\documentclass[11pt]{article}
+
+%%%%%%%%%%%%
+% Packages %
+%%%%%%%%%%%%
+\usepackage[dvipsnames]{xcolor}
+\hyphenpenalty=10000
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+
+\usepackage{tocloft}
+\usepackage[linesnumbered,ruled]{algorithm2e}
+\renewcommand\cftsecleader{\cftdotfill{\cftdotsep}}
+\def\undertilde#1{\mathord{\vtop{\ialign{##\crcr
+$\hfil\displaystyle{#1}\hfil$\crcr\noalign{\kern1.5pt\nointerlineskip}
+$\hfil\tilde{}\hfil$\crcr\noalign{\kern1.5pt}}}}}
+\usepackage{bold-extra}
+\usepackage{bm}
+\usepackage{cleveref}
+\usepackage{xcolor}
+\usepackage[colorlinks = true,
+            linkcolor = black,
+            urlcolor  = blue,
+            citecolor = black,
+            anchorcolor = black]{hyperref}
+\usepackage{epstopdf}
+\usepackage{braket}
+\usepackage{upgreek}
+\usepackage{caption}
+\usepackage{booktabs}
+\usepackage{subcaption}
+\usepackage{amssymb,latexsym,amsmath,gensymb}
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{pdflscape}
+\usepackage{url}
+\usepackage{array}
+\newcolumntype{C}{>{$\displaystyle} c <{$}}
+\usepackage{tikz, calc}
+\usetikzlibrary{shapes.geometric, arrows, calc}
+\tikzstyle{norm} = [rectangle, rounded corners, minimum width=2cm, minimum height=1cm,text centered, draw=black]
+\tikzstyle{arrow} = [thick, ->, >=stealth]
+
+\newcommand{\argmin}{\arg\!\min}
+\providecommand{\argmax}[1]{\underset{#1}{\mathrm{argmax}}\,}
+\newcommand{\me}{\mathrm{e}}
+\providecommand{\e}[1]{\ensuremath{\times 10^{#1}}}
+\providecommand{\mb}[1]{\mathbf{#1}}
+\providecommand{\mc}[1]{\mathcal{#1}}
+\providecommand{\ro}{\mathbf{\mathfrak{r}}_o}
+\providecommand{\so}{\mathbf{\hat{s}}_o}
+\providecommand{\sd}{\mathbf{\hat{s}}_d}
+\providecommand{\pp}{\mathbf{\hat{p}}}
+\providecommand{\rb}{\mathbf{r}_b}
+\providecommand{\rbm}{r_b^{\text{m}}}
+\providecommand{\rd}{\mathbf{\mathfrak{r}}_d}
+\providecommand{\mh}[1]{\mathbf{\hat{#1}}}
+\providecommand{\mf}[1]{\mathfrak{#1}}
+\providecommand{\ms}[1]{\mathsf{#1}}
+\providecommand{\mbb}[1]{\mathbb{#1}}
+\providecommand{\bs}[1]{\boldsymbol{#1}}
+\providecommand{\tv}{\texttt{v}}
+\providecommand{\tx}[1]{\text{#1}}
+\providecommand{\tb}[1]{\textbf{#1}}
+\providecommand{\ttt}[1]{\texttt{#1}}
+\providecommand{\bv}{\bs{\nu}}
+\providecommand{\bp}{\bs{\rho}}
+\providecommand{\p}{\mh{p}}
+\providecommand{\lmsum}{\sum_{l=0}^\infty\sum_{m=-l}^{l}}
+\providecommand{\intr}[1]{\int_{\mbb{R}^{#1}}}
+\providecommand{\ints}[1]{\int_{\mbb{S}^{#1}}}
+\providecommand{\intinf}{\int_{-\infty}^{\infty}}
+\let\originalleft\left
+\let\originalright\right
+\renewcommand{\left}{\mathopen{}\mathclose\bgroup\originalleft}
+\renewcommand{\right}{\aftergroup\egroup\originalright}
+
+
+\providecommand{\fig}[4]{
+  % filename, width, caption, label
+\begin{figure}[H]
+ \captionsetup{width=1.0\linewidth}
+ \centering
+ \includegraphics[width = #2\textwidth]{#1}
+ \caption{#3}
+ \label{fig:#4}
+\end{figure}
+}
+
+\makeatletter
+\renewcommand*\env@matrix[1][*\c@MaxMatrixCols c]{%
+  \hskip -\arraycolsep
+  \let\@ifnextchar\new@ifnextchar
+  \array{#1}}
+\makeatother
+
+\newcommand{\tensor}[1]{\overset{\text{\tiny$\leftrightarrow$}}{\mb{#1}}}
+\newcommand{\tunderbrace}[2]{\underbrace{#1}_{\textstyle#2}}
+\providecommand{\figs}[7]{
+  % filename1, filename2, caption1, caption2, label1, label2, shift
+\begin{figure}[H]
+\centering
+\begin{minipage}[b]{.45\textwidth}
+  \centering
+  \includegraphics[width=1.0\linewidth]{#1}
+  \captionsetup{justification=justified, singlelinecheck=true}
+  \caption{#3}
+  \label{fig:#5}
+\end{minipage}
+\hspace{2em}
+\begin{minipage}[b]{.45\textwidth}
+  \centering
+  \includegraphics[width=1.0\linewidth]{#2}
+  \vspace{#7em}
+  \captionsetup{justification=justified}
+  \caption{#4}
+  \label{fig:#6}
+\end{minipage}
+\end{figure}
+}
+\makeatletter
+
+\providecommand{\code}[1]{
+\begin{center}
+\lstinputlisting{#1}
+\end{center}
+}
+
+\newcommand{\crefrangeconjunction}{--}
+%%%%%%%%%%%
+% Spacing %
+%%%%%%%%%%%
+% Margins
+\usepackage[
+top    = 1.5cm,
+bottom = 1.5cm,
+left   = 1.5cm,
+right  = 1.5cm]{geometry}
+
+% Indents, paragraph space
+%\usepackage{parskip}
+\setlength{\parskip}{1.5ex}
+
+% Section spacing
+\usepackage{titlesec}
+\titlespacing*{\title}
+{0pt}{0ex}{0ex}
+\titlespacing*{\section}
+{0pt}{0ex}{0ex}
+\titlespacing*{\subsection}
+{0pt}{0ex}{0ex}
+\titlespacing*{\subsubsection}
+{0pt}{0ex}{0ex}
+
+% Line spacing
+\linespread{1.1}
+
+%%%%%%%%%%%%
+% Document %
+%%%%%%%%%%%%
+\begin{document}
+\title{\vspace{-2.5em} Optimizing angular diSPIM measurements\vspace{-1em}} % \author{Talon Chandler, Min Guo, Hari
+  % Shroff, Rudolf Oldenbourg, Patrick La Rivi\`ere}
+\date{\vspace{-3em}\today\vspace{-1em}}
+\maketitle
+
+\section{Introduction}
+Our goal in these notes is to find optimal angular sampling schemes for the
+diSPIM with light-sheet tilting. We review the continuous angular forward model,
+find the sampling schemes available to us, choose an objective function to
+optimize, then search through the sampling schemes.
+
+\section{Continuous forward model}
+We briefly review the continuous angular forward model---see the
+\href{https://github.com/talonchandler/polharmonic/blob/master/notes/2018-12-10-angular-svd/report/report.pdf}{previous
+  notes} for a more detailed discussion. We can write the
+continuous-to-continuous forward model in the form
+\begin{align}
+  \mb{g}_c = \mc{H}_{cc}\mb{f}_c,\label{eq:cc}
+\end{align}
+where $\mb{f}_c \in \mbb{L}_2(\mbb{S}^2)$ is the angular dipole density,
+$\mb{g}_c \in \mbb{L}_2(\mbb{S}^2\times \mbb{S}^1)$ is the continuous irradiance
+data taken by varying the detection optical axis (the $\mbb{S}^2$ dimension) and
+the illumination polarizer (the $\mbb{S}^1$ dimension), and $\mc{H}_{cc}$ is a
+linear continuous-to-continuous Hilbert-space operator between these spaces.
+
+If we choose a delta-function basis for both object and data space then we can
+rewrite Eq. \eqref{eq:cc} as 
+\begin{align}
+  g(\sd, \pp) = \ints{2}d\so\, h(\sd,\pp;\so)f(\so),\label{eq:fwd}
+\end{align}
+where $\so \in \mbb{S}^2$ is the object angular coordinate, $\sd \in \mbb{S}^2$
+is the detection optical axis coordinate, $\pp \in \mbb{S}^1$ is the polarizer
+coordinate, and $h(\sd,\pp;\so)$ is the kernel of the integral transform. We can
+separate the kernel into an excitation and detection part since these processes
+are incoherent
+\begin{align}
+  h(\sd, \pp;\so) = h^{\text{exc}}(\pp;\so)h^{\text{det}}(\sd;\so). \label{eq:kern}
+\end{align}
+The excitation kernel is straightforward---the squared dot product of the
+polarizer orientation $\pp$ with the object angular coordinate $\so$
+\begin{align}
+  h^{\text{exc}}(\pp\cdot\so) \propto (\pp\cdot\so)^2. \label{eq:exckern}
+\end{align}
+The detection kernel requires more care since we are collecting light over the
+NA of the objective. In the previous notes we started with the power along a
+single ray then integrated over the aperture to find that the detection kernel is
+\begin{align}
+  h^{\text{det}}(\sd\cdot\so) \propto (1 - \sqrt{\cos\alpha})P_0(\sd\cdot\so) + \frac{1}{5}\left[\frac{1}{4}\sqrt{\cos\alpha}(7-3\cos(2\alpha)) - 1\right]P_2(\sd\cdot\so),
+\end{align}
+where $\text{NA} = n_o\sin\alpha$, and $P_{\ell}(x)$ are the Legendre
+polynomials.
+
+We can rewrite the mapping in Eq. \eqref{eq:cc} in an object-space spherical
+harmonic basis as
+\begin{align}
+  g(\sd, \pp) = \sum_{\ell m}H_\ell^m(\sd, \pp)F_\ell^m,\label{eq:fwdsh}
+\end{align}
+where $F_\ell^m$ is the angular dipole spectrum given by 
+\begin{align}
+  F_\ell^m = \int_{\mbb{S}^2}d\so\, f(\so)Y_\ell^{m*}(\so),
+\end{align}
+and $H_\ell^m(\sd, \pp)$ is the kernel in this basis given by
+\begin{align}
+  H_\ell^m(\sd, \pp) &= \sum_{\ell' m'}\sum_{\ell'' m''}(-1)^m G_{\ell,\ell',\ell''}^{-m,m',m''}H_{\ell'}^{m',\text{exc}}(\pp)H_{\ell''}^{m'',\text{det}}(\sd),\label{eq:triple4}\\
+    H_{\ell'}^{m',\text{exc}}(\pp) &\propto Y_{\ell'}^{m'*}(\pp)\left[\delta_{0\ell'} + \frac{2}{5}\delta_{2,\ell'}\right],\label{eq:dipexc}\\
+    H_{\ell''}^{m'',\text{det}}(\sd) &\propto Y_{\ell''}^{m''*}(\sd)\left[(1 - \sqrt{\cos\alpha})\delta_{0,\ell''} + \left(\frac{1}{4}\sqrt{\cos\alpha}(7-3\cos(2\alpha)) - 1\right)\delta_{2,\ell''}\right].\label{eq:dipdet}
+\end{align}
+with the Gaunt coefficients given by 
+\begin{align}
+  G_{\ell,\ell',\ell''}^{m,m',m''} = \ints{2}d\so\, Y_\ell^{m}(\so)Y_{\ell'}^{m'}(\so)Y_{\ell''}^{m''}(\so).
+\end{align}
+
+It's useful to compare Eq. \eqref{eq:fwd} to Eq. \eqref{eq:fwdsh}---in a delta
+function basis we need to compute an angular integral, while in the object-space
+spherical harmonics basis the kernel has a finite number of terms so we can
+compute it exactly. 
+
+It's also useful to compare Eq. \eqref{eq:kern} to Eq. \eqref{eq:triple4}---in a
+delta function basis the kernel is the product of the excitation and detection
+kernels, while in the object-space spherical harmonic basis the kernel is a
+generalized convolution of the excitation and detection kernels.
+
+\section{Sampling schemes}
+We can write the sampling operation as a continuous-to-discrete Hilbert space
+operator $\mc{D}_w$
+\begin{align}
+  \mb{g}_d = \mc{D}_w\mb{g}_c = \mc{D}_w\mc{H}_{cc}\mb{f}_c. 
+\end{align}
+We can write the sampling operation in a delta function basis as
+\begin{align}
+  g_m = \int_{\mbb{S}^2}d\sd\int_{\mbb{S}^1}d\pp\, w_m(\sd,\pp)g(\sd,\pp).
+\end{align}
+where $g_m$ is the $m$th discrete measurement and $w_m(\sd,\pp)$ is the $m$th
+sampling aperture. For now we will restrict ourselves to delta-function sampling
+apertures
+\begin{align}
+  w_m(\sd,\pp) = \delta(\mh{s}_{d,m} - \sd)\delta(\mh{p}_{m} - \pp),
+\end{align}
+where $\mh{s}_{d,m}$ and $\mh{p}_{m}$ are the $m$th sampling points. This
+restriction means that we will leave the polarizer setting and tilt angle fixed
+during each volume acquisition. We could consider scanning the polarizer
+setting and tilt angle in the future for faster acquisitions, but I think these
+sampling schemes will always decrease ``angular SNR''.
+
+So far we've formulated everything quite generally and haven't made any
+reference to the diSPIM geometry. Now we find the constraints that the diSPIM
+geometry places on the values of $\mh{s}_{d,m}$ and $\mh{p}_{m}$. If we define
+the $\mh{x}$ and $\mh{z}$ axes as the optical axes of the two objective then we
+have the following sampling constraint
+\begin{align}
+\mh{s}_{d,m} \in \{\mh{x}, \mh{z}\}.  \label{eq:first}
+\end{align}
+In words, this constraint says that we can only detect along one of two discrete
+and orthogonal axes.
+
+Next, we constrain the polarizer sampling points $\mh{p}_m$. We introduce a
+variable $\mh{s}_{e,m}$ to denote the excitation optical axis for the $m$th
+measurement. This variable does not affect the forward model (we've formulated
+in terms of $\pp$ only on the excitation side), but it will allow us to
+conveniently constrain $\pp$. First, we constrain the excitation optical axis to
+be perpendicular to the detection optical axis
+\begin{align}
+  \mh{s}_{e,m} \cdot \mh{s}_{d,m} = 0.
+\end{align}
+This is a fairly loose constraint, but it ensures that the light sheet is in
+focus across the field of view.
+
+Next, we constrain the excitation optical axis to within the available tilt
+angles of the instrument. If we use $\mc{R}$ to denote an ``axis swapping
+operator'' ($\mc{R}(\mh{z}) = \mh{x}$ and $\mc{R}(\mh{x}) = \mh{z}$), then the tilting
+constraint can be written as
+\begin{align}
+  \mh{s}_{e,m} \cdot \mc{R}(\mh{s}_{d,m}) \leq \Delta,
+\end{align}
+where $\Delta$ is the maximum tilt angle. For the current instrument $\Delta = 15^{\circ} = \pi/12$.
+
+Finally, we constrain the excitation polarization $\pp_m$ to be perpendicular to
+the excitation optical axis
+\begin{align}
+  \mh{s}_{e,m} \cdot \pp_m = 0.  \label{eq:final}
+\end{align}
+For convenience we will denote individual sampling points with $\mf{s}_m$ =
+($\pp_m$, $\mh{s}_{d,m}$), and we will denote the set of all sampling points
+$\mf{s}_m$ that satisfy Eqs. \eqref{eq:first}--\eqref{eq:final} by $\mc{S}$.
+With this notation we can denote a complete sampling scheme with $M$ samples
+by $\mf{s} \in \mc{S}^M$ ($M$ copies of the set $\mc{S}^M$).
+
+\section{Objective functions}
+Our goal is to choose an $M$-sample sampling scheme $\mf{s} \in \mc{S}^M$ that
+is optimal in some sense. We propose that we optimize the Schatten 2-norm of the
+continuous-discrete imaging operator
+\begin{align}
+  \mf{s}^* = \argmax{\mf{s} \in \mc{S}^M}||\mc{D}_{\mf{s}}\mc{H}_{cc}||_2. \label{eq:notime}
+\end{align}
+The Schatten $p$-norm is defined as the $\mbb{L}_p$ norm of the singular values
+of the operator, so the Schatten $2$-norm is a reasonable measure of the amount
+of information that the imaging system can pass. It favors sampling schemes that
+have many large singular values, so it will prefer sampling schemes that measure
+many orthogonal parameters of the object that are insensitive to noise.
+
+It's useful to interpret the Schatten $2$-norm by analyzing a spatial imaging
+system. The ``effective OTF'' that appears in many fluorescence microscopy
+papers (including Hari and Yicong's 2018 SIM review) is a specific example of a
+continuous singular value spectrum. We can calculate the Schatten $2$-norm by
+taking the effective OTF, squaring its value at each spatial frequency,
+integrating over the spatial frequencies, then taking the square root. The
+Schatten $2$-norm will be largest for imaging systems that have many singular
+values (a high spatial frequency bandwidth) that are large (we prefer effective
+OTFs that are large and constant over the bandwidth). 
+
+Eq. \eqref{eq:notime} will optimize the number and size of the singular values
+without considering how interpretable the corresponding parameters are. One of
+our motivations for adding light-sheet tilting was to measure rotationally
+invariant parameters of the object which will be much more interpretable than
+rotationally variant parameters. To achieve this objective we need to measure at
+least the $\ell=0$ and $\ell = 2$ rotationally invariant subspaces---a
+6-dimensional subspace of $\mbb{L}_2(\mbb{S}^2)$. This will require at least 6
+measurements. To ensure that a sampling scheme has measured this rotationally
+invariant subspace, we require that
+\begin{align}
+  \text{rank}(\mc{D}_{\mf{s}}\mc{H}_{cc}\mc{P}_{\ell_c = 2}) \geq 6 \label{eq:constraint}
+\end{align}
+where $\mc{P}_{\ell_c=2}$ is a projection operator onto the $\ell=0$ and
+$\ell=2$ subspace. For convenience we will denote the set of sampling schemes
+that satisfy the constraint in Eq. \eqref{eq:constraint} by
+$\mc{Z} = \{\mf{s}\, |\, \text{rank}(\mc{D}_{\mf{s}}\mc{H}_{cc}\mc{P}_{\ell_c = 2})
+\geq 6\}$.
+
+The solutions of Eq. \eqref{eq:notime} will not necessarily satisfy Eq.
+\eqref{eq:constraint}, and simply adding an extra constraint to Eq.
+\eqref{eq:constraint} will not ensure that we are optimally measuring the
+parameters in the subspace that we want to measure. Instead, we propose an
+alternative optimization problem
+\begin{align}
+    \mf{s}_{\ell_c =2}^* = \argmax{\mf{s} \in \mc{S}^M\cap\mc{Z}}||\mc{D}_{\mf{s}}\mc{H}_{cc}\mc{P}_{\ell_c = 2}||_2,
+\end{align}
+which ensures that the objective function is independent of singular values that
+measure parameters outside of the objective subspace. Note that the set
+$\mc{S}^M\cap\mc{Z}$ will definitely be empty for $M \leq 6$, and we are not sure
+what value of $M$ will yield solutions.
+
+\section{Practical implementation details}
+The two optimization problems above are sufficient to propose optimal sampling
+schemes, but they lack many of the details required for an implementation. In
+this section I'll go through some of the practical work of converting the
+abstract forms into finite-dimensional optimization problems.
+
+First, we need to choose a basis and find matrix representations for the
+operators $\mc{D}_{\mf{s}}$ and $\mc{H}_{cc}$. At first glance this seems
+difficult---$\mc{D}_{\mf{s}}$ is a CD operator and $\mc{H}_{cc}$ is a CC
+operator so they do not have finite-dimensional matrix representations
+individually. Luckily, the combination $\mc{D}_{\mf{s}} \mc{H}_{cc}$ is a
+band-limited compact operator, so it has a finite-dimensional representation as
+a $15\times M$ matrix that we will call $\ms{H}$. The entries of this matrix are
+given by
+\begin{align}
+  \ms{H}_{jm} = H_j(\mh{s}_{d,m}, \mh{p}_m),
+\end{align}
+where $j$ is a single index over the spherical harmonics, and Eq.
+\ref{eq:triple4} shows us how to calculate the entries in terms
+of the excitation and detection kernels. 
+
+Next, we need a matrix representation of $\mc{P}_{\ell_c=2}$. This is simple in
+a spherical harmonics basis---we create a 15$\times$15 matrix called
+$\ms{P}$, fill the first six diagonal elements with ones, and place zeroes
+elsewhere
+\begin{align}
+  \ms{P}_{ij} = \delta_{ij}, \qquad i,j = 0,1,2,3,4,5.
+\end{align}
+
+Next, we need a way to calculate the Schatten 2-norm efficiently. We could
+calculate the singular values of each $15\times 15$ matrix, but this would be
+slow. We can take a shortcut and replace the Schatten 2-norm with the Frobenius
+norm---the $\mbb{L}_2$ norm of the matrix entries. Note that this replacement is
+only valid for finite-dimensional representations of the operators.
+
+Finally, we need an efficient set of scalar parameters to search through the set
+of sampling schemes $\mc{S}^M$. We will parameterize each sample with a discrete
+view index $v \in \{0, 1\}$ to indicate the detection axis, a tilt angle defined
+from the nominal excitation axis $\delta \in [-\Delta, \Delta]$, and a polarizer
+angle defined from the detection axis $\phi \in [0, 2\pi)$.
+
+This parameter space is challenging to search because it is continuous in some
+parameters and discrete in others. It's not clear if it's possible to take
+derivatives with respect to the continuous parameters, so as a first pass we
+will discretize the continuous parameters and use a search heuristic.
+Discretization has the advantage of providing solutions that will be easier to
+implement experimentally since we can constrain our solutions to sampling
+schemes that are easy to align, but of course we can't guarantee that our
+sampling scheme solutions will be globally optimal.
+
+We will discretize the tilt angle into 5 angles
+$\delta \in \{-\Delta, -\Delta/2, 0,\Delta/2, \Delta\}$, and we will discretize
+the polarizer angle into 8 angles $\phi \in \{0,\pi/8,\dots,7\pi/8\}$. This means
+that a brute-force approach will need to search
+$(2\,\text{views}\times 5\,\text{tilts}\times 8\,\text{polarizer settings})^M$
+possible measurement schemes which becomes computationally infeasible for $M$
+larger than about 5 or 6.
+
+To avoid a brute-force search we will use a simple hill-climbing algorithm. In
+words, we (1) start with an initial guess for each of the $3M$ parameters and
+evaluate the objective function, (2) increment and decrement the first parameter
+and move in the direction that improves the objective function, (3) repeat (2)
+for each parameter one by one, (4) repeat (3) and keep cycling parameters until
+no movement improves the objective function or a fixed number of objective
+function evaluations is reached. Although the algorithm is extremely coarse and
+provides no guarantees, it is simple to implement and it can be stopped at any
+time and will always return its best guess.
+
+\section{Results}
+
+\end{document}
+
