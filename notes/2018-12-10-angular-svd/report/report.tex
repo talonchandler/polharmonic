@@ -218,7 +218,7 @@ $\Pi\left(\frac{\mh{s}\cdot\sd}{\cos\alpha}\right)$ models the finite aperture
 of the objective with $\text{NA} = n_o\sin\alpha$. In Appendix
 \ref{sec:spherical} we evaluate this integral in closed form to find that
 \begin{align}
-  h^{\text{det}}(\sd\cdot\so) \propto (1 - \sqrt{\cos\alpha})P_0(\sd\cdot\so) + \frac{1}{5}\left[\frac{1}{4}\sqrt{\cos\alpha}(7-3\cos(2\alpha)) - 1\right]P_2(\sd\cdot\so).
+  h^{\text{det}}(\sd\cdot\so) \propto (1 - \sqrt{\cos\alpha})P_0(\sd\cdot\so) + \frac{1}{5}\left[\frac{2}{5} + \frac{1}{10}\sqrt{\cos\alpha}(-7+3\cos\alpha)\right]P_2(\sd\cdot\so).
 \end{align}
 The detection kernel is rotationally symmetric, so it can be written as a
 function of $\sd\cdot\so$. For very low NA the detection kernel reduces to
@@ -255,7 +255,7 @@ where $H_{\ell'}^{m',\text{exc}}(\pp\cdot\so)$ and $H_{\ell''}^{m'',\text{det}}(
 In Appendix B we evaluate these spherical Fourier transforms as
 \begin{align}
     H_{\ell'}^{m',\text{exc}}(\pp) &\propto Y_{\ell'}^{m'*}(\pp)\left[\delta_{0\ell'} + \frac{2}{5}\delta_{2,\ell'}\right],\label{eq:dipexc}\\
-    H_{\ell''}^{m'',\text{det}}(\sd) &\propto Y_{\ell''}^{m''*}(\sd)\left[(1 - \sqrt{\cos\alpha})\delta_{0,\ell''} + \left(\frac{1}{4}\sqrt{\cos\alpha}(7-3\cos(2\alpha)) - 1\right)\delta_{2,\ell''}\right].\label{eq:dipdet}
+    H_{\ell''}^{m'',\text{det}}(\sd) &\propto Y_{\ell''}^{m''*}(\sd)\left[(1 - \sqrt{\cos\alpha})\delta_{0,\ell''} + \left(\frac{2}{5} + \frac{1}{10}\sqrt{\cos\alpha}(-7+3\cos\alpha)\right)\delta_{2,\ell''}\right].\label{eq:dipdet}
 \end{align}
 
 We continue simplifying Eq. \eqref{eq:triple} by rewriting it as
@@ -473,13 +473,13 @@ need to take at least 1, 6, or 15 measurements.
 % \end{align}
 
 
-\section{Specific designs (in progress)}
-one-view epi,
-one-view lightsheet,
-two-view lightsheet,
-two-view lightsheet two-tilt one-side,
-two-view lightsheet two-tilt two-side,
-two-view lightsheet three-tilt one-side two-tilt one-side.
+% \section{Specific designs (in progress)}
+% one-view epi,
+% one-view lightsheet,
+% two-view lightsheet,
+% two-view lightsheet two-tilt one-side,
+% two-view lightsheet two-tilt two-side,
+% two-view lightsheet three-tilt one-side two-tilt one-side.
 
 \appendix
 \section{Spherical integral of the product of two rotationally symmetric
@@ -551,7 +551,7 @@ Comparing Eq. \eqref{eq:kern} to Eq. \eqref{eq:integral} means that
 Evaluating the Fourier-Legendre transform of these functions gives
 \begin{align}
   F_\ell &= \frac{2\ell + 1}{2}\int_{-1}^1dx\,(1 - x^{2})P_\ell(x) = \frac{2}{3}(\delta_{\ell,0} + \delta_{\ell,2}),\label{eq:fl}\\
-  H_\ell &= \frac{2\ell + 1}{2}\int_{\cos\alpha}^1dx\,x^{-1/2}P_\ell(x) = (1 - \sqrt{\cos\alpha})\delta_{\ell,0} + \left[\frac{1}{4}\sqrt{\cos\alpha}(7-3\cos(2\alpha)) - 1\right]\delta_{\ell,2}+ \cdots,\label{eq:hl}
+  H_\ell &= \frac{2\ell + 1}{2}\int_{\cos\alpha}^1dx\,x^{-1/2}P_\ell(x) = (1 - \sqrt{\cos\alpha})\delta_{\ell,0} + \left[\frac{2}{5} + \frac{1}{10}\sqrt{\cos\alpha}(-7+3\cos\alpha)\right]\delta_{\ell,2}+ \cdots,\label{eq:hl}
 \end{align}
 Notice that we only need to evaluate the first two terms of $H_\ell$ since
 only two terms of $F_\ell$ are non-zero. As we've noted before, the physical
@@ -561,7 +561,7 @@ process.
 Plugging Eqs. \eqref{eq:fl} and \eqref{eq:hl} into Eq. \eqref{eq:five} gives the
 closed form result for the detection kernel
 \begin{align}
-  h^{\text{det}}(\sd\cdot\so) \propto (1 - \sqrt{\cos\alpha})P_0(\sd\cdot\so) + \frac{1}{5}\left[\frac{1}{4}\sqrt{\cos\alpha}(7-3\cos(2\alpha)) - 1\right]P_2(\sd\cdot\so).
+  h^{\text{det}}(\sd\cdot\so) \propto (1 - \sqrt{\cos\alpha})P_0(\sd\cdot\so) + \frac{1}{5}\left[\frac{2}{5} + \frac{1}{10}\sqrt{\cos\alpha}(-7+3\cos\alpha)\right]P_2(\sd\cdot\so).
 \end{align}
 
 \section{Spherical Fourier transform of a rotationally symmetric function}
@@ -597,7 +597,7 @@ functions
 where
 \begin{align}
   h^{\text{exc}}(\pp\cdot\so) &\propto (\pp\cdot\so)^2, \\
-  h^{\text{det}}(\sd\cdot\so) &\propto (1 - \sqrt{\cos\alpha})P_0(\sd\cdot\so) + \frac{1}{5}\left[\frac{1}{4}\sqrt{\cos\alpha}(7-3\cos(2\alpha)) - 1\right]P_2(\sd\cdot\so).
+  h^{\text{det}}(\sd\cdot\so) &\propto (1 - \sqrt{\cos\alpha})P_0(\sd\cdot\so) + \frac{1}{5}\left[\frac{2}{5} + \frac{1}{10}\sqrt{\cos\alpha}(-7+3\cos\alpha)\right]P_2(\sd\cdot\so).
 \end{align}
 Starting with the excitation kernel
 \begin{align}
@@ -611,8 +611,8 @@ the angular transfer function while the relative contribution to the two $\ell$ 
 Finally, the detection kernel is
 \begin{align}
   H_{\ell''}^{m'',\text{det}}(\sd) &= \frac{4\pi}{2\ell'' + 1}Y_{\ell''}^{m''*}(\sd)\left[\frac{2\ell'' + 1}{2}\int_{-1}^1dx\, h^{\text{det}}(x)P_{\ell''}(x)\right],\\
-  H_{\ell''}^{m'',\text{det}}(\sd) &= \frac{4\pi}{2\ell'' + 1}Y_{\ell''}^{m''*}(\sd)\left[(1 - \sqrt{\cos\alpha})\delta_{0,\ell''} + \frac{1}{5}\left(\frac{1}{4}\sqrt{\cos\alpha}(7-3\cos(2\alpha)) - 1\right)\delta_{2,\ell''}\right],\\
-  H_{\ell''}^{m'',\text{det}}(\sd) &\propto Y_{\ell''}^{m''*}(\sd)\left[(1 - \sqrt{\cos\alpha})\delta_{0,\ell''} + \left(\frac{1}{4}\sqrt{\cos\alpha}(7-3\cos(2\alpha)) - 1\right)\delta_{2,\ell''}\right].
+  H_{\ell''}^{m'',\text{det}}(\sd) &= \frac{4\pi}{2\ell'' + 1}Y_{\ell''}^{m''*}(\sd)\left[(1 - \sqrt{\cos\alpha})\delta_{0,\ell''} + \frac{1}{5}\left(\frac{2}{5} + \frac{1}{10}\sqrt{\cos\alpha}(-7+3\cos\alpha)\right)\delta_{2,\ell''}\right],\\
+  H_{\ell''}^{m'',\text{det}}(\sd) &\propto Y_{\ell''}^{m''*}(\sd)\left[(1 - \sqrt{\cos\alpha})\delta_{0,\ell''} + \left(\frac{2}{5} + \frac{1}{10}\sqrt{\cos\alpha}(-7+3\cos\alpha)\right)\delta_{2,\ell''}\right].
 \end{align}
 Notice that the detection axis $\sd$ only affects the $m$ components of the
 detection axis and the detection NA affects the relative contribution to the two $\ell$ bands. 

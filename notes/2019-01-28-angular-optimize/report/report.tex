@@ -43,8 +43,8 @@ $\hfil\tilde{}\hfil$\crcr\noalign{\kern1.5pt}}}}}
 \tikzstyle{norm} = [rectangle, rounded corners, minimum width=2cm, minimum height=1cm,text centered, draw=black]
 \tikzstyle{arrow} = [thick, ->, >=stealth]
 
-\newcommand{\argmin}{\arg\!\min}
 \providecommand{\argmax}[1]{\underset{#1}{\mathrm{argmax}}\,}
+\providecommand{\argmin}[1]{\underset{#1}{\mathrm{argmin}}\,}
 \newcommand{\me}{\mathrm{e}}
 \providecommand{\e}[1]{\ensuremath{\times 10^{#1}}}
 \providecommand{\mb}[1]{\mathbf{#1}}
@@ -208,7 +208,7 @@ The detection kernel requires more care since we are collecting light over the
 NA of the objective. In the previous notes we started with the power along a
 single ray then integrated over the aperture to find that the detection kernel is
 \begin{align}
-  h^{\text{det}}(\sd\cdot\so) \propto (1 - \sqrt{\cos\alpha})P_0(\sd\cdot\so) + \frac{1}{5}\left[\frac{1}{4}\sqrt{\cos\alpha}(7-3\cos(2\alpha)) - 1\right]P_2(\sd\cdot\so),
+  h^{\text{det}}(\sd\cdot\so) \propto 2(1 - \sqrt{\cos\alpha})P_0(\sd\cdot\so) + \frac{1}{5}\left[\frac{2}{5} + \frac{1}{10}\sqrt{\cos\alpha}(-7+3\cos\alpha)\right]P_2(\sd\cdot\so),
 \end{align}
 where $\text{NA} = n_o\sin\alpha$, and $P_{\ell}(x)$ are the Legendre
 polynomials.
@@ -226,7 +226,7 @@ and $H_\ell^m(\sd, \pp)$ is the kernel in this basis given by
 \begin{align}
   H_\ell^m(\sd, \pp) &= \sum_{\ell' m'}\sum_{\ell'' m''}(-1)^m G_{\ell,\ell',\ell''}^{-m,m',m''}H_{\ell'}^{m',\text{exc}}(\pp)H_{\ell''}^{m'',\text{det}}(\sd),\label{eq:triple4}\\
     H_{\ell'}^{m',\text{exc}}(\pp) &\propto Y_{\ell'}^{m'*}(\pp)\left[\delta_{0\ell'} + \frac{2}{5}\delta_{2,\ell'}\right],\label{eq:dipexc}\\
-    H_{\ell''}^{m'',\text{det}}(\sd) &\propto Y_{\ell''}^{m''*}(\sd)\left[(1 - \sqrt{\cos\alpha})\delta_{0,\ell''} + \left(\frac{1}{4}\sqrt{\cos\alpha}(7-3\cos(2\alpha)) - 1\right)\delta_{2,\ell''}\right].\label{eq:dipdet}
+    H_{\ell''}^{m'',\text{det}}(\sd) &\propto \frac{Y_{\ell''}^{m''*}(\sd)}{1 - \cos\alpha}\left[(1 - \sqrt{\cos\alpha})\delta_{0,\ell''} + \left(\frac{2}{5} + \frac{1}{10}\sqrt{\cos\alpha}(-7+3\cos\alpha)\right)\delta_{2,\ell''}\right].\label{eq:dipdet}
 \end{align}
 with the Gaunt coefficients given by 
 \begin{align}
@@ -310,63 +310,92 @@ by $\mf{s} \in \mc{S}^M$ ($M$ copies of the set $\mc{S}^M$).
 
 \section{Objective functions}
 Our goal is to choose an $M$-sample sampling scheme $\mf{s} \in \mc{S}^M$ that
-is optimal in some sense. We propose that we optimize the Schatten 2-norm of the
-continuous-discrete imaging operator
-\begin{align}
-  \mf{s}^* = \argmax{\mf{s} \in \mc{S}^M}||\mc{D}_{\mf{s}}\mc{H}_{cc}||_2. \label{eq:notime}
-\end{align}
-The Schatten $p$-norm is defined as the $\mbb{L}_p$ norm of the singular values
-of the operator, so the Schatten $2$-norm is a reasonable measure of the amount
-of information that the imaging system can pass. It favors sampling schemes that
-have many large singular values, so it will prefer sampling schemes that measure
-many orthogonal parameters of the object that are insensitive to noise.
+is optimal in some sense. We propose that we minimize the $\mbb{L}_2$ condition
+number of the continuous-to-discrete imaging operator---the ratio of the largest
+and smallest singular values of the matrix. We can interpret the condition
+number as the ``invertibility'' of the matrix.
 
-It's useful to interpret the Schatten $2$-norm by analyzing a spatial imaging
-system. The ``effective OTF'' that appears in many fluorescence microscopy
-papers (including Hari and Yicong's 2018 SIM review) is a specific example of a
-continuous singular value spectrum. We can calculate the Schatten $2$-norm by
-taking the effective OTF, squaring its value at each spatial frequency,
-integrating over the spatial frequencies, then taking the square root. The
-Schatten $2$-norm will be largest for imaging systems that have many singular
-values (a high spatial frequency bandwidth) that are large (we prefer effective
-OTFs that are large and constant over the bandwidth). 
-
-Eq. \eqref{eq:notime} will optimize the number and size of the singular values
-without considering how interpretable the corresponding parameters are. One of
-our motivations for adding light-sheet tilting was to measure rotationally
-invariant parameters of the object which will be much more interpretable than
-rotationally variant parameters. To achieve this objective we need to measure at
-least the $\ell=0$ and $\ell = 2$ rotationally invariant subspaces---a
-6-dimensional subspace of $\mbb{L}_2(\mbb{S}^2)$. This will require at least 6
-measurements. To ensure that a sampling scheme has measured this rotationally
-invariant subspace, we require that
+Optimizing the condition number will generate designs that are easily inverted,
+but the designs may estimate a small number of uninteresting parameters. For
+this reason we impose a rank constraint on the matrix. We require that
 \begin{align}
-  \text{rank}(\mc{D}_{\mf{s}}\mc{H}_{cc}\mc{P}_{\ell_c = 2}) \geq 6 \label{eq:constraint}
+  \text{rank}(\mc{D}_{\mf{s}}\mc{H}_{cc}\mc{P}_{\ell_c = 2}) \geq 6, \label{eq:constraint}
 \end{align}
 where $\mc{P}_{\ell_c=2}$ is a projection operator onto the $\ell=0$ and
 $\ell=2$ subspace. For convenience we will denote the set of sampling schemes
 that satisfy the constraint in Eq. \eqref{eq:constraint} by
-$\mc{Z} = \{\mf{s}\, |\, \text{rank}(\mc{D}_{\mf{s}}\mc{H}_{cc}\mc{P}_{\ell_c = 2})
-\geq 6\}$.
-
-The solutions of Eq. \eqref{eq:notime} will not necessarily satisfy Eq.
-\eqref{eq:constraint}, and simply adding an extra constraint to Eq.
-\eqref{eq:constraint} will not ensure that we are optimally measuring the
-parameters in the subspace that we want to measure. Instead, we propose an
-alternative optimization problem
+$\mc{Z} = \{\mf{s}\, |\, \text{rank}(\mc{D}_{\mf{s}}\mc{H}_{cc}\mc{P}_{\ell_c =
+  2}) \geq 6\}$. An optimal $M$-sample sampling scheme will be the solution of the optimization problem 
 \begin{align}
-    \mf{s}_{\ell_c =2}^* = \argmax{\mf{s} \in \mc{S}^M\cap\mc{Z}}||\mc{D}_{\mf{s}}\mc{H}_{cc}\mc{P}_{\ell_c = 2}||_2,
+  \mf{s}^* = \argmin{\mf{s} \in \mc{S}^M \cap \mc{Z}}\kappa(\mc{D}_{\mf{s}}\mc{H}_{cc}), \label{eq:notimekappa}
 \end{align}
-which ensures that the objective function is independent of singular values that
-measure parameters outside of the objective subspace. Note that the set
-$\mc{S}^M\cap\mc{Z}$ will definitely be empty for $M \leq 6$, and we are not sure
-what value of $M$ will yield solutions.
+where $\kappa(A)$ denotes the $\mbb{L}_2$ condition number of $A$.
+
+Earlier we mainly used the Schatten 2-norm of the continuous-discrete imaging
+operator---the root sum of squares of the singular values---as the objective
+function. This objective function resulted in useful designs, but the last
+singular value was usually small which led us to optimizing the condition
+number. We can interpret the Schatten 2-norm designs as the ``learn as much as
+we can about all parameters'' designs and the condition number designs as the
+``no parameter left behind'' designs.
+
+% Schatten 2-norm of the
+% continuous-discrete imaging operator
+% \begin{align}
+%   \mf{s}^* = \argmax{\mf{s} \in \mc{S}^M}||\mc{D}_{\mf{s}}\mc{H}_{cc}||_2. \label{eq:notime}
+% \end{align}
+% The Schatten $p$-norm is defined as the $\mbb{L}_p$ norm of the singular values
+% of the operator, so the Schatten $2$-norm is a reasonable measure of the amount
+% of information that the imaging system can pass. It favors sampling schemes that
+% have many large singular values, so it will prefer sampling schemes that measure
+% many orthogonal parameters of the object that are insensitive to noise.
+
+% It's useful to interpret the Schatten $2$-norm by analyzing a spatial imaging
+% system. The ``effective OTF'' that appears in many fluorescence microscopy
+% papers (including Hari and Yicong's 2018 SIM review) is a specific example of a
+% continuous singular value spectrum. We can calculate the Schatten $2$-norm by
+% taking the effective OTF, squaring its value at each spatial frequency,
+% integrating over the spatial frequencies, then taking the square root. The
+% Schatten $2$-norm will be largest for imaging systems that have many singular
+% values (a high spatial frequency bandwidth) that are large (we prefer effective
+% OTFs that are large and constant over the bandwidth). 
+
+
+% Eq. \eqref{eq:notime} will optimize the number and size of the singular values
+% without considering how interpretable the corresponding parameters are. One of
+% our motivations for adding light-sheet tilting was to measure rotationally
+% invariant parameters of the object which will be much more interpretable than
+% rotationally variant parameters. To achieve this objective we need to measure at
+% least the $\ell=0$ and $\ell = 2$ rotationally invariant subspaces---a
+% 6-dimensional subspace of $\mbb{L}_2(\mbb{S}^2)$. This will require at least 6
+% measurements. To ensure that a sampling scheme has measured this rotationally
+% invariant subspace, we require that
+% \begin{align}
+%   \text{rank}(\mc{D}_{\mf{s}}\mc{H}_{cc}\mc{P}_{\ell_c = 2}) \geq 6, \label{eq:constraint}
+% \end{align}
+% where $\mc{P}_{\ell_c=2}$ is a projection operator onto the $\ell=0$ and
+% $\ell=2$ subspace. For convenience we will denote the set of sampling schemes
+% that satisfy the constraint in Eq. \eqref{eq:constraint} by
+% $\mc{Z} = \{\mf{s}\, |\, \text{rank}(\mc{D}_{\mf{s}}\mc{H}_{cc}\mc{P}_{\ell_c = 2})
+% \geq 6\}$.
+
+% The solutions of Eq. \eqref{eq:notime} will not necessarily satisfy Eq.
+% \eqref{eq:constraint}, and simply adding an extra constraint to Eq.
+% \eqref{eq:constraint} will not ensure that we are optimally measuring the
+% parameters in the subspace that we want to measure. Instead, we propose an
+% alternative optimization problem
+% \begin{align}
+%     \mf{s}_{\ell_c =2}^* = \argmax{\mf{s} \in \mc{S}^M\cap\mc{Z}}||\mc{D}_{\mf{s}}\mc{H}_{cc}\mc{P}_{\ell_c = 2}||_2,
+% \end{align}
+% which ensures that the objective function is independent of singular values that
+% measure parameters outside of the objective subspace. Note that the set
+% $\mc{S}^M\cap\mc{Z}$ will definitely be empty for $M \leq 6$, and we are not sure
+% what value of $M$ will yield solutions.
 
 \section{Practical implementation details}
-The two optimization problems above are sufficient to propose optimal sampling
-schemes, but they lack many of the details required for an implementation. In
-this section I'll go through some of the practical work of converting the
-abstract forms into finite-dimensional optimization problems.
+The optimization problem above lacks many of the details required for an
+implementation. In this section I'll go through some of the practical work of
+converting the abstract form into a finite-dimensional optimization problem.
 
 First, we need to choose a basis and find matrix representations for the
 operators $\mc{D}_{\mf{s}}$ and $\mc{H}_{cc}$. At first glance this seems
@@ -391,11 +420,11 @@ elsewhere
   \ms{P}_{ij} = \delta_{ij}, \qquad i,j = 0,1,2,3,4,5.
 \end{align}
 
-Next, we need a way to calculate the Schatten 2-norm efficiently. We could
-calculate the singular values of each $15\times 15$ matrix, but this would be
-slow. We can take a shortcut and replace the Schatten 2-norm with the Frobenius
-norm---the $\mbb{L}_2$ norm of the matrix entries. Note that this replacement is
-only valid for finite-dimensional representations of the operators.
+% Next, we need a way to calculate the Schatten 2-norm efficiently. We could
+% calculate the singular values of each $15\times 15$ matrix, but this would be
+% slow. We can take a shortcut and replace the Schatten 2-norm with the Frobenius
+% norm---the $\mbb{L}_2$ norm of the matrix entries. Note that this replacement is
+% only valid for finite-dimensional representations of the operators.
 
 Finally, we need an efficient set of scalar parameters to search through the set
 of sampling schemes $\mc{S}^M$. We will parameterize each sample with a discrete
@@ -412,25 +441,91 @@ implement experimentally since we can constrain our solutions to sampling
 schemes that are easy to align, but of course we can't guarantee that our
 sampling scheme solutions will be globally optimal.
 
-We will discretize the tilt angle into 5 angles
-$\delta \in \{-\Delta, -\Delta/2, 0,\Delta/2, \Delta\}$, and we will discretize
-the polarizer angle into 8 angles $\phi \in \{0,\pi/8,\dots,7\pi/8\}$. This means
-that a brute-force approach will need to search
-$(2\,\text{views}\times 5\,\text{tilts}\times 8\,\text{polarizer settings})^M$
-possible measurement schemes which becomes computationally infeasible for $M$
-larger than about 5 or 6.
+We will discretize the tilt angle into 3 angles
+$\delta \in \{-\Delta, 0, \Delta\}$, and we will discretize the polarizer angle
+into $P$ angles $\phi \in \{0,\pi/P,\dots,(P-1)\pi/P\}$. This means that a
+brute-force approach will need to search the number of ways to choose $M$
+elements from $2\,\,\text{views}\times 3\,\,\text{tilts}\times P\,\,\text{polarizer}$
+options = $\binom{6P}{M}$.
 
-To avoid a brute-force search we will use a simple hill-climbing algorithm. In
-words, we (1) start with an initial guess for each of the $3M$ parameters and
-evaluate the objective function, (2) increment and decrement the first parameter
-and move in the direction that improves the objective function, (3) repeat (2)
-for each parameter one by one, (4) repeat (3) and keep cycling parameters until
-no movement improves the objective function or a fixed number of objective
-function evaluations is reached. Although the algorithm is extremely coarse and
-provides no guarantees, it is simple to implement and it can be stopped at any
-time and will always return its best guess.
+My current implementation requires about 2 milliseconds per objective function
+evaluation, so a brute force search is feasible for $P=6$ and $M=6$ since
+$\binom{36}{6} \approx 2\e{6}$ evaluations will take about 2 hours.
 
-\section{Results}
+\section{Results}\label{sec:results}
+Figure 1--3 include several subfigures that we can use to compare the designs.
+
+In the \textbf{top left} subfigure we show a schematic of the angular design.
+Each arrow indicates a single polarized excitation direction and tilt angle. In
+the current diSPIM design we do not use any excitation arm tilting, so all 6
+arrows are centered on the optic axes (indicated by large black dots). The
+colors of the arrows match the small colored squares in the \textbf{top center}
+subfigure which indicate the point response functions for each measurement. The
+radius of each point response function indicates the size of the signal measured
+from a fluorophore oriented along that direction.
+
+In the \textbf{top right} subfigure we show an set of single direction
+reconstructions with the given design. We start by creating a uniformly oriented
+phantom for each of the 250 directions in the positive octant of the sphere
+indicated by \textcolor{green}{green} dots. Next, we simulate the imaging
+process, simulate Poisson noise with SNR = 20, reconstruct the phantom, then
+find maximum of the reconstructed ODF. We mark each reconstructed maximum with a
+\textcolor{red}{red} dot and connect each phantom/reconstruction pair with a
+black line.
+
+In the \textbf{center} subfigure we show the singular value spectrum of the
+imaging system with the singular vectors plotted on the $x$ axis. The singular
+vectors are orthogonal functions, so they necessarily have positive
+(\textcolor{red}{red}) and negative (\textcolor{blue}{blue}) components. In the
+top-right of the figure we show the Schatten 2-norm of the design, the condition
+number, and the rank.
+
+In the \textbf{bottom} subfigure we show the singular value spectrum of the
+imaging system after projecting onto the $\ell = 0, 2$ subspace with the associated
+Schatten 2-norm, condition number, and rank. 
+
+\fig{../figures/custom-designs/3dispim.pdf}{1.0}{3-polarization diSPIM design.
+  See the top of Section \ref{sec:results} for the general caption. The current design
+  does not use any light sheet tilting, so the arrows in the schematic are
+  centered on the black dots. Although the 3-polarization diSPIM design measures
+  a 6-dimensional space (its rank is 6), the last singular value is very small
+  (1/22 of the maximum singular value) so it is effectively lost in the noise.
+  The 3-polarization diSPIM design only measures a 5-dimensional subspace of the
+  $\ell = 0, 2$ subspace, so the reconstructions suffer from significant blind
+  spots. The single direction reconstructions show that many directions are
+  reconstructed with errors larger than 30 degrees.}{3dispim}
+
+\fig{../figures/custom-designs/optimal-6pol.pdf}{1.0}{Optimal $M=6$, $P=3$
+  tilting diSPIM design. See the top of Section \ref{sec:results} for the general
+  caption. This design is the optimal $6$-measurement design when $3$ equally
+  spaced polarizer settings and light-sheet tilting are available. First,
+  collect the \textcolor{blue}{blue} samples by tilting the light sheet and
+  cycling through the three polarizer settings. Next, collect the
+  \textcolor{red}{red} samples from the other view by choosing the polarizer
+  setting that points towards \textcolor{blue}{blue} excitation axis and tilting
+  the excitation sheet both directions. Finally, collect the
+  \textcolor{green}{green} sample by changing the polarizer setting and exciting
+  along the optic axis. This design shows several advantages over our current
+  design: the smallest singular value is 1/9 the size of the largest singular
+  value, so we have a much better chance of recovering it from the noise; we
+  measure components from all 6 dimensions of the $\ell=0, 2$ subspace; and the
+  single direction reconstruction shows that we can reconstruct with errors less
+  than 15 degrees.}{33dispim}
+
+\fig{../figures/custom-designs/optimal-6pol-6choice.pdf}{1.0}{Optimal $P=6$
+  tilting diSPIM design. See the top of Section \ref{sec:results} for the general
+  caption. This design is the optimal $6$-measurement design when $6$ equally
+  spaced polarizer settings and light-sheet tilting are available. Compared to
+  the optimal $P=3$ design in Figure 2, the optimal $P=6$ design has a smallest
+  singular value that is 1/7 the size of the largest singular value, so it is
+  even less susceptible to corruption by noise. Interestingly, the singular
+  direction reconstruction looks worse for the $P=6$ design than the $P=3$
+  design. This isn't too troubling since we have optimized on the condition
+  number, not the single direction reconstruction. Although this design has a
+  slightly better condition number, it requires finer polarization alignment
+  than the $P=3$ design, it requires tilting on both arms, and it does not
+  provide a very large improvement. With these comments and the ``Min constraint''
+  in mind, I'm happy to recommend the $P=3$ design.}{36dispim}
 
 \end{document}
 
