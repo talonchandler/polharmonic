@@ -226,7 +226,7 @@ and $H_\ell^m(\sd, \pp)$ is the kernel in this basis given by
 \begin{align}
   H_\ell^m(\sd, \pp) &= \sum_{\ell' m'}\sum_{\ell'' m''}(-1)^m G_{\ell,\ell',\ell''}^{-m,m',m''}H_{\ell'}^{m',\text{exc}}(\pp)H_{\ell''}^{m'',\text{det}}(\sd),\label{eq:triple4}\\
     H_{\ell'}^{m',\text{exc}}(\pp) &\propto Y_{\ell'}^{m'*}(\pp)\left[\delta_{0\ell'} + \frac{2}{5}\delta_{2,\ell'}\right],\label{eq:dipexc}\\
-    H_{\ell''}^{m'',\text{det}}(\sd) &\propto \frac{Y_{\ell''}^{m''*}(\sd)}{1 - \cos\alpha}\left[(1 - \sqrt{\cos\alpha})\delta_{0,\ell''} + \left(\frac{2}{5} + \frac{1}{10}\sqrt{\cos\alpha}(-7+3\cos\alpha)\right)\delta_{2,\ell''}\right].\label{eq:dipdet}
+    H_{\ell''}^{m'',\text{det}}(\sd) &\propto \frac{Y_{\ell''}^{m''*}(\sd)}{1 - \cos\alpha}\left[(1 - \sqrt{\cos\alpha})\delta_{0,\ell''} + \left(\frac{2}{5} + \frac{1}{10}\sqrt{\cos\alpha}(-7+3\cos\alpha)\right)\delta_{2,\ell''}\right],\label{eq:dipdet}
 \end{align}
 with the Gaunt coefficients given by 
 \begin{align}
@@ -234,9 +234,10 @@ with the Gaunt coefficients given by
 \end{align}
 
 It's useful to compare Eq. \eqref{eq:fwd} to Eq. \eqref{eq:fwdsh}---in a delta
-function basis we need to compute an angular integral, while in the object-space
-spherical harmonics basis the kernel has a finite number of terms so we can
-compute it exactly. 
+function basis we need to compute a continuous angular integral (in general this
+requires an approximate Riemann sum), while in the object-space spherical
+harmonics basis the kernel has a finite number of terms so we can compute it
+exactly.
 
 It's also useful to compare Eq. \eqref{eq:kern} to Eq. \eqref{eq:triple4}---in a
 delta function basis the kernel is the product of the excitation and detection
@@ -261,9 +262,9 @@ apertures
 \end{align}
 where $\mh{s}_{d,m}$ and $\mh{p}_{m}$ are the $m$th sampling points. This
 restriction means that we will leave the polarizer setting and tilt angle fixed
-during each volume acquisition. We could consider scanning the polarizer
-setting and tilt angle in the future for faster acquisitions, but I think these
-sampling schemes will always decrease ``angular SNR''.
+during each volume acquisition. We could consider scanning the polarizer setting
+and tilt angle while acquiring data in the future for faster imaging, but I
+think these sampling schemes will always decrease ``angular SNR''.
 
 So far we've formulated everything quite generally and haven't made any
 reference to the diSPIM geometry. Now we find the constraints that the diSPIM
@@ -285,8 +286,8 @@ be perpendicular to the detection optical axis
 \begin{align}
   \mh{s}_{e,m} \cdot \mh{s}_{d,m} = 0.
 \end{align}
-This is a fairly loose constraint, but it ensures that the light sheet is in
-focus across the field of view.
+This constraint ensures that the light sheet is in focus across the field of
+view.
 
 Next, we constrain the excitation optical axis to within the available tilt
 angles of the instrument. If we use $\mc{R}$ to denote an ``axis swapping
@@ -334,8 +335,8 @@ where $\kappa(A)$ denotes the $\mbb{L}_2$ condition number of $A$.
 Earlier we mainly used the Schatten 2-norm of the continuous-discrete imaging
 operator---the root sum of squares of the singular values---as the objective
 function. This objective function resulted in useful designs, but the last
-singular value was usually small which led us to optimizing the condition
-number. We can interpret the Schatten 2-norm designs as the ``learn as much as
+singular value was usually small which led us to optimizing the condition number
+instead. We can interpret the Schatten 2-norm designs as the ``learn as much as
 we can about all parameters'' designs and the condition number designs as the
 ``no parameter left behind'' designs.
 
@@ -464,7 +465,7 @@ subfigure which indicate the point response functions for each measurement. The
 radius of each point response function indicates the size of the signal measured
 from a fluorophore oriented along that direction.
 
-In the \textbf{top right} subfigure we show an set of single direction
+In the \textbf{top right} subfigure we show a set of single direction
 reconstructions with the given design. We start by creating a uniformly oriented
 phantom for each of the 250 directions in the positive octant of the sphere
 indicated by \textcolor{green}{green} dots. Next, we simulate the imaging
