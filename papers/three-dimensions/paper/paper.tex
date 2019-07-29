@@ -54,7 +54,8 @@
 \providecommand{\so}{\mathbf{\hat{s}}_o}
 \providecommand{\rp}{\mathbf{r}_p}
 \providecommand{\rbm}[1]{r_b^{\text{m}}}
-\providecommand{\rd}{\mathbf{r}_d}
+\providecommand{\rd}{\mathbf{r}^{\bot}_d}
+\providecommand{\rdp}{\mathbf{r}^{'\bot}_d}
 \providecommand{\rdf}{\mathpzc{r}_d}
 \providecommand{\mh}[1]{\mathbf{\hat{#1}}}
 \providecommand{\mbb}[1]{\mathbb{#1}}
@@ -98,8 +99,6 @@
 \end{abstract*}
 
 \section{Introduction}
-\add{Patrick: Key references for comparison are sheppard1994} \cite{sheppard1994} \add{and arnison2002} \cite{arnison2002}.\\
-
 \noindent Skeleton literature review ahead. \\
 
 \noindent First and second papers transfer functions for dipoles \cite{chandler2019a, chandler2019b}\\
@@ -130,29 +129,31 @@ $\text{m}^{-1}$.
 
 \noindent Delta functions have inverse units of the argument $[\delta(\ro)] = \text{m}^{-3}$.
 
-\noindent \add{I'm having some difficulty getting units to agree in section 2.2.3, but section 3 and the appendix are fairly consistent.}
-
 \subsection{Three-dimensional monopole transfer functions}
 \subsubsection{Monopole transfer functions}
-Monopole point spread function
+We begin by modeling a microscope that is imaging a three-dimensional sample of monopole emitters with a two-dimensional detector using an integral transform
 \begin{align}
-  g(\rd) = \int_{\mbb{R}}d\ropar\int_{\mbb{R}^2}d\roperp\, h(\rd - \roperp, \ropar)f(\ro),
+  g(\rd) = \int_{\mbb{R}}d\ropar\int_{\mbb{R}^2}d\roperp\, h(\rd - \roperp, \ropar)f(\ro),\label{eq:opener}
 \end{align}
-We can rewrite as 
+where $\rd$ is a two-dimensional detector position, $\ro = (\roperp, \ropar)$ is a three-dimensional detector coordinate with its transverse/axial decomposition, $g(\rd)$ is the measured irradiance on the detector, $f(\ro)$ is the monopole density, and $h(\rd - \roperp, \ropar)$ is a three-to-two-dimensional point spread function. 
+
+We can use the Fourier-convolution theorem to rewrite Eq. \eqref{eq:opener} as
 \begin{align}
   G(\bvperp) = \int_{\mbb{R}}d\bvpar\, H(\bv)F(\bv),
 \end{align}
-where
+where $\bv = (\bvperp, \bvpar)$ is a three-dimensional spatial frequency coordinate with its transverse/axial decomposition, 
 \begin{align}
-  G(\bvperp) = \int_{\mbb{R}^2}d\mb{r}^{\perp}\, g(\mb{r})\, \text{exp}(-2\pi i\mb{r}\cdot\bvperp),
+  G(\bvperp) = \int_{\mbb{R}^2}d\rd\, g(\rd)\, \text{exp}(-2\pi i\rd\cdot\bvperp)
 \end{align}
+is the scaled irradiance spectrum,
 \begin{align}
-  H(\bv) = \int_{\mbb{R}^3}d\bs{\mf{r}}\, h(\bs{\mf{r}})\, \text{exp}(-2\pi i\bs{\mf{r}}\cdot\bv),
+  H(\bv) = \int_{\mbb{R}^3}d\bs{\mf{r}}\, h(\bs{\mf{r}})\, \text{exp}(-2\pi i\bs{\mf{r}}\cdot\bv)
 \end{align}
-and
+is the monopole transfer function, and
 \begin{align}
-  F(\bv) = \int_{\mbb{R}^3}d\bs{\mf{r}}\, f(\bs{\mf{r}})\, \text{exp}(-2\pi i\bs{\mf{r}}\cdot\bv).
+  F(\bv) = \int_{\mbb{R}^3}d\bs{\mf{r}}\, f(\bs{\mf{r}})\, \text{exp}(-2\pi i\bs{\mf{r}}\cdot\bv)
 \end{align}
+is the monopole spectrum. Figure \ref{fig:monopole-block} summarizes the relationships between the object and data representations. 
 
 \begin{figure}
   \centering
@@ -164,16 +165,19 @@ and
 \end{figure}
 
 \subsubsection{Monopole coherent transfer functions}
+The monopole point spread function can always be written as the absolute square of a monopole coherent spread function
 \begin{align}
-  |c(\rd - \roperp, \ropar)|^2 = h(\rd - \roperp, \ropar)
+  |c(\rd - \roperp, \ropar)|^2 = h(\rd - \roperp, \ropar).
 \end{align}
+By applying the autocorrelation theorem we can use the monopole coherent transfer function as a shortcut for calculating the monopole transfer function
 \begin{align}
-  H(\bv) = \int_{\mbb{R}^3}d\bt\,C(\bt)C^*(\bt - \bv)
+  H(\bv) = \int_{\mbb{R}^3}d\bt\,C(\bt)C^*(\bt - \bv),
 \end{align}
+where $\bt = (\btperp, \btpar)$ is a three-dimensional transverse spatial frequency coordinate with its transverse/axial decomposition, and $C(\bt)$ is a coherent transfer function defined by
 \begin{align}
   C(\bt) = \int_{\mbb{R}^3}d\bs{\mf{r}}\, c(\bs{\mf{r}})\,\text{exp}(-2\pi i\bs{\mf{r}}\cdot\bt).\label{eq:monoctf}
 \end{align}
-This implies that the three-dimensional coherent transfer function is a scaled pupil function on a spherical shell. 
+Figure \ref{fig:monopole-transfer-functions} summarizes the relationships between the transfer functions.  
 
 \begin{figure}
   \centering
@@ -185,67 +189,68 @@ This implies that the three-dimensional coherent transfer function is a scaled p
 \end{figure}
 
 \subsubsection{Monopole pupil functions}
-% First, consider the field created at $\rs$ by a monopole at $\ro$ 
-% \begin{align}
-%   U_s(\rs, \ro) \propto \frac{\text{exp}[2\pi i\nu_m|\rs - \ro|]}{|\rs - \ro|},
-% \end{align}
-% where $\nu_m = n_o/\lambda$. For monopoles near the origin we can find the fields on the Gaussian reference sphere of an objectives lens with focal length $f_0 \gg |\ro|$ by applying the approximation $|\rs - \ro| \approx |\rs| - \rs\cdot\ro/|\rs|$ and dropping second-order amplitude and constant phase terms
-% \begin{align}
-%   U_s(\rs, \ro) \propto \frac{1}{f_0}\text{exp}[-2\pi i\nu_m(\rs\cdot\ro)/f_0].
-% \end{align}
-% Next, we expand the coordinates into transverse and axial components
-% \begin{align}
-%   U_s(\rs, \ro) \propto \frac{1}{f_0}\text{exp}[-2\pi i\nu_m(\rsperp\cdot\roperp + \rspar\ropar)/f_0],
-% \end{align}
-% then rewrite in pupil coordinates using the relationships $\rsperp = \rpperp$ and $\rspar = \sqrt{f_0^2 - |\rppar|^2}$
-% \begin{align}
-%   U_p(\rpperp, \roperp, \ropar) \propto \frac{1}{f_0}\text{exp}\left[-2\pi i\nu_m\left(\rpperp\cdot\roperp + \rspar\sqrt{f_0^2 - |\roperp|^2}\right)/f_0\right].
-% \end{align}
-\add{Patrick: This section follows section 2A in the second paper \cite{chandler2019b} fairly closely with modifications for 3D.}
-
-We can write the field in the pupil plane at point $\rpperp$ due to a monopole at $\ro = (\roperp, \ropar)$ as
+In this section we will relate the monopole transfer functions to physical
+parameters. First, consider the field created at $\rs$ by a monopole at $\ro$
 \begin{align}
-  U_p(\rpperp, \roperp, \ropar) \propto p_d(\rpperp, \ropar)\,\text{exp}\left[-2\pi i \frac{n_0}{\lambda f_0}\rpperp\cdot\roperp\right],
+  U_s(\rs, \ro) \propto \frac{\text{exp}[2\pi i\nu_m|\rs - \ro|]}{|\rs - \ro|},
+\end{align}
+where $\nu_m = n_o/\lambda$ is the radius of the Ewald sphere. For monopoles near the origin we can find the fields on the Gaussian reference sphere of an objectives lens with focal length $f_0 \gg |\ro|$ by applying the approximation $|\rs - \ro| \approx |\rs| - \rs\cdot\ro/|\rs|$ and dropping second-order amplitude and constant phase terms
+\begin{align}
+  U_s(\rs, \ro) \propto \frac{1}{f_0}\text{exp}[-2\pi i\nu_m(\rs\cdot\ro)/f_0].
+\end{align}
+Next, we expand the coordinates into transverse and axial components
+\begin{align}
+  U_s(\rs, \roperp, \ropar) \propto \frac{1}{f_0}\text{exp}[-2\pi i\nu_m(\rsperp\cdot\roperp + \rspar\ropar)/f_0],
+\end{align}
+then rewrite in pupil coordinates using the relationships $\rsperp = \rpperp$ and $\rspar = \sqrt{f_0^2 - |\rppar|^2}$
+\begin{align}
+  U_p(\rpperp, \roperp, \ropar) \propto \frac{1}{f_0}\text{exp}\left[-2\pi i\nu_m\left(\rpperp\cdot\roperp + \ropar\sqrt{f_0^2 - |\roperp|^2}\right)/f_0\right].
+\end{align}
+We can rewrite the field in the pupil plane as
+\begin{align}
+  U_p(\rpperp, \roperp, \ropar) \propto \frac{1}{f_0}p_d(\rpperp, \ropar)\,\text{exp}\left[-2\pi i \frac{n_0}{\lambda f_0}\rpperp\cdot\roperp\right],
 \end{align}
 where $p_d(\rpperp, \ropar)$ is the \textit{defocused monopole pupil function}  
 \begin{align}
-  p_d(\rpperp, \ropar) = p(\rpperp)\, \text{exp}\left[-2\pi i\ropar\nu_m\sqrt{1 - (|\rpperp|/f_0)^2}\right],
+  p_d(\rpperp, \ropar) = p(\rpperp)\, \text{exp}\left[-2\pi i\nu_m\ropar\sqrt{1 - (|\rpperp|/f_0)^2}\right],
 \end{align}
-and $p(\rpperp)$ is the usual pupil function which can be used to model angular cutoff, apodization, or aberrations.
+and $p(\rpperp)$ is the usual pupil function that can be used to model the angular cutoff, apodization, aberration, or phase masks.
 
 Since the second lens is paraxial, we can model the relationship between the field in the pupil plane and the field on the detector with a scaled Fourier transform
 \begin{align}
-  U_d(\rd', \roperp, \ropar) \propto \int_{\mbb{R}^2}d\rpperp\,p_d(\rpperp, \ropar)\,\text{exp}\left[-2\pi i \frac{n_0}{\lambda f_0}\rpperp\cdot\roperp\right]\text{exp}\left[-2\pi i \frac{n_1}{\lambda f_1}\rpperp\cdot\rd'\right].
+  U_d(\rdp, \roperp, \ropar) \propto \frac{n_1}{\lambda f_0f_1}\int_{\mbb{R}^2}d\rpperp\,p_d(\rpperp, \ropar)\,\text{exp}\left[-2\pi i \frac{n_0}{\lambda f_0}\rpperp\cdot\roperp\right]\text{exp}\left[-2\pi i \frac{n_1}{\lambda f_1}\rpperp\cdot\rdp\right].
 \end{align}
 
 If we define $P(\btperp, \ropar)$ as the two-dimensional transverse Fourier transform of the defocused pupil function
 \begin{align}
-  P_d(\btperp, \ropar) = \int_{\mbb{R}^2}d\rpperp\, p_d(\rpperp, \ropar)\,\text{exp}(-2\pi i \rpperp\cdot\btperp),\label{eq:pupilF}
+  P(\btperp, \ropar) = \int_{\mbb{R}^2}d\rpperp\, p_d(\rpperp, \ropar)\,\text{exp}(-2\pi i \rpperp\cdot\btperp),\label{eq:pupilF}
 \end{align}
 then we can rewrite the field on the detector as
 \begin{align}
-  U_d(\rd', \roperp, \ropar) \propto P\left(\frac{n_0}{\lambda f_0}\roperp + \frac{n_1}{\lambda f_1}\rd', \ropar\right).
+  U_d(\rdp, \roperp, \ropar) \propto \frac{n_1}{\lambda f_0f_1}P\left(\frac{n_0}{\lambda f_0}\roperp + \frac{n_1}{\lambda f_1}\rdp, \ropar\right).
 \end{align}
-After rewriting in terms of the magnification $m = -\frac{f_1 n_0}{f_0 n_1}$, demagnifying the coordinates with $\rd = \rd'/m$, and demagnifying the irradiance with $h(\rd - \roperp, \ropar) \propto h'(m[\rd - \roperp], \ropar) $, we find the defocused monopole point spread function is related to the Fourier transform of the defocused monopole pupil function by 
+After rewriting in terms of the magnification $m = -\frac{f_1 n_0}{f_0 n_1}$, demagnifying the coordinates with $\rd = \rdp/m$, and demagnifying the irradiance with $h(\rd - \roperp, \ropar) \propto h'(m[\rd - \roperp], \ropar) $, we find the defocused monopole point spread function is related to the Fourier transform of the defocused monopole pupil function by 
 \begin{align}
-  h(\rd-\roperp, \ropar) \propto \left|P\left(-\frac{n_0}{\lambda f_0}[\rd - \roperp], \ropar\right)\right|^2.
+  h(\rd-\roperp, \ropar) \propto \left|\frac{n_1}{\lambda f_0f_1}P\left(-\frac{n_0}{\lambda f_0}[\rd - \roperp], \ropar\right)\right|^2.
 \end{align}
 The monopole point spread function is the absolute square of the monopole coherent spread function so
 \begin{align}
-  c(\rd - \roperp, \ropar) \propto P\left(-\frac{n_0}{\lambda f_0}[\rd - \roperp], \ropar\right). \label{eq:monocsf}
+  c(\rd - \roperp, \ropar) \propto \frac{n_1}{\lambda f_0f_1}P\left(-\frac{n_0}{\lambda f_0}[\rd - \roperp], \ropar\right). \label{eq:monocsf}
 \end{align}
 Our final task is to calculate the monopole coherent transfer function by plugging Eq. \eqref{eq:monocsf} into Eq. \eqref{eq:monoctf} which yields
 \begin{align}
-  C(\bt) = \int_{\mbb{R}}dr^{\mypar}\int_{\mbb{R}^2}d\mb{r}^{\bot}\, P\left(-\frac{n_0}{\lambda f_0}\mb{r}^{\bot}, r^{\mypar}\right)\,\text{exp}(-2\pi i[\mb{r}^{\bot}\cdot\btperp + r^{\mypar}\btpar]).
+  C(\bt) \propto \frac{n_1}{\lambda f_0f_1}\int_{\mbb{R}}dr^{\mypar}\int_{\mbb{R}^2}d\mb{r}^{\bot}\, P\left(-\frac{n_0}{\lambda f_0}\mb{r}^{\bot}, r^{\mypar}\right)\,\text{exp}(-2\pi i[\mb{r}^{\bot}\cdot\btperp + r^{\mypar}\btpar]).
 \end{align}
 Using Eq. \eqref{eq:pupilF} to simplify the transverse integral yields
 \begin{align}
-  C(\bt) \propto p\left(\frac{\lambda f_0}{n_0}\btperp\right) \int_{\mbb{R}}d r^{\mypar} \,\text{exp}\left(-2\pi i r^{\mypar}\sqrt{\nu_m - |\btperp|^2}\right)\,\text{exp}(-2\pi i r^{\mypar}\btpar)
+  C(\bt) \propto \frac{1}{\nu_m}\, p\left(\frac{\lambda f_0}{n_0}\btperp\right) \int_{\mbb{R}}d r^{\mypar} \,\text{exp}\left(-2\pi i r^{\mypar}\sqrt{\nu_m - |\btperp|^2}\right)\,\text{exp}(-2\pi i r^{\mypar}\btpar).
 \end{align}
 Finally, we use the Fourier shift theorem to evaluate the axial integral to find that 
 \begin{align}
-  C(\bt) \propto p\left(\frac{\lambda f_0}{n_0}\btperp\right)\,\delta\left(\btpar - \sqrt{\nu_m^2 - |\btperp|^2}\right).\label{eq:monoctf}
+  C(\bt) \propto \frac{1}{\nu_m}p\left(\frac{\lambda f_0}{n_0}\btperp\right)\,\delta\left(\btpar - \sqrt{\nu_m^2 - |\btperp|^2}\right).
 \end{align}
+This shows that the three-dimensional coherent transfer function is a scaled pupil function on a spherical cap. 
+
 
 % \subsection{Three-dimensional dipole transfer functions}
 % \subsubsection{Dipole transfer functions}
@@ -275,46 +280,51 @@ Finally, we use the Fourier shift theorem to evaluate the axial integral to find
 \subsection{Monopole transfer functions}
 We can model an aplanatic microscope imaging monopole emitters with the scalar pupil function
 \begin{align}
-  p(\rpperp) \propto  \tilde{C}\left(\frac{|\rpperp|}{f_0}\right)\Pi\left(\frac{|\rpperp|}{2f_0\sin\alpha}\right). \label{eq:monopupil}
+  p(\rpperp) \propto  \tilde{C}\left(\frac{|\rpperp|}{f_0}\right)\Pi\left(\frac{|\rpperp|}{2f_0\sin\alpha}\right), \label{eq:monopupil}
 \end{align}
-
-Plugging Eq. \eqref{eq:monopupil} in Eq. \eqref{eq:monoctf} yields
-\begin{align}
-  C(\bt) \propto \tilde{C}\left(\frac{|\btperp|}{\nu_m}\right)\,\delta\left(\btpar - \sqrt{\nu_m^2 - |\btperp|^2}\right)\,\Pi\left(\frac{|\btperp|}{\nu_c}\right)
-\end{align}
-where $\nu_c = 2\text{NA}/\lambda$, $\text{NA} = n_0\sin\alpha$, and 
+where
 \begin{align}
   \tilde{C}(x) = (1 - x^2)^{-1/4}.
 \end{align}
-
-\add{To make the units check we need to add a normalization factor of $\frac{1}{\nu_c}$ to the coherent transfer function. Arguably this factor should have been included in the Eqs. 22 and 23 of the second paper \cite{chandler2019b}, but we played a bit loose with the proportionality symbol. I'm not sure if there's a more elegant way to motivate this factor of $\frac{1}{\nu_c}$.}
+Plugging Eq. \eqref{eq:monopupil} in Eq. \eqref{eq:monoctf} yields
 \begin{align}
-  C(\bt) \propto \frac{1}{\nu_c}\tilde{C}\left(\frac{|\btperp|}{\nu_m}\right)\,\delta\left(\btpar - \sqrt{\nu_m^2 - |\btperp|^2}\right)\,\Pi\left(\frac{|\btperp|}{\nu_c}\right)
+  C(\bt) \propto \frac{1}{\nu_m}\tilde{C}\left(\frac{|\btperp|}{\nu_m}\right)\,\delta\left(\btpar - \sqrt{\nu_m^2 - |\btperp|^2}\right)\,\Pi\left(\frac{|\btperp|}{\nu_c}\right),\label{eq:toexpand}
+\end{align}
+where $\nu_c = 2\text{NA}/\lambda$ and $\text{NA} = n_0\sin\alpha$. Applying an identity from Appendix \ref{sec:delta} (Eq. \eqref{eq:sphereidentity}) allows us to write the coherent transfer function in spherical coordinates as 
+\begin{align}
+  C(\bt) \propto \frac{1}{\nu_m}\sqrt{\cos\theta_\tau}\,\delta\left(|\bt| - \nu_m\right)\,\Pi\left(\frac{\theta_\tau}{2\alpha}\right).
 \end{align}
 
 In Appendix \ref{sec:monoauto} we calculate the autocorrelation of the coherent transfer function and show that the monopole transfer function is given by
 \begin{align}
-  H(\bv) = \delta(\bv) + \frac{4\tau_{\circ}^2\bvpar}{\pi\nu_c^2|\bv|\nu_m}\sqrt{p^2 - 1}\,E\left(\beta_m, \frac{p}{\sqrt{p^2 - 1}}\right),
+  H(\bv) = 4\pi\sin^2(\alpha/2)\,\delta(|\bv|) + \frac{|\bvpar|}{\nu_m|\bv|}\sqrt{p^2 - 1}\,E\left(\beta_m, \frac{p}{\sqrt{p^2 - 1}}\right)\infty\left(\frac{|\bvperp|}{\nu_m}, \frac{|\bvpar|}{\nu_m}, \alpha\right),
 \end{align}
 where $E(\beta_m, k)  = \int_0^{\beta_m} d\phi\sqrt{1 - k^2\sin^2\phi}$ is an incomplete elliptic integral of the second kind and
 \begin{align}
-  p = \frac{|\bvperp|\nu_\circ}{\bvpar|\bv|},\qquad
-  \nu_\circ = \sqrt{\nu_m^2 - (|\bv|/2)^2},\qquad
-  \beta_m = \cos^{-1}\left(\frac{1}{p}\left[\frac{2\nu_m}{|\bvpar|}\cos\alpha + 1\right]\right).
+  p = \frac{2|\bvperp|}{\bvpar|\bv|}\sqrt{\nu_m^2 - (|\bv|/2)^2},\qquad
+  \beta_m = \cos^{-1}\left(\frac{1}{p}\left[\frac{2\nu_m}{|\bvpar|}\cos\alpha + 1\right]\right),\nonumber\\ \infty(x, z, \alpha) = \Pi\left(\frac{|z|}{2(\sqrt{1 - (|x| - \sin\alpha)^2} - \cos\alpha)}\right).
 \end{align}
 
-We can also investigate the three-dimensional monopole transfer functions under the paraxial approximation by expanding the coherent transfer about $|\btperp| = 0$ and dropping second-order terms
-\begin{align}
-  C(\bt) \propp \frac{1}{\nu_c}\delta\left(\btpar - \nu_m + |\btperp|^2/2\nu_m\right)\,\Pi\left(\frac{|\btperp|}{\nu_c}\right).
+We can also investigate the three-dimensional monopole transfer functions under the paraxial approximation by expanding the argument of the delta function in Eq. \eqref{eq:toexpand} about $|\btperp| = 0$ and dropping fourth- and higher-order terms \begin{align}
+  C(\bt) \propp \frac{1}{\nu_m}\delta\left(\btpar - \nu_m + |\btperp|^2/2\nu_m\right)\,\Pi\left(\frac{|\btperp|}{\nu_c}\right).
 \end{align}
 In Appendix B we calculate the autocorrelation of the paraxial coherent transfer and show that the paraxial monopole transfer function is given by
 \begin{align}
-  H(\bv) \eqp \delta(\bv) + \frac{8\nu_m}{\pi\nu_c^2}\text{nez}\left(\frac{|\bvperp|}{\nu_c}, \frac{2\nu_m|\bvpar|}{\nu_c^2}\right),
+  H(\bv) \eqp \frac{\pi\nu_c^2}{4\nu_m^2}\delta(|\bv|) + \frac{4}{\nu_m}\text{nez}\left(\frac{|\bvperp|}{\nu_c}, \frac{2\nu_m|\bvpar|}{\nu_c^2}\right),
 \end{align}
 where
 \begin{align}
  \text{nez}(x, z) = \frac{1}{2|x|}\text{Re}\left[\sqrt{1 - \left(\frac{|z|}{|x|} + |x|\right)^2}\right].
 \end{align}
+
+Figure 3 compares the high-aperture transfer function to the paraxial transfer function in their normalized forms. For extremely high numerical apertures $\alpha = \pi/2$ the high-aperture transfer function predicts an axial spatial frequency cutoff that is double the prediction of the paraxial model. Additionally, the high-aperture transfer function predicts a spatial frequency support that is a horn torus at $\alpha = \pi/2$ and a lemon-profiled torus for $\alpha < \pi/2$, while the paraxial transfer function predicts a scaled parabolic-lemon-profiled torus for all $\alpha$. 
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.85]{../figures/monopole-psf/dpsf.pdf}
+  \caption{Comparison of high-aperture and paraxial three-dimensional transfer functions for $\text{NA} = (1.00, 1.25, 1.50)$, $n_o = 1.5$, and $\lambda = 500\,\text{nm}$. Input spatial frequencies are in  m${}^{-1}$ and the output is in m${}^{+1}$. All transfer functions are normalized so that $\lim_{|{\bvperp}|\rightarrow 0} \int_\mbb{R}d\bvpar H(\bvperp, \bvpar) = 1$.}
+  \label{fig:compare}
+\end{figure}
 
 % \subsection{Dipole transfer functions}
 % \subsubsection{Dipole point spread function}
@@ -344,59 +354,60 @@ The authors declare that there are no conflicts of interest related to this arti
 \bibliography{/Users/Talon/Library/texmf/talon}
 \appendix
 
-\section{Multidimensional curvilinear delta functions}
+\section{Multidimensional curvilinear delta functions}\label{sec:delta}
+In this appendix we summarize operational rules for manipulating multidimensional curvilinear delta functions. See Bracewell \cite{bracewell2004} for an intuitive approach to two-dimensional delta functions, and see Gelfand and Shilov \cite{gelfand2016} for a more mathematical discussion of multidimensional delta functions.
 
-\add{TODO: Summarize operational rules for tricky curvilinear delta functions. TBH I haven't mastered these rules yet.}
-% In this appendix we review operational rules for manipulating multidimensional curvilinear delta functions. For a gentle introduction see Bracewell \cite{bracewell2004} and for details see Gelfand and Shilov \cite{gelfand2016}. Here we attempt to be brief and accessible.
-
-% $\delta(f(x))$
-
-% $\delta(f(\mb{r}))$
-
-% $\delta(\mb{f}(\mb{r}))$
-
-\section{Three-dimensional monopole transfer functions}\label{sec:monoauto}
-\add{I have recently reworked this section with units in mind, and as far as I can tell all of the units are consistent. The paraxial results agree with the literature and when they project to 2D we get a result that is consistent with the previous paper.}
-
-\add{I'm still having problems with the high-NA result, though. When I integrate over the axial coordinate the result is not normalized (see Fig. \ref{fig:compare}), and the result does not agree with Sheppard/Barakat \cite{barakat1963, sheppard1994} who predict a suppressed low-frequency response and an enhanced high-frequency response for high-NA objectives compared to the paraxial approximation. I'm hot on the trail of a few issues, but I'd appreciate any flags.}
-
-In this appendix we will calculate the three-dimensional monopole transfer function
-by evaluating the integral
+Our goal is to interpret delta functions of the form $\delta(\mb{g}(\mb{r}))$ where $\mb{g}: \mbb{R}^N \rightarrow \mbb{R}^M$. Starting with a simple case $N = M = 1$ and $g(r) = r$ we can use the sifting property to interpret the delta function
 \begin{align}
-  H(\bv) = \int_{\mbb{R}^3}d\bt\, C(\bt + \bv/2)\,C^*(\bt - \bv/2). \label{eq:3dauto}
+  \int_{\mbb{R}}dr\,\delta(r)f(r) = f(0).
 \end{align}
-We will start by calculating the transfer function for the most general high-aperture case by setting the coherent transfer function to
+When $g(r) = ar$ then we can use a change of variables to show that 
 \begin{align}
-  C(\bt) \propto \frac{1}{\nu_c}\tilde{C}\left(\frac{|\btperp|}{\nu_m}\right)\,\delta\left(\btpar - \sqrt{\nu_m^2 - |\btperp|^2}\right)\,\Pi\left(\frac{|\btperp|}{\nu_c}\right).
+  \int_{\mbb{R}}dr\,\delta(ar)f(r) = \frac{f(0)}{|a|}.
 \end{align}
-Equivalently, we can express the high-aperture coherent transfer function in spherical coordinates as
-\begin{align}
-  C(\bt) \propto \,\frac{1}{\nu_c}\sqrt{\cos\theta_{\tau}}\,\delta\left(|\bt| - \nu_m\right)\,\Pi\left(\frac{\theta_{\tau}}{2\alpha}\right).
-\end{align}
-Therefore, we can interpret the integral in Eq. \eqref{eq:3dauto} as the autocorrelation of a $\sqrt{\cos\tau_\theta}$-weighted spherical cap with radius $\nu_m$ and half angle $\alpha$.
+Intuitively, the function $ar$ crosses its zero with an absolute slope $|a|$ so it sifts less of the function $f(r)$ by a factor of $|a|^{-1}$. 
 
-For $|\bv| = 0$ we can integrate over the spherical cap to find that 
+When $g(r)$ is a function with multiple zeros then the delta functions sifts (with appropriate weighting) at all of the function's zeros 
 \begin{align}
-  H(\bv) \propto \frac{1}{\nu_c^2}\int_{0}^{\infty}|\bt|^2d|\bt|\int_0^{2\pi}d\phi_\tau\int_{0}^{\alpha}d\theta_\tau \sin\theta_\tau\cos\theta_\tau\delta(|\bt| - \nu_m)\delta(|\bt| - \nu_m) = \frac{\pi}{4}\delta(|\bv|).
+  \int_{\mbb{R}}dr\,\delta(g(r))f(r) = \sum_{g(r_i) = 0}f(r_i)\left|\frac{dg(r_i)}{dr}\right|^{-1}.\label{eq:zero1}
 \end{align}
 
-When $|\bv| > 0$ we need to integrate over the intersection of the two spherical
-caps which only intersect when
+When $N > 1$ and $M = 1$ we can interpret the delta function as sifting over the (potentially infinite) set of zeros of $g(\mb{r})$
 \begin{align}
-  |\bvpar| < \sqrt{\nu_m^2 - (|\bvperp| - \nu_m\sin\alpha)^2} - \nu_m\cos\alpha. 
+  \int_{\mbb{R}^N}d\mb{r}\,\delta(g(\mb{r}))f(\mb{r}) = \int_{g^{-1}(0)}d\sigma(\mb{r})f(\mb{r})|\nabla g(\mb{r})|^{-1},\label{eq:zero2}
 \end{align}
-Therefore, the transfer function is zero when this condition is not satisfied.
+where $d\sigma(\mb{r})$ is an appropriate measure for the solution set, and $|\nabla g(\mb{r})|$ denotes the gradient magnitude evaluated at $\mb{r}$.
 
-\begin{figure}
-  \centering
-  \includegraphics[scale=0.3]{../figures/caps/general.pdf}
-  \includegraphics[scale=0.25]{../figures/caps/spherical.pdf}\hspace{0.5em}
-  \includegraphics[scale=0.28]{../figures/caps/cylindrical.pdf}
-  \caption{Geometric constructions and coordinate systems for performing the three-dimensional autocorrelation. (Top) Two spherical caps with spherical radius $\nu_m = n_o/\lambda$ and base diameter $\nu_c = 2\text{NA}/\lambda$ are shifted by $\bv$ and intersect along a circular arc in the plane perpendicular to $\bv$. (Bottom left) We define a spherical coordinate system for each cap. These coordinate systems  are most convenient for expressing the individual coherent transfer functions. (Bottom right) We define a cylindrical coordinate system with the long axis of the cylinder parallel to the shift direction $\bv$ and the azimuthal angle $\beta_\tau$ defined with respect to the lowest point of each cylindrical slice. This coordinate system is most convenient for integrating over the circular arc of intersection.}
-  \label{fig:caps}
-\end{figure}
+When $M > 1$ then $\mb{g}$ is a vector-valued function, and $\delta(\mb{g}(\mb{r})$ can be used to manipulate the product of multiple delta functions. For example, we can rewrite $\delta(g_1(\mb{r}))\delta(g_2(\mb{r}))$ as $\delta(\mb{g}(\mb{r}))$. When $N = M > 1$ 
+we interpret the delta function in a familiar way
+\begin{align}
+  \int_{\mbb{R}^N}d\mb{r}\,\delta(\mb{g}(\mb{r}))f(\mb{r}) = \int_{\mb{g}^{-1}(0)}d\sigma(\mb{r})f(\mb{r})\left|\frac{\partial(g_1,\dots,g_M)}{\partial(r_1,\dots,r_N)}(\mb{r})\right|^{-1},
+\end{align}
+where $\left|\frac{\partial(g_1,\dots,g_M)}{\partial(r_1,\dots,r_N)}(\mb{r})\right|$ denotes the Jacobian determinant evaluated at $\mb{r}$.
 
-By inspection of Fig. \ref{fig:caps}, the intersection of the two shifted spherical caps is a circular arc centered on the origin in the plane perpendicular to the shift direction $\bv$. To integrate along this arc it will be convenient to define three new coordinate systems: (1, 2) two spherical coordinate systems defined with respect to the centers of the shifted spheres, and (3) a cylindrical coordinate system with long axis parallel to the shift direction $\bv$. The shifted spherical coordinate systems are straightforward to derive as
+The final case we will consider is when $N > M > 1$ which we can interpret with
+\begin{align}
+  \int_{\mbb{R}^N}d\mb{r}\,\delta(\mb{g}(\mb{r}))f(\mb{r}) = \int_{\mb{g}^{-1}(0)}d\sigma(\mb{r})f(\mb{r})\left|\frac{\partial(g_1,\dots,g_M)}{\partial(r^*_1,\dots,r^*_M)}(\mb{r})\right|^{-1},\label{eq:transversedelta}
+\end{align}
+where $r_1^*,\dots,r_M^*$ form an orthogonal basis for the tangent space of the solution set $\mb{g}^{-1}(0)$, and $\left|\frac{\partial(g_1,\dots,g_M)}{\partial(r^*_1,\dots,r^*_M)}(\mb{r})\right|$ denotes the Jacobian determinant in the tangent space evaluated at $\mb{r}$. For example, if $N = 3$, $M = 2$ and $\mb{g}(\mb{r}) = [2x, 3z]$, then the solution set is the $y$ axis. We can use the $x$ and $z$ unit vectors as a basis for the tangent space of the solution set, so we can write
+\begin{align}
+  \int_{\mbb{R}^3}dxdydz\,\delta\left(\begin{bmatrix}2x\\3z\end{bmatrix}\right)f(x,y,z) = \frac{1}{6}\int_{\mbb{R}}dy f(0,y,0).
+\end{align}
+
+In these examples we have been interpreting delta functions by sifting functions with a one-dimensional output $f:\mbb{R}^N\rightarrow \mbb{R}$, but these interpretations work equally well for functions with multidimensional outputs $\mb{f}:\mbb{R}^N\rightarrow \mbb{R}^P$.
+
+The rules in this section can be used to manipulate delta functions that appear outside integrals. For example, we can use Eq. \eqref{eq:zero1} to verify the identity
+\begin{align}
+  \delta(x^2 - 1) = \frac{1}{2}[\delta(x - 1) + \delta(x + 1)]. 
+\end{align}
+Similar identities can be established for any multidimensional delta function by taking care that both the solution set and the appropriate Jacobian determinant are preserved. For example, we can use Eq. \eqref{eq:zero2} to verify that
+\begin{align}
+   \delta\left(\btpar \pm \sqrt{\nu_m^2 - |\btperp|^2}\right) = \frac{\btpar}{\nu_m}\delta\left(|\bt| - \nu_m\right) = \cos\theta_\tau\delta\left(|\bt| - \nu_m\right).\label{eq:sphereidentity}
+\end{align}
+
+
+\section{Coordinate systems for evaluating the autocorrelation of a spherical cap}\label{sec:coord}
+In this appendix specify three coordinate systems which will be useful for evaluating the autocorrelation of spherical caps. By inspection of Fig. \ref{fig:caps}, the intersection of the two shifted spherical caps is a circular arc centered on the origin in the plane perpendicular to the shift direction $\bv$. To integrate along this arc it will be convenient to define two spherical coordinate systems defined with respect to the centers of the shifted spheres and a cylindrical coordinate system with its long axis parallel to the shift direction $\bv$. The shifted spherical coordinate systems are straightforward to derive as
 \begin{align}
   \begin{bmatrix}
     \tau_x\\
@@ -419,18 +430,11 @@ Deriving the cylindrical coordinate system is more involved. We follow Arnison a
     \tau_y\\
     \btpar
   \end{bmatrix}
-  &= \mb{R}_{\mb{z}}(-\tan^{-1}(\nu_y/\nu_x)\mb{R}_{\mb{y}}(\sin^{-1}(\bvpar/|\bv|))
-  \begin{bmatrix}
+&= \mb{R}_{\mb{z}}(-\tan^{-1}(\nu_y/\nu_x)\mb{R}_{\mb{y}}(\sin^{-1}(\bvpar/|\bv|))\begin{bmatrix}
     \tau_\xi\\
     \tau_R\sin\beta_\tau\\
     -\tau_R\cos\beta_\tau
-  \end{bmatrix}\nonumber\\
-  &=
-  \begin{bmatrix}
-    \displaystyle\frac{\nu_x}{|\bv|}\tau_\xi + \frac{\tau_R}{|\bvperp||\bv|}(\bvpar\nu_x\cos\beta_\tau - |\bv|\nu_y\sin\beta_\tau)\\[1em]
-    \displaystyle\frac{\nu_y}{|\bv|}\tau_\xi + \frac{\tau_R}{|\bvperp||\bv|}(\bvpar\nu_y\cos\beta_\tau + |\bv|\nu_x\sin\beta_\tau)\\[1em]
-    \displaystyle\frac{\bvpar}{|\bv|}\tau_\xi - \frac{|\bvperp|\tau_R}{|\bv|}\cos\beta_\tau
-  \end{bmatrix},\label{eq:cylindrical}
+  \end{bmatrix},
 \end{align}
 where
 \begin{align}
@@ -445,27 +449,58 @@ where
     \cos\theta & \sin\theta & 0\\
     -\sin\theta & \cos\theta & 0\\
     0 & 0 & 1
-  \end{bmatrix}.
+  \end{bmatrix}  .
+\end{align}
+Multiplying the matrices and simplifying yields
+\begin{align}
+    \begin{bmatrix}
+    \tau_x\\
+    \tau_y\\
+    \btpar
+  \end{bmatrix}
+  &=
+  \begin{bmatrix}
+    \displaystyle\frac{\nu_x}{|\bv|}\tau_\xi + \frac{\tau_R}{|\bvperp||\bv|}(\bvpar\nu_x\cos\beta_\tau - |\bv|\nu_y\sin\beta_\tau)\\[1em]
+    \displaystyle\frac{\nu_y}{|\bv|}\tau_\xi + \frac{\tau_R}{|\bvperp||\bv|}(\bvpar\nu_y\cos\beta_\tau + |\bv|\nu_x\sin\beta_\tau)\\[1em]
+    \displaystyle\frac{\bvpar}{|\bv|}\tau_\xi - \frac{|\bvperp|\tau_R}{|\bv|}\cos\beta_\tau
+  \end{bmatrix}.\label{eq:cylindrical}
 \end{align}
 
-To evaluate the integral we need to express it in our new cylindrical coordinate system. We start by considering the pair of delta functions in the integrand $\delta(|\bt - \bv/2| - \nu_m)\,\delta(|\bt + \bv/2| - \nu_m)$. The spherical shells intersect in a circle of radius $\nu_\circ = \sqrt{\nu_m^2 - (|\bv|/2)^2}$ centered on the origin so we expect the delta functions to become $\delta(\tau_\xi)\,\delta(\tau_R - \nu_\circ)$ in the cylindrical coordinate system. However, we need to preserve the ``strength'' of the delta functions in the new coordinate system (see Bracewell \cite{bracewell2004} for operational rules and see Gelfand and Shilov \cite{gelfand2016} for a detailed discussion), so we normalize by the Jacobian determinant in each coordinate system. After accounting for the changing strength of the delta functions we find that
-\begin{align}
-  \delta(|\bt - \bv/2| - \nu_m)\,\delta(|\bt + \bv/2| - \nu_m) = \frac{\nu_\circ}{|\bv|}\delta(\tau_\xi)\,\delta(\tau_R - \nu_\circ).
-\end{align}
-\add{This step is a prime candidate for an error. I derived this factor
-  $\frac{\nu_\circ}{|\bv|}$ by matching the Jacobian on both sides, but this
-  disagrees with the factor Arnison \cite{arnison2002} uses which is $\propto \frac{1}{|\bv|\nu_\circ}$. Arnison's factor doesn't seem to have the correct units...although all of the Sheppard papers seem pretty free-form when it comes to normalizing/units.}
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.3]{../figures/caps/general.pdf}
+  \includegraphics[scale=0.25]{../figures/caps/spherical.pdf}\hspace{0.5em}
+  \includegraphics[scale=0.28]{../figures/caps/cylindrical.pdf}
+  \caption{Geometric constructions and coordinate systems for performing the three-dimensional autocorrelation. (Top) Two spherical caps with spherical radius $\nu_m = n_o/\lambda$ and base diameter $\nu_c = 2\text{NA}/\lambda$ are shifted by $\bv$ and intersect along a circular arc in the plane perpendicular to $\bv$. (Bottom left) We define a spherical coordinate system for each cap. These coordinate systems  are most convenient for expressing the individual coherent transfer functions. (Bottom right) We define a cylindrical coordinate system with the long axis of the cylinder parallel to the shift direction $\bv$ and the azimuthal angle $\beta_\tau$ defined with respect to the lowest point of each cylindrical slice. This coordinate system is most convenient for integrating over the circular arc of intersection.}
+  \label{fig:caps}
+\end{figure}
 
-The integrating measure in the cylindrical coordinate system is
+\section{Three-dimensional monopole transfer functions}\label{sec:monoauto}
+In this appendix we calculate the three-dimensional monopole transfer function
+by evaluating the integral
 \begin{align}
-  d\bt = \tau_R d\tau_R d\tau_\xi d\beta_\tau,
+  H(\bv) \propto \int_{\mbb{R}^3}d\bt\, C(\bt + \bv/2)\,C^*(\bt - \bv/2). \label{eq:3dauto}
 \end{align}
-so we can write the integral as 
+where the coherent transfer function is
 \begin{align}
-  H(\bv) \propto \frac{1}{\nu_c^2}\frac{\nu_\circ}{|\bv|}\int_{\mbb{R}}d\tau_\xi\int_{0}^{\infty}\tau_Rd\tau_R\int_{-\pi}^{\pi}d\beta_\tau\, \sqrt{\cos\tau_{\theta_1}\cos\tau_{\theta_2}}\,\delta(\tau_\xi)\delta(\tau_R - \nu_\circ)\,\Pi\left(\frac{\tau_{\theta_1}}{2\alpha}\right)\Pi\left(\frac{\tau_{\theta_2}}{2\alpha}\right).
+  C(\bt) \propto \,\frac{1}{\nu_m}\sqrt{\cos\theta_{\tau}}\,\delta\left(|\bt| - \nu_m\right)\,\Pi\left(\frac{\theta_{\tau}}{2\alpha}\right).\label{eq:3dctf2}
+\end{align}
+We can interpret the integral in Eq. \eqref{eq:3dauto} as the autocorrelation of a $\sqrt{\cos\theta_\tau}$-weighted spherical cap with radius $\nu_m$ and half angle $\alpha$.
+
+First, we plug Eq. \eqref{eq:3dctf2} into Eq. \eqref{eq:3dauto}, rewrite the delta functions in vector notation, and use the shifted spherical coordinates from Appendix \ref{sec:coord}
+\begin{align}
+  H(\bv) \propto \frac{1}{\nu_m^2}\int_{\mbb{R}^3}d\bt\,\delta\left(\begin{bmatrix}|\bt + \bv/2| - \nu_m\\ |\bt - \bv/2| - \nu_m \end{bmatrix}\right)\sqrt{\cos\theta_{\tau_1}\cos\theta_{\tau_2}}\,\Pi\left(\frac{\theta_{\tau_1}}{2\alpha}\right)\Pi\left(\frac{\theta_{\tau_2}}{2\alpha}\right).
+\end{align}
+Next, we calculate all of the pieces we need to apply Eq. \eqref{eq:transversedelta} from Appendix \ref{sec:delta}. First, the argument of the delta function is zero on a circle with radius $\nu_\circ = \sqrt{\nu_m^2 - (|\bv|/2)}$. We will integrate over the circle in cylindrical coordinates (see Appendix \ref{sec:coord}) using the measure $\nu_\circ d\beta_\tau$. Next, we calculate the transverse Jacobian determinant on the circle of intersection. The transverse Jacobian determinant will be the same for all points around the circle of intersection and for all shift directions (by the symmetry of the spheres), so we only calculate the transverse Jacobian for shifts along the $\mb{x}$ axis at the point of intersection $\bs{\tau}^* = [0, 0, \nu_\circ]$. We will use the $x$ and $z$ directions as a basis for the tangent space and calculate the transverse Jacobean determinant as
+\begin{align}
+  \left|\begin{bmatrix}\frac{\partial g_1}{\partial x}(\bs{\tau}^*)&\frac{\partial g_1}{\partial z}(\bs{\tau}^*)\\\frac{\partial g_2}{\partial x}(\bs{\tau}^*)&\frac{\partial g_2}{\partial z}(\bs{\tau}^*)\end{bmatrix}\right| = \left|\begin{bmatrix}\frac{-|\bv|}{2\nu_m}&\frac{\nu_\circ}{\nu_m}\\\frac{|\bv|}{2\nu_m}&\frac{\nu_\circ}{\nu_m}\end{bmatrix}\right| = \frac{|\bv|\nu_\circ}{\nu_m^2}.
+\end{align}
+Bringing the solution set, the measure, and the inverse transverse Jacobian together yields
+\begin{align}
+  H(\bv) = \frac{1}{|\bv|}\int_0^{2\pi} d\beta_\tau\,\sqrt{\cos\theta_{\tau_1}\cos\theta_{\tau_2}}\,\Pi\left(\frac{\theta_{\tau_1}}{2\alpha}\right)\Pi\left(\frac{\theta_{\tau_2}}{2\alpha}\right).\label{eq:lastform}
 \end{align}
 
-Next, we express the integrand in cylindrical coordinates. Equating the $\btpar$ components in Eqs. \eqref{eq:spherical} and \eqref{eq:cylindrical} and evaluating on the circle of intersection ($|\bt|\rightarrow \nu_m$, $\tau_\xi\rightarrow 0$, $\tau_R\rightarrow \nu_\circ$) yields the relationship
+Next, we express the integrand in terms of $\beta_\tau$. Equating the $\btpar$ components in Eqs. \eqref{eq:spherical} and \eqref{eq:cylindrical} and evaluating on the circle of intersection ($|\bt|\rightarrow \nu_m$, $\tau_\xi\rightarrow 0$, $\tau_R\rightarrow \nu_\circ$) yields the relationship
 \begin{align}
   \nu_m\cos\theta_{\tau_{1,2}} \pm \frac{\bvpar}{2} = -\frac{|\bvperp|\nu_\circ}{|\bv|}\cos\beta_\tau\label{eq:angles}.
 \end{align}
@@ -478,29 +513,41 @@ where
   p = \frac{2|\bvperp|\nu_\circ}{\bvpar|\bv|}.
 \end{align}
 
-We can also use Eq. \eqref{eq:angles} to find the limits of integration for $\tau_\beta$ by setting $\tau_{\theta_2} \rightarrow \alpha$ then solving for $\tau_\beta$ to find the maximum azimuthal angle $\beta_m$
+We can also use Eq. \eqref{eq:angles} to find the limits of integration for $\beta_\tau$ by setting $\tau_{\theta_2} \rightarrow \alpha$ then solving for $\beta_\tau$ to find the maximum azimuthal angle $\beta_m$
 \begin{align}
   \beta_m = \cos^{-1}\left[\frac{1}{p}\left(\frac{2\nu_m}{|\bvpar|}\cos\alpha + 1\right)\right].
 \end{align}
 
-Bringing everything together yields the one-dimensional integral
+Now that we have written the integrand in terms of $\beta_tau$, we can write Eq. \eqref{eq:lastform} as
 \begin{align}
-  H(\bv) \propto \frac{\nu_\circ^2\bvpar}{2\nu_c^2|\bv|\nu_m}\int_{-\beta_m}^{\beta_m}d\tau_\beta\, \sqrt{p^2\cos^2\beta_\tau - 1}, 
+  H(\bv) \propto \frac{\bvpar}{|\bv|\nu_m}\int_{0}^{\beta_m}d\beta_\tau\, \sqrt{p^2\cos^2\beta_\tau - 1}, 
 \end{align}
 which can be written as 
 \begin{align}
-  H(\bv) \propto \frac{\tau_{\circ}^2\bvpar}{\nu_c^2|\bv|\nu_m}\sqrt{p^2 - 1}\,E\left(\beta_m, \frac{p}{\sqrt{p^2 - 1}}\right),
+  H(\bv) \propto \frac{\bvpar}{|\bv|\nu_m}\sqrt{p^2 - 1}\,E\left(\beta_m, \frac{p}{\sqrt{p^2 - 1}}\right), \label{eq:intresult}
 \end{align}
 where $E(\beta_m, k)  = \int_0^{\beta_m} d\phi\sqrt{1 - k^2\sin^2\phi}$ is an incomplete elliptic integral of the second kind.
 
-After normalization, the complete transfer function is given by
+The spherical shells only intersect when 
 \begin{align}
-  H(\bv) = \delta(|\bv|) + \frac{4\tau_{\circ}^2\bvpar}{\pi\nu_c^2|\bv|\nu_m}\sqrt{p^2 - 1}\,E\left(\beta_m, \frac{p}{\sqrt{p^2 - 1}}\right).
+|\bvpar| < \sqrt{\nu_m^2 - (|\bvperp| - \nu_m\sin\alpha)^2} - \nu_m\cos\alpha, 
+\end{align}
+so the transfer function will be zero when this condition is not satisfied.
+We can rewrite this condition conveniently by defining a function
+\begin{align}
+  \infty(x, z, \alpha) = \Pi\left(\frac{|z|}{2(\sqrt{1 - (|x| - \sin\alpha)^2} - \cos\alpha)}\right).
+\end{align}
+
+The result in Eq. \eqref{eq:intresult} diverges as $|\bv| \rightarrow 0$ so the transfer function is still undefined at that point. Instead, we calculate the value of the transfer function at $\bv = 0$ by applying the central-ordinate theorem. The solid angle of the sphere collected by the optical system is the value of the transfer functions $\bv = 0$ so $H(0) = 4\pi\sin^2(\alpha/2)$.
+
+Stitching together the two solutions and accounting for the region of validity yields the complete transfer function
+\begin{align}
+  H(\bv) \propto 4\pi\sin^2(\alpha/2)\,\delta(|\bv|) + \frac{|\bvpar|}{\nu_m|\bv|}\sqrt{p^2 - 1}\,E\left(\beta_m, \frac{p}{\sqrt{p^2 - 1}}\right)\infty\left(\frac{|\bvperp|}{\nu_m}, \frac{\bvpar}{\nu_m}, \alpha \right).
 \end{align}
 
 Next, we calculate the monopole transfer function under the paraxial approximation. We approximate the $\sqrt{\cos\theta_\tau}$-weighted spherical cap with a truncated paraboloid
 \begin{align}
-  C(\bt) \propp \frac{1}{\nu_c}\delta\left(\btpar - \nu_m + |\btperp|^2/2\nu_m\right)\,\Pi\left(\frac{|\btperp|}{\nu_c}\right). \label{eq:ctf}
+  C(\bt) \propp \frac{1}{\nu_m}\delta\left(\btpar - \nu_m + |\btperp|^2/2\nu_m\right)\,\Pi\left(\frac{|\btperp|}{\nu_c}\right). \label{eq:ctf}
 \end{align}
 
 For the high-aperture case we evaluated the three-dimensional autocorrelation
@@ -520,37 +567,18 @@ and $C^{(d)}(\btperp, r^{\mypar})$ is the defocused coherent transfer function g
 \end{align}
 We plug Eq. \eqref{eq:ctf} into Eq. \eqref{eq:deftf} and evaluate the Fourier transform to find that the defocused coherent transfer function is
 \begin{align}
-  C^{(d)}(\btperp, r^{\mypar}) \propp \frac{1}{\nu_c}\text{exp}(2\pi i r^{\mypar}[-\nu_m + |\btperp|^2/2\nu_m])\Pi\left(\frac{|\btperp|}{\nu_c}\right), \label{eq:defctf}
+  C^{(d)}(\btperp, r^{\mypar}) \propp \frac{1}{\nu_m}\text{exp}(2\pi i r^{\mypar}[-\nu_m + |\btperp|^2/2\nu_m])\Pi\left(\frac{|\btperp|}{\nu_c}\right), \label{eq:defctf}
 \end{align}
-which we can interpret as a disk with uniform magnitude and quadratic phase factor that depends on the defocus $r^{\mypar}$. 
+which we can interpret as a disk with uniform magnitude and a quadratic phase factor that depends on the defocus $r^{\mypar}$. 
 
-To evaluate the three-dimensional transfer function at $|\bv| = 0$ we start by evaluating the defocused transfer function at $|\bvperp| = 0$
+Next, we evaluate the defocused transfer function by plugging Eq. \eqref{eq:defctf} into Eq. \eqref{eq:defautocorr} and simplifying the complex exponentials
 \begin{align}
-  H^{(d)}(\bv, r^{\mypar}) = \frac{\pi}{4}. \label{eq:result}
+  H^{(d)}(\bvperp,r^{\mypar}) \propp \frac{1}{\nu_m^2}\int_{\mbb{R}^2}d\btperp\, \text{exp}(2\pi i r^{\mypar}[\btperp\cdot\bvperp/\nu_m])\Pi\left(\frac{|\btperp + \bvperp/2|}{\nu_c}\right) \Pi\left(\frac{|\btperp - \bvperp/2|}{\nu_c}\right).\label{eq:defocusresult}
 \end{align}
-After plugging \eqref{eq:result} into Eq. \eqref{eq:def3dtf} and evaluating the Fourier transform we find that 
+Plugging Eq. \eqref{eq:defocusresult} into Eq. \eqref{eq:def3dtf} and evaluating the
+Fourier transform yields 
 \begin{align}
-  H(\bv) = \frac{\pi}{4}\delta(|\bv|). 
-\end{align}
-
-When $|\bv| > 0$ we need to integrate over the intersection of the two truncated paraboloids which only intersect when
-\begin{align}
-  |\bvpar| < -\frac{1}{2\nu_m}|\bvperp|(|\bvperp| - \nu_c). 
-\end{align}
-Therefore, the paraxial transfer function is zero when this condition is not satisfied.
-
-First we evaluate the defocused transfer function by plugging Eq. \eqref{eq:defctf} into Eq. \eqref{eq:defautocorr}
-\begin{align}
-  H^{(d)}(\bvperp,r^{\mypar}) \propp \frac{1}{\nu_c^2}\int_{\mbb{R}^2}d\btperp\, \text{exp}(2\pi i r^{\mypar}[|\btperp + \bvperp/2|^2/2\nu_m])\, \text{exp}(-2\pi i r^{\mypar}[|\btperp - \bvperp/2|^2/2\nu_m])\nonumber\\\Pi\left(\frac{|\btperp + \bvperp/2|}{\nu_c}\right) \Pi\left(\frac{|\btperp - \bvperp/2|}{\nu_c}\right),
-\end{align}
-then simplifying the complex exponentials
-\begin{align}
-  H^{(d)}(\bvperp,r^{\mypar}) \propp \frac{1}{\nu_c^2}\int_{\mbb{R}^2}d\btperp\, \text{exp}(2\pi i r^{\mypar}[\btperp\cdot\bvperp/\nu_m])\Pi\left(\frac{|\btperp + \bvperp/2|}{\nu_c}\right) \Pi\left(\frac{|\btperp - \bvperp/2|}{\nu_c}\right).\label{eq:defocusresult}
-\end{align}
-Next, we plug Eq. \eqref{eq:defocusresult} into Eq. \eqref{eq:def3dtf} and evaluate the
-Fourier transform to find that 
-\begin{align}
-  H(\bv) \propp \frac{1}{\nu_c^2}\int_{\mbb{R}^2}d\btperp\, \delta(\bvpar - \btperp\cdot\bvperp/\nu_m)\Pi\left(\frac{|\btperp + \bvperp/2|}{\nu_c}\right) \Pi\left(\frac{|\btperp - \bvperp/2|}{\nu_c}\right).
+  H(\bv) \propp \frac{1}{\nu_m^2}\int_{\mbb{R}^2}d\btperp\, \delta(\bvpar - \btperp\cdot\bvperp/\nu_m)\Pi\left(\frac{|\btperp + \bvperp/2|}{\nu_c}\right) \Pi\left(\frac{|\btperp - \bvperp/2|}{\nu_c}\right).
 \end{align}
 \begin{figure}
   \centering
@@ -559,19 +587,26 @@ Fourier transform to find that
   \label{fig:geometry}
 \end{figure}
 
-We can evaluate this integral with the help of the geometric construction in Fig. \ref{fig:geometry}. The delta function corresponds to a line perpendicular to the transverse shift direction $\bvperp$ displaced from the origin by $\nu_m|\bvpar|/|\bvperp|$. Within the intersection of the shifted circles this line has length $2\sqrt{(\nu_c/2)^2 - ([\nu_m|\bvpar|/|\bvperp|] + [|\bvperp|/2])^2}$. Finally, the ``strength'' of the delta function is $\nu_m/|\bvperp|$, so the integral evaluates to 
+We can evaluate this integral with the help of the geometric construction in Fig. \ref{fig:geometry}. The delta function corresponds to a line perpendicular to the transverse shift direction $\bvperp$ displaced from the origin by $\nu_m|\bvpar|/|\bvperp|$. Within the intersection of the shifted circles this line has length $2\sqrt{(\nu_c/2)^2 - ([\nu_m|\bvpar|/|\bvperp|] + [|\bvperp|/2])^2}$. Finally, the transverse Jacobian (the transverse derivative in this case) of the function is $|\bvperp|/\nu_m$, so the integral evaluates to 
 \begin{align}
-  H(\bv) \propp \frac{2\nu_m}{\nu_c^2|\bvperp|}\sqrt{\left(\frac{\nu_c}{2}\right)^2 - \left(\frac{\nu_m|\bvpar|}{|\bvperp|} + \frac{|\bvperp|}{2}\right)^2}. 
+  H(\bv) \propp \frac{2}{\nu_m|\bvperp|}\sqrt{\left(\frac{\nu_c}{2}\right)^2 - \left(\frac{\nu_m|\bvpar|}{|\bvperp|} + \frac{|\bvperp|}{2}\right)^2}. \label{eq:intresult3}
 \end{align}
 
-After normalization, the complete paraxial transfer function is 
+The truncated paraboloids only intersect when
 \begin{align}
-  H(\bv) \eqp \delta(|\bv|) + \frac{8\nu_m}{\pi\nu_c^2|\bvperp|}\text{Re}\left\{\sqrt{\left(\frac{\nu_c}{2}\right)^2 - \left(\frac{\nu_m|\bvpar|}{|\bvperp|} + \frac{|\bvperp|}{2}\right)^2}\right\}.
+  |\bvpar| < -\frac{1}{2\nu_m}|\bvperp|(|\bvperp| - \nu_c),
 \end{align}
+so the paraxial transfer function is zero when this condition is not satisfied. We can incorporate this condition conveniently by only considering the real part of the expression in Eq. \eqref{eq:intresult3}.
 
+Once again, the result in Eq. \eqref{eq:intresult3} diverges as $|\bv| \rightarrow 0$, but we can use the central-ordinate theorem to find that $H(0) = \frac{\pi\nu_c^2}{4\nu_m^2}$. 
+
+The complete paraxial transfer function is 
+\begin{align}
+  H(\bv) \propp \frac{\pi\nu_c^2}{4\nu_m^2}\delta(|\bv|) + \frac{2}{\nu_m|\bvperp|}\text{Re}\left\{\sqrt{\left(\frac{\nu_c}{2}\right)^2 - \left(\frac{\nu_m|\bvpar|}{|\bvperp|} + \frac{|\bvperp|}{2}\right)^2}\right\}.
+\end{align}
 We can rewrite the paraxial transfer function in a scaled form 
 \begin{align}
-  H(\bv) \eqp \delta(|\bv|) + \frac{8\nu_m}{\pi\nu_c^2}\text{nez}\left(\frac{|\bvperp|}{\nu_c}, \frac{2\nu_m|\bvpar|}{\nu_c^2}\right),
+  H(\bv) \eqp \frac{\pi\nu_c^2}{4\nu_m^2}\delta(|\bv|) + \frac{4}{\nu_m}\text{nez}\left(\frac{|\bvperp|}{\nu_c}, \frac{2\nu_m|\bvpar|}{\nu_c^2}\right),
 \end{align}
 where we have defined the function
 \begin{align}
@@ -587,20 +622,10 @@ and named it for its resemblance to pince-nez (nose-pinching glasses)---see Fig.
 
 We can recover the two-dimensional paraxial transfer function by integrating over the axial coordinate
 \begin{align}
-  H(\bvperp) \eqp \int_{\mbb{R}}d\bvpar\, H(\bv) = \frac{4}{\pi}\text{chat}_0\left(\frac{|\bvperp|}{\nu_c}\right), 
+  H(\bvperp) \eqp \int_{\mbb{R}}d\bvpar\, H(\bv) = \frac{4\nu_c^2}{\pi\nu_m^2}\text{chat}_0\left(\frac{|\bvperp|}{\nu_c}\right), 
 \end{align}
 where we have used
 \begin{align}
   \int_{\mbb{R}}dz\,\text{nez}(x,z) = \text{chat}_0(x) = \frac{1}{2}\left[\cos^{-1}|x| - |x|\sqrt{1-x^2}\right]\Pi\left(\frac{x}{2}\right).
 \end{align}
-
-\begin{figure}
-  \centering
-  \includegraphics[scale=0.85]{../figures/monopole-psf/dpsf.pdf}
-  \caption{Comparison of high-aperture and paraxial three-dimensional transfer functions for $\text{NA} = (1.00, 1.25, 1.50)$, $n_o = 1.5$, and $\lambda = 500\,\text{nm}$. \add{Notice the units: input spatial frequencies are in  m${}^{-1}$ and the output is in m${}^{+1}$. I have overlaid each plot with two lines: a blue line which is the paraxial transverse transfer function ($\text{chat}(\nu/\nu_c)$) and a green line which is the numerical integral of the 3D transfer function over $\bvpar$. The blue and green lines should have their own $y$ axis, but I'm reusing the left $y$ axis without units. In the paraxial case these lines agree which is a good check that my results are correct. In the high-aperture case the green line is not normalized, and I expect the green line to be lower than the blue line at low frequencies and higher than the blue line at high frequencies (see Barakat \cite{barakat1963}). Therefore, I'm searching for an error that makes the high-aperture transfer function too large everywhere (normalization) and too small at high-frequencies.}}
-  \label{fig:compare}
-\end{figure}
-
-
-
 \end{document}
